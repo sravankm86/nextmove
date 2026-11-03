@@ -2,8 +2,8 @@ mode: review
 timezone: America/Los_Angeles
 profile: null
 companies: null
-tracker: null
+tracker: null  # Optional; setup can create it.
 master_resume: null
 recruiting_mail: null
-resume_output: null
+resume_output: null  # Optional; setup can create it.
 email_lookback_days: 7
