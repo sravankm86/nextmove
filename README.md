@@ -1,11 +1,15 @@
 # Nextmove
 
-Find roles worth making a move for. **Shortlist** is the set of verified roles worth your attention.
+Portable, agent-agnostic job-search operations. Run with ChatGPT, Claude, Codex, or another assistant that can access GitHub and Google Workspace.
 
-Nextmove is a portable job-search workflow you can run with an AI assistant that can read files. No specific model, account, connector, or runtime is required for the demo.
+## Architecture
+- **GitHub**: public, versioned instructions, contracts, and examples. No personal data or secrets.
+- **Google Sheets in Google Drive**: persistent application tracker and authoritative target-company list.
+- **Google Docs**: editable master resume, the sole source of resume facts.
+- **Google Drive**: tailored one-page PDF resumes in one output folder, with descriptive filenames. No separate Job Descriptions or Research folders.
+- **Recruiting email**: optional read-only input for reconciliation. Never send email or submit applications.
 
-1. Read [SETUP.md](SETUP.md) and copy the example config outside this repository.
-2. For a dry run, give your assistant [WORKFLOW.md](WORKFLOW.md) and [the fictional example](examples/demo.md). Ask it to run in review mode; compare its output with the expected result.
-3. For real use, provide your private config and authorized inputs. Start with review mode. Enable writes only after checking the proposed changes.
+Start with [SETUP.md](SETUP.md), then run [WORKFLOW.md](WORKFLOW.md). Universal instructions are in [AGENTS.md](AGENTS.md). Private Google resource links belong in private configuration, not this public repository.
 
-Nextmove never submits applications or sends email.
+## Portability and safety
+A runtime needs authenticated access to Google Sheets/Drive/Docs and optionally recruiting email and web search. Use native connectors or APIs; no provider-specific model behavior is required. Reuse existing resources; create only missing ones with authorization. Default to review mode. For concurrent runs, use one writer for tracker changes; parallelize research, not conflicting writes.
