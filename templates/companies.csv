@@ -1,1 +1,1 @@
-company,pool,decision,careers_url,notes,company_id,source_id,catalog_url,reader
+company,pool,decision,careers_url,notes,company_id,source_id,catalog_url,reader,max_applications,application_window_days,application_window_type,rejection_cooldown_days,restriction_scope,last_rejection_at,apply_blocked_until,application_hold_status,restriction_details_or_source,restriction_last_verified_at,restriction_timezone
