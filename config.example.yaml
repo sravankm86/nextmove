@@ -8,6 +8,17 @@ recruiting_mail: null
 resume_output: null  # Optional; setup can create it.
 email_lookback_days: 7
 answer_bank: null
+# Scan policy contract; the selected runtime must implement durable state/readers.
+scan:
+  processing: incremental  # Baseline required when state/validation is unavailable.
+  source_registry: null  # Existing authorized private destination; never public Git.
+  runner_state: null  # Durable cache/checkpoints and reusable reader locations.
+  description_policy: all  # all, or candidates only after explicit user choice.
+  description_freshness: verify  # Reliable edit version/conditional request or refresh.
+  recovery_budget:  # Optional; null means no user-selected cutoff.
+    max_attempts_per_source: null
+    max_minutes_per_source: null
+    max_model_escalations: null
 auto_apply:
   supported_domains: []
   daily_submission_cap: 0

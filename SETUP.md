@@ -14,6 +14,10 @@ For scheduling, first confirm an interactive run works, then give your scheduler
 
 Map existing Applications and Target Companies headers to the templates. Add Job Inventory, Scan Audit, Runs and Controls tabs using the CSV headers in [templates](templates/). Keep existing tracker rows and statuses. For companies with several boards, use a source row per board with a shared company ID. Set up a catalog reader for each source and verify coverage against the live employer site.
 
+Configure the scan's private source registry, durable runner state and reusable reader locations. Persist hashes, source/version evidence, pagination checkpoints, criteria/filter versions and descriptions in the existing authorized store; map optional fields without replacing the user's schema. A temporary workspace is not durable storage. Test baseline enumeration, source-manifest revalidation, description-only edits, additions/removals, expired cursors and interrupted write readback before relying on incremental results. These instructions and configuration fields do not install an incremental scanner; the chosen runtime must implement them. If state or readers are missing, report that and perform baseline/setup work.
+
+Keep the default description policy all and recovery budgets unset unless the user chooses otherwise. Candidate-only description retrieval reduces archival depth and post-closure reassessment; a recovery cutoff limits the effort spent recovering sources and can leave current coverage incomplete. Record the user's choice privately and in the run audit. Do not silently add cache freshness windows, sampling-only verification or page caps.
+
 Before enabling auto-apply, configure a private answer bank, supported sites and submission cap, and connect an authorized browser runtime. Test one form, receipt capture, duplicate prevention, a simulated uncertain submission, and the live pause control. Use one submission worker.
 
 ## Existing inputs and new destinations
