@@ -39,11 +39,15 @@ Store per-company limits and cooldowns in Target Companies, separately from Sear
 
 Do not infer a company cooldown from a generic rejection or invent a waiting period. Preserve exact-role dispositions. Confirm scope, duration, trigger and rolling/calendar/fixed semantics. If multiple constraints apply, all must allow the submission; a future date is only an estimate until the quota is recomputed. Multiple windows or mixed scopes must be recorded in details and not silently collapsed to one rule.
 
-Count distinct confirmed submission events in the applicable window, including applications subsequently rejected or withdrawn unless the rule explicitly restores capacity. Deduplicate duplicate tracker rows and receipts; include known external/manual applications. Uncertain attempts may occupy capacity but must not be marked Applied. If allowance cannot be proven, reconcile before submitting. Determine the next rolling-window opening when enough events expire, not necessarily when only the oldest event expires.
+Count distinct human/agent-reported or evidenced submission events in the applicable window (including Applied without a receipt), including applications subsequently rejected or withdrawn unless the rule explicitly restores capacity. Deduplicate duplicate tracker rows and receipts; include known external/manual applications. Uncertain attempts may occupy capacity but must not be marked Applied. If allowance cannot be proven, reconcile before submitting. Determine the next rolling-window opening when enough events expire, not necessarily when only the oldest event expires.
 
 Keep scanning and saving qualifying Discovered jobs while an application hold applies. Record the hold separately; do not lower relevance because of a temporary restriction. Recheck the live company rule, current submission history, scope, timezone and all pause/stop controls immediately before Submit, using one submission worker. An elapsed date does not authorize auto-apply, prove role eligibility, or override any remaining limit. Known restrictions with unresolved dates/scope remain held for clarification.
 
 Before enabling auto-apply, configure a private answer bank, supported sites and submission cap, and connect an authorized browser runtime. Test one form, receipt capture, duplicate prevention, a simulated uncertain submission, and the live pause control. Use one submission worker.
+
+## Applications lifecycle format
+
+Map Applications to [LIFECYCLE.md](LIFECYCLE.md). Use one Lifecycle status dropdown. Separate Applied on, Confirmed on, Outcome on, Status source, Status notes and Status recorded at. Preserve the old combined status/date text and pipeline values in read-only legacy fields when migrating; do not drop notes, dispositions or fit assessments. Maintain dropdown and filter coverage when appending rows. Unknown historical dates stay blank. A resume link alone does not make a row Ready. Manual dropdown edits require date/source updates unless an explicit runtime supplies them.
 
 ## Existing inputs and new destinations
 

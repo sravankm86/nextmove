@@ -18,4 +18,4 @@ A run is complete only when all planned official boards have verified coverage a
 
 Ask Codex:
 
-> Run Nextmove's shortlist stage in prepare mode. Read AGENTS.md and stages/shortlist.md. Take the unrated Discovered jobs from my Applications tracker for the scan run I specify. Open each official description and rate relevance High, Medium or Low using my private profile and master CV. Write the rating, evidence and gaps to the existing row. Leave the rating blank if the full description cannot be verified and report why. Verify the writes and summarize counts and unresolved roles. Stop after shortlisting.
+> Run Nextmove's shortlist stage in prepare mode. Read AGENTS.md and stages/shortlist.md. Take the unrated Queued jobs from my Applications tracker for the scan run I specify. Open each official description and rate relevance High, Medium or Low using my private profile and master CV. Write the rating, evidence and gaps to the existing row. Leave the rating blank if the full description cannot be verified and report why. Verify the writes and summarize counts and unresolved roles. Stop after shortlisting.
