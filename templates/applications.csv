@@ -1,1 +1,1 @@
-company,role,requisition_id,status,applied_on,job_url,resume_url,resume_notes,fit_rationale,date_found,outcome,posted_salary,source_url,source_date,job_key,pipeline_stage,run_id,attempt_id,submitted_at,submitted_resume_version,confirmation_ref,blocker
+company,role,requisition_id,status,applied_on,job_url,resume_url,resume_notes,fit_rationale,date_found,outcome,posted_salary,source_url,source_date,job_key,pipeline_stage,run_id,attempt_id,submitted_at,submitted_resume_version,confirmation_ref,blocker,location,first_pass_reason,relevance,fit_gaps,eligibility,fit_evaluated_at

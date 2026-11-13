@@ -1,8 +1,8 @@
 # Run Nextmove
 
 1. **Start one run.** Load [setup](SETUP.md), private config, live tracker headers and controls. Record a run ID, instruction revision and schedule timezone. Confirm access and mode. Reconcile recruiting messages before discovery when connected.
-2. **Collect inventory.** Run [scan](stages/scan.md) for all allowed companies. Parallelize by source where useful. Keep the run visibly incomplete when any required source remains unresolved. Verified roles may proceed with the coverage gap reported.
-3. **Evaluate a batch.** Pass inventory, descriptions and coverage to [shortlist](stages/shortlist.md). Advance only verified shortlisted roles.
+2. **Collect inventory.** Run [scan](stages/scan.md) for all allowed companies. Parallelize by source where useful. Keep the run visibly incomplete when any required source remains unresolved. Apply the broad first-pass filter and save verified matches as Discovered in Applications when writes are authorized. Verified roles may proceed with the coverage gap reported.
+3. **Evaluate a batch.** Pass Discovered tracker rows and coverage to [shortlist](stages/shortlist.md). Open each official description, save High, Medium or Low relevance on the same row and advance only verified High matches.
 4. **Prepare by role.** Pass each shortlisted job and its evidence to [prepare](stages/prepare.md). Verify the packet before marking it Ready.
 5. **Submit and track.** Run [apply and track](stages/apply.md) serially. Check controls and authorization at submission time. Reconcile receipts and later outcomes.
 6. **Report.** Publish coverage and stage totals, links to evidence and outstanding exceptions. Separate incomplete scans, unresolved eligibility, no strong matches and uncertain submissions.

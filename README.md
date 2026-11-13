@@ -11,6 +11,8 @@ Portable, agent-agnostic job-search operations. Run with ChatGPT, Claude, Codex,
 
 Start with [SETUP.md](SETUP.md), then run [WORKFLOW.md](WORKFLOW.md). Universal instructions are in [AGENTS.md](AGENTS.md). Private Google resource links belong in private configuration, not this public repository.
 
+For a scan and shortlist pilot, follow the [Codex run instructions](CODEX.md).
+
 ## Pipeline
 
 [Scan official catalogs](stages/scan.md) → [Shortlist](stages/shortlist.md) → [Prepare CV](stages/prepare.md) → [Apply and track](stages/apply.md). [WORKFLOW.md](WORKFLOW.md) defines the coordinator, handoffs and dashboard. This repository supplies instructions and tracker templates. Bring your own scheduler, catalog readers and browser runtime.
