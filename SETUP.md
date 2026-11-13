@@ -12,7 +12,7 @@ Copy `config.example.yaml` into a private folder outside the repo. Use local pat
 
 For scheduling, first confirm an interactive run works, then give your scheduler the same versioned instructions and private inputs. Start in review mode.
 
-Map existing Applications and Target Companies headers to the templates. Add Job Inventory, Scan Audit, Runs and Controls tabs using the CSV headers in [templates](templates/). Keep existing tracker rows and statuses. For companies with several boards, use a source row per board with a shared company ID. Set up a catalog reader for each source and verify coverage against the live employer site.
+Map existing Applications and Target Companies headers to the templates. Add Job Inventory, Scan Audit, Runs and Controls tabs using the CSV headers in [templates](templates/). Keep existing tracker rows and statuses. When configured and authorized, map the lifecycle-events and mail-audit templates into the existing private store; do not create new destinations or silently migrate statuses. For companies with several boards, use a source row per board with a shared company ID. Set up a catalog reader for each source and verify coverage against the live employer site.
 
 Configure the scan's private source registry, durable runner state and reusable reader locations. Persist hashes, source/version evidence, pagination checkpoints, criteria/filter versions and descriptions in the existing authorized store; map optional fields without replacing the user's schema. A temporary workspace is not durable storage. Test baseline enumeration, source-manifest revalidation, description-only edits, additions/removals, expired cursors and interrupted write readback before relying on incremental results. These instructions and configuration fields do not install an incremental scanner; the chosen runtime must implement them. If state or readers are missing, report that and perform baseline/setup work.
 
@@ -32,7 +32,7 @@ Store per-company limits and cooldowns in Target Companies, separately from Sear
 | Restriction scope | restriction_scope | Company / Role family / Exact role / Mixed / Unconfirmed. Mixed rules need separate scopes in details. |
 | Last rejection date | last_rejection_at | Actual qualifying event date/time and evidence; not itself a company-wide ban. |
 | Apply blocked until | apply_blocked_until | Earliest date/time after all applicable restrictions; prefer ISO8601 with an explicit offset. |
-| Application hold status | application_hold_status | Not assessed / No known hold / Held / Needs clarification; separate from role fit and pipeline stage. |
+| Application hold status | application_hold_status | Not assessed / No known hold / Held / Needs clarification; separate from role fit and lifecycle status. |
 | Restriction details / source | restriction_details_or_source | Published rule or explicit user instruction, evidence/date, duration basis, exceptions, affected roles, reset times and additional limits. |
 | Restriction last verified | restriction_last_verified_at | When the rule/evidence was actually reviewed. |
 | Restriction timezone | restriction_timezone | Confirmed IANA timezone for boundaries/date-only inputs; do not assume the Sheet's timezone. |
@@ -41,9 +41,17 @@ Do not infer a company cooldown from a generic rejection or invent a waiting per
 
 Count distinct human/agent-reported or evidenced submission events in the applicable window (including Applied without a receipt), including applications subsequently rejected or withdrawn unless the rule explicitly restores capacity. Deduplicate duplicate tracker rows and receipts; include known external/manual applications. Uncertain attempts may occupy capacity but must not be marked Applied. If allowance cannot be proven, reconcile before submitting. Determine the next rolling-window opening when enough events expire, not necessarily when only the oldest event expires.
 
-Keep scanning and saving qualifying Discovered jobs while an application hold applies. Record the hold separately; do not lower relevance because of a temporary restriction. Recheck the live company rule, current submission history, scope, timezone and all pause/stop controls immediately before Submit, using one submission worker. An elapsed date does not authorize auto-apply, prove role eligibility, or override any remaining limit. Known restrictions with unresolved dates/scope remain held for clarification.
+Keep scanning and saving qualifying Queued jobs while an application hold applies. Record the hold separately; do not lower relevance because of a temporary restriction. Recheck the live company rule, current submission history, scope, timezone and all pause/stop controls immediately before Submit, using one submission worker. An elapsed date does not authorize auto-apply, prove role eligibility, or override any remaining limit. Known restrictions with unresolved dates/scope remain held for clarification.
 
 Before enabling auto-apply, configure a private answer bank, supported sites and submission cap, and connect an authorized browser runtime. Test one form, receipt capture, duplicate prevention, a simulated uncertain submission, and the live pause control. Use one submission worker.
+
+## Worker fields and handoff setup
+
+Map the optional Applications fields for job_posted_at/job_posted_text, work_arrangement/location_details, posted_salary/salary_details, independent career_fit/resume_fit, review versions/time/hash, review_pending, resume_type/master version/verification/claim reference and next_owner. Keep axis-specific rationale in fit_rationale and changes in resume_notes. Preserve legacy fields and hide technical columns if useful; do not force every optional field into the main visible view. Unknown salary, location or posted date is not date found or an estimate.
+
+Configure five logical responsibilities and their queues from WORKFLOW.md. Keep bulk readers/writes in code and a single shared-state writer. For Tracker, configure read-only mailbox scope, pagination, event deduplication and a durable successful checkpoint with overlapping lookback. Test a generic acknowledgement, duplicate receipt, older acknowledgement after rejection, ambiguous role match and uncertain submission. Missing mail access must be visible and must not be reported as reconciled.
+
+These schemas and instructions do not install workers, email automations or a live tracker migration. Old Reviewed/Rated means “assessed”, not necessarily positive: reclassify only from supporting two-axis evidence or send to review-owned Needs review. Preserve historical outcomes, dates and user edits.
 
 ## Applications lifecycle format
 

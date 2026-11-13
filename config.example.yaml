@@ -19,6 +19,14 @@ scan:
     max_attempts_per_source: null
     max_minutes_per_source: null
     max_model_escalations: null
+review:
+  decision_rule: career_high_or_resume_high
+  negative_rule: both_low
+  borderline_or_missing: needs_review
+tracking:
+  mailbox_state: null  # Existing authorized private checkpoint/event store.
+  lifecycle_events: null  # Existing authorized private transition log.
+  mail_audit: null  # Existing authorized private coverage/matching audit.
 auto_apply:
   supported_domains: []
   daily_submission_cap: 0

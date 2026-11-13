@@ -1,0 +1,1 @@
+run_id,mailbox_scope,window_start,window_end,pages_read,messages_read,matched_events,unmatched_events,ambiguous_events,duplicate_events,transitions_saved,last_successful_checkpoint,status,error,checked_at
