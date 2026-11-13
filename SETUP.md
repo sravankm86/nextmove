@@ -2,7 +2,7 @@
 
 | Capability | Provide | Minimum access | If missing |
 |---|---|---|---|
-| Search and verify openings | Target roles, locations, company list | Public web search and employer posting retrieval | Review supplied descriptions; label live status unverified |
+| Search and verify openings | Target roles, locations, company list | Official catalogs and a reader that can enumerate their pages | Review supplied descriptions; label live status unverified |
 | Check duplicates | Live tracker or current CSV export | Read | Label results provisional; do not add Pending rows |
 | Reconcile recruiting mail | Gmail, Outlook, or selected messages | Read only | Skip reconciliation |
 | Tailor a resume | Latest master resume | Read | Skip tailoring; never infer facts |
@@ -11,6 +11,10 @@
 Copy `config.example.yaml` into a private folder outside the repo. Use local paths or private links your tool can open. Connect accounts through the tool you chose; do not paste passwords or tokens into config. The templates are CSVs and work with a local spreadsheet or an imported table. No connector is installed by this repository.
 
 For scheduling, first confirm an interactive run works, then give your scheduler the same versioned instructions and private inputs. Start in review mode.
+
+Map existing Applications and Target Companies headers to the templates. Add Job Inventory, Scan Audit, Runs and Controls tabs using the CSV headers in [templates](templates/). Keep existing tracker rows and statuses. For companies with several boards, use a source row per board with a shared company ID. Set up a catalog reader for each source and verify coverage against the live employer site.
+
+Before enabling auto-apply, configure a private answer bank, supported sites and submission cap, and connect an authorized browser runtime. Test one form, receipt capture, duplicate prevention, a simulated uncertain submission, and the live pause control. Use one submission worker.
 
 ## Existing inputs and new destinations
 

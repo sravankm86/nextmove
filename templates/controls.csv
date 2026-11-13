@@ -1,0 +1,3 @@
+control,value
+pause_applications,true
+stop_all,false

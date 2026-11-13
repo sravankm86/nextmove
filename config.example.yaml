@@ -1,4 +1,4 @@
-mode: review
+mode: review  # review, prepare, or auto-apply
 timezone: America/Los_Angeles
 profile: null
 companies: null
@@ -7,3 +7,7 @@ master_resume: null
 recruiting_mail: null
 resume_output: null  # Optional; setup can create it.
 email_lookback_days: 7
+answer_bank: null
+auto_apply:
+  supported_domains: []
+  daily_submission_cap: 0
