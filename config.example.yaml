@@ -9,6 +9,13 @@ storage:
   base: null  # Discover/verify the private base ID; never commit real IDs.
   table_field_map: null  # Private mapping of logical fields to live table/field IDs.
   migration_checkpoint: null  # Verified cutover status and resumable progress.
+governance:
+  audit_required: true
+  audit_operations: [create, read, update, archive, delete, schema]
+  audit_store: null  # Private Audit Events mapping; not a universal interceptor.
+  access_layer: null  # Must be configured/tested; direct UI/API access remains a gap.
+  allow_hard_delete: false
+  integrity_rules: null  # Private mapping, cardinality and scoped validation evidence.
 master_resume: null
 recruiting_mail: null
 resume_output: null  # Optional; setup can create it.

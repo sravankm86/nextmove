@@ -1,0 +1,1 @@
+event_key,operation_id,operation,phase,recorded_at,occurred_at,actor,channel,base_id,table_id,record_id,entity_key,field_changes_json,read_scope_json,reason,source,run_id,evidence_ref,coverage_errors

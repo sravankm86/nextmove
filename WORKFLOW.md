@@ -12,7 +12,7 @@ Lifecycle status determines the work queue. The five responsibilities are logica
 
 ## Run contract
 
-Load [setup](SETUP.md), [universal rules](AGENTS.md), [storage contract](STORAGE.md), private inputs, live Airtable schema and controls. Record run ID, instruction/version hashes, requested workers, mode and timezone. Follow [LIFECYCLE.md](LIFECYCLE.md). A stage-specific request runs only that worker and its necessary preflight; do not automatically launch the rest.
+Load [setup](SETUP.md), [universal rules](AGENTS.md), [storage contract](STORAGE.md), [data governance](DATA-GOVERNANCE.md), private inputs, live Airtable schema and controls. Record run ID, instruction/version hashes, requested workers, mode and timezone. Follow [LIFECYCLE.md](LIFECYCLE.md). A stage-specific request runs only that worker and its necessary preflight; do not automatically launch the rest.
 
 1. Run [Scanner](stages/scan.md) across every Allow company, including regional boards. Preserve Exclude-over-Allow precedence and Pool. Reuse readers, validate catalog coverage, process deltas and save Queued candidates with salary, work-location details, job-posted date and provenance. Unknown metadata remains explicitly unknown.
 2. Run [Reviewer](stages/review.md). A High career-goal fit OR a High resume fit qualifies for Shortlisted. Both Low means Not a fit. Borderline or unresolved evidence means Needs review, not an invented negative. Record the independent scores, rationale, gaps and versions.
@@ -28,7 +28,7 @@ The Tracker may be invoked as an explicit preflight reconciliation before submis
 Process review and preparation in bounded batches with durable checkpoints. Report the remaining queue explicitly; a completed batch is not a completed queue. Reuse assessments only when their JD, career-criteria and master versions remain valid. A whole-queue request continues through checkpoints unless a live control, explicit budget or unresolved blocker stops it.
 
 
-Each handoff includes run ID, worker, job key, current/expected state, input versions, artifact/evidence references and blocker/next owner. The coordinator rereads affected rows, checks that state and versions still match, writes only the permitted delta and verifies readback. Concurrent human edits take precedence over a stale plan and must be reconciled.
+Each handoff includes run ID, worker, job key, current/expected state, input versions, artifact/evidence references and blocker/next owner. The coordinator journals read/mutation intent and scope under DATA-GOVERNANCE.md, rereads affected rows, checks that state and versions still match, writes only the permitted delta and verifies readback. Concurrent human edits take precedence over a stale plan and must be reconciled.
 
 Record transitions and their provenance in the authorized lifecycle event log when configured. Make events idempotent by source event/job identity; do not duplicate receipts or replay uncertain submissions. Keep current status, fit scores, history and company holds separate. In a runtime such as Dot, delegated work must remain visible and return a durable checkpoint.
 

@@ -17,9 +17,14 @@ Resolve the private workspace/base and discover live tables, field IDs, types an
 | Catalog Sources | One official source/region per stable source ID, with configuration and coverage gaps |
 | Scan Audit / Runs | Source coverage, actual run provenance, errors and durable checkpoints |
 | Lifecycle Events / Mail Audit | Idempotent transition evidence and mailbox coverage/checkpoints when configured |
+| Audit Events | General operation journal: stable operation/event ID, table/record/field scope, actor, before/after values, verified outcome and read scope; policy-based append-only |
 | Controls | Live pause/stop and verified migration state; never implicit submission authorization |
 
 Use stable company/job/source/event keys for identity; Airtable record IDs implement links. Historical applications outside the current target list retain company text without automatically creating or allowing a target. Optional Company Policies records must not duplicate quota counting or override confirmed rules silently. Blank restrictions mean unrecorded, not unlimited. Preserve every applicable scope/window and follow SETUP.md for eligibility.
+
+## Data governance
+
+Follow [DATA-GOVERNANCE.md](DATA-GOVERNANCE.md) for all controlled CRUD, including reads, row/field history, identity, relationships, archival and honest enforcement reporting. Scan Audit and Lifecycle Events serve specific domain purposes; neither replaces the general Audit Events journal. Airtable record IDs are immutable identities; primary display fields and merge keys do not enforce SQL uniqueness. Existing migrated text fields are provenance until a verified typed/link migration is completed.
 
 ## Reads, writes and fidelity
 
