@@ -48,6 +48,10 @@ def check(root):
                 decoded[rel] = json.loads(text)
             except json.JSONDecodeError as exc:
                 errors.append(rel + ": invalid JSON at line " + str(exc.lineno))
+        if rel == ".github/workflows/validate.yml":
+            root_keys = set(re.findall(r"(?m)^([A-Za-z_+][A-Za-z0-9_+ -]*):", text))
+            allowed = {"name", "on", "permissions", "concurrency", "jobs", "env", "defaults", "run-name"}
+            require({"name", "on", "jobs"}.issubset(root_keys) and root_keys.issubset(allowed), "Invalid GitHub workflow root keys")
         if p.suffix == ".csv":
             rows = list(csv.reader(text.splitlines()))
             require(bool(rows) and len(rows[0]) == len(set(rows[0])) and all(rows[0]), "Invalid/duplicate CSV header: " + rel)
