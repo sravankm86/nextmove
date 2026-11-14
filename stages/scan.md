@@ -4,7 +4,7 @@ Use complete catalog checks with incremental processing. Keep bulk parsing, comp
 
 ## Inputs and reusable state
 
-Load the run ID, mode, live Target Companies and Applications headers, controls, private criteria and prior inventory. Include every Allow company; Exclude wins on duplicate rows. Preserve Pool and user choices. Record instruction, reader, normalizer, criteria and filter versions. Recheck controls and company choices before writes.
+Load the run ID, mode, live Target Companies and Applications fields, controls, private criteria and prior inventory. Include every Allow company; Exclude wins on duplicate rows. Preserve Pool and user choices. Record instruction, reader, normalizer, criteria and filter versions. Recheck controls and company choices before writes.
 
 Reuse the private source registry and tested readers. Maintain a stable company ID and a source ID per official board/region, with careers URL, catalog endpoint, company-scope rule, reader location/version, pagination contract and validation evidence. Parent-company and VC portfolio jobs do not automatically belong to an allowed employer.
 
@@ -46,7 +46,7 @@ Distinguish full/revalidated, reused but unverified, summary only, failed retrie
 
 ## Runtime and recovery
 
-Prefer bounded code concurrency for HTTP work, honoring provider limits and Retry-After. Use one coordinator. Model workers, when requested or needed for a specific exception, receive disjoint sources and compact evidence, contracts and failures. They return durable artifacts, counts and errors; they do not write Sheets. Wait for results or explicit interrupted/deferred checkpoints before finalizing coverage.
+Prefer bounded code concurrency for HTTP work, honoring provider limits and Retry-After. Use one coordinator. Model workers, when requested or needed for a specific exception, receive disjoint sources and compact evidence, contracts and failures. They return durable artifacts, counts and errors; they do not mutate shared tracker state. Wait for results or explicit interrupted/deferred checkpoints before finalizing coverage.
 
 Avoid one model/tool turn per job, repeated discovery, whole-page dumps, and repeating identical permanent failures without new evidence. Use reasonable transient retries and pagination guards.
 
@@ -54,7 +54,7 @@ Recovery budgets are optional and disabled by default. A user-selected attempt/t
 
 ## Delta writes and verification
 
-Save the full metadata inventory in Job Inventory when available. Keep descriptions, hashes, source/reader state and exceptions in the existing authorized mapped private store. Map optional fields during authorized setup; do not assume columns or overwrite unrelated data. Do not export private tracker/profile snapshots to a new archive by default.
+Follow ../STORAGE.md. Save the full metadata inventory in Airtable Job Inventory. Keep captured full descriptions in Drive with accessible private references; keep hashes, source/reader metadata, checkpoints and exceptions in the mapped Airtable tables. Retain reusable reader artifacts in the configured durable content/runtime location. Map optional fields during authorized setup; do not assume columns or overwrite unrelated data. Do not export private tracker/profile snapshots to a new archive by default.
 
 Use LIFECYCLE.md as the current status contract; legacy pipeline values are history, not a second active state. Never reset a tracked role to Queued on a new scan. Only the coordinator writes. Reread affected rows and match stable identities. Upsert every verified first-pass match into Applications; new rows get lifecycle status Queued, company, title, salary details, work location/arrangement, job-posted date (or explicit missing status), URL, date found, run ID and first-pass reason. Match exact tracked roles instead of duplicating them. Preserve historical status, notes, fit decisions, submissions and exact-role Not applying/Role not available semantics. Queued does not mean submitted or CV-ready.
 

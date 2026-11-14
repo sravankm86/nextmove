@@ -1,15 +1,15 @@
 # Nextmove
 
-Portable, agent-agnostic job-search operations. Run with ChatGPT, Claude, Codex, or another assistant that can access GitHub and Google Workspace.
+Portable, agent-agnostic job-search operations. Run with ChatGPT, Claude, Codex, or another assistant that can access GitHub, Airtable and Google Drive.
 
 ## Architecture
 - **GitHub**: public, versioned instructions, contracts, and examples. No personal data or secrets.
-- **Google Sheets in Google Drive**: persistent application tracker and authoritative target-company list.
+- **Airtable**: authoritative target companies, applications, job metadata, company restrictions, controls and audit records. See [STORAGE.md](STORAGE.md).
 - **Google Docs**: editable master resume, the sole source of resume facts.
-- **Google Drive**: approved base or tailored one-page PDF resumes in one output folder, with descriptive filenames. No separate Job Descriptions or Research folders.
+- **Google Drive**: all content, including captured full job descriptions, master/resume documents and approved base or tailored one-page PDFs in the configured output folder. No separate Job Descriptions or Research folders.
 - **Recruiting email**: optional read-only input for reconciliation. Read-only.
 
-Start with [SETUP.md](SETUP.md), then run [WORKFLOW.md](WORKFLOW.md). Universal instructions are in [AGENTS.md](AGENTS.md). Private Google resource links belong in private configuration, not this public repository.
+Start with [SETUP.md](SETUP.md), then run [WORKFLOW.md](WORKFLOW.md). Universal instructions are in [AGENTS.md](AGENTS.md). Private Airtable IDs and Google resource links belong in private configuration, not this public repository.
 
 For worker-specific runs, follow the [Codex run instructions](CODEX.md).
 
@@ -22,4 +22,4 @@ Reviewer qualifies a role when career fit OR resume fit is High. Both Low yields
 [WORKFLOW.md](WORKFLOW.md) defines state-owned queues, handoffs and the single writer. [LIFECYCLE.md](LIFECYCLE.md) defines status evidence and migration. These are logical responsibilities, not five mandatory model agents. This repository supplies instructions/contracts/templates, not installed workers; bring a runtime, scheduler, readers and durable private state.
 
 ## Portability and safety
-A runtime needs authenticated access to Google Sheets/Drive/Docs and optionally recruiting email and web search. Use native connectors or APIs; no provider-specific model behavior is required. Reuse existing resources; create only missing ones with authorization. Default to review mode. Enable automatic submission only through explicit private configuration and runtime authorization. For concurrent runs, use one writer for tracker changes; parallelize research, not conflicting writes.
+A runtime needs authenticated access to Airtable and Google Drive/Docs and optionally recruiting email and web search. Use native connectors or APIs; no provider-specific model behavior is required. Reuse existing resources; create only missing ones with authorization. Default to review mode. Enable automatic submission only through explicit private configuration and runtime authorization. For concurrent runs, use one writer for tracker changes; parallelize research, not conflicting writes.

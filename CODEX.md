@@ -1,6 +1,6 @@
 # Run Nextmove workers with Codex
 
-Open the Nextmove repository in Codex. Connect access to your private Google Sheets tracker, candidate preferences and master CV. Provide private links in the session or local configuration. Verify Codex can read the Target Companies and Applications tabs, write to the tracker, and reach official career sites. Use [setup](SETUP.md) to map headers and add missing audit tabs if authorized. The repository contains instructions and templates. Codex needs working web or browser tools or a runtime that can fetch official feeds.
+Open the Nextmove repository in Codex. Connect access to your private Airtable base, candidate preferences and master CV. Provide private links in the session or local configuration. Verify Codex can read the Target Companies and Applications tables, write to the tracker, and reach official career sites. Use [setup](SETUP.md) to map fields and add missing audit tables if authorized. The repository contains instructions and templates. Codex needs working web or browser tools or a runtime that can fetch official feeds.
 
 ## 1. Scan and save jobs
 

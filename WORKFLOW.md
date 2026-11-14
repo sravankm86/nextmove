@@ -12,7 +12,7 @@ Lifecycle status determines the work queue. The five responsibilities are logica
 
 ## Run contract
 
-Load [setup](SETUP.md), [universal rules](AGENTS.md), private inputs, live headers and controls. Record run ID, instruction/version hashes, requested workers, mode and timezone. Follow [LIFECYCLE.md](LIFECYCLE.md). A stage-specific request runs only that worker and its necessary preflight; do not automatically launch the rest.
+Load [setup](SETUP.md), [universal rules](AGENTS.md), [storage contract](STORAGE.md), private inputs, live Airtable schema and controls. Record run ID, instruction/version hashes, requested workers, mode and timezone. Follow [LIFECYCLE.md](LIFECYCLE.md). A stage-specific request runs only that worker and its necessary preflight; do not automatically launch the rest.
 
 1. Run [Scanner](stages/scan.md) across every Allow company, including regional boards. Preserve Exclude-over-Allow precedence and Pool. Reuse readers, validate catalog coverage, process deltas and save Queued candidates with salary, work-location details, job-posted date and provenance. Unknown metadata remains explicitly unknown.
 2. Run [Reviewer](stages/review.md). A High career-goal fit OR a High resume fit qualifies for Shortlisted. Both Low means Not a fit. Borderline or unresolved evidence means Needs review, not an invented negative. Record the independent scores, rationale, gaps and versions.

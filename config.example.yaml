@@ -2,7 +2,13 @@ mode: review  # review, prepare, or auto-apply
 timezone: America/Los_Angeles
 profile: null
 companies: null
-tracker: null  # Optional; setup can create it.
+tracker: null  # Private Airtable base reference; authorized setup can create it.
+storage:
+  structured_provider: airtable
+  content_provider: google_drive
+  base: null  # Discover/verify the private base ID; never commit real IDs.
+  table_field_map: null  # Private mapping of logical fields to live table/field IDs.
+  migration_checkpoint: null  # Verified cutover status and resumable progress.
 master_resume: null
 recruiting_mail: null
 resume_output: null  # Optional; setup can create it.
