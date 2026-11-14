@@ -1,8 +1,5 @@
 # Nextmove in Claude Code
 
-Read AGENTS.md first, then SETUP.md, COMMANDS.md and the requested stage contract. The same source-of-truth, audit, one-writer, resume-integrity and submission-authorization rules apply here.
+Read AGENTS.md and COMMANDS.md, then the requested stage. Default Run is a thorough single-agent plan; manual stages use identical checkpoints.
 
-This is an instruction repository, not an installed worker. Connect this harness to your own private Airtable/Drive resources and required stage tools, and save HARNESS-BOOTSTRAP.md with private references outside Git. Do not infer access from another harness or rely on chat/local files as sole state.
-
-A single-stage command stops after its verified handoff. Only an explicitly requested ordered plan can continue to another stage, under ARCHITECTURE.md. Never infer submission authorization from a plan or a Ready resume.
-
+Connect this harness to the user's own six-table Airtable/Drive instance and required tools. Save HARNESS-BOOTSTRAP.md privately. Do not inherit another harness's access, rely on chat/local memory, admit title-only matches or infer submission authorization. Preserve facts, live controls and meaningful History.

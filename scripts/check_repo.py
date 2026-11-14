@@ -74,41 +74,40 @@ def check(root):
     except KeyError as exc:
         errors.append("Missing/invalid contract: " + str(exc))
         return errors
-    tables = core["tables"] + state["tables"]
+    tables = core["tables"]
     names = [t["name"] for t in tables]
-    require(len(core["tables"]) == 11 and len(state["tables"]) == 6 and len(set(names)) == 17, "Expected eleven core and six distinct execution tables")
-    supported_primary = {"singleLineText", "multilineText", "number", "date", "dateTime", "url", "email"}
-    lookup = {t["name"]: t for t in tables}
+    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History"}
+    require(len(names) == 6 and set(names) == expected, "Expected exactly six active logical tables")
+    require(state.get("deprecated") is True and not state.get("tables"), "Legacy execution schema must not add tables")
+    lookup = {t["name"]:t for t in tables}
     for table in tables:
         fields = table["fields"]
-        field_names = [f["name"] for f in fields]
-        require(len(field_names) == len(set(field_names)), "Duplicate fields: " + table["name"])
-        require(bool(fields) and fields[0]["type"] in supported_primary, "Unsupported primary creation field: " + table["name"])
+        labels = [f["name"] for f in fields]
+        require(len(labels) == len(set(labels)), "Duplicate fields: " + table["name"])
         for f in fields:
             if f["type"] == "singleSelect":
-                choices = [x["name"] for x in f.get("options", {}).get("choices", [])]
-                require(bool(choices) and len(choices) == len(set(choices)), "Invalid enum: " + table["name"] + "." + f["name"])
-    for link in core["links"] + state["links"]:
-        require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table: " + str(link))
-        if link["from_table"] in lookup:
-            require(link["field"] not in [f["name"] for f in lookup[link["from_table"]]["fields"]], "Link conflicts with scalar field: " + link["field"])
-    resources = [x["key"] for x in seed["resources"]]
-    require(len(resources) == len(set(resources)), "Duplicate setup resource key")
-    require(set(command["state_tables"]) == {x["name"] for x in state["tables"]}, "Command/state table mismatch")
+                choices = [c["name"] for c in f.get("options", {}).get("choices", [])]
+                require(bool(choices) and len(choices) == len(set(choices)), "Invalid enum: " + f["name"])
+    for link in core["links"]:
+        require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
+    resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
+    require(len(resources) == len(set(resources)), "Duplicate Settings key")
+    require(set(command["tables"]) == expected and command["default_command"] == "Run", "Wrong command/schema default")
     aliases = []
     for cmd in command["commands"]:
-        require((root / cmd["instructions"]).is_file(), "Missing stage instructions: " + cmd["command"])
-        require(set(cmd["required_resources"]).issubset(resources), "Unseeded resource: " + cmd["command"])
-        require(set(cmd.get("submission_resources", [])).issubset(resources), "Unseeded submission resource: " + cmd["command"])
+        require((root / cmd["instructions"]).is_file(), "Missing command path: " + cmd["command"])
+        require(set(cmd["required_resources"]).issubset(resources), "Unseeded command resource")
         aliases += cmd["aliases"]
-    require(len(aliases) == len(set(aliases)), "Ambiguous command alias")
-    require(command.get("application_submission_default") is False, "Unsafe default submission policy")
-    require(next(x for x in command["commands"] if x["command"] == "Apply")["mode"] == "review", "Apply must default to preflight/review")
-    require(seed["submission_defaults"]["daily_submission_cap"] == 0 and seed["submission_defaults"]["enabled"] is False, "Unsafe setup submission defaults")
-    controls = {x["control"]: x["value"] for x in seed["controls"]}
-    require(controls.get("Pause applications") is True and controls.get("Stop all") is False, "Invalid fresh-install pause/stop defaults")
-    require(seed["scan_defaults"]["description_policy"] == "all" and seed["scan_defaults"]["recovery_budget"] is None, "Fidelity defaults changed without contract update")
-    require(seed["scan_defaults"]["inventory_storage_profile"] == "full-airtable", "Unexpected storage-profile default")
+    require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
+    require(command["application_submission_default"] is False, "Unsafe submission default")
+    require(next(c for c in command["commands"] if c["command"] == "Apply")["mode"] == "review", "Apply must default to preflight")
+    controls = {x["key"]: x["value"] for x in seed["controls"]}
+    require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")
+    policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
+    require(policy["recall_first"] is True and policy["title_only_admission"] is False and policy["career_screen_before_queue"] is True, "Admission gates weakened")
+    history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
+    require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
+    require(seed["submission_defaults"]["enabled"] is False and seed["submission_defaults"]["daily_submission_cap"] == 0, "Unsafe submission setup")
     require("MIT License" in (root / "LICENSE").read_text(), "Expected MIT license")
     return errors
 

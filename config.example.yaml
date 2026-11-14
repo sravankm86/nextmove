@@ -1,63 +1,35 @@
-mode: review  # review, prepare, or auto-apply
-timezone: null  # Set the user's actual IANA timezone; do not infer policy boundaries.
-profile: null
-companies: null
-tracker: null  # Private Airtable base reference; authorized setup can create it.
+# Filled copies stay private; Airtable Settings is authoritative configuration.
+mode: review
+timezone: null
 storage:
   structured_provider: airtable
   content_provider: google_drive
-  base: null  # Discover/verify the private base ID; never commit real IDs.
-  table_field_map: null  # Private mapping of logical fields to live table/field IDs.
-  migration_checkpoint: null  # Verified cutover status and resumable progress.
-governance:
-  audit_required: true
-  audit_operations: [create, read, update, archive, delete, schema]
-  audit_store: null  # Private Audit Events mapping; not a universal interceptor.
-  access_layer: null  # Must be configured/tested; direct UI/API access remains a gap.
-  allow_hard_delete: false
-  integrity_rules: null  # Private mapping, cardinality and scoped validation evidence.
-master_resume: null
-recruiting_mail: null
-resume_output: null  # Optional; setup can create it.
-email_lookback_days: 7
-answer_bank: null
-# Scan policy contract; the selected runtime must implement durable state/readers.
+  base: null
+  schema_version: 2
+  inventory_policy: admission-only
+execution:
+  default: single-agent
+  pipeline: [Scan, Review, Prepare, Apply, Track]
+  manual_handoffs: true
+  one_active_writer: true
+  continue_unaffected: true
+role_gate:
+  role_family: product_management
+  experience_years_threshold: null
+  comparison: greater_than
+  equivalent_scope_benchmark: null
+  recall_first: true
+  title_only_admission: false
+  career_screen_before_queue: true
 scan:
-  processing: incremental  # Baseline required when state/validation is unavailable.
-  source_registry: null  # Existing authorized private destination; never public Git.
-  runner_state: null  # Durable cache/checkpoints and reusable reader locations.
-  inventory_storage_profile: full-airtable  # Optional drive-catalog only by explicit choice; see SCALING.md.
-  description_policy: all  # all, or candidates only after explicit user choice.
-  description_freshness: verify  # Reliable edit version/conditional request or refresh.
-  recovery_budget:  # Optional; null means no user-selected cutoff.
-    max_attempts_per_source: null
-    max_minutes_per_source: null
-    max_model_escalations: null
-review:
-  decision_rule: career_high_or_resume_high
-  negative_rule: both_low
-  borderline_or_missing: needs_review
-tracking:
-  mailbox_state: null  # Existing authorized private checkpoint/event store.
-  lifecycle_events: null  # Existing authorized private transition log.
-  mail_audit: null  # Existing authorized private coverage/matching audit.
+  complete_source_enumeration: true
+  description_policy: admission-focused
+  recovery_budget: null
+history:
+  meaningful_changes: true
+  run_read_scope: true
+  per_read_rows: false
 auto_apply:
+  enabled: false
   supported_domains: []
   daily_submission_cap: 0
-
-# Portable manual harness contract; real resource references stay in Airtable.
-commands:
-  orchestration: manual  # Or single-harness with an explicit recorded stage plan.
-  bootstrap: HARNESS-BOOTSTRAP.md
-  contract: contracts/commands.json
-  context_registry: null
-  stage_config: null
-  stage_runs: null
-  work_items: null
-  task_attempts: null
-  artifacts: null
-  resume_compatible_unfinished: true
-  scope: full_eligible_queue
-  auto_chain: false
-  submission_default: review
-

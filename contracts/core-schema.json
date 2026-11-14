@@ -1,11 +1,11 @@
 {
-  "version": 1,
-  "description": "Logical fresh-install core blueprint, not a connector request body. Resolve live IDs and field options with the selected tools; preserve existing mappings and provenance.",
+  "version": 2,
+  "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values.",
   "tables": [
     {
-      "name": "Target Companies",
-      "description": "One current company choice. Allow/Exclude and Pool belong to the user; no default Allow.",
+      "name": "Companies",
       "business_key": "Company key",
+      "description": "Explicit company choices and confirmed simple quota/cooldown rules. Complex unclear rules block submission; no automatic Allow.",
       "fields": [
         {
           "name": "Company",
@@ -34,10 +34,6 @@
           "type": "singleLineText"
         },
         {
-          "name": "Careers URL",
-          "type": "url"
-        },
-        {
           "name": "Notes",
           "type": "multilineText"
         },
@@ -56,6 +52,10 @@
           }
         },
         {
+          "name": "Application window type",
+          "type": "singleLineText"
+        },
+        {
           "name": "Rejection cooldown (days)",
           "type": "number",
           "options": {
@@ -63,56 +63,8 @@
           }
         },
         {
-          "name": "Application window type",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Rolling"
-              },
-              {
-                "name": "Calendar"
-              },
-              {
-                "name": "Fixed"
-              },
-              {
-                "name": "Unconfirmed"
-              }
-            ]
-          }
-        },
-        {
           "name": "Restriction scope",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Company"
-              },
-              {
-                "name": "Role family"
-              },
-              {
-                "name": "Exact role"
-              },
-              {
-                "name": "Mixed"
-              },
-              {
-                "name": "Unconfirmed"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Last rejection date",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
+          "type": "singleLineText"
         },
         {
           "name": "Apply blocked until",
@@ -152,19 +104,6 @@
           "type": "multilineText"
         },
         {
-          "name": "Restriction last verified",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
           "name": "Restriction timezone",
           "type": "singleLineText"
         }
@@ -172,11 +111,15 @@
     },
     {
       "name": "Applications",
-      "description": "Current application lifecycle and fit/resume evidence. Preserve legacy fields during migration.",
-      "business_key": "Record ID; scoped Job key for canonical role matching",
+      "business_key": "Job key for canonical roles; immutable record identity for preserved legacy history",
+      "description": "Only verified role/scope admissions become new inventory. Career alignment must pass before Queued. Historical applications are preserved separately from new admission.",
       "fields": [
         {
           "name": "Application",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Job key",
           "type": "singleLineText"
         },
         {
@@ -188,14 +131,23 @@
           "type": "singleLineText"
         },
         {
-          "name": "Requisition ID",
-          "type": "singleLineText"
+          "name": "Job description link",
+          "type": "url"
         },
         {
           "name": "Lifecycle status",
           "type": "singleSelect",
           "options": {
             "choices": [
+              {
+                "name": "Needs eligibility"
+              },
+              {
+                "name": "Inventoried"
+              },
+              {
+                "name": "Not aligned"
+              },
               {
                 "name": "Queued"
               },
@@ -248,184 +200,78 @@
           }
         },
         {
-          "name": "Applied on",
-          "type": "date",
+          "name": "Role eligibility",
+          "type": "singleSelect",
           "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Eligible"
+              },
+              {
+                "name": "Excluded"
+              }
+            ]
           }
         },
         {
-          "name": "Job description link",
-          "type": "url"
-        },
-        {
-          "name": "Resume link",
-          "type": "url"
-        },
-        {
-          "name": "Resume notes",
+          "name": "Eligibility evidence",
           "type": "multilineText"
         },
         {
-          "name": "Fit rationale",
-          "type": "multilineText"
+          "name": "Eligibility policy version",
+          "type": "singleLineText"
         },
         {
-          "name": "Date found",
-          "type": "dateTime",
+          "name": "Career gate",
+          "type": "singleSelect",
           "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Pass"
+              },
+              {
+                "name": "Fail"
+              }
+            ]
           }
         },
         {
-          "name": "Outcome",
+          "name": "Career evidence",
           "type": "multilineText"
+        },
+        {
+          "name": "Career goals version",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Description content (Drive)",
+          "type": "url"
+        },
+        {
+          "name": "Description status",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Availability",
+          "type": "singleLineText"
         },
         {
           "name": "Posted salary range",
           "type": "multilineText"
         },
         {
-          "name": "Source url",
-          "type": "url"
-        },
-        {
-          "name": "Observed at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Job key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Legacy pipeline stage",
-          "type": "multilineText"
-        },
-        {
-          "name": "Run id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Attempt id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Submitted at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Submitted resume version",
-          "type": "multilineText"
-        },
-        {
-          "name": "Confirmation ref",
-          "type": "multilineText"
-        },
-        {
-          "name": "Blocker",
-          "type": "multilineText"
-        },
-        {
           "name": "Location",
-          "type": "multilineText"
+          "type": "singleLineText"
         },
         {
-          "name": "First pass reason",
-          "type": "multilineText"
-        },
-        {
-          "name": "Relevance",
-          "type": "multilineText"
-        },
-        {
-          "name": "Fit gaps",
-          "type": "multilineText"
-        },
-        {
-          "name": "Eligibility",
-          "type": "multilineText"
-        },
-        {
-          "name": "Fit evaluated at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Confirmed on",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
-          "name": "Status source",
-          "type": "multilineText"
-        },
-        {
-          "name": "Status notes",
-          "type": "multilineText"
-        },
-        {
-          "name": "Outcome on",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
-          "name": "Status recorded at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Legacy status applied on",
-          "type": "multilineText"
+          "name": "Work arrangement",
+          "type": "singleLineText"
         },
         {
           "name": "Job posted date",
@@ -437,36 +283,30 @@
           }
         },
         {
-          "name": "Job posted text",
-          "type": "multilineText"
-        },
-        {
-          "name": "Work arrangement",
-          "type": "singleSelect",
+          "name": "First seen at",
+          "type": "dateTime",
           "options": {
-            "choices": [
-              {
-                "name": "Remote"
-              },
-              {
-                "name": "Hybrid"
-              },
-              {
-                "name": "On-site"
-              },
-              {
-                "name": "Unspecified"
-              }
-            ]
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
           }
         },
         {
-          "name": "Location details",
-          "type": "multilineText"
-        },
-        {
-          "name": "Salary details",
-          "type": "multilineText"
+          "name": "Last seen at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
         },
         {
           "name": "Career fit",
@@ -509,97 +349,6 @@
           }
         },
         {
-          "name": "Reviewed at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Review criteria version",
-          "type": "multilineText"
-        },
-        {
-          "name": "Review master version",
-          "type": "multilineText"
-        },
-        {
-          "name": "Review description hash",
-          "type": "multilineText"
-        },
-        {
-          "name": "Review pending",
-          "type": "checkbox",
-          "options": {
-            "icon": "check",
-            "color": "greenBright"
-          }
-        },
-        {
-          "name": "Resume type",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Base"
-              },
-              {
-                "name": "Tailored"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Resume master version",
-          "type": "multilineText"
-        },
-        {
-          "name": "Resume verified at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Resume claims reference",
-          "type": "url"
-        },
-        {
-          "name": "Next owner",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Reviewer"
-              },
-              {
-                "name": "Preparer"
-              },
-              {
-                "name": "Applier"
-              },
-              {
-                "name": "Tracker"
-              },
-              {
-                "name": "Human"
-              }
-            ]
-          }
-        },
-        {
           "name": "Fit rationale - Career goals",
           "type": "multilineText"
         },
@@ -608,145 +357,31 @@
           "type": "multilineText"
         },
         {
-          "name": "Description content (Drive)",
+          "name": "Resume link",
           "type": "url"
         },
         {
-          "name": "Imported lifecycle status",
-          "type": "singleLineText"
+          "name": "Resume notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Evidence versions (JSON)",
+          "type": "multilineText"
         },
         {
           "name": "Submission attempt key",
           "type": "singleLineText"
         },
         {
-          "name": "Submission recorded at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Job Inventory",
-      "description": "Canonical posting metadata and capture references; default full inventory, with optional explicitly selected storage profiles.",
-      "business_key": "job_key",
-      "fields": [
-        {
-          "name": "job_key",
+          "name": "Submitted resume version",
           "type": "singleLineText"
         },
         {
-          "name": "company_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "source_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "requisition_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "source_posting_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "job_url",
-          "type": "url"
-        },
-        {
-          "name": "title",
+          "name": "Confirmation reference",
           "type": "multilineText"
         },
         {
-          "name": "location",
-          "type": "multilineText"
-        },
-        {
-          "name": "description_content_drive",
-          "type": "url"
-        },
-        {
-          "name": "first_seen_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "last_seen_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "availability",
-          "type": "multilineText"
-        },
-        {
-          "name": "description_status",
-          "type": "multilineText"
-        },
-        {
-          "name": "disposition",
-          "type": "multilineText"
-        },
-        {
-          "name": "fit_rationale",
-          "type": "multilineText"
-        },
-        {
-          "name": "run_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "first_pass_decision",
-          "type": "multilineText"
-        },
-        {
-          "name": "first_pass_reason",
-          "type": "multilineText"
-        },
-        {
-          "name": "posted_salary",
-          "type": "multilineText"
-        },
-        {
-          "name": "salary_details",
-          "type": "multilineText"
-        },
-        {
-          "name": "work_arrangement",
-          "type": "multilineText"
-        },
-        {
-          "name": "location_details",
-          "type": "multilineText"
-        },
-        {
-          "name": "job_posted_at",
+          "name": "Applied on",
           "type": "date",
           "options": {
             "dateFormat": {
@@ -755,176 +390,92 @@
           }
         },
         {
-          "name": "job_posted_text",
-          "type": "multilineText"
+          "name": "Confirmed on",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
-          "name": "metadata_gaps",
-          "type": "multilineText"
+          "name": "Outcome on",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
-          "name": "Metadata hash",
+          "name": "Blocker",
+          "type": "multilineText"
+        }
+      ]
+    },
+    {
+      "name": "Sources",
+      "business_key": "Source key",
+      "description": "One official board/region. Enumerate all pages transiently; preserve coverage and minimal unresolved eligibility checks, not ineligible job records.",
+      "fields": [
+        {
+          "name": "Source",
           "type": "singleLineText"
         },
         {
-          "name": "Description hash",
+          "name": "Source key",
           "type": "singleLineText"
+        },
+        {
+          "name": "Official careers URL",
+          "type": "url"
+        },
+        {
+          "name": "Catalog URL",
+          "type": "url"
+        },
+        {
+          "name": "Region",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Reader reference",
+          "type": "url"
         },
         {
           "name": "Reader version",
           "type": "singleLineText"
         },
         {
-          "name": "Criteria version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Filter version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Description verified at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Source memberships (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Change version evidence (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Field provenance (JSON)",
-          "type": "multilineText"
-        }
-      ]
-    },
-    {
-      "name": "Catalog Sources",
-      "description": "One current configured official board/region; preserve its change history in Audit Events.",
-      "business_key": "source_id",
-      "fields": [
-        {
-          "name": "Source record name",
-          "type": "singleLineText"
-        },
-        {
-          "name": "source_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "company_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "company",
-          "type": "singleLineText"
-        },
-        {
-          "name": "official_careers_url",
-          "type": "url"
-        },
-        {
-          "name": "catalog_url",
-          "type": "url"
-        },
-        {
-          "name": "reader",
-          "type": "singleLineText"
-        },
-        {
-          "name": "region",
-          "type": "singleLineText"
-        },
-        {
-          "name": "source_verification",
-          "type": "multilineText"
-        },
-        {
-          "name": "coverage_gap",
-          "type": "multilineText"
-        },
-        {
-          "name": "snapshot_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "run_id",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Reader version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Manifest version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Pagination contract (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Checkpoint (JSON)",
-          "type": "multilineText"
-        }
-      ]
-    },
-    {
-      "name": "Company Policies",
-      "description": "Separate confirmed constraints where a company has multiple scopes/windows; do not invent a policy.",
-      "business_key": "Policy key",
-      "fields": [
-        {
-          "name": "Policy",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Policy key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Type",
+          "name": "Latest coverage",
           "type": "singleSelect",
           "options": {
             "choices": [
               {
-                "name": "Application limit"
+                "name": "Complete"
               },
               {
-                "name": "Rejection cooldown"
+                "name": "Partial"
               },
               {
-                "name": "Manual hold"
+                "name": "Failed"
+              },
+              {
+                "name": "Unverified"
               }
             ]
           }
         },
         {
-          "name": "Rule details",
+          "name": "Checkpoint (JSON)",
           "type": "multilineText"
         },
         {
-          "name": "Blocked until",
+          "name": "Last error",
+          "type": "multilineText"
+        },
+        {
+          "name": "Last scanned at",
           "type": "dateTime",
           "options": {
             "dateFormat": {
@@ -935,36 +486,153 @@
             },
             "timeZone": "utc"
           }
-        },
-        {
-          "name": "Evidence (Drive)",
-          "type": "url"
         }
       ]
     },
     {
       "name": "Runs",
-      "description": "Domain evidence; not a replacement for the general CRUD journal.",
-      "business_key": "run_id",
+      "business_key": "Run key",
+      "description": "One row per full run by default; manual stage invocations use the identical checkpoint/handoff shape. No per-job work-item or general attempt tables.",
       "fields": [
         {
-          "name": "Run record",
+          "name": "Run key",
           "type": "singleLineText"
         },
         {
-          "name": "run_id",
+          "name": "Run type",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Full run"
+              },
+              {
+                "name": "Scan"
+              },
+              {
+                "name": "Review"
+              },
+              {
+                "name": "Prepare"
+              },
+              {
+                "name": "Apply"
+              },
+              {
+                "name": "Track"
+              },
+              {
+                "name": "Migration"
+              },
+              {
+                "name": "Experiment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Running"
+              },
+              {
+                "name": "Complete"
+              },
+              {
+                "name": "Partial"
+              },
+              {
+                "name": "Blocked"
+              },
+              {
+                "name": "Failed"
+              },
+              {
+                "name": "Interrupted"
+              },
+              {
+                "name": "Cancelled"
+              },
+              {
+                "name": "No work"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Mode",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "review"
+              },
+              {
+                "name": "prepare"
+              },
+              {
+                "name": "auto-apply"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Owner",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Instruction revision",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Input versions (JSON)",
           "type": "multilineText"
         },
         {
-          "name": "instruction_revision",
+          "name": "Scope (JSON)",
           "type": "multilineText"
         },
         {
-          "name": "mode",
+          "name": "Stages (JSON)",
           "type": "multilineText"
         },
         {
-          "name": "started_at",
+          "name": "Checkpoint (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Pending checks (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Expected items",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Completed items",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Blocked items",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Started at",
           "type": "dateTime",
           "options": {
             "dateFormat": {
@@ -977,7 +645,7 @@
           }
         },
         {
-          "name": "heartbeat_at",
+          "name": "Finished at",
           "type": "dateTime",
           "options": {
             "dateFormat": {
@@ -990,350 +658,77 @@
           }
         },
         {
-          "name": "finished_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "stage",
+          "name": "Handoff (JSON)",
           "type": "multilineText"
         },
         {
-          "name": "status",
-          "type": "multilineText"
+          "name": "Backup/report URL",
+          "type": "url"
         },
         {
-          "name": "error",
+          "name": "Blockers",
           "type": "multilineText"
         }
       ]
     },
     {
-      "name": "Scan Audit",
-      "description": "Domain evidence; not a replacement for the general CRUD journal.",
-      "business_key": "Record ID; run/source/scope/attempt identity",
+      "name": "Settings",
+      "business_key": "Key",
+      "description": "Private resource references, criteria, scope and live controls. Instructions/command routes stay in Git.",
       "fields": [
         {
-          "name": "Audit record",
+          "name": "Key",
           "type": "singleLineText"
         },
         {
-          "name": "run_id",
+          "name": "Value",
           "type": "multilineText"
         },
         {
-          "name": "company_id",
-          "type": "multilineText"
+          "name": "Reference URL",
+          "type": "url"
         },
         {
-          "name": "scope",
-          "type": "multilineText"
-        },
-        {
-          "name": "source_id",
-          "type": "multilineText"
-        },
-        {
-          "name": "source_url",
-          "type": "multilineText"
-        },
-        {
-          "name": "status",
-          "type": "multilineText"
-        },
-        {
-          "name": "pages_read",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "end_verified",
-          "type": "checkbox",
-          "options": {
-            "icon": "check",
-            "color": "greenBright"
-          }
-        },
-        {
-          "name": "advertised_count",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "observed_count",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "description_failures",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "last_success_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "error",
-          "type": "multilineText"
-        },
-        {
-          "name": "scanned_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Lifecycle Events",
-      "description": "Domain evidence; not a replacement for the general CRUD journal.",
-      "business_key": "event_id",
-      "fields": [
-        {
-          "name": "Event",
+          "name": "Version",
           "type": "singleLineText"
         },
         {
-          "name": "event_id",
-          "type": "multilineText"
-        },
-        {
-          "name": "job_key",
-          "type": "multilineText"
-        },
-        {
-          "name": "company",
-          "type": "multilineText"
-        },
-        {
-          "name": "role",
-          "type": "multilineText"
-        },
-        {
-          "name": "worker",
-          "type": "multilineText"
-        },
-        {
-          "name": "previous_status",
-          "type": "multilineText"
-        },
-        {
-          "name": "new_status",
-          "type": "multilineText"
-        },
-        {
-          "name": "event_type",
-          "type": "multilineText"
-        },
-        {
-          "name": "event_at",
-          "type": "dateTime",
+          "name": "Verification",
+          "type": "singleSelect",
           "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
+            "choices": [
+              {
+                "name": "Located"
+              },
+              {
+                "name": "Verified"
+              },
+              {
+                "name": "Missing"
+              },
+              {
+                "name": "Needs verification"
+              },
+              {
+                "name": "Inaccessible"
+              }
+            ]
           }
         },
         {
-          "name": "recorded_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
+          "name": "Required by",
+          "type": "singleLineText"
         },
         {
-          "name": "source",
-          "type": "multilineText"
-        },
-        {
-          "name": "evidence_ref",
-          "type": "multilineText"
-        },
-        {
-          "name": "run_id",
-          "type": "multilineText"
-        },
-        {
-          "name": "notes",
+          "name": "Notes",
           "type": "multilineText"
         }
       ]
     },
     {
-      "name": "Mail Audit",
-      "description": "Domain evidence; not a replacement for the general CRUD journal.",
-      "business_key": "Record ID; run/source/scope/attempt identity",
-      "fields": [
-        {
-          "name": "Audit",
-          "type": "singleLineText"
-        },
-        {
-          "name": "run_id",
-          "type": "multilineText"
-        },
-        {
-          "name": "mailbox_scope",
-          "type": "multilineText"
-        },
-        {
-          "name": "window_start",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "window_end",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "pages_read",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "messages_read",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "matched_events",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "unmatched_events",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "ambiguous_events",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "duplicate_events",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "transitions_saved",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "last_successful_checkpoint",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "status",
-          "type": "multilineText"
-        },
-        {
-          "name": "error",
-          "type": "multilineText"
-        },
-        {
-          "name": "checked_at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Audit Events",
-      "description": "Policy-based append-only operation journal; not immutable or a native all-path interceptor.",
+      "name": "History",
       "business_key": "Event key",
+      "description": "Meaningful mutations and business events; failed/uncertain operations retain evidence. No routine per-read/per-row access logging. Not a universal immutable audit system.",
       "fields": [
         {
           "name": "Event key",
@@ -1344,59 +739,8 @@
           "type": "singleLineText"
         },
         {
-          "name": "Operation",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Create"
-              },
-              {
-                "name": "Read"
-              },
-              {
-                "name": "Update"
-              },
-              {
-                "name": "Archive"
-              },
-              {
-                "name": "Delete"
-              },
-              {
-                "name": "Schema"
-              },
-              {
-                "name": "Baseline"
-              },
-              {
-                "name": "Access review"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Phase",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Intent"
-              },
-              {
-                "name": "Succeeded"
-              },
-              {
-                "name": "Failed"
-              },
-              {
-                "name": "Uncertain"
-              },
-              {
-                "name": "Baseline"
-              }
-            ]
-          }
+          "name": "Event type",
+          "type": "singleLineText"
         },
         {
           "name": "Recorded at",
@@ -1429,19 +773,11 @@
           "type": "singleLineText"
         },
         {
-          "name": "Table ID",
+          "name": "Table reference",
           "type": "singleLineText"
         },
         {
-          "name": "Record ID reference",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Entity key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Run ID",
+          "name": "Record reference",
           "type": "singleLineText"
         },
         {
@@ -1449,35 +785,8 @@
           "type": "multilineText"
         },
         {
-          "name": "Read scope (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Reason / source",
-          "type": "multilineText"
-        },
-        {
-          "name": "Coverage / errors",
-          "type": "multilineText"
-        },
-        {
-          "name": "Evidence (Drive)",
+          "name": "Evidence URL",
           "type": "url"
-        }
-      ]
-    },
-    {
-      "name": "Controls",
-      "description": "Private live configuration/stop controls; values must be parsed explicitly, never by truthiness of a string.",
-      "business_key": "Control",
-      "fields": [
-        {
-          "name": "Control",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Value",
-          "type": "multilineText"
         },
         {
           "name": "Notes",
@@ -1489,56 +798,38 @@
   "links": [
     {
       "from_table": "Applications",
-      "field": "Target company",
-      "target_table": "Target Companies",
+      "field": "Company",
+      "target_table": "Companies",
       "cardinality": "0..1"
     },
     {
       "from_table": "Applications",
-      "field": "Inventory job",
-      "target_table": "Job Inventory",
+      "field": "Sources",
+      "target_table": "Sources",
+      "cardinality": "many"
+    },
+    {
+      "from_table": "Sources",
+      "field": "Company",
+      "target_table": "Companies",
+      "cardinality": "1"
+    },
+    {
+      "from_table": "Sources",
+      "field": "Last run",
+      "target_table": "Runs",
       "cardinality": "0..1"
     },
     {
-      "from_table": "Job Inventory",
-      "field": "Target company",
-      "target_table": "Target Companies",
-      "cardinality": "0..1"
-    },
-    {
-      "from_table": "Catalog Sources",
-      "field": "Target company",
-      "target_table": "Target Companies",
-      "cardinality": "0..1"
-    },
-    {
-      "from_table": "Company Policies",
-      "field": "Target company",
-      "target_table": "Target Companies",
-      "cardinality": "0..1"
-    },
-    {
-      "from_table": "Scan Audit",
-      "field": "Target company",
-      "target_table": "Target Companies",
-      "cardinality": "0..1"
-    },
-    {
-      "from_table": "Lifecycle Events",
+      "from_table": "History",
       "field": "Application",
       "target_table": "Applications",
-      "cardinality": "0..1"
+      "cardinality": "many"
     },
     {
-      "from_table": "Mail Audit",
-      "field": "Stage run",
-      "target_table": "Stage Runs",
-      "cardinality": "0..1"
-    },
-    {
-      "from_table": "Audit Events",
-      "field": "Application",
-      "target_table": "Applications",
+      "from_table": "History",
+      "field": "Run",
+      "target_table": "Runs",
       "cardinality": "0..1"
     }
   ],
@@ -1580,13 +871,24 @@
       }
     }
   ],
-  "identity_note": "Audit Events uses Record ID reference for the affected row, while its own Record ID is computed. Existing deployments may map the affected-row field named Record ID as a legacy alias; do not change its meaning.",
-  "creation_order": [
-    "Create scalar tables with supported primary display fields",
-    "Create orchestration tables from state-schema.json",
-    "Resolve all returned table IDs",
-    "Create links with resolved IDs and validate inverse fields",
-    "Add common/computed metadata with field-creation tools where table creation does not support it",
-    "Map logical names, seed private context/controls, and verify readback"
-  ]
+  "legacy_aliases": {
+    "Companies": [
+      "Target Companies"
+    ],
+    "Sources": [
+      "Catalog Sources"
+    ],
+    "Settings": [
+      "Controls",
+      "Context Registry"
+    ],
+    "Runs": [
+      "Stage Runs",
+      "Runs"
+    ],
+    "History": [
+      "Audit Events",
+      "Lifecycle Events"
+    ]
+  }
 }

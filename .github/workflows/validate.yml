@@ -25,6 +25,8 @@ jobs:
           python-version: '3.12'
       - name: Validate public contracts and docs
         run: python scripts/check_repo.py
+      - name: Admission regression checks
+        run: python -m unittest discover -s tests -v
       - name: Verify generated core schema is current
         run: |
           python scripts/build_schema.py

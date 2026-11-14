@@ -1,0 +1,70 @@
+"""Small shared PM admission gate. Uses evidence supplied by a verified reader.
+
+Title screening finds candidates for verification; it never admits inventory.
+No model APIs, network calls, credentials or user data are required.
+"""
+import re
+import unicodedata
+
+
+def normalize(value):
+    text = unicodedata.normalize('NFKC', value or '').lower()
+    return re.sub(r'\s+', ' ', text.replace('–', '-').replace('—', '-')).strip()
+
+
+DIRECT_PM = re.compile(r'\bproduct\s+(?:(?:inbound|outbound|technical|platform|portfolio|growth|group|security|senior|staff|principal|lead|ai|data|digital|tax)\s+){0,3}(?:manager|mgr|management)\b')
+FLAT_PM = re.compile(r'\bmember\s+of\s+product\s+(?:staff|team)\b')
+OWNER_LEAD = re.compile(r'\bproduct\s+(?:owner|lead|leadership)\b')
+LEADERSHIP = re.compile(r'\b(?:director|head|vp|svp|evp|vice president|chief)\b.{0,45}\bproduct\b|\bproduct\b.{0,45}\b(?:director|head|vp|svp|evp|vice president)\b')
+ABBREVIATION = re.compile(r'\b(?:gpm|cpo|pm|gm)\b|\bgeneral manager\b')
+LOCALIZED_PM = re.compile(r'produktmanager|produktmanagement|chef(?:fe)?\s+de\s+produit|responsable(?:\s+de)?\s+produit|director(?:a)?\s+de\s+producto|gerente\s+de\s+produt[oa]|gestor\s+de\s+produto|产品经理|產品經理|プロダクトマネージャー|제품\s*관리자')
+CLEAR_OTHER = re.compile(r'\b(?:marketing|designer|design|security engineer|product security|support|success|sales|business development|communications|public relations|data scientist|data science|analytics|analyst|software engineer|engineering|engineer|legal|counsel|operations|supply chain|finance|policy|enablement|assistant|program manager|project manager)\b')
+JUNIOR = re.compile(r'^(?:intern|internship|junior|entry.level|graduate)\b|\bassociate\s+(?:technical\s+)?product\s+(?:manager|mgr)\b|\bproduct\s+(?:manager|mgr|management)\s+(?:intern|internship|i|1)\b')
+
+
+def title_screen(title):
+    text = normalize(title)
+    if not text or text in {'.', '-', 'n/a', 'unknown'}:
+        return {'decision': 'pending_metadata', 'reason': 'No usable title; verify official posting'}
+    # A shift time ending in PM is not a product-role abbreviation.
+    text = re.sub(r'\b\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)\b', '', text)
+    role_abbrev = re.search(r'^(?:(?:senior|sr\.?|staff|principal|lead|group|technical|platform)\s+)*(?:pm|gpm)\b', text)
+    direct = bool(DIRECT_PM.search(text) or FLAT_PM.search(text) or OWNER_LEAD.search(text) or LOCALIZED_PM.search(text) or role_abbrev)
+    possible = direct or bool(LEADERSHIP.search(text) or ABBREVIATION.search(text))
+    if not possible:
+        return {'decision': 'reject', 'reason': 'No PM role-family signal'}
+    if not direct and CLEAR_OTHER.search(text):
+        return {'decision': 'reject', 'reason': 'Explicit other function without a PM role signal'}
+    if JUNIOR.search(text):
+        return {'decision': 'reject', 'reason': 'Explicit junior/entry PM title'}
+    return {'decision': 'verify_jd', 'reason': 'Verify PM function and configured senior scope/experience; title is not admission'}
+
+
+def admission(assessment, *, years_threshold):
+    """Return pass/reject/pending. Never infer company-grade equivalence.
+
+    years_threshold is exclusive. Low posted minimums alone do not prove scope
+    below the bar. Equivalent scope requires an explicit evidence-backed decision.
+    """
+    if not isinstance(years_threshold, (int, float)) or isinstance(years_threshold, bool):
+        raise ValueError('Explicit numeric experience threshold required')
+    if assessment.get('identity_verified') is not True or assessment.get('description_verified') is not True:
+        return 'pending'
+    if assessment.get('role_family', 'unknown') not in {'product_management', 'unknown', None}:
+        return 'reject'
+    if assessment.get('role_family') != 'product_management' or not assessment.get('role_evidence'):
+        return 'pending'
+    if assessment.get('availability_verified') is not True:
+        return 'pending'
+    years = assessment.get('experience_years_target')
+    experience_pass = isinstance(years, (int, float)) and not isinstance(years, bool) and years > years_threshold and bool(assessment.get('experience_evidence'))
+    scope_pass = assessment.get('equivalent_senior_scope') is True and bool(assessment.get('scope_evidence'))
+    if experience_pass or scope_pass:
+        return 'pass'
+    if assessment.get('explicitly_below_scope') is True and assessment.get('scope_evidence'):
+        return 'reject'
+    return 'pending'
+
+
+def queue_allowed(*, role_decision, career_decision, career_evidence, versions_current):
+    return role_decision == 'pass' and career_decision == 'pass' and bool(career_evidence) and versions_current is True

@@ -1,66 +1,81 @@
 {
-  "version": 1,
-  "dispatch": "Explicit stage invocation, or next authorized stage of an explicitly recorded single-harness plan; never an inferred pipeline",
-  "state_tables": [
-    "Context Registry",
-    "Stage Config",
-    "Stage Runs",
-    "Work Items",
-    "Task Attempts",
-    "Artifacts"
+  "version": 2,
+  "tables": [
+    "Companies",
+    "Applications",
+    "Sources",
+    "Runs",
+    "Settings",
+    "History"
   ],
+  "default_command": "Run",
+  "execution_modes": [
+    "single-agent",
+    "manual"
+  ],
+  "pipeline": [
+    "Scan",
+    "Review",
+    "Prepare",
+    "Apply",
+    "Track"
+  ],
+  "application_submission_default": false,
   "commands": [
     {
-      "command": "Scan",
+      "command": "Run",
       "aliases": [
-        "scan",
-        "scanner"
+        "run",
+        "run nextmove",
+        "end-to-end"
       ],
-      "stage": "Scan",
+      "stage": "Full run",
       "mode": "prepare",
-      "instructions": "stages/scan.md",
-      "scope": "All current Allow companies and all verified configured official sources/regions; Exclude wins",
+      "instructions": "COMMANDS.md",
+      "scope": "Whole authorized end-to-end plan; continue unaffected work, checkpoint blockers",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "career_goals",
-        "job_description_content",
-        "source_registry",
-        "scan_policy",
+        "role_policy",
+        "execution_policy"
+      ]
+    },
+    {
+      "command": "Scan",
+      "aliases": [
+        "scan"
+      ],
+      "stage": "Scan",
+      "mode": "prepare",
+      "instructions": "stages/scan.md",
+      "scope": "Every Allow company/source; verified role admission and career screen",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "career_goals",
+        "role_policy",
         "content_output"
-      ],
-      "outputs": [
-        "Job Inventory",
-        "Applications",
-        "Scan Audit",
-        "Runs"
-      ],
-      "next_command": "Review"
+      ]
     },
     {
       "command": "Review",
       "aliases": [
         "review",
         "assess",
-        "role fit",
         "shortlist"
       ],
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "All Queued plus explicitly retryable review-owned pre-submission records; preserve later states",
+      "scope": "Gated current queue and explicitly retryable revalidation backlog",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "career_goals",
-        "master_resume",
-        "job_description_content"
-      ],
-      "outputs": [
-        "Applications",
-        "Lifecycle Events"
-      ],
-      "next_command": "Prepare"
+        "role_policy",
+        "master_resume"
+      ]
     },
     {
       "command": "Prepare",
@@ -71,30 +86,24 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "All eligible Shortlisted with current accepted review evidence",
+      "scope": "Eligible Shortlisted roles with current evidence",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "master_resume",
+        "content_output",
         "resume_output"
-      ],
-      "outputs": [
-        "Applications",
-        "Artifacts",
-        "Lifecycle Events"
-      ],
-      "next_command": "Apply"
+      ]
     },
     {
       "command": "Apply",
       "aliases": [
-        "apply",
-        "applier"
+        "apply"
       ],
       "stage": "Apply",
       "mode": "review",
       "instructions": "stages/apply.md",
-      "scope": "Ready roles; submission only within separate live explicit authorization and all gates",
+      "scope": "Ready; actual submissions only in separate explicit scope",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -103,44 +112,22 @@
       "submission_resources": [
         "answer_bank",
         "submission_policy"
-      ],
-      "outputs": [
-        "Applications",
-        "Task Attempts",
-        "Artifacts",
-        "Lifecycle Events"
-      ],
-      "next_command": "Track"
+      ]
     },
     {
       "command": "Track",
       "aliases": [
-        "track",
-        "tracker"
+        "track"
       ],
       "stage": "Track",
       "mode": "prepare",
       "instructions": "stages/track.md",
-      "scope": "Configured read-only mailbox checkpoint with overlap/pagination; exact-role event matching",
+      "scope": "Read-only exact-role mailbox checkpoint",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "mailbox"
-      ],
-      "outputs": [
-        "Applications",
-        "Mail Audit",
-        "Lifecycle Events"
-      ],
-      "next_command": null
+      ]
     }
-  ],
-  "resume_policy": "Resume one compatible released unfinished run of the same stage. Multiple candidates or ambiguous prior owner require disambiguation. Never steal an active owner on expiry alone.",
-  "complete_rule": "Every frozen work item accounted for; acceptance/readback, audit and handoff persisted; unresolved work prevents Complete",
-  "application_submission_default": false,
-  "allowed_orchestration_modes": [
-    "manual",
-    "single-harness"
   ]
 }
-

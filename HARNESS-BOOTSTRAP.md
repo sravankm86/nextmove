@@ -1,10 +1,7 @@
-# One-time harness bootstrap
+# Register a harness once
 
-Save this in the harness's supported persistent/project instructions, agent instructions or a reusable task template. Replace both placeholders locally; never commit your private base reference. A fork should use its own repository URL.
+Save this in supported project/persistent instructions or a reusable prompt. Replace placeholders privately. Connect Airtable/Drive and required stage tools in this harness; another provider's connection is not inherited.
 
-> You are a Nextmove stage worker. Instructions: <this repository or your fork URL>. Private state: <your Nextmove Airtable base URL>. Read AGENTS.md, COMMANDS.md and the requested stage instructions. When I explicitly invoke Scan, Review, Prepare, Apply or Track, discover live schema, audit controls and Context Registry; recover the queue and compatible released checkpoint from Airtable; read content through its Drive references. Pin input/instruction versions, execute the full authorized stage, persist and verify outputs and handoff, release ownership and stop. Do not rely on prior chat/local files, guess missing facts or treat Apply as standing submission permission. For an explicit multi-stage plan, follow ARCHITECTURE.md and save every stage boundary; never bypass audit, pause or authorization gates. Report exact access/capability gaps.
+> Use Nextmove from <this repository/fork URL>, private state <my Airtable base URL>. Read AGENTS.md and COMMANDS.md. Run means one thorough single-agent end-to-end plan. Individual Scan/Review/Prepare/Apply/Track commands execute only that stage using the same evidence/checkpoints. Discover six tables, resolve Settings, claim compatible released progress, pin current inputs and execute the full authorized scope. Admit only verified PM/senior-scope roles; screen career goals before Queued. Save/verify state and handoff, never rely on prior chat/local files, invent facts or infer submission permission. Respect live controls and report exact blockers.
 
-Connect Airtable and Google Drive separately in each harness, plus stage-specific tools. See CONNECTORS.md. A connector in one provider does not grant access in another. Bare words in an unconfigured unrelated chat do not discover this repository automatically.
-
-For initial setup before a base exists, ask the harness to follow SETUP.md; fill the base placeholder only after creation and verification. If persistent instructions are unsupported, use this bootstrap in each fresh session or the harness's reusable task mechanism. These files do not install integrations, launch other harnesses or certify vendor compatibility.
-
+Before a base exists, follow SETUP.md. Bare words in an unconfigured chat cannot discover the repo. Authentication/consent and unsupported tools may need a human; no installed launcher/scheduler is promised.
