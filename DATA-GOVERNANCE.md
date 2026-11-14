@@ -61,3 +61,8 @@ Strict all-path CRUD/read auditing and database-enforced constraints require a c
 Official references:
 - https://support.airtable.com/articles/3516802427-record-level-revision-history-in-airtable
 - https://support.airtable.com/articles/8978269981-the-primary-field-in-airtable
+
+
+## Manually invoked harness stages
+
+The user may operate one harness at a time under COMMANDS.md without an automated dispatcher. A harness can implement the controlled audit protocol directly through its tools for that interactive invocation; a persistent API gateway is not a prerequisite to manually emitting verified intents/outcomes. It must still test its audit access, record every controlled operation, honor one writer and stop affected work when logging fails. This changes neither universal access coverage nor Airtable's enforcement limits. Keep coverage Partial and do not bypass UI/API, retention, permission or submission controls. Do not block an otherwise capable interactive stage solely because an unattended scheduler is absent.

@@ -17,6 +17,9 @@ Resolve the private workspace/base and discover live tables, field IDs, types an
 | Catalog Sources | One official source/region per stable source ID, with configuration and coverage gaps |
 | Scan Audit / Runs | Source coverage, actual run provenance, errors and durable checkpoints |
 | Lifecycle Events / Mail Audit | Idempotent transition evidence and mailbox coverage/checkpoints when configured |
+| Context Registry / Stage Config | Private resource discovery, command defaults and per-stage readiness |
+| Stage Runs / Work Items / Task Attempts | Durable invocation, frozen queue, ownership, progress, retry evidence and handoff |
+| Artifacts | Drive content references, producing task, input versions and verification |
 | Audit Events | General operation journal: stable operation/event ID, table/record/field scope, actor, before/after values, verified outcome and read scope; policy-based append-only |
 | Controls | Live pause/stop and verified migration state; never implicit submission authorization |
 
@@ -43,3 +46,8 @@ During an authorized migration, snapshot live source schema and records, import 
 Use actual available capacity information and service errors. Do not assume that a Free label proves a particular enforced limit, split bases to evade limits, silently omit history, or purchase an upgrade. If capacity/quota blocks progress, stop affected writes, reconcile in-flight batches, save a checkpoint and report exact verified/remaining counts and the service error. Resume using the same identities after capacity is restored.
 
 Migration changes storage only. It does not install workers/readers, resolve scan or metadata gaps, create mailbox access, enable scheduling, or authorize submissions. Preserve live pause/stop controls; apply only under the separate explicit authorization in stages/apply.md.
+
+
+## Harness-independent state
+
+[COMMANDS.md](COMMANDS.md) defines manual stage execution across fresh harness sessions. Airtable must hold operational scope, queue membership, instruction/input versions, decisions, attempts, checkpoints, verification, errors, next owner and ownership release. Drive stores the referenced content; Git stores portable instructions and reusable public code. No chat, provider-specific session, ephemeral workspace or unseen scheduler may be the sole source of progress. Each harness must verify authenticated access and write capability itself. Register unresolved inputs honestly; metadata discovery is not full content verification or permission to submit.

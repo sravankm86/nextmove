@@ -1,0 +1,996 @@
+{
+  "version": 1,
+  "description": "Logical schema. Resolve private table and field IDs at runtime. Cardinality is writer-validated, not a SQL constraint.",
+  "tables": [
+    {
+      "name": "Context Registry",
+      "description": "Private durable resource directory for fresh harness sessions. Content remains in Drive; this table holds reference, required-stage, version and verification state. No credentials.",
+      "fields": [
+        {
+          "name": "Resource key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Resource name",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Reference URL",
+          "type": "url"
+        },
+        {
+          "name": "Value (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Required by",
+          "type": "multilineText"
+        },
+        {
+          "name": "Version / hash",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Verification",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Located"
+              },
+              {
+                "name": "Verified"
+              },
+              {
+                "name": "Missing"
+              },
+              {
+                "name": "Needs verification"
+              },
+              {
+                "name": "Inaccessible"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Verified at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Created at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Updated at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stage Config",
+      "description": "One row per portable stage command. Instructions and queue contract are versioned in GitHub; private defaults and resource requirements live here. No automatic cross-stage execution.",
+      "fields": [
+        {
+          "name": "Command",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Stage",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Scan"
+              },
+              {
+                "name": "Review"
+              },
+              {
+                "name": "Prepare"
+              },
+              {
+                "name": "Apply"
+              },
+              {
+                "name": "Track"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Default mode",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "review"
+              },
+              {
+                "name": "prepare"
+              },
+              {
+                "name": "auto-apply"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Instructions path",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Queue contract (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Required resources (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Policy (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Readiness",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Configured"
+              },
+              {
+                "name": "Needs capability check"
+              },
+              {
+                "name": "Blocked"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Blockers",
+          "type": "multilineText"
+        },
+        {
+          "name": "Created at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Updated at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stage Runs",
+      "description": "Durable command invocation and frozen queue. Resume a released unfinished run; completion requires every item accounted for and verified outputs. Separate from application lifecycle.",
+      "fields": [
+        {
+          "name": "Run key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Stage",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Scan"
+              },
+              {
+                "name": "Review"
+              },
+              {
+                "name": "Prepare"
+              },
+              {
+                "name": "Apply"
+              },
+              {
+                "name": "Track"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Running"
+              },
+              {
+                "name": "Complete"
+              },
+              {
+                "name": "Partial"
+              },
+              {
+                "name": "Blocked"
+              },
+              {
+                "name": "Failed"
+              },
+              {
+                "name": "Interrupted"
+              },
+              {
+                "name": "Cancelled"
+              },
+              {
+                "name": "No work"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Mode",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "review"
+              },
+              {
+                "name": "prepare"
+              },
+              {
+                "name": "auto-apply"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Instruction revision",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Input versions (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Scope (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Checkpoint (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Expected items",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Completed items",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Blocked items",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Owner",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Heartbeat at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Lease expires at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Started at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Finished at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Handoff (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Blockers",
+          "type": "multilineText"
+        },
+        {
+          "name": "Next command",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Created at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Updated at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Work Items",
+      "description": "Frozen run membership and resumable per-board/per-application work. Unique run/entity/input-version key checked by one writer; no title-based matching.",
+      "fields": [
+        {
+          "name": "Work key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Entity key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Source ID",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Stage",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Scan"
+              },
+              {
+                "name": "Review"
+              },
+              {
+                "name": "Prepare"
+              },
+              {
+                "name": "Apply"
+              },
+              {
+                "name": "Track"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Running"
+              },
+              {
+                "name": "Complete"
+              },
+              {
+                "name": "Partial"
+              },
+              {
+                "name": "Blocked"
+              },
+              {
+                "name": "Failed"
+              },
+              {
+                "name": "Interrupted"
+              },
+              {
+                "name": "Cancelled"
+              },
+              {
+                "name": "No work"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Expected state (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Input versions (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Checkpoint (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Output (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Acceptance (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Blockers",
+          "type": "multilineText"
+        },
+        {
+          "name": "Next owner",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Created at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Updated at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Task Attempts",
+      "description": "Append a distinct execution attempt when changing/resuming harness. Preserve failed/interrupted attempts; no blind retry of uncertain submissions.",
+      "fields": [
+        {
+          "name": "Attempt key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Harness",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Session reference",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Running"
+              },
+              {
+                "name": "Complete"
+              },
+              {
+                "name": "Partial"
+              },
+              {
+                "name": "Blocked"
+              },
+              {
+                "name": "Failed"
+              },
+              {
+                "name": "Interrupted"
+              },
+              {
+                "name": "Cancelled"
+              },
+              {
+                "name": "No work"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Owner",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Started at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Heartbeat at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Finished at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Checkpoint (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Evidence (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Errors",
+          "type": "multilineText"
+        },
+        {
+          "name": "Created at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Updated at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Artifacts",
+      "description": "Versioned private Drive content references and verification evidence. Store operational version/state here; content bodies stay in Drive.",
+      "fields": [
+        {
+          "name": "Artifact key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Kind",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Drive URL",
+          "type": "url"
+        },
+        {
+          "name": "Content hash",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Version",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Input versions (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Verification",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Verified"
+              },
+              {
+                "name": "Failed"
+              },
+              {
+                "name": "Stale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Verification evidence (JSON)",
+          "type": "multilineText"
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Created at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Updated at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from_table": "Stage Runs",
+      "field": "Stage configuration",
+      "target_table": "Stage Config",
+      "cardinality": "1"
+    },
+    {
+      "from_table": "Stage Runs",
+      "field": "Previous run",
+      "target_table": "Stage Runs",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Work Items",
+      "field": "Stage run",
+      "target_table": "Stage Runs",
+      "cardinality": "1"
+    },
+    {
+      "from_table": "Work Items",
+      "field": "Application",
+      "target_table": "Applications",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Work Items",
+      "field": "Target company",
+      "target_table": "Target Companies",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Work Items",
+      "field": "Catalog source",
+      "target_table": "Catalog Sources",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Task Attempts",
+      "field": "Stage run",
+      "target_table": "Stage Runs",
+      "cardinality": "1"
+    },
+    {
+      "from_table": "Task Attempts",
+      "field": "Work item",
+      "target_table": "Work Items",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Artifacts",
+      "field": "Stage run",
+      "target_table": "Stage Runs",
+      "cardinality": "1"
+    },
+    {
+      "from_table": "Artifacts",
+      "field": "Work item",
+      "target_table": "Work Items",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Artifacts",
+      "field": "Application",
+      "target_table": "Applications",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Artifacts",
+      "field": "Attempt",
+      "target_table": "Task Attempts",
+      "cardinality": "0..1"
+    },
+    {
+      "from_table": "Stage Config",
+      "field": "Required context",
+      "target_table": "Context Registry",
+      "cardinality": "many"
+    }
+  ],
+  "additional_application_inventory_fields": [
+    {
+      "table": "Applications",
+      "name": "Review pending",
+      "type": "checkbox"
+    },
+    {
+      "table": "Applications",
+      "name": "Reviewed at",
+      "type": "dateTime"
+    },
+    {
+      "table": "Applications",
+      "name": "Review criteria version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Review master version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Review description hash",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Resume type",
+      "type": "singleSelect"
+    },
+    {
+      "table": "Applications",
+      "name": "Resume master version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Resume verified at",
+      "type": "dateTime"
+    },
+    {
+      "table": "Applications",
+      "name": "Resume claims reference",
+      "type": "url"
+    },
+    {
+      "table": "Applications",
+      "name": "Submission attempt key",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Submission recorded at",
+      "type": "dateTime"
+    },
+    {
+      "table": "Applications",
+      "name": "Submitted resume version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Confirmation reference",
+      "type": "multilineText"
+    },
+    {
+      "table": "Applications",
+      "name": "Blocker",
+      "type": "multilineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Metadata hash",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Description hash",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Reader version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Criteria version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Filter version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Description verified at",
+      "type": "dateTime"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Source memberships (JSON)",
+      "type": "multilineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Change version evidence (JSON)",
+      "type": "multilineText"
+    },
+    {
+      "table": "Job Inventory",
+      "name": "Field provenance (JSON)",
+      "type": "multilineText"
+    },
+    {
+      "table": "Catalog Sources",
+      "name": "Reader version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Catalog Sources",
+      "name": "Manifest version",
+      "type": "singleLineText"
+    },
+    {
+      "table": "Catalog Sources",
+      "name": "Pagination contract (JSON)",
+      "type": "multilineText"
+    },
+    {
+      "table": "Catalog Sources",
+      "name": "Checkpoint (JSON)",
+      "type": "multilineText"
+    }
+  ]
+}

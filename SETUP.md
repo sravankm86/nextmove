@@ -76,3 +76,10 @@ Check actual service errors and available plan information; do not assume a plan
 ## Audit and integrity readiness
 
 Follow [DATA-GOVERNANCE.md](DATA-GOVERNANCE.md). Set up Audit Events separately from scan/mail/lifecycle logs. Expose immutable Record ID, Created at/by, Updated at/by and Archived at fields without confusing system times with historical event dates. Test controlled read logging, create/update before/after values, archive, idempotent retry, stale human edits and a failed audit sink before enabling a worker. Record the verified audit scope and unimplemented coverage in private Controls. Do not label a table, policy document, draft automation or latest-modified timestamp as a functioning universal audit system. A direct UI/API bypass, inaccessible permissions or missing gateway is an explicit coverage gap. Retention, access controls and relational enforcement require a deliberate architecture decision; do not buy a plan or move platforms implicitly.
+
+
+## Register a manually chosen harness once
+
+Save HARNESS-BOOTSTRAP.md in the harness's supported persistent instructions or reusable task template, with the existing private base reference supplied outside Git. Connect Airtable, Google Drive and stage-specific tools there. Register the current goals document, designated editable master, resume destination, captured-description content and optional base resume in Context Registry. Keep unknown answer banks, mailbox scope and submission authorization explicitly unresolved. Use the six state tables in COMMANDS.md for run scope, attempts, artifacts and handoffs. Setup does not invoke a stage.
+
+Test Scan, Review, Prepare, Apply preflight and Track only when explicitly requested and supported. Verify a fresh session can recover the same inputs, persist audited state, resume released unfinished work, reconcile an uncertain write and stop without launching the next command. A dry contract check or new schema is not a live provider test. Bare Apply remains subject to explicit authorization, answer/cooldown checks and live Pause applications.

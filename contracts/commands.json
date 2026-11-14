@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "dispatch": "explicit user stage invocation only",
+  "state_tables": [
+    "Context Registry",
+    "Stage Config",
+    "Stage Runs",
+    "Work Items",
+    "Task Attempts",
+    "Artifacts"
+  ],
+  "commands": [
+    {
+      "command": "Scan",
+      "aliases": [
+        "scan",
+        "scanner"
+      ],
+      "stage": "Scan",
+      "mode": "prepare",
+      "instructions": "stages/scan.md",
+      "scope": "All current Allow companies and all verified configured official sources/regions; Exclude wins",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "career_goals",
+        "job_description_content"
+      ],
+      "outputs": [
+        "Job Inventory",
+        "Applications",
+        "Scan Audit",
+        "Runs"
+      ],
+      "next_command": "Review"
+    },
+    {
+      "command": "Review",
+      "aliases": [
+        "review",
+        "assess",
+        "role fit",
+        "shortlist"
+      ],
+      "stage": "Review",
+      "mode": "prepare",
+      "instructions": "stages/review.md",
+      "scope": "All Queued plus explicitly retryable review-owned pre-submission records; preserve later states",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "career_goals",
+        "master_resume",
+        "job_description_content"
+      ],
+      "outputs": [
+        "Applications",
+        "Lifecycle Events"
+      ],
+      "next_command": "Prepare"
+    },
+    {
+      "command": "Prepare",
+      "aliases": [
+        "prepare",
+        "resume preparation"
+      ],
+      "stage": "Prepare",
+      "mode": "prepare",
+      "instructions": "stages/prepare.md",
+      "scope": "All eligible Shortlisted with current accepted review evidence",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "master_resume",
+        "resume_output"
+      ],
+      "outputs": [
+        "Applications",
+        "Artifacts",
+        "Lifecycle Events"
+      ],
+      "next_command": "Apply"
+    },
+    {
+      "command": "Apply",
+      "aliases": [
+        "apply",
+        "applier"
+      ],
+      "stage": "Apply",
+      "mode": "review",
+      "instructions": "stages/apply.md",
+      "scope": "Ready roles; submission only within separate live explicit authorization and all gates",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "master_resume"
+      ],
+      "submission_resources": [
+        "answer_bank",
+        "submission_policy"
+      ],
+      "outputs": [
+        "Applications",
+        "Task Attempts",
+        "Artifacts",
+        "Lifecycle Events"
+      ],
+      "next_command": "Track"
+    },
+    {
+      "command": "Track",
+      "aliases": [
+        "track",
+        "tracker"
+      ],
+      "stage": "Track",
+      "mode": "prepare",
+      "instructions": "stages/track.md",
+      "scope": "Configured read-only mailbox checkpoint with overlap/pagination; exact-role event matching",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "mailbox"
+      ],
+      "outputs": [
+        "Applications",
+        "Mail Audit",
+        "Lifecycle Events"
+      ],
+      "next_command": null
+    }
+  ],
+  "resume_policy": "Resume one compatible released unfinished run of the same stage. Multiple candidates or ambiguous prior owner require disambiguation. Never steal an active owner on expiry alone.",
+  "complete_rule": "Every frozen work item accounted for; acceptance/readback, audit and handoff persisted; unresolved work prevents Complete",
+  "application_submission_default": false
+}

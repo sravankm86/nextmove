@@ -1,5 +1,8 @@
 # Scan official job catalogs
 
+For a short-command invocation, use [../COMMANDS.md](../COMMANDS.md) to recover private context, queue, attempts and checkpoints, persist verified outputs/handoff, and stop after this stage.
+
+
 Use complete catalog checks with incremental processing. Keep bulk parsing, comparisons, filtering, checkpointing and verification in code. Give the model compact summaries, ambiguous decisions and specific failures, not whole catalogs, descriptions, HTML or spreadsheet readbacks.
 
 ## Inputs and reusable state

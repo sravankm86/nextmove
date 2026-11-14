@@ -10,6 +10,10 @@ Lifecycle status determines the work queue. The five responsibilities are logica
 | Applier | Ready with explicit submission authorization and all live gates satisfied | Submit the exact role using the verified resume and capture the receipt | Applied → Confirmed when receipt is available; Submission uncertain if unresolved |
 | Tracker | Mailbox changes and submitted/active/uncertain roles; exact-role events may also concern terminal records | Reconcile receipts, recruiter activity and outcomes read-only from mail | Confirmed, In process, Offer, Accepted, Rejected, Closed, or a scoped unresolved exception |
 
+## Manual harness commands
+
+Use [COMMANDS.md](COMMANDS.md) for Scan / Review / Prepare / Apply / Track. The operator chooses one active harness; it recovers context and state, completes its authorized queue and saves a handoff before stopping. Next command is advisory, not an automatic launch. Stage execution state is separate from application lifecycle. See the [one-time bootstrap](HARNESS-BOOTSTRAP.md).
+
 ## Run contract
 
 Load [setup](SETUP.md), [universal rules](AGENTS.md), [storage contract](STORAGE.md), [data governance](DATA-GOVERNANCE.md), private inputs, live Airtable schema and controls. Record run ID, instruction/version hashes, requested workers, mode and timezone. Follow [LIFECYCLE.md](LIFECYCLE.md). A stage-specific request runs only that worker and its necessary preflight; do not automatically launch the rest.

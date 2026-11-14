@@ -9,6 +9,8 @@ Portable, agent-agnostic job-search operations. Run with ChatGPT, Claude, Codex,
 - **Google Drive**: all content, including captured full job descriptions, master/resume documents and approved base or tailored one-page PDFs in the configured output folder. No separate Job Descriptions or Research folders.
 - **Recruiting email**: optional read-only input for reconciliation. Read-only.
 
+For manually chosen harnesses, save [the one-time bootstrap](HARNESS-BOOTSTRAP.md), then use **Scan**, **Review**, **Prepare**, **Apply** or **Track**. [COMMANDS.md](COMMANDS.md) defines fresh-session context recovery, whole-stage execution, resumption and verified handoffs. Each harness needs its own authenticated source access; model APIs are not required.
+
 Start with [SETUP.md](SETUP.md), then run [WORKFLOW.md](WORKFLOW.md). Universal instructions are in [AGENTS.md](AGENTS.md). Private Airtable IDs and Google resource links belong in private configuration, not this public repository.
 
 For worker-specific runs, follow the [Codex run instructions](CODEX.md).

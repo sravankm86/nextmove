@@ -43,3 +43,19 @@ tracking:
 auto_apply:
   supported_domains: []
   daily_submission_cap: 0
+
+# Portable manual harness contract; real resource references stay in Airtable.
+commands:
+  orchestration: manual
+  bootstrap: HARNESS-BOOTSTRAP.md
+  contract: contracts/commands.json
+  context_registry: null
+  stage_config: null
+  stage_runs: null
+  work_items: null
+  task_attempts: null
+  artifacts: null
+  resume_compatible_unfinished: true
+  scope: full_eligible_queue
+  auto_chain: false
+  submission_default: review

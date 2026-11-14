@@ -1,5 +1,8 @@
 # Tracker: reconcile recruiting updates
 
+For a short-command invocation, use [../COMMANDS.md](../COMMANDS.md) to recover private context, queue, attempts and checkpoints, persist verified outputs/handoff, and stop after this stage.
+
+
 Input: configured read-only recruiting mailbox(es), Applications and exact-role aliases/history, prior event IDs and a durable successful mailbox checkpoint. Prioritize Applied, Confirmed, In process, Offer and Submission uncertain, but inspect relevant exact-role messages about terminal records as well; do not miss an explicit correction by filtering only active states.
 
 Use an overlapping time window from the last successful checkpoint, enumerate all matching result pages and deduplicate by source message/event identity plus job key. Do not rely on unread status or a single results page. Keep mail bodies, private links and personal data outside public Git and bulk model context. Missing access, incomplete pages and checkpoint gaps must be reported; do not advance the successful fetch checkpoint beyond unread or unstaged coverage. Ambiguous events may advance the fetch watermark only after being durably saved to an unresolved-event queue; they remain unreconciled and are retried when identity/evidence changes. Fetch coverage is not proof that every event has a resolved role.

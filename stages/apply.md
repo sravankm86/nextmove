@@ -1,5 +1,8 @@
 # Applier: submit and capture confirmation
 
+For a short-command invocation, use [../COMMANDS.md](../COMMANDS.md) to recover private context, queue, attempts and checkpoints, persist verified outputs/handoff, and stop after this stage.
+
+
 Input: one role with a verified Ready resume and known required answers, live tracker with lifecycle status Ready and no unresolved review/preparation version blocker, private application policy and dashboard controls. Review mode returns proposals. Prepare mode may persist authorized outputs without submitting. Auto-apply requires explicit standing authorization, supported sites and a configured submission cap. Follow site rules and runtime approval requirements.
 
 Load the live company application-restriction fields from Target Companies and follow SETUP.md, Company application restrictions. Check both application-count limits and rejection cooldowns, including scope, triggering event, timezone and boundary semantics. A generic rejection does not establish a company-wide ban. Count distinct human/agent-reported or evidenced submissions using Applied on, including Applied without a receipt, in the relevant window, including later rejections/withdrawals and known external applications; deduplicate rows/receipts and reconcile uncertain attempts when allowance is unclear. All applicable limits must permit submission. Known restrictions with unresolved scope or end time block affected submissions.

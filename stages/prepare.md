@@ -1,5 +1,8 @@
 # Preparer: produce an honest, verified resume
 
+For a short-command invocation, use [../COMMANDS.md](../COMMANDS.md) to recover private context, queue, attempts and checkpoints, persist verified outputs/handoff, and stop after this stage.
+
+
 Input queue: Shortlisted roles with current full JD and review evidence, the latest editable Google Doc master resume, approved base resume if available, private answer bank and resume destination. Recheck the review's JD, criteria and master versions; stale material evidence returns to Reviewer with a blocker. Resolve exact-role submission/history ambiguity before advancement. Temporary company holds remain separate; preparation may proceed when requested, but submission remains gated.
 
 Integrity takes priority over keyword matching or attractiveness. The latest master is the sole factual resume source. Career goals, the JD, earlier tailored resumes, inferred seniority and application forms do not establish candidate facts. Never add or inflate skills, experience, dates, titles, employers, credentials, team size, ownership, metrics or achievements. Do not turn a role requirement into a claim of experience. Preserve the master.

@@ -1,5 +1,8 @@
 # Reviewer: assess and route candidates
 
+For a short-command invocation, use [../COMMANDS.md](../COMMANDS.md) to recover private context, queue, attempts and checkpoints, persist verified outputs/handoff, and stop after this stage.
+
+
 Input: Queued rows or review_pending pre-submission records, full official JDs, private career goals, latest editable Google Doc master resume, exact-role history and review policy/version. Review-owned Needs review records are retryable after relevant evidence changes or explicit requeue. Legacy shortlist commands route here.
 
 Select the requested batch and checkpoint completed job keys; leave the remaining queue visible. Verify the requisition and full responsibilities/qualifications. Use current verified cached full text or refresh it under scan freshness rules. Missing, blocked, summary-only or wrong-role descriptions stay retryable; do not manufacture a rating. Record role eligibility separately from fit and company cooldowns.
