@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "dispatch": "explicit user stage invocation only",
+  "dispatch": "Explicit stage invocation, or next authorized stage of an explicitly recorded single-harness plan; never an inferred pipeline",
   "state_tables": [
     "Context Registry",
     "Stage Config",
@@ -24,7 +24,10 @@
         "instructions_repository",
         "structured_store",
         "career_goals",
-        "job_description_content"
+        "job_description_content",
+        "source_registry",
+        "scan_policy",
+        "content_output"
       ],
       "outputs": [
         "Job Inventory",
@@ -134,5 +137,10 @@
   ],
   "resume_policy": "Resume one compatible released unfinished run of the same stage. Multiple candidates or ambiguous prior owner require disambiguation. Never steal an active owner on expiry alone.",
   "complete_rule": "Every frozen work item accounted for; acceptance/readback, audit and handoff persisted; unresolved work prevents Complete",
-  "application_submission_default": false
+  "application_submission_default": false,
+  "allowed_orchestration_modes": [
+    "manual",
+    "single-harness"
+  ]
 }
+

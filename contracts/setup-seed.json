@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "description": "Private setup seed blueprint. Resolve resources from actual account/tool results. Null references are unresolved, never invented defaults. Do not overwrite existing user values.",
+  "resources": [
+    {
+      "key": "instructions_repository",
+      "required_by": "All",
+      "purpose": "Repository or fork URL and pinned revision",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "structured_store",
+      "required_by": "All",
+      "purpose": "Verified private base identity and live schema mapping",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "career_goals",
+      "required_by": "Scan,Review",
+      "purpose": "User-supplied current goals/criteria document",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "master_resume",
+      "required_by": "Review,Prepare,Apply",
+      "purpose": "Designated factual editable master, not an inferred PDF",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "resume_output",
+      "required_by": "Prepare",
+      "purpose": "Private output folder; verify write/readback",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "content_output",
+      "required_by": "Scan,Prepare",
+      "purpose": "Private captured/reusable content destination",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "approved_base_resume",
+      "required_by": "Prepare optional",
+      "purpose": "Optional approved current base PDF; verify grounding before reuse",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "job_description_content",
+      "required_by": "Scan,Review",
+      "purpose": "Registered content store and per-job full-content references; empty on a new install",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "source_registry",
+      "required_by": "Scan",
+      "purpose": "Catalog Sources table and current configuration coverage",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "scan_policy",
+      "required_by": "Scan",
+      "purpose": "Explicit fidelity/storage defaults and chosen tradeoffs",
+      "verification": "Needs verification",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "reader_artifacts",
+      "required_by": "Scan incremental reuse optional",
+      "purpose": "Versioned accessible reader artifacts; baseline fallback when absent",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "mailbox",
+      "required_by": "Track",
+      "purpose": "Read-only provider/scope and checkpoint; optional for other stages",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "answer_bank",
+      "required_by": "Apply submission",
+      "purpose": "Approved reusable answers; do not infer from old role answers",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "submission_policy",
+      "required_by": "Apply submission",
+      "purpose": "Explicit current scope/domains/cap/authorization",
+      "verification": "Missing",
+      "reference_url": null,
+      "value": null
+    },
+    {
+      "key": "execution_policy",
+      "required_by": "All",
+      "purpose": "One active harness; manual sequence or explicit single-harness plan",
+      "verification": "Needs verification",
+      "reference_url": null,
+      "value": null
+    }
+  ],
+  "controls": [
+    {
+      "control": "Pause applications",
+      "value": true
+    },
+    {
+      "control": "Stop all",
+      "value": false
+    },
+    {
+      "control": "Audit coverage",
+      "value": "Partial until actual access paths, retention and enforcement are verified"
+    },
+    {
+      "control": "Setup readiness",
+      "value": "Needs verification; per-stage evidence required"
+    },
+    {
+      "control": "Execution policy",
+      "value": {
+        "orchestration": "manual",
+        "one_active_harness": true,
+        "auto_chain": false
+      }
+    },
+    {
+      "control": "Inventory storage profile",
+      "value": "full-airtable"
+    }
+  ],
+  "submission_defaults": {
+    "enabled": false,
+    "daily_submission_cap": 0,
+    "supported_domains": [],
+    "authorization_evidence": null
+  },
+  "scan_defaults": {
+    "description_policy": "all",
+    "recovery_budget": null,
+    "description_freshness": "verify",
+    "inventory_storage_profile": "full-airtable"
+  },
+  "stage_config_source": "contracts/commands.json",
+  "bootstrap_boundary": "Record actual resource creation and discovery honestly once Audit Events is available; do not fabricate earlier intents or times."
+}
+

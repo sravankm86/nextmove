@@ -1,0 +1,25 @@
+name: Bug report
+description: Report a reproducible instruction, schema or setup problem using fictional data.
+body:
+  - type: markdown
+    attributes:
+      value: Do not post private resumes, job snapshots, mail, account links, IDs or secrets. Follow SECURITY.md for sensitive reports.
+  - type: input
+    id: revision
+    attributes:
+      label: Instruction revision and affected stage
+      placeholder: Commit/tag and stage or setup section
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Fictional reproduction and expected/actual behavior
+      description: Include harness capabilities and a minimal redacted example; no private output.
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: Known capability or access limitations
+      description: Describe only capabilities, not account identities or credentials.

@@ -1,4 +1,29 @@
+# Filled configuration and credentials
 /private/
 /config.yaml
+/config.local.*
 /.env*
+!/.env.example
+/.airtable/
+/credentials*
+/secrets*
+# Private workflow data and generated artifacts
 /output/
+/artifacts/
+/exports/
+/checkpoints/
+/snapshots/
+/browser-state/
+/storage_state.json
+*.pdf
+*.docx
+*.xlsx
+*.zip
+*.sqlite*
+*.db
+# Local runtime/editor state
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+

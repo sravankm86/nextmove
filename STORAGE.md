@@ -51,3 +51,11 @@ Migration changes storage only. It does not install workers/readers, resolve sca
 ## Harness-independent state
 
 [COMMANDS.md](COMMANDS.md) defines manual stage execution across fresh harness sessions. Airtable must hold operational scope, queue membership, instruction/input versions, decisions, attempts, checkpoints, verification, errors, next owner and ownership release. Drive stores the referenced content; Git stores portable instructions and reusable public code. No chat, provider-specific session, ephemeral workspace or unseen scheduler may be the sole source of progress. Each harness must verify authenticated access and write capability itself. Register unresolved inputs honestly; metadata discovery is not full content verification or permission to submit.
+
+
+## Fresh installs and storage profiles
+
+SETUP.md composes contracts/core-schema.json (eleven core tables) and contracts/state-schema.json (six execution tables), resolves generated IDs and verifies aliases/types/links. Existing schemas are preserved and mapped; these files are not a migration command. Native computed fields are never input values in upserts. Audit event identity and affected-row identity have separate mappings.
+
+Full Airtable metadata inventory remains the default. SCALING.md documents a separate opt-in Drive-catalog profile with a verified complete artifact and Airtable candidate/operational index. Register the choice privately; do not change an existing profile, silently weaken coverage or delete rows. Both profiles keep operational progress, choices, lifecycle and decisions authoritative in Airtable and content/evidence in Drive.
+

@@ -1,5 +1,5 @@
 mode: review  # review, prepare, or auto-apply
-timezone: America/Los_Angeles
+timezone: null  # Set the user's actual IANA timezone; do not infer policy boundaries.
 profile: null
 companies: null
 tracker: null  # Private Airtable base reference; authorized setup can create it.
@@ -26,6 +26,7 @@ scan:
   processing: incremental  # Baseline required when state/validation is unavailable.
   source_registry: null  # Existing authorized private destination; never public Git.
   runner_state: null  # Durable cache/checkpoints and reusable reader locations.
+  inventory_storage_profile: full-airtable  # Optional drive-catalog only by explicit choice; see SCALING.md.
   description_policy: all  # all, or candidates only after explicit user choice.
   description_freshness: verify  # Reliable edit version/conditional request or refresh.
   recovery_budget:  # Optional; null means no user-selected cutoff.
@@ -46,7 +47,7 @@ auto_apply:
 
 # Portable manual harness contract; real resource references stay in Airtable.
 commands:
-  orchestration: manual
+  orchestration: manual  # Or single-harness with an explicit recorded stage plan.
   bootstrap: HARNESS-BOOTSTRAP.md
   contract: contracts/commands.json
   context_registry: null
@@ -59,3 +60,4 @@ commands:
   scope: full_eligible_queue
   auto_chain: false
   submission_default: review
+

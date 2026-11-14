@@ -1,6 +1,6 @@
 # Portable stage commands
 
-Read AGENTS.md, DATA-GOVERNANCE.md, STORAGE.md and WORKFLOW.md. The user manually chooses one harness at a time. No scheduler, model API, automatic stage chaining or cross-harness launcher is required. See [HARNESS-BOOTSTRAP.md](HARNESS-BOOTSTRAP.md) for one-time registration in each harness. Machine-readable routing is in [contracts/commands.json](contracts/commands.json).
+Read AGENTS.md, DATA-GOVERNANCE.md, STORAGE.md and WORKFLOW.md. The user chooses one active harness. Use it for one stage, or explicitly request a recorded ordered plan in that harness under ARCHITECTURE.md. A human may instead switch harnesses between stages. No scheduler, model API or cross-harness launcher is required. See [HARNESS-BOOTSTRAP.md](HARNESS-BOOTSTRAP.md) for one-time registration in each harness. Machine-readable routing is in [contracts/commands.json](contracts/commands.json).
 
 ## Command meaning
 
@@ -13,6 +13,8 @@ Only dispatch when the user actually requests a stage. Quoted examples, setup di
 | Prepare (Resume preparation) | All eligible Shortlisted with current review inputs | Prepare mode: master-grounded resume, changes, verified PDF/version and Ready |
 | Apply | Ready queue, constrained by live controls and separate authorization | Default review/preflight; submit only under a valid explicit private authorization |
 | Track | Configured read-only recruiting mailbox and saved coverage checkpoint | Prepare mode: exact-role updates, events and mail audit |
+
+An explicitly requested single-harness plan records stage order, scope, current pointer and stop conditions privately under ARCHITECTURE.md. Each stage uses the same queue, audit, acceptance and handoff rules. Do not advance on Partial/Blocked unless the plan explicitly permits unaffected work, and never infer submission authorization. A bare command still stops after one stage.
 
 A registered non-submission command is a request to execute and save that stage, not merely describe a plan. Do not ask the user to repeat known criteria, role IDs or links stored in the registry. Default scope is the whole eligible queue, not just the latest scan, first page or convenient batch. An explicit scope in the current request takes precedence and must be saved. Bare Apply does not create a standing authorization, unpause applications, choose answers or waive eligibility.
 
@@ -72,10 +74,11 @@ Set the final run state from persisted item outcomes. Complete requires every pl
 
 Save Handoff (JSON) with run/attempt IDs, stage, instruction/input versions, scope/counts, exact outputs and artifact references, verified decisions, remaining work, blockers, next owner/command and ownership release. Include no secrets or large content bodies. Preserve the source/run/evidence relationships. The next harness reads state directly; the user need not paste this report.
 
-Finish with a short human-readable result and next command. Stop after the requested stage. Recording Next command does not launch it.
+Finish with a short human-readable result and next command. Stop after a single-stage request. Recording Next command does not launch it. Only an explicit recorded multi-stage plan may advance to its next authorized stage after acceptance and live-control checks; log that boundary before continuing.
 
 ## State and readiness boundaries
 
 Context Registry is the private resource directory; Stage Config defines command defaults; Stage Runs records invocation/scope/ownership; Work Items freezes membership and progress; Task Attempts records executions; Artifacts records content references and verification. Existing Runs/Scan Audit, Mail Audit, Lifecycle Events and Audit Events retain their domain/audit roles. Private physical IDs and input content never belong in public Git.
 
 Schema setup and populated resource references establish a portable contract, not an end-to-end tested integration in Codex, Gemini, Claude, Muse or any other harness. Required resource/capability checks occur per harness and stage. Missing answer-bank/submission policy or mailbox access can block Apply/Track while Scan remains usable. Preserve all live audit and submission controls.
+

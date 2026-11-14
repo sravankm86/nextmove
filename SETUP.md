@@ -1,85 +1,106 @@
-# Before you start
+# Set up a private Nextmove instance
 
-| Capability | Provide | Minimum access | If missing |
-|---|---|---|---|
-| Search and verify openings | Target roles, locations, company list | Official catalogs and a reader that can enumerate their pages | Review supplied descriptions; label live status unverified |
-| Check duplicates | Live tracker or current CSV export | Read | Label results provisional; do not add Pending rows |
-| Reconcile recruiting mail | Gmail, Outlook, or selected messages | Read only | Skip reconciliation |
-| Tailor a resume | Latest master resume | Read | Skip tailoring; never infer facts |
-| Save approved results | Tracker and resume destination | Write to those destinations only | Return a proposed patch and files for manual use |
+This guide is executable by a capable setup agent and readable by a human. Start with [AGENTS.md](AGENTS.md), [ARCHITECTURE.md](ARCHITECTURE.md), [DATA-GOVERNANCE.md](DATA-GOVERNANCE.md) and [the checklist](docs/SETUP-CHECKLIST.md). The goal is verified private resources and explicit stage readiness, not an installed model service.
 
-Copy `config.example.yaml` into a private folder outside the repo. Use local paths or private links your tool can open. Connect accounts through the tool you chose; do not paste passwords or tokens into config. The templates are CSVs and work with a local spreadsheet or an imported table. No connector is installed by this repository.
+A request to set up Nextmove authorizes creating the missing private folders, base/tables and configuration described here. Reuse identified resources. It does not authorize purchases, account creation using invented identities, moving existing files, public sharing, importing/migrating a tracker, real job discovery or application submission. Use existing session authorization rather than repeatedly asking for the same permission.
 
-For scheduling, first confirm an interactive run works, then give your scheduler the same versioned instructions and private inputs. Start in review mode.
+## 1. Establish accounts, scope and capabilities
 
-Follow [STORAGE.md](STORAGE.md). Discover the configured Airtable base and map existing Applications and Target Companies fields to the templates. Add missing Job Inventory, Catalog Sources, Scan Audit, Runs and Controls tables during authorized setup using the logical CSV headers in [templates](templates/). Keep existing tracker rows and statuses. When configured and authorized, map the lifecycle-events and mail-audit templates into the existing private store; do not create new destinations or silently migrate statuses. For companies with several boards, use a source row per board with a shared company ID. Set up a catalog reader for each source and verify coverage against the live employer site.
+The human supplies or signs into their own Google and Airtable accounts and identifies the intended workspace/account. Collect current career goals, explicit role/seniority/geography criteria, timezone, target-company choices and designated editable master resume. Record missing inputs; never invent facts, a user preference or a master resume.
 
-Configure the scan's private source registry, durable runner state and reusable reader locations. Persist hashes, source/version evidence, pagination checkpoints and criteria/filter versions in Airtable; keep full descriptions and reusable content in Drive with accessible references; map optional fields without replacing the user's schema. A temporary workspace is not durable storage. Test baseline enumeration, source-manifest revalidation, description-only edits, additions/removals, expired cursors and interrupted write readback before relying on incremental results. These instructions and configuration fields do not install an incremental scanner; the chosen runtime must implement them. If state or readers are missing, report that and perform baseline/setup work.
+Discover the selected harness's actual tools. Determine whether it can read Git instructions, inspect/create Airtable schemas, read/write Drive content, fetch official catalogs and perform its assigned stage's document/browser/mail operations. [CONNECTORS.md](CONNECTORS.md) gives a capability matrix and connection procedure.
 
-Keep the default description policy all and recovery budgets unset unless the user chooses otherwise. Candidate-only description retrieval reduces archival depth and post-closure reassessment; a recovery cutoff limits the effort spent recovering sources and can leave current coverage incomplete. Record the user's choice privately and in the run audit. Do not silently add cache freshness windows, sampling-only verification or page caps.
+Logins, OAuth consent, MFA and connector installation may require the human. If workspace creation or an action is not available in the agent's tools, give the exact manual step using the official application, retain the setup plan and continue unaffected work. Do not claim an unavailable operation succeeded, ask the user to paste passwords, bypass login challenges or replace an inaccessible existing destination.
 
+For a new user, create or select a private Airtable workspace in the intended account. If no workspace-creation tool exists: the human opens Airtable, creates/selects their workspace, grants the appropriate access to the connection and resumes setup with its verified identity. Workspace names need not be unique; verify returned IDs/account before creating the base.
+
+## 2. Create the base and bootstrap the journal
+
+Create or reuse a private base named Nextmove in that workspace. Record the real returned URL/ID privately. An Airtable workspace without a base/tables is not sufficient.
+
+Read both [core-schema.json](contracts/core-schema.json) and [state-schema.json](contracts/state-schema.json). Create Audit Events early so subsequent controlled setup operations can be journaled. The base/journal cannot audit their own creation before they exist: capture the visible plan and actual tool results, then persist an honest bootstrap record once the sink is available. Leave unknown event times blank. Do not claim universal audit coverage or invent historic intents.
+
+Use [DATA-GOVERNANCE.md](DATA-GOVERNANCE.md) for subsequent controlled reads, writes and readback. Schema inspection needed to find the journal is the narrow documented bootstrap exception. A shared integration identity must not be attributed to an invented human actor.
+
+## 3. Build and map all seventeen logical tables
+
+The JSON contracts are blueprints, not connector-specific request bodies. Inspect the live tool schema, supported types and batch limits before mutation.
+
+1. Create the eleven core scalar tables and six orchestration scalar tables, with supported first/display fields. Preserve existing tables, selections, rows and legacy provenance.
+2. Resolve returned table IDs. In a second pass, create links from both contracts using those IDs. Inverse link fields may be generated automatically; do not create duplicate inverse relationships blindly.
+3. Add common immutable record-ID and native system metadata fields. Some connectors support computed fields only through separate field-creation calls. Never send values to computed fields during record creation/upsert.
+4. Merge the orchestration contract's additional application/inventory fields by logical mapping. Do not add duplicates just because a display name differs.
+5. Discover field IDs/types/select choices, validate intended cardinality and persist the logical-to-physical map privately. Native record identity is not display-field uniqueness or an atomic lock.
+6. Read the schema back and compare every required table, field, enum, link target and mapping. Report missing capabilities/types instead of silently using incompatible text fields.
+
+Audit Events has two identities: its own computed Record ID and the affected row's **Record ID reference**. Existing installations may have a text field named Record ID for the affected row; map it explicitly and preserve its meaning. Never write a target record ID into the journal's own computed identity.
+
+Common fields in core-schema.json apply across tables; existing native metadata aliases can be mapped instead of duplicated. Created/Updated at fields used by workflow records are recording metadata, not a substitute for system metadata or business event dates. The selected runtime must implement validation and journaling; tables alone do not install those behaviors.
+
+CSV files in [templates](templates/) are logical import headers and reference examples. They do not create Airtable links/types. Map decision to Search status, preserve Pool and require explicit Allow choices; new unknown companies are not automatically allowed. Keep Applications lifecycle separate from fit, eligibility and stage-execution status.
+
+## 4. Create or reuse private Drive destinations
+
+For a new user, create a private **Nextmove** root with **Resumes** and **Content** children. Resumes holds approved generated PDFs; Content holds captured descriptions, catalog artifacts and reusable content where needed. Do not create additional Research or Job Descriptions folders by default.
+
+If the user already has appropriate destinations, register them instead of moving files or forcing this layout. Existing goals/master documents may remain in their original folders; content authority comes from the registry, not a filename guess. Preserve sharing and parents. No anonymous/public sharing is required.
+
+Register a current goals document, using [templates/profile.md](templates/profile.md) only as a blank structure for user-provided information. The user designates the factual editable Google Doc master. An empty placeholder or an old PDF must not be marked verified master content. The latest designated master is the sole resume-fact source.
+
+Use supported native Docs/Drive creation workflows where needed. Verify created folders/files through returned metadata/readback, exact IDs and intended access. Metadata access does not prove content was read or a folder is writable.
+
+## 5. Populate private context, defaults and controls
+
+Use [setup-seed.json](contracts/setup-seed.json) for required resource keys and safe seed values. Resolve private references from actual tool responses; never paste another user's IDs or real links into this repository.
+
+Populate Context Registry with the repository/fork, structured store, career goals, master, resume destination, content destination, optional approved base, source registry and scan policy. Record real reference, version/hash, required stages, verification state and specific notes. Keep missing mailbox, reader artifacts, answer bank and submission policy explicitly unresolved. A missing optional reader cache allows baseline setup; it does not justify a false incremental claim.
+
+Create five Stage Config rows from [commands.json](contracts/commands.json), link required context records and copy current stage paths, queue rules and pinned instruction revision into private configuration. Queue and policy values must be parsed as structured data; the string “false” must never be treated as truthy authorization.
+
+Seed Controls with Pause applications=true, Stop all=false, honest audit coverage, manual/single-harness execution policy and setup readiness. If a control already exists, reread and preserve the user's value rather than resetting it. Submission cap remains zero, domain scope empty and authorization absent until explicitly configured.
+
+No live Stage Runs, Work Items or application candidates should be fabricated by setup. Set up a source row per official board/region with stable company/source identity; if a company lacks known sources, record the setup gap. Capture reader/pagination contracts and durable locations before claiming supported incremental execution. Do not hardcode this repo author's targets or private criteria.
+
+All operational scope, queues, decisions, versions, attempts, cursors, errors, verification and handoffs belong in Airtable. Drive holds the referenced content. A local config copy may be a bootstrap cache, not the only authoritative memory. If using config.example.yaml, keep the filled copy outside the repo; keep secrets in the connector's supported credential store.
+
+## 6. Connect every executing harness
+
+Use [CONNECTORS.md](CONNECTORS.md). One harness's OAuth grant, MCP connection, private filesystem or browser session does not appear automatically in another.
+
+Save [HARNESS-BOOTSTRAP.md](HARNESS-BOOTSTRAP.md) as supported persistent/project instructions or a reusable task template, replacing repository and private base placeholders locally. Claude Code users can start from [CLAUDE.md](CLAUDE.md); other harnesses must load AGENTS.md explicitly if they do not discover it. Do not assume any provider supports all stage tools.
+
+Read content through the registry and confirm actual access in that harness. Verify write capability with an authorized private setup fixture, not a real application or submission. Keep capability results per stage in private setup readiness. A plain chat with no tools is insufficient.
+
+For one harness executing an explicit stage sequence, save the ordered execution plan as described in ARCHITECTURE.md. For manual cross-harness execution, use the same state and stage contracts. Neither arrangement changes fit, evidence, audit or submission rules.
+
+## 7. Verify setup before reporting readiness
+
+Complete [docs/SETUP-CHECKLIST.md](docs/SETUP-CHECKLIST.md). At minimum verify:
+
+- All schema mappings, links, select choices, safe controls and private context references.
+- A controlled create/read/update/readback/archive sequence with intent/outcome logging on a clearly marked private Context Registry setup fixture. Preserve the fixture/audit; do not use real applications or erase evidence to tidy up.
+- A small authorized Drive content write/readback and artifact reference, plus a fresh-session recovery of registered inputs and saved fixture state. Do not upload real snapshots to a new archive for this test.
+- Stage-specific access and a fictional or separately authorized smoke test. A readback test is not a completed production scan, reviewed queue, Ready resume or application.
+- Recovery design for interrupted writes, stale inputs and uncertain submissions; test with fixtures/local simulation without submitting a form.
+- The exact stage readiness, tested harness identity and remaining gaps. Do not infer universal audit coverage from a successful journal write.
+
+No model APIs or scheduler are necessary for these interactive checks. If consent, login or a stage-specific capability remains missing, mark only the affected readiness Blocked/Needs verification and return the actionable next step. Do not declare the entire workflow operational because empty tables exist.
+
+Return a **private setup report**: actual Drive/workspace/base links and verified IDs, logical schema map, context resources, safe controls, harness capabilities tested, audit scope/limits, stage readiness, unresolved blockers and bootstrap instructions. Store the report/reference in Controls or an authorized private artifact. Do not publish it in Git or a public issue.
 
 ## Company application restrictions
 
-Store per-company limits and cooldowns in Target Companies, separately from Search status and Pool. A temporary hold does not exclude a company from scanning. Map the optional fields in templates/companies.csv to live headers; extend the existing table during authorized setup without replacing company data. Blank policy values mean unrecorded, not zero or unlimited. New rows start with Application hold status “Not assessed”.
+Read [docs/COMPANY-RESTRICTIONS.md](docs/COMPANY-RESTRICTIONS.md) before recording/evaluating quotas or rejection cooldowns. Preserve separate Search status, Pool, lifecycle and fit. Blank restrictions are unknown, not unlimited. A generic rejection does not create a company-wide ban; a past blocked-until date does not itself prove capacity or authorize submission.
 
-| Live header | Template field | Meaning |
-|---|---|---|
-| Max applications | max_applications | Confirmed positive whole-number limit within the specified window. |
-| Application window (days) | application_window_days | Day-based window length; use details for calendar/fixed reset boundaries. |
-| Application window type | application_window_type | Rolling / Calendar / Fixed / Unconfirmed. |
-| Rejection cooldown (days) | rejection_cooldown_days | Confirmed wait after a qualifying rejection; details specify elapsed/calendar days and trigger. |
-| Restriction scope | restriction_scope | Company / Role family / Exact role / Mixed / Unconfirmed. Mixed rules need separate scopes in details. |
-| Last rejection date | last_rejection_at | Actual qualifying event date/time and evidence; not itself a company-wide ban. |
-| Apply blocked until | apply_blocked_until | Earliest date/time after all applicable restrictions; prefer ISO8601 with an explicit offset. |
-| Application hold status | application_hold_status | Not assessed / No known hold / Held / Needs clarification; separate from role fit and lifecycle status. |
-| Restriction details / source | restriction_details_or_source | Published rule or explicit user instruction, evidence/date, duration basis, exceptions, affected roles, reset times and additional limits. |
-| Restriction last verified | restriction_last_verified_at | When the rule/evidence was actually reviewed. |
-| Restriction timezone | restriction_timezone | Confirmed IANA timezone for boundaries/date-only inputs; do not assume the Sheet's timezone. |
+## Existing tracker migration
 
-Do not infer a company cooldown from a generic rejection or invent a waiting period. Preserve exact-role dispositions. Confirm scope, duration, trigger and rolling/calendar/fixed semantics. If multiple constraints apply, all must allow the submission; a future date is only an estimate until the quota is recomputed. Multiple windows or mixed scopes must be recorded in details and not silently collapsed to one rule.
+Migration requires explicit authorization for the source/destination and cutover. Preserve originals, raw combined statuses/dates, user dispositions, actual event times and identity ambiguities. Legacy Reviewed/Rated is not automatically Shortlisted; unsupported positive assumptions become review-owned Needs review. Verify every changed field/link and final totals; uncertain writes are reconciled before retry.
 
-Count distinct human/agent-reported or evidenced submission events in the applicable window (including Applied without a receipt), including applications subsequently rejected or withdrawn unless the rule explicitly restores capacity. Deduplicate duplicate tracker rows and receipts; include known external/manual applications. Uncertain attempts may occupy capacity but must not be marked Applied. If allowance cannot be proven, reconcile before submitting. Determine the next rolling-window opening when enough events expire, not necessarily when only the oldest event expires.
+Import core companies/applications before auxiliary inventory. Recheck actual capacity and follow [SCALING.md](SCALING.md) if an alternative storage profile is explicitly chosen. Archive does not reclaim Airtable rows. Physical deletion, paid upgrades and platform changes require their own authorization. Stop at real service limits, save a durable checkpoint and report verified/remaining counts. Do not silently truncate catalogs or split bases to evade limits.
 
-Keep scanning and saving qualifying Queued jobs while an application hold applies. Record the hold separately; do not lower relevance because of a temporary restriction. Recheck the live company rule, current submission history, scope, timezone and all pause/stop controls immediately before Submit, using one submission worker. An elapsed date does not authorize auto-apply, prove role eligibility, or override any remaining limit. Known restrictions with unresolved dates/scope remain held for clarification.
+## Ongoing operation
 
-Before enabling auto-apply, configure a private answer bank, supported sites and submission cap, and connect an authorized browser runtime. Test one form, receipt capture, duplicate prevention, a simulated uncertain submission, and the live pause control. Use one submission worker.
+Use [COMMANDS.md](COMMANDS.md). Default scan description policy is all, source coverage is complete, and recovery budgets are unset unless the user explicitly chooses a tradeoff. No source TTL, sampling, page cap or candidate-only archive change is implicit.
 
-## Worker fields and handoff setup
+Keep one writer, reread human edits, respect controls and verify handoffs. Application eligibility remains separate from career/resume fit. Apply defaults to preflight; real submissions require current scoped authorization, approved answers/resume, supported site, availability, quota/cooldown checks and live pause/stop gates. Tracker mail remains read-only. Setup is not standing authorization to run stages or submit.
 
-Map the optional Applications fields for job_posted_at/job_posted_text, work_arrangement/location_details, posted_salary/salary_details, independent career_fit/resume_fit, review versions/time/hash, review_pending, resume_type/master version/verification/claim reference and next_owner. Keep axis-specific rationale in fit_rationale and changes in resume_notes. Preserve legacy fields and hide technical columns if useful; do not force every optional field into the main visible view. Unknown salary, location or posted date is not date found or an estimate.
-
-Configure five logical responsibilities and their queues from WORKFLOW.md. Keep bulk readers/writes in code and a single shared-state writer. For Tracker, configure read-only mailbox scope, pagination, event deduplication and a durable successful checkpoint with overlapping lookback. Test a generic acknowledgement, duplicate receipt, older acknowledgement after rejection, ambiguous role match and uncertain submission. Missing mail access must be visible and must not be reported as reconciled.
-
-These schemas and instructions do not install workers, email automations or a live tracker migration. Old Reviewed/Rated means “assessed”, not necessarily positive: reclassify only from supporting two-axis evidence or send to review-owned Needs review. Preserve historical outcomes, dates and user edits.
-
-## Applications lifecycle format
-
-Map Applications to [LIFECYCLE.md](LIFECYCLE.md). Use one Lifecycle status dropdown. Separate Applied on, Confirmed on, Outcome on, Status source, Status notes and Status recorded at. Preserve the old combined status/date text and pipeline values in read-only legacy fields when migrating; do not drop notes, dispositions or fit assessments. Maintain dropdown and filter coverage when appending rows. Unknown historical dates stay blank. A resume link alone does not make a row Ready. Manual dropdown edits require date/source updates unless an explicit runtime supplies them.
-
-## Existing inputs and new destinations
-
-Ask for private links or local paths to existing inputs such as the master resume and target company list. A cloud link requires an authenticated connection; keep it outside Git.
-
-During setup, reuse the tracker and resume output folder if supplied. Otherwise, with setup authorization and cloud write access, create only the missing destinations: a private **Nextmove** Airtable base with mapped tracker tables, and a private **Nextmove — Resumes** folder. Verify them, return their links, and record those links in private configuration when possible. Reuse known destinations on later runs. If a supplied link is inaccessible, report the issue instead of creating a replacement.
-
-Creating empty destinations during setup does not authorize writing application records or saving resumes. Review mode still proposes changes. If cloud creation is unavailable, report what is missing and continue in review mode where possible.
-
-
-## Airtable migration and capacity
-
-A workspace is a container; it still needs a base and tables. Use the existing configured Nextmove base and read STORAGE.md before setup or migration. Keep Drive authoritative for content. Import companies and applications first, then catalogs/audits and inventory metadata. Preserve raw legacy records, actual dates and stable keys; do not invent missing facts or silently promote Reviewed to Shortlisted. Verify every changed value and relationship by readback, then verify table totals and record a durable migration checkpoint. Retain the original Sheets as a backup/content source; after cutover do not dual-write trackers. Never infer that an imported historical audit proves a new scan completed.
-
-Check actual service errors and available plan information; do not assume a plan's capacity or purchase an upgrade. At a capacity/quota error, stop affected writes, reconcile uncertain batches, retain verified progress and report the precise limit and remaining counts. Resume idempotently after capacity is available. Migration does not enable workers, scheduling, mailbox access or submission authorization.
-
-
-## Audit and integrity readiness
-
-Follow [DATA-GOVERNANCE.md](DATA-GOVERNANCE.md). Set up Audit Events separately from scan/mail/lifecycle logs. Expose immutable Record ID, Created at/by, Updated at/by and Archived at fields without confusing system times with historical event dates. Test controlled read logging, create/update before/after values, archive, idempotent retry, stale human edits and a failed audit sink before enabling a worker. Record the verified audit scope and unimplemented coverage in private Controls. Do not label a table, policy document, draft automation or latest-modified timestamp as a functioning universal audit system. A direct UI/API bypass, inaccessible permissions or missing gateway is an explicit coverage gap. Retention, access controls and relational enforcement require a deliberate architecture decision; do not buy a plan or move platforms implicitly.
-
-
-## Register a manually chosen harness once
-
-Save HARNESS-BOOTSTRAP.md in the harness's supported persistent instructions or reusable task template, with the existing private base reference supplied outside Git. Connect Airtable, Google Drive and stage-specific tools there. Register the current goals document, designated editable master, resume destination, captured-description content and optional base resume in Context Registry. Keep unknown answer banks, mailbox scope and submission authorization explicitly unresolved. Use the six state tables in COMMANDS.md for run scope, attempts, artifacts and handoffs. Setup does not invoke a stage.
-
-Test Scan, Review, Prepare, Apply preflight and Track only when explicitly requested and supported. Verify a fresh session can recover the same inputs, persist audited state, resume released unfinished work, reconcile an uncertain write and stop without launching the next command. A dry contract check or new schema is not a live provider test. Bare Apply remains subject to explicit authorization, answer/cooldown checks and live Pause applications.

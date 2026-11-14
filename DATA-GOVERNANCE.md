@@ -26,7 +26,7 @@ Populate the Application link on application audit events using the actual recor
 
 Use an array in Field changes (JSON), for example:
 `[{"field_id":"<private field ID>","field_name":"Lifecycle status","before":"Queued","after":"Shortlisted"}]`.
-Filter Audit Events by Table ID and Record ID for one row, or inspect its linked Application events. Field IDs identify column history within those changes. Keep audit payloads private and out of model context; never log credentials. Keep document/mail bodies in Drive and retain accessible evidence references rather than duplicating full content.
+Filter Audit Events by Table ID and the affected-row identity for one row (Record ID reference in the fresh-install core schema; explicitly mapped legacy text Record ID where applicable), or inspect its linked Application events. Field IDs identify column history within those changes. Keep audit payloads private and out of model context; never log credentials. Keep document/mail bodies in Drive and retain accessible evidence references rather than duplicating full content.
 
 ## Controlled access protocol
 
@@ -66,3 +66,9 @@ Official references:
 ## Manually invoked harness stages
 
 The user may operate one harness at a time under COMMANDS.md without an automated dispatcher. A harness can implement the controlled audit protocol directly through its tools for that interactive invocation; a persistent API gateway is not a prerequisite to manually emitting verified intents/outcomes. It must still test its audit access, record every controlled operation, honor one writer and stop affected work when logging fails. This changes neither universal access coverage nor Airtable's enforcement limits. Keep coverage Partial and do not bypass UI/API, retention, permission or submission controls. Do not block an otherwise capable interactive stage solely because an unattended scheduler is absent.
+
+
+## Fresh-install identity mapping
+
+Use contracts/core-schema.json together with contracts/state-schema.json under SETUP.md. A journal entry's own computed Record ID and the affected record's text Record ID reference are distinct. Preserve existing deployments' explicit aliases; never change a field's meaning to force a new name. Never write values into native computed identity/created/modified fields. Before the base/journal exists, setup cannot persist audit intents there; retain actual tool results and record that limited bootstrap coverage once the sink is available, without fabricating earlier events. The MIT license applies to public repository material, not permission to disclose a user's records.
+
