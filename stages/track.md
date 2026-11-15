@@ -9,3 +9,5 @@ Receipt → Confirmed; actual recruiter engagement → In process; explicit offe
 Record events/evidence in History and current state on Applications. An event can matter even without a state change. Preserve source IDs so polling is safe to repeat without duplicates. Runs/Settings retain mailbox cursor, scope, counts, unresolved IDs and successful coverage; no separate Mail Audit table.
 
 A rejection changes a company hold only under a confirmed applicable rule. Uncertain submissions are reconciled, never resubmitted automatically. Verify all changes and handoff before completion.
+
+For a first Track run without a successful checkpoint, use the earliest known application/observation date among the tracked scope as the start, record that basis, and paginate all relevant results. If that boundary cannot be established, ask for the initial time range under CLARIFICATIONS.md. A bounded access probe is not reconciliation and must not advance the mailbox checkpoint.
