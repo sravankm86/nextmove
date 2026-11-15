@@ -92,7 +92,9 @@
         "structured_store",
         "master_resume",
         "content_output",
-        "resume_output"
+        "resume_output",
+        "career_goals",
+        "role_policy"
       ]
     },
     {
@@ -107,7 +109,9 @@
       "required_resources": [
         "instructions_repository",
         "structured_store",
-        "master_resume"
+        "master_resume",
+        "career_goals",
+        "role_policy"
       ],
       "submission_resources": [
         "answer_bank",

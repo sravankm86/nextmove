@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values.",
   "tables": [
     {
@@ -102,6 +102,24 @@
         {
           "name": "Restriction details / source",
           "type": "multilineText"
+        },
+        {
+          "name": "Last rejection date",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
+        },
+        {
+          "name": "Restriction last verified",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
         },
         {
           "name": "Restriction timezone",
@@ -379,6 +397,27 @@
         {
           "name": "Resume link",
           "type": "url"
+        },
+        {
+          "name": "Resume file name",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Resume version",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Resume verified at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
         },
         {
           "name": "Resume notes",

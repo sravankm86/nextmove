@@ -4,9 +4,9 @@ Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read explicit Allow/Exclude choices,
 
 ## Complete source coverage
 
-Enumerate every official catalog page/cursor transiently to verified end. Validate counts, unique identities, repeated cursors, malformed/empty pages, caps and source-manifest gaps. Zero requires verified empty coverage. Search snippets or unchanged page-one counts do not establish completeness. Reuse unchanged complete resources/change feeds only with validated equivalent evidence and durable checkpoints.
+Enumerate every official catalog page/cursor without storing unrelated rows to verified end. Validate counts, unique identities, repeated cursors, malformed/empty pages, caps and source-manifest gaps. Zero requires verified empty coverage. Search snippets or unchanged page-one counts do not establish completeness. Reuse unchanged complete resources/change feeds only with validated equivalent evidence and durable checkpoints.
 
-Use repeatable official feeds/readers and code for parsing, identities, broad title screening, hashes and readback. Preserve meaningful URL parameters and genuine source memberships. Title equality is not deduplication.
+Use repeatable official feeds/readers and code for parsing, identities, broad title screening, hashes and verification of saved values. Preserve meaningful URL parameters and genuine source memberships. Title equality is not deduplication.
 
 ## Basic candidate screen
 
@@ -18,7 +18,7 @@ If identity or official availability cannot be established, keep a minimal Run p
 
 ## Inventory and handoff
 
-Upsert candidates as Inventoried, recording scan evidence, scan policy version, stable identity/source links, official URL and availability. Save description content/reference and explicit gaps, advertised salary text/basis/currency and its applicable location/level, locations/work restrictions and posted date or missing state. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
+Create or update candidates as Inventoried, recording scan evidence, scan policy version, stable identity/source links, official URL and availability. Save description content/reference and explicit gaps, advertised salary text/basis/currency and its applicable location/level, locations/work restrictions and posted date or missing state. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
 
 Career gate starts Pending; Scan does not certify final Role eligibility. Reobserving a role updates only permitted source/metadata deltas; preserve human outcomes, existing review evidence, notes and later states. Changed evidence flags targeted re-review without reopening submitted/terminal roles. Unchanged rejected roles are not requeued every scan.
 

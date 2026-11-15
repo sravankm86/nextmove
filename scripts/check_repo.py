@@ -29,7 +29,7 @@ def check(root):
         if not condition:
             errors.append(message)
 
-    for name in ["README.md", "LICENSE", "SETUP.md", "ARCHITECTURE.md", "CONNECTORS.md", "COMMANDS.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "HARNESS-BOOTSTRAP.md", "CAREER-GOALS.md", "templates/career-goals.md", "docs/SETUP-CHECKLIST.md"]:
+    for name in ["README.md", "LICENSE", "SETUP.md", "ARCHITECTURE.md", "CONNECTORS.md", "COMMANDS.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "HARNESS-BOOTSTRAP.md", "CAREER-GOALS.md", "CLARIFICATIONS.md", "RESUME-FILES.md", "docs/AIRTABLE-FIELDS.md", "docs/RELEASE-CHECKLIST.md", "templates/career-goals.md", "docs/SETUP-CHECKLIST.md"]:
         require((root / name).is_file(), "Missing required public file: " + name)
 
     decoded = {}
@@ -88,6 +88,15 @@ def check(root):
             if f["type"] == "singleSelect":
                 choices = [c["name"] for c in f.get("options", {}).get("choices", [])]
                 require(bool(choices) and len(choices) == len(set(choices)), "Invalid enum: " + f["name"])
+    for table in tables:
+        header = next(csv.reader((root / ('templates/' + table['name'].lower() + '.csv')).open()))
+        require(header == [f['name'] for f in table['fields']], 'CSV/schema mismatch: ' + table['name'])
+    aliases = decoded.get('contracts/field-aliases.json', {}).get('aliases', {})
+    for table, mapping in aliases.items():
+        require(table in lookup, 'Unknown alias table')
+        if table in lookup:
+            labels = {f['name'] for f in lookup[table]['fields']} | {l['field'] for l in core['links'] if l['from_table'] == table}
+            require(set(mapping).issubset(labels), 'Unknown logical field in aliases: ' + table)
     for link in core["links"]:
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]

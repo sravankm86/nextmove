@@ -10,7 +10,7 @@ One agent is the default; manual harness switching uses identical contracts. See
 | Apply | Authorized exact submission/receipt or uncertainty; default preflight |
 | Track | Read-only exact-role mail updates and checkpoint |
 
-Scan does not check career goals or approve Queued. Review requires current full-JD eligibility and hard career constraints; High career fit OR High resume fit then supports Queued. Both Low is Not a fit; unknowns need review. Resume fit cannot waive hard exclusions. Shortlisted is a legacy alias only.
+Scan derives broad role criteria from Career Goals but does not assess broader career fit or approve Queued. Review requires current full-JD eligibility and hard career constraints; High career fit OR High resume fit then supports Queued. Both Low is Not a fit; unknowns need review. Resume fit cannot waive hard exclusions. Shortlisted is a legacy alias only.
 
 Review dispositions feed versioned, recall-tested scanner improvements under SCAN-OPTIMIZATION.md. Career mismatches do not automatically become scanner exclusions.
 

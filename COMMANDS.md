@@ -1,6 +1,6 @@
 # Run Nextmove
 
-Read AGENTS.md and the requested stage. Load reference docs only when needed, and keep bulk catalogs/readback outside model context.
+Read AGENTS.md, CLARIFICATIONS.md and the requested stage. Load reference docs only when needed, and keep bulk catalogs/verification of saved values outside model context.
 
 | Command | Scope |
 |---|---|
@@ -15,7 +15,7 @@ Quoted examples/setup discussions do not dispatch production work. A single stag
 
 ## Startup and ownership
 
-Discover/map the six tables, Settings and live controls. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference projection/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the six tables, Settings and live controls. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 
@@ -23,7 +23,7 @@ One active writer. Never seize an owner solely on timeout. Missing global access
 
 ## Execute and persist
 
-Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified TTL, hidden page/item/time cap or false completion after one batch.
+Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified time-based freshness assumption, hidden page/item/time cap or false completion after one batch.
 
 Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity/availability remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow SCAN-OPTIMIZATION.md for validated improvements; do not learn career exclusions into Scan.
 

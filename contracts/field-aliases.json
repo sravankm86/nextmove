@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "aliases": {
+    "Applications": {
+      "Company": [
+        "Target company"
+      ],
+      "First seen at": [
+        "Observed at"
+      ]
+    },
+    "Sources": {
+      "Source": [
+        "Source record name"
+      ],
+      "Source key": [
+        "source_id"
+      ],
+      "Official careers URL": [
+        "official_careers_url"
+      ],
+      "Catalog URL": [
+        "catalog_url"
+      ],
+      "Region": [
+        "region"
+      ],
+      "Company": [
+        "Target company"
+      ],
+      "Last error": [
+        "coverage_gap"
+      ]
+    },
+    "Settings": {
+      "Key": [
+        "Control"
+      ]
+    },
+    "History": {
+      "Table reference": [
+        "Table ID"
+      ],
+      "Record reference": [
+        "Record ID"
+      ],
+      "Evidence URL": [
+        "Evidence (Drive)"
+      ],
+      "Notes": [
+        "Reason / source"
+      ]
+    }
+  },
+  "rules": [
+    "Resolve actual field IDs at startup; names are display labels.",
+    "Exactly one active field per logical field. Duplicate status columns require verified migration.",
+    "Map supported legacy types only with documented parsing; do not overwrite source data.",
+    "Never write input into computed fields."
+  ]
+}

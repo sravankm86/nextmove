@@ -26,15 +26,15 @@ flowchart LR
 
 ## Single-agent-first execution
 
-Run resolves Settings and pins current inputs/instructions once. Reuse verified unchanged inputs within that invocation; recheck authoritative versions and live controls at relevant boundaries. Changed JD/master/goals invalidate only affected decisions. No unverified freshness TTL.
+Run resolves Settings and pins current inputs/instructions once. Reuse verified unchanged inputs within that invocation; recheck authoritative versions and live controls at relevant boundaries. Changed JD/master/goals invalidate only affected decisions. No unverified time-based freshness assumption.
 
 Keep stage scopes, counts, blocked identities, artifacts and next cursor in one Run. Applications hold job progress; Sources hold board progress. Continue independent useful work despite item-specific blockers. Missing global access, Stop all or uncertain writes stop affected work. Apply needs separate authorization; Track can independently lack mail access. Unresolved required work means Partial/Blocked.
 
-Manual commands save the same shape and stop after one stage. The next harness reads state and appends ownership/attempt evidence in History; it needs no chat summary. One active writer owns mutations. A stale heartbeat does not prove a worker stopped; Airtable ownership fields are not atomic locks.
+Manual commands save the same shape and stop after one stage. The next harness reads state and appends ownership/attempt evidence in History; it needs no chat summary. One active writer owns writes. A stale heartbeat does not prove a worker stopped; Airtable ownership fields are not atomic locks.
 
 ## Candidate inventory and review boundary
 
-Scan first derives broad function/designation/seniority criteria from the current Career Goals revision (or verifies its current extracted snapshot), then enumerates all catalogs transiently and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity/availability or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
+Scan first derives broad function/designation/seniority criteria from the current Career Goals revision (or verifies its current extracted snapshot), then enumerates all catalogs without storing unrelated rows and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity/availability or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
 
 Review owns full-JD function/experience-or-equivalent-scope verification, current career goals and resume fit. Eligible aligned candidates with High career fit OR High resume fit become Queued for Prepare. Hard career mismatch → Not aligned; clear role/scope failure or both fit axes Low → Not a fit; unresolved → Needs review. Shortlisted is legacy only. See ROLE-ELIGIBILITY.md.
 
@@ -52,7 +52,7 @@ Persist all operational state in Airtable and content in registered Drive locati
 
 ## History and migration
 
-Use meaningful change/event history and run-level read scope instead of routine per-read rows. Airtable does not provide SQL uniqueness/foreign-key transactions or universal immutable logs through this design.
+Use meaningful change/event history and run-level read scope instead of routine per-read rows. Airtable does not provide SQL uniqueness/foreign-key transactions or universal unchangeable logs through this design.
 
 Migrate only with authorization and verified durable backup. Preserve outcomes, notes, restrictions, source identities and resource references. Legacy unreviewed Queued rows become a revalidation backlog, not certified review approval under new gates. Never erase submitted/terminal history because search criteria changed.
 
