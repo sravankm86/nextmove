@@ -27,11 +27,11 @@ Use code for enumeration, normalization, identity, candidate filters, hashes and
 
 Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity/availability remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow SCAN-OPTIMIZATION.md for validated improvements; do not learn career exclusions into Scan.
 
-Preserve human outcomes/notes. Read Manual notes and current status under TRACKER.md before processing and writing a job; record newly observed feedback without rewriting the notes. Legacy broad Queued rows require revalidation under the new policy, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
+Preserve human outcomes/notes. Read Manual notes and current status under TRACKER.md before processing and writing a job; record newly observed feedback in the stage snapshot/History without rewriting the notes. Legacy broad Queued rows require revalidation under the new policy, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
 
 Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. For bounded migration batches, exact per-record private delta artifacts can be indexed by a verified History manifest; never hide unverified changes.
 
-Current description/resume references, versions and verification live on Applications. Content lives in registered Drive locations. A vanished local reader is a recovery gap, not evidence of incremental support.
+Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. STAGE-STATE.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Schema-only releases retain decision-policy versions; changed decision inputs still require revalidation. A vanished local reader is a recovery gap, not evidence of incremental support.
 
 Review owns final eligibility/career gates and approves Queued; Prepare requires its current acceptance evidence. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, availability, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
 

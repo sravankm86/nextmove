@@ -1,15 +1,21 @@
 {
-  "version": 2,
+  "version": 3,
   "aliases": {
     "Applications": {
       "Company": [
         "Target company"
       ],
-      "First seen at": [
-        "Observed at"
-      ],
       "Manual notes": [
         "Status notes"
+      ],
+      "Assessment summary": [
+        "Decision reason"
+      ],
+      "Job evidence": [
+        "Description content (Drive)"
+      ],
+      "History": [
+        "Audit Events"
       ]
     },
     "Sources": {

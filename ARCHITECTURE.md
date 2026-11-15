@@ -46,7 +46,7 @@ Runs holds bounded unresolved source/identity checkpoints; Applications holds pl
 
 A company has many sources/applications; a role may belong to multiple sources. Native IDs identify records, business keys support retries and matching. Historical unmatched applications retain provenance rather than guessed links.
 
-Current resume/JD references, versions and verification stay on Applications; reusable readers on Sources/Settings. Prior values and business events stay in History. No general artifact registry. A submission attempt still gets a distinct identity, exact resume version and outcome before any retry.
+The36-field Applications profile retains current evidence/PDF references, PDF version/verification and four stage Run links. Exact metadata lives in bounded History snapshots and shared fixed inputs in Runs under STAGE-STATE.md; reusable readers stay on Sources/Settings. Prior values and business events stay in History. No general artifact registry. A submission attempt still gets a distinct identity, exact resume version and outcome before any retry.
 
 Persist all operational state in Airtable and content in registered Drive locations. Local files/chat are accelerators only. Reconcile actual outputs before retrying an interrupted write. A finished batch is not a completed stage.
 

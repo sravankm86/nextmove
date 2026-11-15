@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. TRACKER.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -129,19 +129,11 @@
     },
     {
       "name": "Applications",
-      "business_key": "Job key for canonical roles; immutable record identity for preserved legacy history",
-      "description": "Plausible PM candidates become Inventoried after basic semantics. Review owns full eligibility/career/resume acceptance before Queued. Needs eligibility and Shortlisted are legacy aliases only; preserve historical outcomes.",
+      "business_key": "Canonical Job key; native record ID for preserved unmatched history",
+      "description": "36 physical fields including relationships. Current facts/gates live here; bounded stage snapshots in History join fixed shared inputs in Runs under STAGE-STATE.md.",
       "fields": [
         {
           "name": "Application",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Job key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Company name",
           "type": "singleLineText"
         },
         {
@@ -149,8 +141,29 @@
           "type": "singleLineText"
         },
         {
+          "name": "Job key",
+          "type": "singleLineText"
+        },
+        {
           "name": "Job description link",
           "type": "url"
+        },
+        {
+          "name": "Record kind",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Admitted role"
+              },
+              {
+                "name": "Legacy revalidation"
+              },
+              {
+                "name": "Application history"
+              }
+            ]
+          }
         },
         {
           "name": "Lifecycle status",
@@ -222,137 +235,6 @@
           "type": "multilineText"
         },
         {
-          "name": "Record kind",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Admitted role"
-              },
-              {
-                "name": "Legacy revalidation"
-              },
-              {
-                "name": "Application history"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Scan evidence",
-          "type": "multilineText"
-        },
-        {
-          "name": "Scan policy version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Decision category",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Decision reason",
-          "type": "multilineText"
-        },
-        {
-          "name": "Feedback versions (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Role eligibility",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Pending"
-              },
-              {
-                "name": "Eligible"
-              },
-              {
-                "name": "Excluded"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Eligibility evidence",
-          "type": "multilineText"
-        },
-        {
-          "name": "Eligibility policy version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Career gate",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Pending"
-              },
-              {
-                "name": "Pass"
-              },
-              {
-                "name": "Fail"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Career evidence",
-          "type": "multilineText"
-        },
-        {
-          "name": "Career goals version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Description content (Drive)",
-          "type": "url"
-        },
-        {
-          "name": "Description status",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Current"
-              },
-              {
-                "name": "Captured"
-              },
-              {
-                "name": "Historical"
-              },
-              {
-                "name": "Missing"
-              },
-              {
-                "name": "Unavailable"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Availability",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Open"
-              },
-              {
-                "name": "Closed"
-              },
-              {
-                "name": "Unknown"
-              }
-            ]
-          }
-        },
-        {
           "name": "Posted salary range",
           "type": "singleLineText"
         },
@@ -413,16 +295,20 @@
           }
         },
         {
-          "name": "First seen at",
-          "type": "dateTime",
+          "name": "Availability",
+          "type": "singleSelect",
           "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
+            "choices": [
+              {
+                "name": "Open"
+              },
+              {
+                "name": "Closed"
+              },
+              {
+                "name": "Unknown"
+              }
+            ]
           }
         },
         {
@@ -436,6 +322,40 @@
               "name": "24hour"
             },
             "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Role eligibility",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Eligible"
+              },
+              {
+                "name": "Excluded"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Career gate",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pending"
+              },
+              {
+                "name": "Pass"
+              },
+              {
+                "name": "Fail"
+              }
+            ]
           }
         },
         {
@@ -479,20 +399,24 @@
           }
         },
         {
-          "name": "Fit rationale - Career goals",
+          "name": "Decision category",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Assessment summary",
           "type": "multilineText"
         },
         {
-          "name": "Fit rationale - Resume",
+          "name": "Blocker",
           "type": "multilineText"
+        },
+        {
+          "name": "Job evidence",
+          "type": "url"
         },
         {
           "name": "Resume link",
           "type": "url"
-        },
-        {
-          "name": "Resume file name",
-          "type": "singleLineText"
         },
         {
           "name": "Resume version",
@@ -512,24 +436,8 @@
           }
         },
         {
-          "name": "Resume notes",
-          "type": "multilineText"
-        },
-        {
-          "name": "Evidence versions (JSON)",
-          "type": "multilineText"
-        },
-        {
           "name": "Submission attempt key",
           "type": "singleLineText"
-        },
-        {
-          "name": "Submitted resume version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Confirmation reference",
-          "type": "multilineText"
         },
         {
           "name": "Applied on",
@@ -541,28 +449,15 @@
           }
         },
         {
-          "name": "Confirmed on",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
-          "name": "Outcome on",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
-          "name": "Blocker",
+          "name": "Confirmation reference",
           "type": "multilineText"
+        },
+        {
+          "name": "Updated at",
+          "type": "lastModifiedTime"
         }
-      ]
+      ],
+      "common_fields": []
     },
     {
       "name": "Sources",
@@ -975,13 +870,42 @@
       "from_table": "History",
       "field": "Application",
       "target_table": "Applications",
-      "cardinality": "many"
+      "cardinality": "many",
+      "inverse_field": "History"
     },
     {
       "from_table": "History",
       "field": "Run",
       "target_table": "Runs",
       "cardinality": "0..1"
+    },
+    {
+      "from_table": "Applications",
+      "field": "Scan run",
+      "target_table": "Runs",
+      "cardinality": "0..1",
+      "inverse_field": "Scan applications"
+    },
+    {
+      "from_table": "Applications",
+      "field": "Review run",
+      "target_table": "Runs",
+      "cardinality": "0..1",
+      "inverse_field": "Review applications"
+    },
+    {
+      "from_table": "Applications",
+      "field": "Preparation run",
+      "target_table": "Runs",
+      "cardinality": "0..1",
+      "inverse_field": "Preparation applications"
+    },
+    {
+      "from_table": "Applications",
+      "field": "Submission run",
+      "target_table": "Runs",
+      "cardinality": "0..1",
+      "inverse_field": "Submission applications"
     }
   ],
   "common_fields": [
@@ -1041,5 +965,43 @@
       "Audit Events",
       "Lifecycle Events"
     ]
-  }
+  },
+  "application_required_fields": [
+    "Application",
+    "Company",
+    "Role",
+    "Job key",
+    "Job description link",
+    "Record kind",
+    "Lifecycle status",
+    "Manual notes",
+    "Posted salary range",
+    "Additional compensation",
+    "Location",
+    "Work arrangement",
+    "Job posted date",
+    "Availability",
+    "Sources",
+    "Last seen at",
+    "Role eligibility",
+    "Career gate",
+    "Career fit",
+    "Resume fit",
+    "Decision category",
+    "Assessment summary",
+    "Blocker",
+    "Job evidence",
+    "Resume link",
+    "Resume version",
+    "Resume verified at",
+    "Submission attempt key",
+    "Applied on",
+    "Confirmation reference",
+    "Updated at",
+    "History",
+    "Scan run",
+    "Review run",
+    "Preparation run",
+    "Submission run"
+  ]
 }

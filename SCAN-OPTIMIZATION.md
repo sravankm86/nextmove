@@ -4,7 +4,7 @@ Use existing Applications, Runs, Settings and History; no new feedback table, ge
 
 ## Capture the right signal
 
-Review writes Decision category, Decision reason/evidence and Feedback versions (JSON) on each completed/revised assessment. Include scan/review policy versions, JD hash/reference, goals/master versions where relevant, and actual outcomes. Keep scan evidence separate from final eligibility evidence.
+Review keeps Decision category and Assessment summary on Applications and exact reason/evidence/version metadata in History and indexed Drive content under STAGE-STATE.md. Scan run/Review run identify the fixed context; never recreate retired reason/version columns. Include scan/review policy versions, JD hash/reference, goals/master versions where relevant, and actual outcomes. Keep scan evidence separate from final eligibility evidence.
 
 Manual notes is the inline human-feedback input. Observe changed note/status fingerprints and preserve the original wording under TRACKER.md; never clear the field after processing it. Classify human dispositions as human_choice unless independent JD evidence establishes a different category. Feedback does not itself activate a new exclusion rule.
 

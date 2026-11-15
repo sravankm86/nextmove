@@ -1,63 +1,31 @@
-# A readable application tracker
+# The 36-field application tracker
 
-Use short, structured values in the columns people review. Keep exact job descriptions, salary conditions, location restrictions and review evidence in the linked Drive capture and existing agent-detail fields. A shorter display must not reduce the evidence available to Review, Prepare or Apply.
+Applications uses the36 fields in scripts/stage_state.py:CORE_FIELDS and contracts/core-schema.json. Four Run links replace repeated stage context columns. History stores bounded versioned stage metadata and Drive holds detailed content. Read STAGE-STATE.md before stage work. Native record IDs are technical identities; Job key is a validated canonical business identity, with explicit unmatched legacy exceptions.
 
 ## Everyday view
 
-Create a grid named **Review** with these columns in this order. Keep **All fields** as a separate maintenance view; do not delete workflow fields to hide them.
+Show Application, Lifecycle status, Manual notes, Posted salary range, Additional compensation, Location, Work arrangement, Job posted date, Career fit, Resume fit, Blocker, Job description link and Resume link in that order. Manual notes belongs beside status. This is a view over the36-field physical schema, not a substitute for retiring columns after a verified migration.
 
-1. Application
-2. Lifecycle status
-3. Manual notes
-4. Posted salary range
-5. Additional compensation
-6. Location
-7. Work arrangement
-8. Job posted date
-9. Career fit
-10. Resume fit
-11. Blocker
-12. Job description link
-13. Resume link
+Some connectors cannot configure views or delete/retype fields. Complete supported data/schema work and report the exact remaining UI action. Existing extra columns may remain during cutover; current writers ignore them and never recreate retired fields.
 
-Application already contains company and role. Separate company/role columns remain available for filters and expanded records. Applied on, Confirmed on and Outcome on can be added to a submission-tracking view. Gates, hashes, policy versions, source links, resume verification and submission-attempt state belong in agent details.
+## Compact values and full evidence
 
-Configure field visibility/order through a supported Airtable view editor or authenticated UI. Some connectors can change records and fields but cannot change views. In that case complete the supported data work, save the exact remaining UI step in Runs, and report it. A new field is not proof it was positioned next to status.
+Salary contains only distinct advertised ranges, currency and rate unit where applicable. Missing ranges stay blank. Additional compensation uses Equity, Bonus, Commission, Bonus or commission, Not stated; mentions may be conditional and do not promise a grant. Location contains short places, never source JSON or directions. Work arrangement is Remote/Hybrid/On-site/Unspecified and Availability is Open/Closed/Unknown. A remote pay band does not establish remote eligibility.
 
-## Compact values
+Use scripts/tracker_values.py for supported formats and verify unfamiliar structures. Never manufacture salary envelopes across currencies, levels or locations. Job evidence and its exact indexed capture preserve full salary conditions, restrictions, JD and assessment reasoning. Assessment summary gives the current explanation; Blocker gives the current next action. Do not duplicate full source content into display columns.
 
-| Field | Format |
-|---|---|
-| Posted salary range | `USD 260,000–340,000`; ranges only, with currency and `/h` or `/mo` when applicable. Blank when no reliable range is stated. |
-| Additional compensation | Multiple select: Equity, Bonus, Commission, Bonus or commission, Not stated. |
-| Location | Short place values, separated by semicolons when each value includes a city/country comma. No JSON, street directions, postal codes or prose. |
-| Work arrangement | Remote, Hybrid, On-site, Unspecified. Do not infer remote eligibility merely from a remote salary band. |
-| Availability | Open, Closed, Unknown. Store the quote, URL and check time in evidence, not this display value. |
-| Description status | Current, Captured, Historical, Missing, Unavailable. Historical never establishes current availability. |
-| Blocker | A concise next action. Detailed rationale belongs in evidence/expanded fields. |
+## Human feedback and readiness
 
-Use `scripts/tracker_values.py` for supported deterministic formats; verify unfamiliar source structures rather than inventing a value. Preserve every distinct applicable band separately. Never manufacture a minimum/maximum envelope across different locations, currencies or levels. The compact salary field is a display summary, not enough to establish a career compensation gate. Preserve each band’s location, currency, period, base-versus-total basis and source in Salary details or the exact Drive capture. A mention of equity/bonus can be conditional; the label does not promise a grant. Absence of a mention means Not stated, not No.
+Manual notes belongs to the human. Agents read it with current status and never overwrite, clear or rewrite it. Save changed observed notes/status and their fingerprint in stage metadata/History, recording only known edit times/actors. Blank notes do not invalidate a human status change. A personal decline does not automatically become a scanner error or global criterion.
 
-Read current evidence before refreshing these values. Reuse verified captures where available; do not repeat the whole Scan or change fit/status decisions merely to reformat fields. Preserve before/after values in History or an indexed private migration artifact. Never put raw source JSON into display columns.
+Lifecycle, eligibility, career gate and fit are separate facts. Queued alone is not approval: verify the explicit review snapshot, fixed decision rules and current goals/master/JD. Ready alone is not verified PDF identity or submission authorization. An existing attempt requires reconciliation even after a manual status reset. Preserve submitted PDF identity separately from the current editable resume reference.
 
-## Manual notes and feedback
+## Retirement and compatibility
 
-Manual notes belongs to the human. Resolve the legacy alias Status notes by field ID; do not create competing note fields. Agents read it with current Lifecycle status at startup and before relevant writes. They must not overwrite, clear, rewrite or use it as an output log.
+Use the installation's verified migration manifest. Preserve exact prior values and indexed content, migrate required state to History and fixed context snapshots to Runs, backfill stage links, update every reader/writer/alias/schema/template/check, and replay guards after removing proposed fields from a copy. Preserve actual event times and explicit unknowns. Then those columns may retire.
 
-Respect a manual disposition on that job. When feedback changes, record the observed note/status and its fingerprint under `Evidence versions (JSON).manual_feedback`, plus a meaningful History event. Save observation time; do not invent the actual edit time or author. Read back the record before writing so a concurrent human edit is preserved. Blank notes do not invalidate a human status change.
+Keep Company, Job key, current lifecycle/manual notes, independent gates/fit, Job evidence, current PDF version/verification, Submission attempt key and the real History relationship. The empty old Lifecycle Events text helper is not the reciprocal History.Application link.
 
-Use comments such as “wrong function” as a candidate for the feedback process in SCAN-OPTIMIZATION.md. Verify the JD before treating it as a scanner mistake. A personal decline, missing evidence or career mismatch is not automatically a scan exclusion. Ask a targeted clarification only when an ambiguous note blocks the requested decision. Notes do not silently update Career Goals, authorize submissions, waive current review/resume evidence or supply resume facts. A manually selected Queued state still needs the acceptance checks before Prepare.
+Resolve company identities before removing Company name; historical identities do not imply Allow. Native IDs remain available without a Record ID formula. Posted/application/observation dates are not database creation/update time. Empty future guards remain where required by the36-field profile.
 
-## Fields that can retire
-
-Do not provision these old migration/display fields in a new installation:
-
-- Legacy lifecycle status, Imported lifecycle status, Legacy pipeline stage, Legacy status / applied on: replaced by the canonical status and actual event dates.
-- Migration key, Source record, Raw source record, Migration note: old import provenance; preserve an authorized recoverable archive before removal.
-- Inventory job, Lifecycle Events, Work Items, Artifacts: references to the retired multi-table design. Inventory now lives in Applications; History and current Drive references replace the others.
-- First-pass decision, First-pass reason: replaced by Scan evidence, Record kind and the canonical workflow states.
-- Run ID, Source URL, Job posted text: legacy helpers superseded by versioned Run evidence, Sources/official job links and the posted date with exact source evidence. Verify each mapping before removal.
-
-Existing installations must first check actual values, formulas, views, scripts, integrations and source references; retain exact private before-images and replacement mappings. Some live fields may have user-defined dependencies that the connector cannot inspect. Hide retirement candidates first when deletion/dependencies cannot be verified. Never retire empty resume verification, submission attempt, confirmation or outcome fields just because they have not been used yet: later stages require them.
-
-The safe immediate simplification is the everyday view. Consolidating policy/version/evidence columns further is a separate migration: update every stage reader/writer and verify recovery before deleting any guard. Cosmetic cleanup must not weaken resume integrity, source coverage, human-history preservation or submission safety.
+The same six tables support one full agent invocation or separately launched stages. Schema migration changes storage, not role criteria, recall, resume truthfulness, company restrictions, live controls or submission permission.

@@ -1,0 +1,12 @@
+{
+  "schema_version": 6,
+  "scan": "de42e872-basic-PM-v3",
+  "review": "de42e872-review-v3",
+  "eligibility": "de42e872-role-policy-v3",
+  "rules": [
+    "These decision-policy versions are unchanged by the schema-only migration.",
+    "A behavior change must explicitly version its affected decision policy.",
+    "Record the repository revision for audit; a formatting or schema-only commit does not by itself invalidate an unchanged decision policy.",
+    "Current goals, master, exact job content and accepted PDF versions must still match at stage boundaries."
+  ]
+}

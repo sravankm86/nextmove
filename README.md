@@ -16,7 +16,7 @@ One capable agent can run the entire workflow. You can also run one stage at a t
 
 Inventoried and Queued are states in the same Applications table, not duplicate rows in two trackers. Queued means Review approved the role. Shortlisted is a legacy value, not a new stage. Missing salary or unclear seniority does not silently remove a plausible candidate during Scan. Review resolves the required evidence before approval.
 
-The everyday [tracker view](TRACKER.md) uses 13 columns, with Manual notes beside status, salary ranges only, short location/work values and compact equity/bonus labels. Agent details stay available in expanded records or a maintenance view. Agents preserve manual notes and use them as feedback; a manual status change does not waive the evidence needed for the next stage.
+The physical Applications schema has36 fields. The everyday [tracker view](TRACKER.md) uses13 of them, with Manual notes beside status, salary ranges only, short location/work values and compact equity/bonus labels. Versioned stage metadata stays in linked History/Run snapshots under [STAGE-STATE.md](STAGE-STATE.md), with complete content in Drive. Agents preserve manual notes and use them as feedback; a manual status change does not waive the evidence needed for the next stage.
 
 ## Where information lives
 

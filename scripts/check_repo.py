@@ -95,7 +95,7 @@ def check(root):
     for table, mapping in aliases.items():
         require(table in lookup, 'Unknown alias table')
         if table in lookup:
-            labels = {f['name'] for f in lookup[table]['fields']} | {l['field'] for l in core['links'] if l['from_table'] == table}
+            labels = {f['name'] for f in lookup[table]['fields']} | {l['field'] for l in core['links'] if l['from_table'] == table} | {l['inverse_field'] for l in core['links'] if l['target_table'] == table and l.get('inverse_field')}
             require(set(mapping).issubset(labels), 'Unknown logical field in aliases: ' + table)
     for link in core["links"]:
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
@@ -121,7 +121,10 @@ def check(root):
     feedback = policy.get('feedback', {})
     require(feedback.get('protect_eligible_recall') is True and feedback.get('career_rejections_are_scan_negatives') is False, 'Unsafe feedback learning')
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
-    require({'Scan evidence', 'Scan policy version', 'Decision category', 'Decision reason', 'Feedback versions (JSON)'}.issubset(app_fields), 'Missing disposition provenance')
+    from stage_state import CORE_FIELDS
+    linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 36, 'Expected the36-field Application profile')
+    require((root/'STAGE-STATE.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
     require(pref.get('freeform_supported') is True and pref.get('embedded_commands_are_instructions') is False and pref.get('derived_values_require_source_version') is True, 'Unsafe preference interpretation')
