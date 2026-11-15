@@ -18,7 +18,7 @@ If identity or official availability cannot be established, keep a minimal Run p
 
 ## Inventory and handoff
 
-Upsert candidates as Inventoried, recording scan evidence, scan policy version, stable identity/source links, official URL and availability. Save description content/reference and explicit gaps, advertised salary text/basis/currency, locations/work restrictions and posted date or missing state. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
+Upsert candidates as Inventoried, recording scan evidence, scan policy version, stable identity/source links, official URL and availability. Save description content/reference and explicit gaps, advertised salary text/basis/currency and its applicable location/level, locations/work restrictions and posted date or missing state. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
 
 Career gate starts Pending; Scan does not certify final Role eligibility. Reobserving a role updates only permitted source/metadata deltas; preserve human outcomes, existing review evidence, notes and later states. Changed evidence flags targeted re-review without reopening submitted/terminal roles. Unchanged rejected roles are not requeued every scan.
 

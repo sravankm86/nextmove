@@ -49,6 +49,20 @@ Store the versioned extraction/readiness in existing Settings and the Run input/
 6. The editable master supplies resume/candidate facts. Goals supply preferences, not proof of skills, achievements, seniority, salary history or work authorization. Application answers, submission authorization, tools, schedules and company board configuration belong in their designated resources/controls, never inferred from the goals file.
 7. When cleaning an existing document, preserve actual preferences, keep blank/unknown values unresolved and remove procedural material from the live goals file. Preserve recoverable prior revisions; do not move personal background into public Git or promote it into the master. Do not copy obsolete instructions as new policy: check current Git behavior first.
 
+## Compensation and role-type interpretation
+
+User values stay in the private goals document; never hardcode a user's amount, currency or IC/manager choice in public Git. Extract the comparison metric as well as the number: minimum offer, target offer, advertised range maximum and total compensation are different preferences.
+
+For an explicit requirement that the advertised base maximum be above a threshold, Review compares the verified annual base range upper endpoint strictly greater than that value, in the stated currency/period and applicable location/level. Equality does not pass an above requirement. The lower endpoint need not exceed the threshold. Passing says the advertised band can reach the desired level, not that an offer is guaranteed. Bonus, equity, OTE and total compensation do not substitute for base.
+
+Scan captures exact advertised salary text, currency, period, component and location/level associations, but does not reject plausible PM candidates for compensation. Review applies the salary requirement before Queued. Record salary reasoning separately from role/seniority evidence and use career_compensation for a verified mismatch.
+
+Absent or incomplete upper bounds, estimated salary, unclear component, mismatched currency/period or unclear location/level applicability remain Needs review when the compensation gate is required. A starting salary is not an upper bound. Inspect the official description/compensation disclosure for gaps; do not borrow a higher band from a different role/location or silently assume an exchange rate. For foreign-currency roles, use an explicitly configured, source-dated conversion policy if one exists; otherwise keep the comparison unresolved. Do not silently exclude all international roles.
+
+If multiple verified bands apply to acceptable locations for the same requisition, preserve each and identify the qualifying location/level; do not imply every location qualifies. A fixed amount counts as both endpoints only when explicitly the complete applicable base offer. A soft target may inform ranking without becoming a hard gate. Unspecified individual offer minimum/total target remains unspecified even when the user states an advertised-band requirement.
+
+An explicit either IC or manager preference allows both. Do not require direct reports on IC roles or infer manager status from Product Manager wording; assess scope and actual responsibilities. If the user restricts role type, verify the actual structure before approval. scripts/role_gate.py provides a conservative normalized base-maximum gate; readers still establish official source, numeric parsing and band applicability.
+
 ## Authority and storage
 
 Git: instructions and the interpretation contract above. Drive: end-user goals and factual master as distinct documents. Airtable: operational state, references, extracted preference values with provenance and live controls. Chat/local files are not sole memory.

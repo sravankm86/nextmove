@@ -1,5 +1,12 @@
 # Changelog
 
+## Precise compensation and role-type preferences
+
+- Interpret advertised base-range maximum separately from individual offer minimum and total compensation.
+- Review applies the exact comparison and applicable currency/period/location/level; missing required evidence remains unresolved. Scan captures salary without salary-based exclusion.
+- Support IC, manager or either as preference data; personal amounts and choices stay private.
+
+
 ## Career Goals used at both boundaries
 
 - Derive and verify broad Scan role criteria from the current user preference source; Review uses the broader projection for Queued approval.

@@ -9,7 +9,7 @@ Review writes Decision category, Decision reason/evidence and Feedback versions 
 | Category | Interpretation for Scan |
 |---|---|
 | role_function, seniority_scope | Potential basic-screen false positive; inspect transferable evidence |
-| career_domain, career_industry, career_vertical, career_stage, career_geography, career_other | Review-owned preferences; do not automatically add scan exclusions |
+| career_domain, career_industry, career_vertical, career_stage, career_geography, career_compensation, career_other | Review-owned preferences; do not automatically add scan exclusions |
 | fit | Review assessment, not proof of wrong PM family/level |
 | missing_evidence | Unresolved, not a negative training label |
 | availability, duplicate | Source freshness/identity problem, not semantic relevance |

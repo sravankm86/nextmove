@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from role_gate import admission, inventory_candidate, queue_allowed, title_screen
+from role_gate import admission, base_maximum_gate, inventory_candidate, queue_allowed, title_screen
 
 
 class AdmissionTests(unittest.TestCase):
@@ -74,6 +74,32 @@ class AdmissionTests(unittest.TestCase):
                'availability_verified': True, 'role_hint': 'plausible_pm',
                'basic_evidence': 'Official function: product management; owns roadmap'}
         self.assertEqual(inventory_candidate(row), 'pass')
+
+    def test_base_maximum_is_strict_and_not_band_minimum(self):
+        row = {'minimum': 80000, 'maximum': 120000, 'currency': 'USD',
+               'period': 'year', 'component': 'base',
+               'base_upper_bound_verified': True, 'applicable_scope_verified': True,
+               'source_evidence': 'Official annual base band for applicable location'}
+        check = lambda: base_maximum_gate(row, threshold=100000, currency='USD', period='year')
+        self.assertEqual(check(), 'pass')
+        row['maximum'] = 100000
+        self.assertEqual(check(), 'reject')
+        row['maximum'] = 99000
+        self.assertEqual(check(), 'reject')
+
+    def test_salary_ambiguity_is_pending_not_negative(self):
+        row = {'maximum': 120000, 'currency': 'USD', 'period': 'year',
+               'component': 'base', 'base_upper_bound_verified': True,
+               'applicable_scope_verified': True, 'source_evidence': 'Official band'}
+        for key, value in [('maximum', None), ('maximum', float('nan')),
+                           ('maximum', True), ('component', 'total'),
+                           ('currency', 'EUR'), ('period', 'month'),
+                           ('applicable_scope_verified', False),
+                           ('base_upper_bound_verified', False), ('source_evidence', '')]:
+            with self.subTest(key=key, value=value):
+                changed = dict(row, **{key: value})
+                self.assertEqual(base_maximum_gate(changed, threshold=100000,
+                                                 currency='USD', period='year'), 'pending')
 
 
 if __name__ == '__main__':

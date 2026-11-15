@@ -5,6 +5,7 @@ No model APIs, network calls, credentials or user data are required.
 """
 import re
 import unicodedata
+import math
 
 
 def normalize(value):
@@ -102,3 +103,27 @@ def queue_allowed(*, role_decision, career_decision, career_evidence, versions_c
     return (role_decision == 'pass' and career_decision == 'pass'
             and bool(career_evidence) and versions_current is True
             and review_decision == 'approve')
+
+
+def base_maximum_gate(assessment, *, threshold, currency, period):
+    """Compare a reader-verified applicable base maximum, never estimated TC.
+
+    This gate belongs to Review. Threshold and comparison units come from
+    private preferences; the reader supplies a normalized official band.
+    """
+    if (not isinstance(threshold, (int, float)) or isinstance(threshold, bool)
+            or not math.isfinite(threshold) or threshold < 0
+            or not currency or not period):
+        raise ValueError('A finite threshold and explicit comparison units are required')
+    if (assessment.get('base_upper_bound_verified') is not True
+            or assessment.get('applicable_scope_verified') is not True
+            or assessment.get('component') != 'base'
+            or not assessment.get('source_evidence')
+            or assessment.get('currency') != currency
+            or assessment.get('period') != period):
+        return 'pending'
+    maximum = assessment.get('maximum')
+    if (not isinstance(maximum, (int, float)) or isinstance(maximum, bool)
+            or not math.isfinite(maximum) or maximum < 0):
+        return 'pending'
+    return 'pass' if maximum > threshold else 'reject'

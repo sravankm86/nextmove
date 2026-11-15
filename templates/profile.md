@@ -20,6 +20,7 @@
 - Currency and annual/monthly basis:
 - Minimum base, if required:
 - Target base:
+- Advertised base-range maximum requirement, if any:
 - Minimum total compensation, if required:
 - Target total compensation:
 - Bonus and equity preferences:
