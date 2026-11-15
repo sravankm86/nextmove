@@ -45,10 +45,10 @@ def inventory_candidate(assessment):
     """Broad screen; no career inputs or exhaustive scope decision.
 
     A reader supplies basic semantic evidence or an explicit ambiguity reason.
-    Identity/availability gaps remain Run checks. Full JD/scope uncertainty can
+    Identity gaps remain Run checks. Posting availability is not a scan gate. Full JD/scope uncertainty can
     remain on the candidate row for Review. A keyword hit alone is insufficient.
     """
-    if assessment.get('identity_verified') is not True or assessment.get('availability_verified') is not True:
+    if assessment.get('identity_verified') is not True:
         return 'pending'
     screen = title_screen(assessment.get('title'))
     role_hint = assessment.get('role_hint')
@@ -80,8 +80,6 @@ def review_eligibility(assessment, *, years_threshold):
     if assessment.get('role_family', 'unknown') not in {'product_management', 'unknown', None}:
         return 'reject'
     if assessment.get('role_family') != 'product_management' or not assessment.get('role_evidence'):
-        return 'pending'
-    if assessment.get('availability_verified') is not True:
         return 'pending'
     years = assessment.get('experience_years_target')
     experience_pass = isinstance(years, (int, float)) and not isinstance(years, bool) and years > years_threshold and bool(assessment.get('experience_evidence'))

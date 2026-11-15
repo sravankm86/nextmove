@@ -25,7 +25,7 @@ One active writer. Never seize an owner solely on timeout. Missing global access
 
 Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified time-based freshness assumption, hidden page/item/time cap or false completion after one batch.
 
-Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity/availability remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow SCAN-OPTIMIZATION.md for validated improvements; do not learn career exclusions into Scan.
+Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow SCAN-OPTIMIZATION.md for validated improvements; do not learn career exclusions into Scan.
 
 Preserve human outcomes/notes. Read Manual notes and current status under TRACKER.md before processing and writing a job; record newly observed feedback in the stage snapshot/History without rewriting the notes. Legacy broad Queued rows require revalidation under the new policy, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
 
@@ -33,10 +33,12 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. STAGE-STATE.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Schema-only releases retain decision-policy versions; changed decision inputs still require revalidation. A vanished local reader is a recovery gap, not evidence of incremental support.
 
-Review owns final eligibility/career gates and approves Queued; Prepare requires its current acceptance evidence. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, availability, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
+Review owns final eligibility/hard career checks and approves Queued; Prepare requires its current acceptance evidence. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, an accessible actual application form, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
 
 ## Stage boundaries and exit
 
 Save accepted stage outputs before advancing. Continue independent useful work safely, but blocked required stages/items mean Partial/Blocked. Verify every planned item and count before Complete. No work means verified empty eligible scope, not invented coverage.
 
 Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
+
+Use the 28-column tracker under TRACKER.md. Write concise current context and next action in Agent notes; never overwrite Manual notes. Resolve explicit review checks and structured feedback from History. Sources remains board-level scanner state, not an Applications field. Do not require posting availability during Scan/Review or maintain Last seen at; check the real form during Apply.

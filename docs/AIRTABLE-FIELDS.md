@@ -31,17 +31,14 @@ Explicit company choices and confirmed simple quota/cooldown rules. Complex uncl
 
 ### Applications
 
-36 physical fields including relationships. Current facts/gates live here; bounded stage snapshots in History join fixed shared inputs in Runs under STAGE-STATE.md.
-
-Exactly36 physical fields including the six outward links and the History reciprocal link. Do not add common metadata fields to this table; its Updated at field is already declared. Use native record IDs and record.createdTime.
+28 physical fields including five outward relationships and the History reciprocal link. Application ID is the primary formula RECORD_ID(); do not write values into it. Current handoff text belongs in Agent notes. Explicit review checks, structured feedback and source provenance live in History under STAGE-STATE.md.
 
 | Field | Type |
 |---|---|
-| Application | singleLineText |
+| Application ID | formula: RECORD_ID() |
 | Role | singleLineText |
 | Job key | singleLineText |
 | Job description link | url |
-| Record kind | singleSelect: Admitted role, Legacy revalidation, Application history |
 | Lifecycle status | singleSelect: Needs eligibility, Inventoried, Not aligned, Queued, Shortlisted, Not a fit, Ready, Applied, Confirmed, In process, Offer, Accepted, Rejected, Withdrawn, Not pursuing, Closed, Needs review, Submission uncertain, Duplicate |
 | Manual notes | multilineText |
 | Posted salary range | singleLineText |
@@ -49,15 +46,10 @@ Exactly36 physical fields including the six outward links and the History recipr
 | Location | singleLineText |
 | Work arrangement | singleSelect: Remote, Hybrid, On-site, Unspecified |
 | Job posted date | date |
-| Availability | singleSelect: Open, Closed, Unknown |
-| Last seen at | dateTime |
 | Role eligibility | singleSelect: Pending, Eligible, Excluded |
-| Career gate | singleSelect: Pending, Pass, Fail |
 | Career fit | singleSelect: High, Medium, Low, Unresolved |
 | Resume fit | singleSelect: High, Medium, Low, Unresolved |
-| Decision category | singleLineText |
-| Assessment summary | multilineText |
-| Blocker | multilineText |
+| Agent notes | multilineText |
 | Job evidence | url |
 | Resume link | url |
 | Resume version | singleLineText |
@@ -65,16 +57,14 @@ Exactly36 physical fields including the six outward links and the History recipr
 | Submission attempt key | singleLineText |
 | Applied on | date |
 | Confirmation reference | multilineText |
-| Updated at | lastModifiedTime |
 | Company | Link to Companies (0..1) |
-| Sources | Link to Sources (many) |
 | Scan run | Link to Runs (0..1) |
 | Review run | Link to Runs (0..1) |
 | Preparation run | Link to Runs (0..1) |
 | Submission run | Link to Runs (0..1) |
 | History | Reciprocal link of History.Application |
 
-Follow [STAGE-STATE.md](../STAGE-STATE.md) for versioned metadata, accepted review/verification state, immutable context snapshots and interrupted-Submit recovery. Every retired fact must be migrated before column deletion. Existing extra columns may remain during cutover; writers use only the current profile.
+Follow [STAGE-STATE.md](../STAGE-STATE.md) for complete metadata and [the migration guide](TRACKER-MIGRATION.md) before retirement. Reuse Assessment summary as Agent notes after consolidation; convert the existing primary field rather than creating another ID column. Existing extra fields may remain during cutover; current writers ignore them.
 
 ### Sources
 
@@ -160,11 +150,11 @@ Meaningful mutations and business events; failed/uncertain operations retain evi
 
 - Legacy lifecycle status preserves old values. Only Lifecycle status drives current work. Old Queued/Shortlisted rows need current evidence before Queued approval; preserve submitted/terminal outcomes.
 - Needs eligibility and Shortlisted remain accepted legacy values for reading/migration; new stages do not emit them.
-- Record kind remains current operational protection. Migration/import text fields can retire only after their provenance is preserved and current stage readers use the36-field profile.
+- Record kind retires after operational-state normalization and exact provenance preservation under TRACKER-MIGRATION.md. Keep historical outcomes and unmatched identities; do not blanket-delete or certify legacy roles.
 - Companies.Apply blocked until can be legacy text. Accept only a verified complete date/time with confirmed timezone; unclear text means held for clarification. Do not silently coerce or replace it.
 - Existing URL fields stored as text can be read only after validating the exact URL. Existing Location/Work arrangement may be text or select; preserve detail, use only supported select options and record unmapped detail separately.
 - Use exact permitted select names from the live schema. If a needed state/option cannot be written, stop that affected write and repair schema during authorized setup; never invent a similar status.
-- Sources.Company must identify one allowed company. Applications may have one company and many Sources. History can link affected Applications and one Run. Verify links against existing records.
+- Sources.Company must identify one allowed company. Applications may have one company; source memberships are recorded in History rather than an Application relationship. History can link affected Applications and one Run. Verify links against existing records.
 - System creation/modification fields and Record ID are computed. Event dates and recorded dates are separate. Unknown values stay blank with a reason.
 - Stage state snapshots in History and fixed stage inputs on Runs preserve exact versions, decisions, feedback and verification. Four typed context links replace the retired per-Application version fields. Source details remain in indexed Drive evidence.
 - History records exact meaningful changes, actor, reason, event/recorded time and affected references. A native Record ID field in History may be a text reference to the affected row, not the computed ID of the History row; map by type and meaning, not label alone.

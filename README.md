@@ -11,12 +11,12 @@ One capable agent can run the entire workflow. You can also run one stage at a t
 | [Scan](stages/scan.md) | Read every configured official board and region for allowed companies. Derive broad role criteria from Career Goals and use keywords/basic contextual checks. | Plausible candidates become Inventoried; uncertainty is preserved for Review. |
 | [Review](stages/review.md) | Read the full job description. Check seniority/scope, career preferences, compensation and resume fit. | Approved roles become Queued for preparation. Others get a clear reason or Needs review. |
 | [Prepare](stages/prepare.md) | Reuse or tailor a resume using only the editable master for facts. Verify the finished PDF and record changes. | Ready, with an exact resume file and version. |
-| [Apply](stages/apply.md) | Check authorization, answers, availability, resume version and company limits. | Applied, Confirmed or Submission uncertain. Default is checks only. |
+| [Apply](stages/apply.md) | Check authorization, answers, actual form access, resume version and company limits. | Applied, Confirmed or Submission uncertain. Default is checks only. |
 | [Track](stages/track.md) | Read recruiting messages and match them to exact roles. | Confirmation, recruiter engagement and later outcomes recorded. |
 
 Inventoried and Queued are states in the same Applications table, not duplicate rows in two trackers. Queued means Review approved the role. Shortlisted is a legacy value, not a new stage. Missing salary or unclear seniority does not silently remove a plausible candidate during Scan. Review resolves the required evidence before approval.
 
-The physical Applications schema has36 fields. The everyday [tracker view](TRACKER.md) uses13 of them, with Manual notes beside status, salary ranges only, short location/work values and compact equity/bonus labels. Versioned stage metadata stays in linked History/Run snapshots under [STAGE-STATE.md](STAGE-STATE.md), with complete content in Drive. Agents preserve manual notes and use them as feedback; a manual status change does not waive the evidence needed for the next stage.
+The physical Applications schema has 28 fields. The everyday [tracker view](TRACKER.md) shows the main review fields, with Manual notes beside status and a single Agent notes handoff, salary ranges only, short location/work values and compact equity/bonus labels. Versioned stage metadata stays in linked History/Run snapshots under [STAGE-STATE.md](STAGE-STATE.md), with complete content in Drive. Agents preserve manual notes and use them as feedback; a manual status change does not waive the evidence needed for the next stage.
 
 ## Where information lives
 
@@ -76,3 +76,5 @@ With Python 3.10+:
     python -m unittest discover -s tests -v
 
 These check public contracts and helper behavior, not live account readiness. Licensed under [MIT](LICENSE); no private data access is granted.
+
+Existing installations: follow [the 28-column migration](docs/TRACKER-MIGRATION.md). The primary Application ID exposes the native record ID; Company and Role remain separate. Scan/Review do not monitor posting closure. Apply checks the actual form before an authorized submission.

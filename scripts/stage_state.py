@@ -6,20 +6,22 @@ Fetch linked History/Run records through the harness and map field IDs first.
 import hashlib
 import json
 
-SCHEMA = 'nextmove.stage-state.v1'
+SCHEMA = 'nextmove.stage-state.v2'
+READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run', 'submission': 'Submission run'}
-CORE_FIELDS = ['Application','Company','Role','Job key','Job description link','Record kind','Lifecycle status','Manual notes','Posted salary range','Additional compensation','Location','Work arrangement','Job posted date','Availability','Sources','Last seen at','Role eligibility','Career gate','Career fit','Resume fit','Decision category','Assessment summary','Blocker','Job evidence','Resume link','Resume version','Resume verified at','Submission attempt key','Applied on','Confirmation reference','Updated at','History','Scan run','Review run','Preparation run','Submission run']
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Posted salary range','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','Submission attempt key','Applied on','Confirmation reference','History','Scan run','Review run','Preparation run','Submission run']
+RETIRED_FIELDS = ['Record kind','Availability','Sources','Last seen at','Career gate','Assessment summary','Blocker','Decision category','Updated at']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None):
     """Only current fields can be written; legacy plans cannot recreate retired data."""
-    bad = set(values) - (set(CORE_FIELDS) - {'Updated at', 'History'})
+    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History'})
     if bad:
         raise ValueError('Unsupported/retired Application fields: '+', '.join(sorted(bad)))
     for label in ['Company', 'Scan run', 'Review run', 'Preparation run', 'Submission run']:
         if label in values and len(values[label] or []) > 1:
             raise ValueError('Expected at most one linked record: '+label)
-    if creating and values.get('Record kind') == 'Admitted role':
+    if creating:
         key = values.get('Job key')
         company = values.get('Company') or []
         if not key or not values.get('Role') or len(company) != 1:
@@ -28,7 +30,7 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
             raise ValueError('Canonical job key must be checked against live existing keys')
         if allowed_companies is None or company[0] not in allowed_companies:
             raise ValueError('New candidate company must be explicitly allowed')
-        if values.get('Lifecycle status') != 'Inventoried' or values.get('Role eligibility') != 'Pending' or values.get('Career gate') != 'Pending':
+        if values.get('Lifecycle status') != 'Inventoried' or values.get('Role eligibility') != 'Pending':
             raise ValueError('Scan cannot certify eligibility or queue a new candidate')
     return values
 
@@ -67,7 +69,7 @@ def resolve(application, histories):
             data = json.loads(raw) if isinstance(raw, str) else raw
         except (ValueError, TypeError):
             continue
-        if not isinstance(data, dict) or data.get('schema') != SCHEMA:
+        if not isinstance(data, dict) or data.get('schema') not in READ_SCHEMAS:
             continue
         for state in data.get('records', []):
             if state.get('record_id') == application['id']:
@@ -92,11 +94,13 @@ def stage_versions(state, stage, runs):
 def review_ready(app, state, runs, current_inputs):
     if not state or app.get('Lifecycle status') != 'Queued':
         return False
-    if app.get('Role eligibility') != 'Eligible' or app.get('Career gate') != 'Pass':
+    if app.get('Role eligibility') != 'Eligible':
         return False
     if 'High' not in [app.get('Career fit'), app.get('Resume fit')]:
         return False
     review = state.get('review', {})
+    if review.get('role_eligible') is not True or review.get('career_requirements_pass') is not True:
+        return False
     rid = state.get('stage_runs', {}).get('review')
     if not rid or app.get('Review run') != [rid] or review.get('decision') != 'approve':
         return False

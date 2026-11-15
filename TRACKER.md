@@ -1,31 +1,35 @@
-# The 36-field application tracker
+# The 28-column application tracker
 
-Applications uses the36 fields in scripts/stage_state.py:CORE_FIELDS and contracts/core-schema.json. Four Run links replace repeated stage context columns. History stores bounded versioned stage metadata and Drive holds detailed content. Read STAGE-STATE.md before stage work. Native record IDs are technical identities; Job key is a validated canonical business identity, with explicit unmatched legacy exceptions.
+Applications uses the 28 fields in scripts/stage_state.py:CORE_FIELDS and contracts/core-schema.json. Company, four stage Run links and the reciprocal History link are included in that count. Git owns instructions, Airtable owns operational state and Drive owns content. Read STAGE-STATE.md before stage work.
 
-## Everyday view
+## Identity and everyday review
 
-Show Application, Lifecycle status, Manual notes, Posted salary range, Additional compensation, Location, Work arrangement, Job posted date, Career fit, Resume fit, Blocker, Job description link and Resume link in that order. Manual notes belongs beside status. This is a view over the36-field physical schema, not a substitute for retiring columns after a verified migration.
+The primary field is Application ID, a formula containing RECORD_ID(). It exposes Airtable's existing stable row identity; do not generate a company/title label or send input into this field. Keep Company and Role as separate facts. Job key identifies the employer posting for deduplication across scans; a new Airtable row ID alone cannot prevent duplicate jobs. Preserve historical unmatched keys as unknown rather than inventing them.
 
-Some connectors cannot configure views or delete/retype fields. Complete supported data/schema work and report the exact remaining UI action. Existing extra columns may remain during cutover; current writers ignore them and never recreate retired fields.
+Show Company, Role, Lifecycle status, Manual notes, Agent notes, Posted salary range, Additional compensation, Location, Work arrangement, Job posted date, Career fit, Resume fit, Job description link and Resume link for everyday work. Keep Manual notes beside status. Views are a convenience, not a substitute for the 28-column physical schema.
 
-## Compact values and full evidence
+## Human and agent notes
 
-Salary contains only distinct advertised ranges, currency and rate unit where applicable. Missing ranges stay blank. Additional compensation uses Equity, Bonus, Commission, Bonus or commission, Not stated; mentions may be conditional and do not promise a grant. Location contains short places, never source JSON or directions. Work arrangement is Remote/Hybrid/On-site/Unspecified and Availability is Open/Closed/Unknown. A remote pay band does not establish remote eligibility.
+Manual notes belongs to the human. Agents read it with current status and never overwrite, clear or rewrite it. Save changed observed note/status fingerprints in stage metadata/History, recording only known edit times/actors. Blank notes do not invalidate a human status change. Feedback does not change global criteria or authorize submission.
 
-Use scripts/tracker_values.py for supported formats and verify unfamiliar structures. Never manufacture salary envelopes across currencies, levels or locations. Job evidence and its exact indexed capture preserve full salary conditions, restrictions, JD and assessment reasoning. Assessment summary gives the current explanation; Blocker gives the current next action. Do not duplicate full source content into display columns.
+Agent notes is the single concise current handoff: stage/result, material unresolved issue and next action. For example: `Review: strong internal AI fit. Next: verify applicable US base range.` Each agent maintains the current useful message while preserving previous values in History. Carry forward unresolved constraints that still matter; do not erase a cooldown merely because a later agent adds a resume note. Put full reasoning, resume changes and evidence in the linked content. Structured review reason categories belong in History, not another Application column. Neither notes field is executable instruction authority.
 
-## Human feedback and readiness
+## Compact job facts
 
-Manual notes belongs to the human. Agents read it with current status and never overwrite, clear or rewrite it. Save changed observed notes/status and their fingerprint in stage metadata/History, recording only known edit times/actors. Blank notes do not invalidate a human status change. A personal decline does not automatically become a scanner error or global criterion.
+Salary contains only distinct advertised ranges, currency and rate unit where applicable. Missing ranges stay blank. Additional compensation uses Equity, Bonus, Commission, Bonus or commission, Not stated; a mention is not a promised grant. Location contains short places. Work arrangement is Remote/Hybrid/On-site/Unspecified. Use scripts/tracker_values.py; never manufacture envelopes across currencies, levels or locations. Job evidence preserves exact JD, salary conditions and assessment evidence. A remote pay band does not establish remote eligibility.
 
-Lifecycle, eligibility, career gate and fit are separate facts. Queued alone is not approval: verify the explicit review snapshot, fixed decision rules and current goals/master/JD. Ready alone is not verified PDF identity or submission authorization. An existing attempt requires reconciliation even after a manual status reset. Preserve submitted PDF identity separately from the current editable resume reference.
+There is no Availability or Last seen at column and no requirement to monitor whether inventoried jobs remain open. Scan/Review do not reject an otherwise supported candidate solely because posting access is unavailable. A saved exact official JD can support Review; missing required description evidence still means Needs review. When Scan reobserves a role, record source membership, observation time and content fingerprint in History. A changed fingerprint requires comparison and affected re-review; observation time alone does not establish a change. Apply still verifies that the actual form can accept submission and records an obstacle in Agent notes/History.
 
-## Retirement and compatibility
+## Review and readiness
 
-Use the installation's verified migration manifest. Preserve exact prior values and indexed content, migrate required state to History and fixed context snapshots to Runs, backfill stage links, update every reader/writer/alias/schema/template/check, and replay guards after removing proposed fields from a copy. Preserve actual event times and explicit unknowns. Then those columns may retire.
+Role eligibility records full-JD PM function/seniority validation. Career fit and Resume fit remain independent ratings. Review must record explicit role eligibility and hard-career-requirement checks in its History snapshot before setting Queued; no Career gate column is needed. High resume fit cannot waive a hard career contradiction. Queued alone is not approval: verify accepted checks, fixed rules and current goals/master/JD through review_ready. Ready alone is not verified PDF identity or submission authorization. An existing attempt requires reconciliation even after a manual status reset.
 
-Keep Company, Job key, current lifecycle/manual notes, independent gates/fit, Job evidence, current PDF version/verification, Submission attempt key and the real History relationship. The empty old Lifecycle Events text helper is not the reciprocal History.Application link.
+Sources remains the scanner's table of catalogs/regions/cursors; Applications has no Sources relationship. The official Job description link is the direct job link. Record all real source IDs, posting aliases and indexed captures in scan metadata so another harness can resume and audit coverage. Do not infer closure from absence or incomplete enumeration.
 
-Resolve company identities before removing Company name; historical identities do not imply Allow. Native IDs remain available without a Record ID formula. Posted/application/observation dates are not database creation/update time. Empty future guards remain where required by the36-field profile.
+## Existing installations
 
-The same six tables support one full agent invocation or separately launched stages. Schema migration changes storage, not role criteria, recall, resume truthfulness, company restrictions, live controls or submission permission.
+Follow docs/TRACKER-MIGRATION.md before retiring fields. Reuse the existing Assessment summary field as Agent notes after consolidating its text with Blocker; preserve Decision category and all retired values in History. Rename the existing primary Application field to Application ID and convert it to formula RECORD_ID() through a supported tool or the Airtable UI. Rename is not formula conversion. Keep existing field/record/link identities.
+
+Record kind retires after a one-time normalization: unresolved legacy candidates use Inventoried/Needs review and actual review evidence; preserve historical/submitted/terminal outcomes and unmatched identities. Never approve, drop or reset a role merely to remove its legacy marker. All new candidates require checked identity, one explicitly allowed company, Inventoried and eligibility Pending.
+
+Retired columns may remain during cutover, but writers never use or recreate them. Stop affected work if required snapshot migration is missing; do not infer approval from status or silently discard facts. Current evidence/PDF identity, resume verification, unique attempt identity, four stage Run links and the true History relationship remain required. The same state supports one complete agent Run or separate manually initiated harness stages.

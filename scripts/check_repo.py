@@ -123,7 +123,11 @@ def check(root):
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
     from stage_state import CORE_FIELDS
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 36, 'Expected the36-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 28, 'Expected the 28-field Application profile')
+    primary = lookup['Applications']['fields'][0]
+    require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
+    from stage_state import RETIRED_FIELDS
+    require(not (set(RETIRED_FIELDS) & (app_fields | linked)), 'Retired Application fields must not be recreated')
     require((root/'STAGE-STATE.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')

@@ -5,7 +5,7 @@ Default: one capable agent completes a thorough Run. Manual stage-by-stage harne
 | Table | Purpose |
 |---|---|
 | Companies | Explicit choices, notes and confirmed restrictions |
-| Applications | Plausible PM candidates, review/eligibility, career gate, fit, resume/submission state and preserved legacy history |
+| Applications | Plausible PM candidates, review/eligibility, fit, notes, resume/submission state and preserved legacy history |
 | Sources | One board/region, coverage and cursor |
 | Runs | One full invocation by default, or one manual stage; scope, stage progress, pending checks, blockers and handoff |
 | Settings | Private references, criteria, execution policy and live controls |
@@ -34,7 +34,7 @@ Manual commands save the same shape and stop after one stage. The next harness r
 
 ## Candidate inventory and review boundary
 
-Scan first derives broad function/designation/seniority criteria from the current Career Goals revision (or verifies its current extracted snapshot), then enumerates all catalogs without storing unrelated rows and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity/availability or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
+Scan first derives broad function/designation/seniority criteria from the current Career Goals revision (or verifies its current extracted snapshot), then enumerates all catalogs without storing unrelated rows and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
 
 Review owns full-JD function/experience-or-equivalent-scope verification, current career goals and resume fit. Eligible aligned candidates with High career fit OR High resume fit become Queued for Prepare. Hard career mismatch → Not aligned; clear role/scope failure or both fit axes Low → Not a fit; unresolved → Needs review. Shortlisted is legacy only. See ROLE-ELIGIBILITY.md.
 
@@ -44,9 +44,9 @@ Runs holds bounded unresolved source/identity checkpoints; Applications holds pl
 
 ## Relationships and recovery
 
-A company has many sources/applications; a role may belong to multiple sources. Native IDs identify records, business keys support retries and matching. Historical unmatched applications retain provenance rather than guessed links.
+A company has many sources/applications; a role may be observed on multiple sources, recorded in its scan History metadata rather than an Applications relationship. Native IDs identify records, business keys support retries and matching. Historical unmatched applications retain provenance rather than guessed links.
 
-The36-field Applications profile retains current evidence/PDF references, PDF version/verification and four stage Run links. Exact metadata lives in bounded History snapshots and shared fixed inputs in Runs under STAGE-STATE.md; reusable readers stay on Sources/Settings. Prior values and business events stay in History. No general artifact registry. A submission attempt still gets a distinct identity, exact resume version and outcome before any retry.
+The 28-field Applications profile retains current evidence/PDF references, PDF version/verification and four stage Run links. Exact metadata lives in bounded History snapshots and shared fixed inputs in Runs under STAGE-STATE.md; reusable readers stay on Sources/Settings. Prior values and business events stay in History. No general artifact registry. A submission attempt still gets a distinct identity, exact resume version and outcome before any retry.
 
 Persist all operational state in Airtable and content in registered Drive locations. Local files/chat are accelerators only. Reconcile actual outputs before retrying an interrupted write. A finished batch is not a completed stage.
 

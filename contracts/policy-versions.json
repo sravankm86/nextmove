@@ -1,12 +1,14 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "scan": "de42e872-basic-PM-v3",
   "review": "de42e872-review-v3",
   "eligibility": "de42e872-role-policy-v3",
   "rules": [
-    "These decision-policy versions are unchanged by the schema-only migration.",
+    "Role relevance and career-fit decision-policy versions are unchanged; posting availability has its own versioned apply-only policy.",
     "A behavior change must explicitly version its affected decision policy.",
     "Record the repository revision for audit; a formatting or schema-only commit does not by itself invalidate an unchanged decision policy.",
-    "Current goals, master, exact job content and accepted PDF versions must still match at stage boundaries."
-  ]
+    "Current goals, master, exact job content and accepted PDF versions must still match at stage boundaries.",
+    "Posting availability is no longer a Scan/Review exclusion or maintained Application field. Apply still checks that the actual form can accept a submission; previous availability-only holds require targeted Review, never automatic approval."
+  ],
+  "posting_availability": "apply-form-only-v1"
 }

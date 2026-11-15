@@ -4,7 +4,7 @@ Six active Airtable tables: Companies, Applications, Sources, Runs, Settings, Hi
 
 Airtable owns operational choices, admission/queue/application state, pending checks, cursors, input versions, errors and handoffs. Drive owns registered documents, candidate-role captures, PDFs and bounded reports. Git owns instructions; local/chat state is not authoritative memory.
 
-Process catalogs without storing unrelated rows. Clear unrelated/junior roles get aggregate counts; plausible PM candidates become Inventoried even with uncertain level. Unresolved identity/availability remains minimal Run state. Review verifies final eligibility and career/resume fit before Queued. Store scan evidence/version in the Scan run and History metadata/capture; keep Decision category separately on Applications; SCAN-OPTIMIZATION.md defines feedback.
+Process catalogs without storing unrelated rows. Clear unrelated/junior roles get aggregate counts; plausible PM candidates become Inventoried even with uncertain level. Unresolved identity remains minimal Run state. Review verifies final eligibility and career/resume fit before Queued. Store scan evidence/version in the Scan run and History metadata/capture; keep the structured reason category in review History and the concise handoff in Agent notes; SCAN-OPTIMIZATION.md defines feedback.
 
 A one-off old raw catalog/retired-table backup is private recovery evidence, not normal inventory. Future rejects are not mirrored into an unfiltered shadow inventory. This reduces later re-filtering after closure; re-enumerate on criteria changes and resolve ambiguity while live.
 

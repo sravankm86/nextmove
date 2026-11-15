@@ -11,3 +11,5 @@ Store Resume link, Resume version, Resume verified at and Preparation run on App
 Preserve human history and submission gates. A single command stops; a full Run advances only accepted work to authorized Apply/preflight.
 
 Before advancing, verify that the accepted review still matches the current goals, role policy, master and job description. Changed inputs require affected review/re-preparation, not silent reuse. Preserve existing submitted/terminal history.
+
+Maintain the current concise result, unresolved material issue and next action in Agent notes, preserving previous values in History. Never overwrite Manual notes or erase unresolved company restrictions. Detailed evidence belongs in linked content and stage metadata.

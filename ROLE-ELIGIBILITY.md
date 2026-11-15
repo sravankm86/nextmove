@@ -12,7 +12,7 @@ Enumerate every official page. Broad signals include Product Manager/Management/
 
 Use official title, function/team, summary or available description for basic semantics. Exclude clearly unrelated functions and clearly junior roles. Do not require a seniority word or reject direct PM roles because their domain says finance, design or security. Do not turn career preferences into scan exclusions. Clear other functions without plausible PM ownership remain excluded.
 
-A plausible candidate becomes Inventoried with scan evidence/policy version and final Role eligibility Pending. Ambiguous level or mixed function belongs in Review if plausible. Unknown identity/availability or insufficient evidence of plausibility stays a minimal Run pending check. Missing full JD alone need not prevent inventory, but blocks final review acceptance.
+A plausible candidate becomes Inventoried with scan evidence/policy version and final Role eligibility Pending. Ambiguous level or mixed function belongs in Review if plausible. Unknown identity or insufficient evidence of plausibility stays a minimal Run pending check. Missing full JD alone need not prevent inventory, but blocks final review acceptance.
 
 scripts/role_gate.py separates title_screen, inventory_candidate and review_eligibility. Titles alone establish neither a full semantic screen nor final approval.
 

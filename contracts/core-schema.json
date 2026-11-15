@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. TRACKER.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -130,11 +130,14 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "36 physical fields including relationships. Current facts/gates live here; bounded stage snapshots in History join fixed shared inputs in Runs under STAGE-STATE.md.",
+      "description": "28 physical fields including relationships. Current job facts, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under STAGE-STATE.md.",
       "fields": [
         {
-          "name": "Application",
-          "type": "singleLineText"
+          "name": "Application ID",
+          "type": "formula",
+          "options": {
+            "formula": "RECORD_ID()"
+          }
         },
         {
           "name": "Role",
@@ -147,23 +150,6 @@
         {
           "name": "Job description link",
           "type": "url"
-        },
-        {
-          "name": "Record kind",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Admitted role"
-              },
-              {
-                "name": "Legacy revalidation"
-              },
-              {
-                "name": "Application history"
-              }
-            ]
-          }
         },
         {
           "name": "Lifecycle status",
@@ -295,36 +281,6 @@
           }
         },
         {
-          "name": "Availability",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Open"
-              },
-              {
-                "name": "Closed"
-              },
-              {
-                "name": "Unknown"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Last seen at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
           "name": "Role eligibility",
           "type": "singleSelect",
           "options": {
@@ -337,23 +293,6 @@
               },
               {
                 "name": "Excluded"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Career gate",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Pending"
-              },
-              {
-                "name": "Pass"
-              },
-              {
-                "name": "Fail"
               }
             ]
           }
@@ -399,15 +338,7 @@
           }
         },
         {
-          "name": "Decision category",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Assessment summary",
-          "type": "multilineText"
-        },
-        {
-          "name": "Blocker",
+          "name": "Agent notes",
           "type": "multilineText"
         },
         {
@@ -451,10 +382,6 @@
         {
           "name": "Confirmation reference",
           "type": "multilineText"
-        },
-        {
-          "name": "Updated at",
-          "type": "lastModifiedTime"
         }
       ],
       "common_fields": []
@@ -849,12 +776,6 @@
       "cardinality": "0..1"
     },
     {
-      "from_table": "Applications",
-      "field": "Sources",
-      "target_table": "Sources",
-      "cardinality": "many"
-    },
-    {
       "from_table": "Sources",
       "field": "Company",
       "target_table": "Companies",
@@ -967,29 +888,22 @@
     ]
   },
   "application_required_fields": [
-    "Application",
+    "Application ID",
     "Company",
     "Role",
     "Job key",
     "Job description link",
-    "Record kind",
     "Lifecycle status",
     "Manual notes",
+    "Agent notes",
     "Posted salary range",
     "Additional compensation",
     "Location",
     "Work arrangement",
     "Job posted date",
-    "Availability",
-    "Sources",
-    "Last seen at",
     "Role eligibility",
-    "Career gate",
     "Career fit",
     "Resume fit",
-    "Decision category",
-    "Assessment summary",
-    "Blocker",
     "Job evidence",
     "Resume link",
     "Resume version",
@@ -997,7 +911,6 @@
     "Submission attempt key",
     "Applied on",
     "Confirmation reference",
-    "Updated at",
     "History",
     "Scan run",
     "Review run",

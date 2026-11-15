@@ -28,6 +28,20 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(title_screen('Principal Product Manager, Product Design Platform')['decision'], 'verify_jd')
         self.assertEqual(title_screen('Principal PM, Design Systems')['decision'], 'verify_jd')
 
+    def test_posting_availability_is_not_an_inventory_or_review_requirement(self):
+        row = {'identity_verified': True, 'title': 'Senior Product Manager',
+               'role_hint': 'plausible_pm', 'basic_evidence': 'Own the roadmap',
+               'description_verified': True, 'role_family': 'product_management',
+               'role_evidence': 'Own product strategy', 'experience_years_target': 10,
+               'experience_evidence': 'Ten years required'}
+        for value in [None, False, True]:
+            with self.subTest(availability=value):
+                candidate = {**row, 'availability_verified': value}
+                self.assertEqual(inventory_candidate(candidate), 'pass')
+                self.assertEqual(admission(candidate, years_threshold=8), 'pass')
+        self.assertEqual(inventory_candidate({**row, 'identity_verified': False}), 'pending')
+        self.assertEqual(admission({**row, 'description_verified': False}, years_threshold=8), 'pending')
+
     def test_title_alone_cannot_admit(self):
         self.assertEqual(admission({'title': 'Principal Product Manager'}, years_threshold=8), 'pending')
 

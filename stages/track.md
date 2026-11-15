@@ -11,3 +11,5 @@ Record exact message/receipt identities, confirmation/outcome dates and evidence
 A rejection changes a company hold only under a confirmed applicable rule. Uncertain submissions are reconciled, never resubmitted automatically. Verify all changes and handoff before completion.
 
 For a first Track run without a successful checkpoint, use the earliest known application/observation date among the tracked scope as the start, record that basis, and paginate all relevant results. If that boundary cannot be established, ask for the initial time range under CLARIFICATIONS.md. A bounded access probe is not reconciliation and must not advance the mailbox checkpoint.
+
+Maintain the current concise result, unresolved material issue and next action in Agent notes, preserving previous values in History. Never overwrite Manual notes or erase unresolved company restrictions. Detailed evidence belongs in linked content and stage metadata.

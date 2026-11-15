@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "aliases": {
     "Applications": {
       "Company": [
@@ -8,14 +8,18 @@
       "Manual notes": [
         "Status notes"
       ],
-      "Assessment summary": [
-        "Decision reason"
-      ],
       "Job evidence": [
         "Description content (Drive)"
       ],
       "History": [
         "Audit Events"
+      ],
+      "Agent notes": [
+        "Assessment summary",
+        "Decision reason"
+      ],
+      "Application ID": [
+        "Application"
       ]
     },
     "Sources": {
@@ -65,6 +69,7 @@
     "Resolve actual field IDs at startup; names are display labels.",
     "Exactly one active field per logical field. Duplicate status columns require verified migration.",
     "Map supported legacy types only with documented parsing; do not overwrite source data.",
-    "Never write input into computed fields."
+    "Never write input into computed fields.",
+    "Primary-label aliases are read-only transition mappings; never write computed Application ID. Consolidate old notes before marking migration ready."
   ]
 }
