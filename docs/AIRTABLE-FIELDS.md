@@ -41,6 +41,8 @@ Plausible PM candidates become Inventoried after basic semantics. Review owns fu
 | Role | singleLineText |
 | Job description link | url |
 | Lifecycle status | singleSelect: Needs eligibility, Inventoried, Not aligned, Queued, Shortlisted, Not a fit, Ready, Applied, Confirmed, In process, Offer, Accepted, Rejected, Withdrawn, Not pursuing, Closed, Needs review, Submission uncertain, Duplicate |
+| Manual notes | multilineText |
+| Record kind | singleSelect: Admitted role, Legacy revalidation, Application history |
 | Scan evidence | multilineText |
 | Scan policy version | singleLineText |
 | Decision category | singleLineText |
@@ -53,11 +55,12 @@ Plausible PM candidates become Inventoried after basic semantics. Review owns fu
 | Career evidence | multilineText |
 | Career goals version | singleLineText |
 | Description content (Drive) | url |
-| Description status | singleLineText |
-| Availability | singleLineText |
-| Posted salary range | multilineText |
+| Description status | singleSelect: Current, Captured, Historical, Missing, Unavailable |
+| Availability | singleSelect: Open, Closed, Unknown |
+| Posted salary range | singleLineText |
+| Additional compensation | multipleSelects: Equity, Bonus, Commission, Bonus or commission, Not stated |
 | Location | singleLineText |
-| Work arrangement | singleLineText |
+| Work arrangement | singleSelect: Remote, Hybrid, On-site, Unspecified |
 | Job posted date | date |
 | First seen at | dateTime |
 | Last seen at | dateTime |
@@ -80,6 +83,8 @@ Plausible PM candidates become Inventoried after basic semantics. Review owns fu
 | Blocker | multilineText |
 | Company | Link to Companies (0..1) |
 | Sources | Link to Sources (many) |
+
+Use [TRACKER.md](../TRACKER.md) for the 13-column everyday view, range-only salary formatting and human-owned Manual notes. Existing multiline salary/location or text work/status fields remain supported by ID; new installations use the compact types above. Do not force destructive field-type recreation.
 
 ### Sources
 

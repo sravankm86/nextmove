@@ -18,6 +18,8 @@ If identity or official availability cannot be established, keep a minimal Run p
 
 ## Inventory and handoff
 
+Follow TRACKER.md for compact display fields: salary ranges only, explicit additional-compensation labels, short place values and the permitted work-arrangement values. Keep location-specific salary conditions and exact source text in evidence; no raw JSON or explanatory paragraphs in display columns. Preserve Manual notes and any manual disposition on reobservation.
+
 Create or update candidates as Inventoried, recording scan evidence, scan policy version, stable identity/source links, official URL and availability. Save description content/reference and explicit gaps, advertised salary text/basis/currency and its applicable location/level, locations/work restrictions and posted date or missing state. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
 
 Career gate starts Pending; Scan does not certify final Role eligibility. Reobserving a role updates only permitted source/metadata deltas; preserve human outcomes, existing review evidence, notes and later states. Changed evidence flags targeted re-review without reopening submitted/terminal roles. Unchanged rejected roles are not requeued every scan.

@@ -27,7 +27,7 @@ Use code for enumeration, normalization, identity, candidate filters, hashes and
 
 Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity/availability remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow SCAN-OPTIMIZATION.md for validated improvements; do not learn career exclusions into Scan.
 
-Preserve human outcomes/notes. Legacy broad Queued rows require revalidation under the new policy, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
+Preserve human outcomes/notes. Read Manual notes and current status under TRACKER.md before processing and writing a job; record newly observed feedback without rewriting the notes. Legacy broad Queued rows require revalidation under the new policy, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
 
 Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. For bounded migration batches, exact per-record private delta artifacts can be indexed by a verified History manifest; never hide unverified changes.
 

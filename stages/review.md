@@ -8,6 +8,8 @@ Assess domain, industry, vertical, company stage, geography and all actual goals
 
 ## Decisions
 
+Read Manual notes under TRACKER.md. A short displayed salary range or an Equity/Bonus label is not sufficient compensation evidence: verify the applicable original band, currency, period, base-versus-total basis and location. Keep the display concise and full evidence recoverable. Respect a human decline without treating it as a global scanner rejection.
+
 - Clear non-PM or below-scope candidate: Not a fit, Role eligibility Excluded, reason category role_function or seniority_scope.
 - Eligible role with a hard career contradiction: Not aligned, Career gate Fail, precise career reason category/evidence.
 - Eligibility and hard career constraints pass, with High career fit OR High resume fit: Queued for Prepare. Persist full current review acceptance/evidence.

@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values.",
+  "version": 5,
+  "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. TRACKER.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
@@ -218,6 +218,27 @@
           }
         },
         {
+          "name": "Manual notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Record kind",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Admitted role"
+              },
+              {
+                "name": "Legacy revalidation"
+              },
+              {
+                "name": "Application history"
+              }
+            ]
+          }
+        },
+        {
           "name": "Scan evidence",
           "type": "multilineText"
         },
@@ -293,15 +314,70 @@
         },
         {
           "name": "Description status",
-          "type": "singleLineText"
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Current"
+              },
+              {
+                "name": "Captured"
+              },
+              {
+                "name": "Historical"
+              },
+              {
+                "name": "Missing"
+              },
+              {
+                "name": "Unavailable"
+              }
+            ]
+          }
         },
         {
           "name": "Availability",
-          "type": "singleLineText"
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Open"
+              },
+              {
+                "name": "Closed"
+              },
+              {
+                "name": "Unknown"
+              }
+            ]
+          }
         },
         {
           "name": "Posted salary range",
-          "type": "multilineText"
+          "type": "singleLineText"
+        },
+        {
+          "name": "Additional compensation",
+          "type": "multipleSelects",
+          "options": {
+            "choices": [
+              {
+                "name": "Equity"
+              },
+              {
+                "name": "Bonus"
+              },
+              {
+                "name": "Commission"
+              },
+              {
+                "name": "Bonus or commission"
+              },
+              {
+                "name": "Not stated"
+              }
+            ]
+          }
         },
         {
           "name": "Location",
@@ -309,7 +385,23 @@
         },
         {
           "name": "Work arrangement",
-          "type": "singleLineText"
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Remote"
+              },
+              {
+                "name": "Hybrid"
+              },
+              {
+                "name": "On-site"
+              },
+              {
+                "name": "Unspecified"
+              }
+            ]
+          }
         },
         {
           "name": "Job posted date",

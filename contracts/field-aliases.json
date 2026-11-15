@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "aliases": {
     "Applications": {
       "Company": [
@@ -7,6 +7,9 @@
       ],
       "First seen at": [
         "Observed at"
+      ],
+      "Manual notes": [
+        "Status notes"
       ]
     },
     "Sources": {
