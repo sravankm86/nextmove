@@ -31,7 +31,7 @@
       ],
       "stage": "Full run",
       "mode": "prepare",
-      "instructions": "COMMANDS.md",
+      "instructions": "WORKFLOW.md",
       "scope": "Whole authorized end-to-end plan; continue unaffected work, checkpoint blockers",
       "required_resources": [
         "instructions_repository",

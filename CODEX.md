@@ -1,7 +1,3 @@
 # Nextmove in Codex
 
-Read AGENTS.md and COMMANDS.md. Save HARNESS-BOOTSTRAP.md with the exact private base and connect required sources.
-
-Use Run for the primary single-agent sequence, or Scan / Review / Prepare / Apply / Track individually. Each stage shares the same six-table state, role/career gates, versions and evidence. A new session recovers Settings, application/source progress and a compatible released Run.
-
-A full run continues independent useful work safely and records partial/blocked outcomes; a manual stage ends at handoff. Submissions remain explicitly scoped and gated. Schema setup or public validation is not a production run.
+Start with AGENTS.md and WORKFLOW.md, then the requested stage. Register the private base and this repository once using SETUP.md; every harness needs its own authenticated connections. A Run executes the full authorized sequence, while named stages stop at handoff. Recover from Airtable/Drive, preserve human notes and factual resumes, and never infer submission permission.

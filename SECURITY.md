@@ -1,6 +1,6 @@
 # Security and privacy
 
-The supported security boundary is described in DATA-GOVERNANCE.md and ARCHITECTURE.md. This repository does not create a protected database, intercept every service access, restrict a base owner or guarantee privacy across third-party providers.
+The supported security boundary is described in DATA.md and README.md. This repository does not create a protected database, intercept every service access, restrict a base owner or guarantee privacy across third-party providers.
 
 ## Private material
 

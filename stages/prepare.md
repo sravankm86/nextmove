@@ -1,12 +1,12 @@
 # Prepare
 
-Use COMMANDS.md. Process review-approved Queued roles with current accepted full-JD eligibility, career and fit evidence. Inventoried is not preparation-ready; legacy Shortlisted requires evidence-based revalidation. The designated editable master is the sole factual source; never modify it, invent claims or copy requirements as experience.
+Use WORKFLOW.md. Process review-approved Queued roles with current accepted full-JD eligibility, career and fit evidence. Inventoried is not preparation-ready; legacy Shortlisted requires evidence-based revalidation. The designated editable master is the sole factual source; never modify it, invent claims or copy requirements as experience.
 
 Reuse a suitable approved base PDF or tailor by selecting/reordering/shortening grounded evidence. Preserve meaning, qualifications, dates, metrics and uncertainty. Record current master/JD versions, claim grounding and exact change notes, including base reuse with no tailoring.
 
 Follow RESUME-FILES.md for filenames, versions, reuse and page length. Create the agreed PDF in the registered Drive destination, render/visually inspect it and verify factual integrity, suitability and readable layout. Unsupported claims, stale inputs, missing master or failed PDF verification block Ready. A link alone is not readiness.
 
-Store Resume link, Resume version, Resume verified at and Preparation run on Applications. Preserve input pins, grounded changes/base reuse, claim evidence, exact filenames, editable source and visual verification in the preparation snapshot/result under STAGE-STATE.md; prior values stay in History. Runs stores progress/blockers. No generic artifact table or separate content folders are required.
+Store Resume link, Resume version, Resume verified at and Preparation run on Applications. Preserve input pins, grounded changes/base reuse, claim evidence, exact filenames, editable source and visual verification in the preparation snapshot/result under DATA.md; prior values stay in History. Runs stores progress/blockers. No generic artifact table or separate content folders are required.
 
 Preserve human history and submission gates. A single command stops; a full Run advances only accepted work to authorized Apply/preflight.
 

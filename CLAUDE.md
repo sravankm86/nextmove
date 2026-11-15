@@ -1,5 +1,3 @@
 # Nextmove in Claude Code
 
-Read AGENTS.md and COMMANDS.md, then the requested stage. Default Run is a thorough single-agent plan; manual stages use identical checkpoints.
-
-Connect this harness to the user's own six-table Airtable/Drive instance and required tools. Save HARNESS-BOOTSTRAP.md privately. Do not inherit another harness's access, rely on chat/local memory, admit title-only matches or infer submission authorization. Preserve facts, live controls and meaningful History.
+Start with AGENTS.md and WORKFLOW.md, then the requested stage. Register the private base and this repository once using SETUP.md; every harness needs its own authenticated connections. A Run executes the full authorized sequence, while named stages stop at handoff. Recover from Airtable/Drive, preserve human notes and factual resumes, and never infer submission permission.

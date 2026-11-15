@@ -1,5 +1,12 @@
 # Changelog
 
+## Consolidated instructions and interview endpoint
+
+- Eleven operational instruction files with a README map and one owner for each rule; redundant documents and deprecated markers removed.
+- Seven recruiting statuses ending at Interviewing. Confirmation is evidence under Applied; uncertainty stays blocked through saved attempt identity.
+- Minimal six-table blueprint: 95 physical columns including reciprocal links. Existing deployments require verified field preservation and consolidation before deletion.
+- Legacy Run progress remains readable without changing frozen accepted input pins. No change to role recall, hard career requirements, resume integrity or submission authorization.
+
 ## Current instruction release
 
 - Six active tables, one Applications table for Inventoried candidates and the reviewed Queued list.

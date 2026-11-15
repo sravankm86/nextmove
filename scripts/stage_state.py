@@ -18,6 +18,9 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
     bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History'})
     if bad:
         raise ValueError('Unsupported/retired Application fields: '+', '.join(sorted(bad)))
+    from lifecycle import STATUSES
+    if 'Lifecycle status' in values and values['Lifecycle status'] not in STATUSES:
+        raise ValueError('Unsupported lifecycle status; migrate legacy labels explicitly')
     for label in ['Company', 'Scan run', 'Review run', 'Preparation run', 'Submission run']:
         if label in values and len(values[label] or []) > 1:
             raise ValueError('Expected at most one linked record: '+label)
@@ -141,4 +144,26 @@ def merge_state(previous, *, record_id, job_key, stage, run_id, values):
     result = json.loads(json.dumps(previous))
     result['stage_runs'][stage] = run_id
     result[stage] = values
+    return result
+
+
+def run_progress(run):
+    """Read merged current progress plus legacy separate fields without writing pins."""
+    def parsed(value):
+        if value in [None, '']:
+            return None
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except (ValueError, TypeError):
+                return value
+        return value
+    base = parsed(run.get('Checkpoint (JSON)'))
+    result = dict(base) if isinstance(base, dict) else ({'legacy_checkpoint_raw': base} if base is not None else {})
+    for field, key in [('Stages (JSON)', 'stages'), ('Pending checks (JSON)', 'pending_checks'),
+                       ('Handoff (JSON)', 'handoff'), ('Next command', 'next_action'),
+                       ('Mode', 'execution_mode'), ('Backup/report URL', 'report_url')]:
+        value = parsed(run.get(field))
+        if key not in result and value is not None:
+            result[key] = value
     return result

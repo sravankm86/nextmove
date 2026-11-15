@@ -1,6 +1,6 @@
 {
-  "version": 7,
-  "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. TRACKER.md defines compact displays, manual feedback and view visibility.",
+  "version": 8,
+  "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
@@ -28,10 +28,6 @@
               }
             ]
           }
-        },
-        {
-          "name": "Pool",
-          "type": "singleLineText"
         },
         {
           "name": "Notes",
@@ -104,33 +100,16 @@
           "type": "multilineText"
         },
         {
-          "name": "Last rejection date",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
-          "name": "Restriction last verified",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
           "name": "Restriction timezone",
           "type": "singleLineText"
         }
-      ]
+      ],
+      "common_fields": []
     },
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "28 physical fields including relationships. Current job facts, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under STAGE-STATE.md.",
+      "description": "28 physical fields including relationships. Current job facts, seven-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -157,22 +136,10 @@
           "options": {
             "choices": [
               {
-                "name": "Needs eligibility"
-              },
-              {
                 "name": "Inventoried"
               },
               {
-                "name": "Not aligned"
-              },
-              {
                 "name": "Queued"
-              },
-              {
-                "name": "Shortlisted"
-              },
-              {
-                "name": "Not a fit"
               },
               {
                 "name": "Ready"
@@ -181,37 +148,13 @@
                 "name": "Applied"
               },
               {
-                "name": "Confirmed"
-              },
-              {
-                "name": "In process"
-              },
-              {
-                "name": "Offer"
-              },
-              {
-                "name": "Accepted"
-              },
-              {
-                "name": "Rejected"
-              },
-              {
-                "name": "Withdrawn"
+                "name": "Interviewing"
               },
               {
                 "name": "Not pursuing"
               },
               {
-                "name": "Closed"
-              },
-              {
-                "name": "Needs review"
-              },
-              {
-                "name": "Submission uncertain"
-              },
-              {
-                "name": "Duplicate"
+                "name": "Rejected"
               }
             ]
           }
@@ -392,10 +335,6 @@
       "description": "One official board/region. Enumerate all pages transiently; preserve coverage and minimal source/identity checks; plausible role/scope ambiguities are inventoried for Review.",
       "fields": [
         {
-          "name": "Source",
-          "type": "singleLineText"
-        },
-        {
           "name": "Source key",
           "type": "singleLineText"
         },
@@ -412,8 +351,8 @@
           "type": "singleLineText"
         },
         {
-          "name": "Reader reference",
-          "type": "url"
+          "name": "Reader",
+          "type": "singleLineText"
         },
         {
           "name": "Reader version",
@@ -459,8 +398,22 @@
             },
             "timeZone": "utc"
           }
+        },
+        {
+          "name": "Archived at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
         }
-      ]
+      ],
+      "common_fields": []
     },
     {
       "name": "Runs",
@@ -539,23 +492,6 @@
           }
         },
         {
-          "name": "Mode",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "review"
-              },
-              {
-                "name": "prepare"
-              },
-              {
-                "name": "auto-apply"
-              }
-            ]
-          }
-        },
-        {
           "name": "Owner",
           "type": "singleLineText"
         },
@@ -572,15 +508,7 @@
           "type": "multilineText"
         },
         {
-          "name": "Stages (JSON)",
-          "type": "multilineText"
-        },
-        {
           "name": "Checkpoint (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Pending checks (JSON)",
           "type": "multilineText"
         },
         {
@@ -631,18 +559,11 @@
           }
         },
         {
-          "name": "Handoff (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Backup/report URL",
-          "type": "url"
-        },
-        {
-          "name": "Blockers",
+          "name": "Agent notes",
           "type": "multilineText"
         }
-      ]
+      ],
+      "common_fields": []
     },
     {
       "name": "Settings",
@@ -689,14 +610,11 @@
           }
         },
         {
-          "name": "Required by",
-          "type": "singleLineText"
-        },
-        {
           "name": "Notes",
           "type": "multilineText"
         }
-      ]
+      ],
+      "common_fields": []
     },
     {
       "name": "History",
@@ -765,7 +683,8 @@
           "name": "Notes",
           "type": "multilineText"
         }
-      ]
+      ],
+      "common_fields": []
     }
   ],
   "links": [
@@ -773,19 +692,22 @@
       "from_table": "Applications",
       "field": "Company",
       "target_table": "Companies",
-      "cardinality": "0..1"
+      "cardinality": "0..1",
+      "inverse_field": "Applications"
     },
     {
       "from_table": "Sources",
       "field": "Company",
       "target_table": "Companies",
-      "cardinality": "1"
+      "cardinality": "1",
+      "inverse_field": "Sources"
     },
     {
       "from_table": "Sources",
       "field": "Last run",
       "target_table": "Runs",
-      "cardinality": "0..1"
+      "cardinality": "0..1",
+      "inverse_field": "Sources"
     },
     {
       "from_table": "History",
@@ -798,7 +720,8 @@
       "from_table": "History",
       "field": "Run",
       "target_table": "Runs",
-      "cardinality": "0..1"
+      "cardinality": "0..1",
+      "inverse_field": "History"
     },
     {
       "from_table": "Applications",
@@ -829,44 +752,7 @@
       "inverse_field": "Submission applications"
     }
   ],
-  "common_fields": [
-    {
-      "name": "Record ID",
-      "type": "formula",
-      "options": {
-        "formula": "RECORD_ID()"
-      }
-    },
-    {
-      "name": "System created at",
-      "type": "createdTime"
-    },
-    {
-      "name": "System updated at",
-      "type": "lastModifiedTime"
-    },
-    {
-      "name": "Created by",
-      "type": "createdBy"
-    },
-    {
-      "name": "Updated by",
-      "type": "lastModifiedBy"
-    },
-    {
-      "name": "Archived at",
-      "type": "dateTime",
-      "options": {
-        "dateFormat": {
-          "name": "iso"
-        },
-        "timeFormat": {
-          "name": "24hour"
-        },
-        "timeZone": "utc"
-      }
-    }
-  ],
+  "common_fields": [],
   "legacy_aliases": {
     "Companies": [
       "Target Companies"

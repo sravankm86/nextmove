@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "deprecated": true,
-  "tables": [],
-  "links": [],
-  "replacement": "core-schema.json",
-  "note": "The six-table core replaces generic orchestration tables; do not provision v1 execution tables."
-}

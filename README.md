@@ -1,80 +1,99 @@
 # Nextmove
 
-Nextmove helps you find suitable senior product-management roles, assess them, prepare truthful resumes, apply within your instructions and track recruiting updates. It runs through connected AI tools such as Codex or Claude Code. It is a set of instructions and validation tools, not a hosted application or an automatic job scheduler.
+Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It finds plausible senior product-management roles, reviews their fit, prepares truthful resumes, supports authorized applications and tracks recruiting progress through the interview stage.
 
-## How it works
+One agent can run the whole sequence. You can also start each stage manually in a different harness. Both use the same saved state, evidence and safeguards. This repository is not a hosted app, scheduler or automatic launcher for other harnesses.
 
-One capable agent can run the entire workflow. You can also run one stage at a time in different tools. Both approaches use the same saved state and checks.
+## The workflow
 
 | Stage | Work | Result |
 |---|---|---|
-| [Scan](stages/scan.md) | Read every configured official board and region for allowed companies. Derive broad role criteria from Career Goals and use keywords/basic contextual checks. | Plausible candidates become Inventoried; uncertainty is preserved for Review. |
-| [Review](stages/review.md) | Read the full job description. Check seniority/scope, career preferences, compensation and resume fit. | Approved roles become Queued for preparation. Others get a clear reason or Needs review. |
-| [Prepare](stages/prepare.md) | Reuse or tailor a resume using only the editable master for facts. Verify the finished PDF and record changes. | Ready, with an exact resume file and version. |
-| [Apply](stages/apply.md) | Check authorization, answers, actual form access, resume version and company limits. | Applied, Confirmed or Submission uncertain. Default is checks only. |
-| [Track](stages/track.md) | Read recruiting messages and match them to exact roles. | Confirmation, recruiter engagement and later outcomes recorded. |
+| [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
+| [Review](stages/review.md) | Read the full JD and assess role/seniority, hard career requirements and independent career/resume fit. | Approved candidates become Queued; others remain pending or become Not pursuing, with reasons. |
+| [Prepare](stages/prepare.md) | Reuse or tailor from the factual master, record grounded changes and verify the rendered PDF. | Ready with an exact resume file/version. |
+| [Apply](stages/apply.md) | Check authorization, answers, real form access, exact resume and company restrictions. | Applied after an established submission; uncertainty blocks retries. Default is preflight. |
+| [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
-Inventoried and Queued are states in the same Applications table, not duplicate rows in two trackers. Queued means Review approved the role. Shortlisted is a legacy value, not a new stage. Missing salary or unclear seniority does not silently remove a plausible candidate during Scan. Review resolves the required evidence before approval.
+The seven statuses are **Inventoried, Queued, Ready, Applied, Interviewing, Not pursuing and Rejected**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#seven-lifecycle-states).
 
-The physical Applications schema has 28 fields. The everyday [tracker view](TRACKER.md) shows the main review fields, with Manual notes beside status and a single Agent notes handoff, salary ranges only, short location/work values and compact equity/bonus labels. Versioned stage metadata stays in linked History/Run snapshots under [STAGE-STATE.md](STAGE-STATE.md), with complete content in Drive. Agents preserve manual notes and use them as feedback; a manual status change does not waive the evidence needed for the next stage.
+Inventory and the preparation queue are states in the same Applications table. Reasons, confirmation, missing evidence and uncertain attempts do not need separate lifecycle states. A manually selected status does not create review approval, verify a PDF or authorize submission.
 
-## Where information lives
+## Architecture
 
-| Location | Responsibility |
+~~~mermaid
+flowchart LR
+    User[Human preferences and authorization] --> Agent[One active AI harness]
+    Git[GitHub instructions] --> Agent
+    Agent <--> Airtable[Six Airtable tables: saved state]
+    Agent <--> Drive[Google Drive: content and evidence]
+    Agent --> Boards[Official catalogs and application sites]
+    Mail[Read-only recruiting mailbox] --> Agent
+    Airtable --> Next[Same agent or manually chosen next harness]
+    Drive --> Next
+~~~
+
+Git owns all procedures. Drive owns Career Goals, the factual master, resumes, job captures and reports. Airtable owns targeting, candidate/application state, source progress, fixed inputs, checkpoints and history. The active harness executes through its own authenticated connections; connections do not transfer between providers.
+
+| Airtable table | Responsibility | Minimal target columns |
+|---|---|---:|
+| Companies | Allow/Exclude choices and confirmed application restrictions | 15 |
+| Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 28 |
+| Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
+| Runs | Frozen inputs, ownership, progress and handoff | 20 |
+| Settings | Private references, versions, controls and verification | 6 |
+| History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
+
+The 95-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+
+## Where to find each rule
+
+There are 11 operational instruction files. Each concern has one owner; maintenance and public-project policies are separate.
+
+| Question | Read |
 |---|---|
-| GitHub | All workflow instructions, decision rules, setup guidance, templates and validation helpers. |
-| Google Drive | Your Career Goals, factual master resume, base/tailored resumes, job descriptions and reports. |
-| Airtable | Companies, Applications, Sources, Runs, Settings and History: choices, job state, source progress, saved run progress, private references and change history. |
-| Your active AI tool | Executes instructions through its own authenticated connections to these services, official careers sites and supported application sites. |
-| Mailbox | Read-only recruiting updates for Track. |
+| What should a harness load first? | [AGENTS.md](AGENTS.md) |
+| Commands, lifecycle, ownership, clarifications and stage handoff? | [WORKFLOW.md](WORKFLOW.md) |
+| Accounts, Drive folders, Airtable setup, connectors and saved harness prompt? | [SETUP.md](SETUP.md) |
+| Fields, identity, compact values, notes, evidence, history and recovery? | [DATA.md](DATA.md) |
+| How are end-user career preferences interpreted? | [CAREER-GOALS.md](CAREER-GOALS.md) |
+| Scan criteria, pagination and recall-tested improvement? | [Scan](stages/scan.md) |
+| Final role/seniority, compensation and fit decisions? | [Review](stages/review.md) |
+| Resume production and verification? | [Prepare](stages/prepare.md), with [file/version rules](RESUME-FILES.md) |
+| Company quotas, cooldowns and submission safeguards? | [Apply](stages/apply.md) |
+| Receipts, recruiter engagement and mailbox checkpoints? | [Track](stages/track.md) |
+| Deliberate field retirement, deployment and release checks? | [Maintenance](docs/MAINTENANCE.md) |
 
-Career Goals contains preferences only. It supplies function/designation/seniority criteria for Scan and broader preferences for Review. The master is a separate source of candidate facts. Settings can cache extracted preferences with the source version; an old copy cannot override an edited document.
+Agents read the entry point, workflow and requested stage, then relevant reference sections. They do not load the entire repository or bulk catalogs into model context. Standard public files such as SECURITY.md, CONTRIBUTING.md and LICENSE are not additional stage procedures.
 
-The agent starts with [AGENTS.md](AGENTS.md), then [COMMANDS.md](COMMANDS.md) and the stage instructions. It reads current Settings and controls, checks the required connections, saves the instruction/input versions, executes the authorized work and verifies saved results. See [ARCHITECTURE.md](ARCHITECTURE.md) and [STORAGE.md](STORAGE.md).
+## What you provide
 
-## What you need to provide
+- Your own Airtable and Google accounts, sufficient service capacity and the intended private destinations.
+- Separate authenticated connections in every harness, plus any browser or mailbox tools that its stages require. You handle sign-in, consent and MFA; unsupported capabilities remain blockers.
+- [Career preferences](templates/career-goals.md), in ordinary prose or the optional template: desired function, designation, seniority/scope, compensation, domains, responsibilities, geography and priorities. This document contains preferences, not agent instructions.
+- One accurate designated editable master resume; an approved base PDF is optional. Goals are not evidence of experience.
+- Explicit company choices, known application restrictions and answers to decision-critical questions. Agents must ask when a missing answer changes the work.
+- Explicit submission scope and approved answers before real applications. Track needs read-only mailbox access.
 
-- Your own Airtable and Google accounts, enough capacity for your data, and the correct private destinations.
-- Authenticated Airtable/Drive connections in each AI tool you use. Sign-in, account consent, MFA and some workspace selection require you.
-- [Career preferences](templates/career-goals.md): desired function/titles, seniority/scope, compensation, domains, responsibilities, locations and non-negotiables. Plain prose is supported; unknowns can be clarified.
-- One designated editable master resume with accurate facts, plus an approved base PDF if available. Keep these current.
-- Explicit company Allow/Exclude choices and known application restrictions. The agent verifies official boards; it does not assume every company is allowed.
-- Answers to decision-critical questions. [CLARIFICATIONS.md](CLARIFICATIONS.md) requires agents to ask rather than invent facts, preferences or application answers.
-- For actual submissions: explicit scope/authorization, approved answers and a supported browser tool. For Track: the intended mailbox and read access.
-
-No model API key is required. Connectors may use APIs internally. Each AI tool needs its own connections; forking this repository does not copy another user's files or access. Plain chat without suitable tools cannot run the workflow.
+No model API key is required. Connectors may use service APIs internally. A fork does not copy private data, authentication or another person's setup. Plain chat without suitable tools cannot execute these stages.
 
 ## Set up and run
 
-Follow [SETUP.md](SETUP.md), [CONNECTORS.md](CONNECTORS.md) and [the setup checklist](docs/SETUP-CHECKLIST.md). Register the repo and your private base once using [HARNESS-BOOTSTRAP.md](HARNESS-BOOTSTRAP.md). Fresh setup keeps submissions paused.
+Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Then use `Run Nextmove` for the full authorized sequence or `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
 
-| Command | Scope |
-|---|---|
-| Run Nextmove | Scan → Review → Prepare → Apply checks/authorized submissions → Track; one saved run with stage progress. |
-| Scan / Review / Prepare / Apply / Track | Run only that stage and save a handoff. Apply alone does not grant unlimited submission permission. |
+For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked. Do not run production work through an unresolved migration pause.
 
-For manual switching, release the prior agent's ownership and open the next configured tool. It reads Airtable/Drive to recover progress without a chat summary. Only one agent writes at a time. Missing capabilities block the affected work; the agent continues independent useful work and reports Partial or Blocked when appropriate. See [COMMANDS.md](COMMANDS.md).
+## Expectations and limits
 
-Before using an existing installation, complete its schema/settings mapping and legacy review checks. The six-table design is a target, not a claim that an older base has already been migrated. Keep old records recoverable until authorized backup and replacement checks pass. Do not start production work while a migration or readiness control is paused.
+Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
-## What to expect
+Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
 
-Expect broad source coverage, a reviewable candidate pool, clear reasons for decisions, honest resumes, exact [resume filenames and versions](RESUME-FILES.md), verified writes and saved progress. [Review feedback](SCAN-OPTIMIZATION.md) improves Scan with tests that protect recall. [History](DATA-GOVERNANCE.md) records meaningful changes and events, not a row for every read.
+## Contributing and license
 
-Do not expect guaranteed interviews, offers or compensation; access to every careers site; unattended authentication; automatic launching of other AI tools; automatic submission permission; identical judgment from every model; or unlimited free storage. A successful repository check is not proof of a complete live scan or a tested application site. Service and tool limits must be reported.
-
-Airtable does not enforce SQL-style uniqueness/transactions or provide an unchangeable all-access audit through these instructions. Direct human/API edits can bypass the agent's journal. Missing or uncertain evidence must remain visible. No hidden page caps, fabricated completion or automatic paid upgrades are allowed.
-
-## Maintenance and sharing
-
-Keep private data out of public Git and issues. Read [SECURITY.md](SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md), [the column guide](docs/AIRTABLE-FIELDS.md) and [release checks](docs/RELEASE-CHECKLIST.md).
-
-With Python 3.10+:
+Keep private data, account identifiers, resumes, job/mail snapshots and credentials out of public Git and issues. Read [SECURITY.md](SECURITY.md) and [CONTRIBUTING.md](CONTRIBUTING.md). With Python 3.10+, run:
 
     python scripts/check_repo.py
     python scripts/build_schema.py
     python -m unittest discover -s tests -v
 
-These check public contracts and helper behavior, not live account readiness. Licensed under [MIT](LICENSE); no private data access is granted.
-
-Existing installations: follow [the 28-column migration](docs/TRACKER-MIGRATION.md). The primary Application ID exposes the native record ID; Company and Role remain separate. Scan/Review do not monitor posting closure. Apply checks the actual form before an authorized submission.
+These validate public contracts/helpers, not live scan completion or account readiness. Licensed under [MIT](LICENSE); no access to private data is granted.

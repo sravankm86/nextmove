@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "aliases": {
     "Applications": {
       "Company": [
@@ -23,9 +23,6 @@
       ]
     },
     "Sources": {
-      "Source": [
-        "Source record name"
-      ],
       "Source key": [
         "source_id"
       ],
@@ -43,6 +40,9 @@
       ],
       "Last error": [
         "coverage_gap"
+      ],
+      "Reader": [
+        "reader"
       ]
     },
     "Settings": {
@@ -63,6 +63,34 @@
       "Notes": [
         "Reason / source"
       ]
+    },
+    "Companies": {
+      "Sources": [
+        "Catalog Sources"
+      ]
+    },
+    "Runs": {
+      "Agent notes": [
+        "Blockers"
+      ],
+      "History": [
+        "Audit Events"
+      ],
+      "Sources": [
+        "Catalog Sources"
+      ],
+      "Scan applications": [
+        "Applications"
+      ],
+      "Review applications": [
+        "Applications 2"
+      ],
+      "Preparation applications": [
+        "Applications 3"
+      ],
+      "Submission applications": [
+        "Applications 4"
+      ]
     }
   },
   "rules": [
@@ -70,6 +98,7 @@
     "Exactly one active field per logical field. Duplicate status columns require verified migration.",
     "Map supported legacy types only with documented parsing; do not overwrite source data.",
     "Never write input into computed fields.",
-    "Primary-label aliases are read-only transition mappings; never write computed Application ID. Consolidate old notes before marking migration ready."
+    "Primary-label aliases are read-only transition mappings; never write computed Application ID. Consolidate old notes before marking migration ready.",
+    "During Source primary-field consolidation prefer the verified explicit field-ID map; copy source_id before renaming the primary field and retiring the duplicate. Read legacy Run progress through run_progress until cutover is verified."
   ]
 }

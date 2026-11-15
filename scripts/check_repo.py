@@ -29,8 +29,13 @@ def check(root):
         if not condition:
             errors.append(message)
 
-    for name in ["README.md", "LICENSE", "SETUP.md", "ARCHITECTURE.md", "CONNECTORS.md", "COMMANDS.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "HARNESS-BOOTSTRAP.md", "CAREER-GOALS.md", "CLARIFICATIONS.md", "RESUME-FILES.md", "docs/AIRTABLE-FIELDS.md", "docs/RELEASE-CHECKLIST.md", "templates/career-goals.md", "docs/SETUP-CHECKLIST.md"]:
+    for name in ["README.md", "LICENSE", "AGENTS.md", "WORKFLOW.md", "SETUP.md", "DATA.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "CAREER-GOALS.md", "RESUME-FILES.md", "docs/MAINTENANCE.md", "templates/career-goals.md"]:
         require((root / name).is_file(), "Missing required public file: " + name)
+
+    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['scan','review','prepare','apply','track']]
+    require(len(runtime)==11 and all((root/p).is_file() for p in runtime), 'Expected eleven canonical operational instruction files')
+    for obsolete in ['COMMANDS.md','ARCHITECTURE.md','CLARIFICATIONS.md','CONNECTORS.md','DATA-GOVERNANCE.md','HARNESS-BOOTSTRAP.md','LIFECYCLE.md','ROLE-ELIGIBILITY.md','SCALING.md','SCAN-OPTIMIZATION.md','STAGE-STATE.md','STORAGE.md','TRACKER.md','stages/shortlist.md','templates/profile.md','contracts/state-schema.json']:
+        require(not (root/obsolete).exists(), 'Do not restore a duplicate/deprecated instruction authority: '+obsolete)
 
     decoded = {}
     for p in files(root):
@@ -68,7 +73,6 @@ def check(root):
 
     try:
         core = decoded["contracts/core-schema.json"]
-        state = decoded["contracts/state-schema.json"]
         command = decoded["contracts/commands.json"]
         seed = decoded["contracts/setup-seed.json"]
     except KeyError as exc:
@@ -78,7 +82,6 @@ def check(root):
     names = [t["name"] for t in tables]
     expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History"}
     require(len(names) == 6 and set(names) == expected, "Expected exactly six active logical tables")
-    require(state.get("deprecated") is True and not state.get("tables"), "Legacy execution schema must not add tables")
     lookup = {t["name"]:t for t in tables}
     for table in tables:
         fields = table["fields"]
@@ -99,6 +102,17 @@ def check(root):
             require(set(mapping).issubset(labels), 'Unknown logical field in aliases: ' + table)
     for link in core["links"]:
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
+    from lifecycle import STATUSES
+    lifecycle = next(f for f in lookup['Applications']['fields'] if f['name']=='Lifecycle status')
+    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==7, 'Expected seven lifecycle states ending at Interviewing')
+    counts = {}
+    for table in tables:
+        fields = {f['name'] for f in table['fields']}
+        fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
+        fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
+        counts[table['name']] = len(fields)
+    require(counts=={'Companies':15,'Applications':28,'Sources':13,'Runs':20,'Settings':6,'History':13}, 'Unexpected minimal table profile')
+    require(not core.get('common_fields') and all(t.get('common_fields')==[] for t in tables), 'Do not duplicate native metadata across tables')
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
     require(len(resources) == len(set(resources)), "Duplicate Settings key")
     require(set(command["tables"]) == expected and command["default_command"] == "Run", "Wrong command/schema default")
@@ -128,7 +142,7 @@ def check(root):
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     from stage_state import RETIRED_FIELDS
     require(not (set(RETIRED_FIELDS) & (app_fields | linked)), 'Retired Application fields must not be recreated')
-    require((root/'STAGE-STATE.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
+    require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
     require(pref.get('freeform_supported') is True and pref.get('embedded_commands_are_instructions') is False and pref.get('derived_values_require_source_version') is True, 'Unsafe preference interpretation')

@@ -4,7 +4,7 @@ Nextmove is an instruction-led project for tool-capable harnesses. Contributions
 
 ## Before proposing a change
 
-Read AGENTS.md, ARCHITECTURE.md, DATA-GOVERNANCE.md and the affected stage. Use fictional examples. Describe the concrete trigger, resulting behavior, validation and known capability limits. No account identifiers, real resumes, mail excerpts, private links, browser state or raw job snapshots belong in issues, patches, screenshots or CI artifacts.
+Read AGENTS.md, README.md, DATA.md and the affected stage. Use fictional examples. Describe the concrete trigger, resulting behavior, validation and known capability limits. No account identifiers, real resumes, mail excerpts, private links, browser state or raw job snapshots belong in issues, patches, screenshots or CI artifacts.
 
 For a bug, provide a redacted harness/capability description, instruction revision, expected behavior and minimal fictional reproduction. For a security or privacy exposure, follow SECURITY.md instead of opening a public issue with sensitive details. Feature requests should explain the goal and any effect on fidelity, costs or permissions.
 

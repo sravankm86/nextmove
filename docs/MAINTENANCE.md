@@ -1,0 +1,29 @@
+# Maintenance, migrations and releases
+
+This file is for deliberate maintenance, not every stage startup. README.md maps active logic; WORKFLOW.md, DATA.md and stages/ own runtime rules. Git history preserves removed files; do not keep redirect files or a second active instruction set.
+
+## Field audit and retirement
+
+The minimal target is 95 columns across six tables: Companies 15, Applications 28, Sources 13, Runs 20, Settings 6 and History 13, including required reciprocal links. A live audit can find more fields. Audit every actual field for a current consumer, useful human action, required evidence/identity or recoverability; populated does not imply necessary, and empty does not imply dispensable. Keep configured cooldown fields even before first use. Preserve archived-source disabling and real relational links.
+
+Produce a private per-field report with live field ID/name/type, population, decision, purpose, replacement, dependency checks and deletion readiness. Check formulas, views, automations/interfaces and known integrations; disclose inaccessible view configurations/external consumers. Private identifiers/content never belong in public Git. A recommendation is not permission to delete unpreserved information.
+
+Use one writer. Read current values; preserve exact retired values/native actor/time metadata, original inputs, links and application outcomes in bounded indexed private content or History snapshots. Store hashes, row selectors and verified durable references. Reconcile human edits, migrate only intended deltas, verify saved replacements and replay readiness/retry guards with retired fields removed. Preserve unknowns. Never overwrite fixed input pins of old accepted Runs.
+
+Companies: move optional company research/import/source exports to indexed content; keep current targeting/restrictions/notes. Last rejection/verification facts live in History. Sources: copy the real source_id into its existing primary field and rename it Source key before retiring the duplicate; merge verification/pagination/manifest details into Checkpoint, preserve reader identity/version and Archived at. Runs: consolidate separate stage/pending/handoff/mode/report/next-action state into Checkpoint, and reuse Blockers as Agent notes; keep fixed Input versions unchanged. History: preserve Operation/Phase/Entity key/read scope/error details and populate any missing event classification from actual evidence before retiring duplicate columns; never fabricate actor/time or rewrite past business outcomes. Settings: remove repeated metadata and Required by only after preserving useful historical details; required resources come from contracts/commands.json. Do not automatically delete settings rows.
+
+Update aliases, every reader/writer, generated contracts/templates and private mappings together. Mark per-table retirement_ready only after exact readback/dependency/recovery checks. Delete only the verified list. Some tools cannot delete/retype fields or manage select choices; provide precise UI actions and keep final deployment readiness incomplete until readback proves them. Native reciprocal fields cannot be dropped independently of the relationship they represent.
+
+## Applications and lifecycle migration
+
+Applications stays at 28 columns. Reuse Assessment summary as Agent notes after consolidating Blocker and preserving Decision category in review.reason_category. Primary Application becomes Application ID, formula RECORD_ID(); rename alone is insufficient. Preserve former Record kind/Availability/Sources/Last seen at/Career gate/Updated at values and source provenance in History. Legacy pending candidates use operational state; preserve historical unmatched keys and submitted outcomes.
+
+Complete review snapshots require explicit review.role_eligible and review.career_requirements_pass booleans, accepted full-JD decision/hash/provenance and fixed inputs. Migrate only explicit Eligible/Excluded and Pass/Fail values to true/false; unknown stays null. Migration never approves a job. Verify original legitimate approvals, current PDF verification and pending-attempt blocking after retirement. Prior snapshot versions remain readable for recovery; only explicit current checks establish acceptance.
+
+WORKFLOW.md defines the seven-state mapping. Preserve exact prior status/confirmation/uncertainty/duplicate references and outcomes in History. Populate any missing submission attempt evidence before collapsing an uncertain-submit status; otherwise leave the item blocked. Configure the seven select choices, apply/verify mappings, then remove unused old choices. Confirmed maps to Applied without discarding confirmations. Interviewing is the final tracked recruiting stage; offers/acceptance and later recruiting outcomes are outside automatic scope.
+
+## Release and deployment checks
+
+Run python scripts/check_repo.py, python scripts/build_schema.py and python -m unittest discover -s tests -v. Verify generated schema matches the committed file. Check internal links, command routes, field aliases, canonical document ownership, private-data patterns and the actual diff. Publish the reviewed revision and verify the branch. CI is a public-contract test, not a live scan or comprehensive security audit.
+
+Privately verify schema/types/options/links, human notes/outcomes, goals/master/output access, source coverage, one writer, durable handoff, attempt recovery, rendered PDFs, mailbox scope and live controls. Save Passed/Blocked/Not tested with evidence. A clean repository does not prove a fully migrated base or supported browser. Never call the deployment fully ready with unresolved UI, data migration or access steps.
