@@ -5,9 +5,9 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Command | Scope |
 |---|---|
 | Run / Run Nextmove | Default single agent: Scan → Review → Prepare → Apply → Track |
-| Scan | Source coverage, verified PM admission, career screen before Queued |
-| Review / Assess / Shortlist | Gated queue and explicitly retryable legacy/review backlog |
-| Prepare | Current eligible Shortlisted roles |
+| Scan | Complete source coverage and keywords/basic semantics → Inventoried; no career screen |
+| Review / Assess / Shortlist | Inventoried/retryable backlog → full eligibility/career/resume assessment → Queued |
+| Prepare | Current review-approved Queued roles |
 | Apply | Ready roles; default preflight unless separately authorized |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
 
@@ -25,7 +25,7 @@ One active writer. Never seize an owner solely on timeout. Missing global access
 
 Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified TTL, hidden page/item/time cap or false completion after one batch.
 
-Scan creates records only after verified PM/experience-or-scope admission. Uncertainty stays in minimal Run checkpoints; unrelated clear failures only produce aggregate counts. Career screening precedes Queued. ROLE-ELIGIBILITY.md defines the gate.
+Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity/availability remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow SCAN-OPTIMIZATION.md for validated improvements; do not learn career exclusions into Scan.
 
 Preserve human outcomes/notes. Legacy broad Queued rows require revalidation under the new policy, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
 
@@ -33,10 +33,10 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Current description/resume references, versions and verification live on Applications. Content lives in registered Drive locations. A vanished local reader is a recovery gap, not evidence of incremental support.
 
-Review respects admission/career gates. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, availability, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
+Review owns final eligibility/career gates and approves Queued; Prepare requires its current acceptance evidence. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, availability, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
 
 ## Stage boundaries and exit
 
 Save accepted stage outputs before advancing. Continue independent useful work safely, but blocked required stages/items mean Partial/Blocked. Verify every planned item and count before Complete. No work means verified empty eligible scope, not invented coverage.
 
-Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report source coverage, transient rejects, verification candidates, admitted inventory, career queue and later outcomes separately. A new harness must recover this without prior chat/local state.
+Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.

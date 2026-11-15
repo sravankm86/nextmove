@@ -1,35 +1,29 @@
-# Scan: precise admission with recall first
+# Scan: plausible PM inventory with recall first
 
-Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read current explicit Allow/Exclude choices, every configured official source/region, role policy and career goals. Do not inherit obsolete company-pool exemptions or old criteria.
+Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read explicit Allow/Exclude choices, every configured official board/region and the versioned scan/role policy. Scan does not assess career goals or resume fit and cannot set Queued.
 
-## Coverage before admission
+## Complete source coverage
 
-Enumerate every official catalog page/cursor transiently to verified end. Check counts, unique identities, repeated cursors, empty/malformed pages, caps and source-manifest gaps. Zero needs verified empty coverage; search results or unchanged page one/counts are insufficient. Reuse a complete unchanged resource/change feed only with validated equivalent evidence and durable checkpoint.
+Enumerate every official catalog page/cursor transiently to verified end. Validate counts, unique identities, repeated cursors, malformed/empty pages, caps and source-manifest gaps. Zero requires verified empty coverage. Search snippets or unchanged page-one counts do not establish completeness. Reuse unchanged complete resources/change feeds only with validated equivalent evidence and durable checkpoints.
 
-Use code for parsing, identity, title screening, hashes and verification. A source membership or requisition identity must be genuine; title equality and placeholder IDs do not establish duplicates. Preserve meaningful URL parameters.
+Use repeatable official feeds/readers and code for parsing, identities, broad title screening, hashes and readback. Preserve meaningful URL parameters and genuine source memberships. Title equality is not deduplication.
 
-Do not persist individual clear unrelated/junior roles, full bodies or a raw shadow catalog. Record aggregate observed/rejected counts and reason cohorts. A user-authorized one-off migration archive is separate legacy evidence.
+## Basic candidate screen
 
-## Role/seniority gate
+Use broad PM keywords, aliases, localized and unlevelled titles. Check official title, team/function, summary or readily available description for plausible product-management work and senior scope. Exclude clear unrelated functions and clearly junior roles. Do not infer company grade from title, demand Senior in every title, or treat low minimum years alone as proof of insufficient scope.
 
-Use broad PM title aliases, including unlevelled and flat titles, abbreviations/localized variants requiring verification. Clear non-PM functions are excluded before storage. Do not require a Senior word or infer L66 equivalence from any title.
+Basic semantics must have recorded evidence or an explicit ambiguity reason; a keyword hit is not final eligibility. Plausible candidates with uncertain PM boundaries or level enter Inventoried with Role eligibility Pending for Review. Do not perform full career/domain/industry/vertical/geography alignment, resume scoring or exhaustive seniority adjudication here. Capture geographic/work restrictions as data, not career-fit exclusions. Explicit company Exclude remains binding.
 
-For plausible/ambiguous cases, read the exact current official full description or reliable current feed content. Verify PM responsibilities and either experience above the configured threshold or evidence-backed equivalent senior scope. A low minimum alone does not prove insufficient scope; resolve actual responsibilities. Missing descriptions/title/level stay minimal Run pending checks with identity, URL, reason, version and retry checkpoint. They are not admitted inventory.
+If identity or official availability cannot be established, keep a minimal Run pending check with URL, reason and next action rather than inventing a role. Missing title can be resolved from official summary; insufficient evidence for even plausibility stays pending, not silently rejected.
 
-Only verified admissions are written as Inventoried. Save canonical identity, all advertised location/work restrictions, exact salary text/basis/currency, posted date or explicit missing state, capture reference, eligibility evidence and policy/content versions. Do not estimate metadata or borrow another posting's band.
+## Inventory and handoff
 
-## Career screen before queuing
+Upsert candidates as Inventoried, recording scan evidence, scan policy version, stable identity/source links, official URL and availability. Save description content/reference and explicit gaps, advertised salary text/basis/currency, locations/work restrictions and posted date or missing state. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
 
-After admission, evaluate current domain/industry/vertical, company stage, geography and other actual goals from role/employer evidence. Hard contradictions → Not aligned; unknown → remain Inventoried/pending; supported alignment → Queued. No resume scoring during Scan. Soft preferences are not invented hard exclusions.
+Career gate starts Pending; Scan does not certify final Role eligibility. Reobserving a role updates only permitted source/metadata deltas; preserve human outcomes, existing review evidence, notes and later states. Changed evidence flags targeted re-review without reopening submitted/terminal roles. Unchanged rejected roles are not requeued every scan.
 
-A temporary company hold does not remove source coverage or lower fit, but is visible as a later submission blocker. Never submit during Scan.
+Clear rejects produce aggregate reason counts, not a raw shadow catalog. Capture candidate descriptions in registered Drive content; unrelated feed bodies remain transient. Sources holds cursor/coverage; Runs holds scope, counts, gaps and handoff; Applications holds candidate/review/application state.
 
-## Persistence and completion
+Verify writes and all planned sources. Company/source Complete requires every planned source verified; Partial means usable observations with coverage gaps; Failed means no usable verified source. Report source coverage separately from capture gaps and unresolved candidates. Review pending does not by itself make completed Scan coverage incomplete. A full Run remains Partial if required later work is blocked.
 
-Sources hold current run/cursor/coverage. Runs holds planned scope, counts, minimal pending checks, errors and stage checkpoint. Applications holds only admitted/current or preserved legacy job state. Capture descriptions for admitted roles; feed content for clear rejects is transient.
-
-Checkpoint batches with stable identities. On expired/inconsistent cursors restart/reconcile rather than double-count or hide gaps. No hidden limits or freshness TTL. Preserve prior application state/notes and submitted/terminal outcomes; changed criteria require scoped revalidation, not automatic reopening.
-
-Verify actual writes and stage acceptance. Source/company Complete means every planned source verified; Partial means usable observations plus unresolved coverage; Failed means no usable verified source. Separately report admission and career-screen pending gaps. Do not mark a full run complete while required unresolved work remains.
-
-Report observed/rejected/candidate/pending/admitted/queued counts separately, metadata/description gaps, source/company coverage and saved-row gaps. A single Scan command stops; an explicit full Run advances accepted unaffected work under COMMANDS.md.
+Report observed, clear-rejected, plausible, newly inventoried, existing/reobserved, identity-pending and capture-gap counts separately. A single Scan stops; a full Run hands Inventoried roles to Review.

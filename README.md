@@ -10,20 +10,19 @@ The primary workflow is **one agent completing a thorough end-to-end run**. You 
 |---|---|
 | Git | Versioned instructions, contracts and shared validation helpers |
 | Airtable | Six tables: Companies, Applications, Sources, Runs, Settings, History |
-| Drive | Goals, factual master, admitted-job descriptions, PDFs and bounded reports |
+| Drive | Goals, factual master, candidate-job descriptions, PDFs and bounded reports |
 | Active harness | Executes through its actual authenticated tools |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md). No general work-item, attempt or artifact tables are needed.
 
-## Admission before storage
+## Candidate inventory, then review
 
-1. Enumerate official catalogs transiently and identify possible PM roles.
-2. Verify actual PM function and the configured experience or equivalent senior-scope bar from the exact description. Titles are not universal grade mappings.
-3. Store verified roles as Inventoried. Clear mismatches never become new inventory; unresolved checks get minimal Run checkpoints.
-4. Check domain, industry, vertical and current career goals before Queued.
-5. Review fit, prepare an honest resume, apply only if authorized and track updates.
+1. Scan every official catalog page and use broad PM keywords with basic semantic checks.
+2. Save plausible senior PM candidates as Inventoried, including uncertain level/function boundaries for Review. Clear unrelated/junior roles stay out; Scan does not assess career goals.
+3. Review the full description for final role/scope eligibility, career goals and resume fit. Approved candidates become Queued for preparation; others receive explicit reasons or Needs review.
+4. Prepare verifies an honest resume, Apply submits only if authorized, and Track reconciles updates.
 
-Recall is primary within the eligible PM population. Precision comes from verification before admission, not aggressive keyword rejection. See [ROLE-ELIGIBILITY.md](ROLE-ELIGIBILITY.md). Legacy application history is preserved separately from new admission.
+Recall is primary. Inventory is a candidate pool, not proof of eligibility. Review feedback improves basic scan criteria through versioned tests, not automatic rejection of every non-queued pattern. See [ROLE-ELIGIBILITY.md](ROLE-ELIGIBILITY.md) and [SCAN-OPTIMIZATION.md](SCAN-OPTIMIZATION.md). Legacy history is preserved; Shortlisted is a legacy status, not an extra new stage.
 
 ## Prerequisites and setup
 
@@ -42,8 +41,8 @@ Follow [SETUP.md](SETUP.md), [CONNECTORS.md](CONNECTORS.md), [the checklist](doc
 | Command | Behavior |
 |---|---|
 | Run | Single agent: Scan → Review → Prepare → Apply → Track, with stage checkpoints and submission gates |
-| Scan | Cover sources, verify admission, screen career goals and queue aligned roles |
-| Review | Detailed current career/resume fit after admission gates |
+| Scan | Cover sources and inventory plausible PM candidates using keywords/basic semantics |
+| Review | Verify full eligibility and career/resume fit; approve Queued and record feedback |
 | Prepare | Produce and verify a grounded base/tailored resume |
 | Apply | Default preflight; submissions require explicit scope and live gates |
 | Track | Exact-role mail/receipt reconciliation, read-only on mail |
@@ -67,4 +66,4 @@ With Python 3.10+:
     python scripts/check_repo.py
     python -m unittest discover -s tests -v
 
-These validate public contracts and admission regressions, not accounts or production runs. Licensed under [MIT](LICENSE); no access to private data is granted.
+These validate public contracts and scan/review regressions, not accounts or production runs. Licensed under [MIT](LICENSE); no access to private data is granted.

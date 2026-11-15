@@ -1,14 +1,14 @@
 # Fictional examples
 
-These are invented cases, not private user data.
+These cases are invented, not private data.
 
-- “Senior Product Manager” triggers a description check, not admission. An explicit senior-scope requirement with PM ownership can pass; a title alone cannot.
-- “Staff Product Designer” is rejected without an inventory row. “Principal PM, Design Systems” needs verification because domain wording must not override a plausible PM role.
-- Missing title/scope stays in minimal pending checks. It is not counted as admitted or discarded as a negative.
-- An admitted role working in an explicitly excluded industry becomes Not aligned and never Queued. Unknown domain evidence remains pending.
-- One board succeeds and another fails: source coverage is Partial even if useful jobs were admitted.
-- Career/resume review can qualify High on either axis only after hard gates pass. Resume evidence cannot rescue a hard career contradiction.
-- A suitable base PDF still needs current master grounding and visual verification. A JD requirement never becomes an invented candidate fact.
+- A Senior Product Manager posting with basic PM ownership signals becomes Inventoried with eligibility Pending. Scan does not assess its industry against career goals.
+- A flat Product Manager title with unclear level remains a plausible candidate; Review resolves full scope. Staff Product Designer is a clear other function and is not inventoried.
+- Missing identity/official availability stays in minimal Run checks. Missing full JD on an otherwise plausible candidate is a capture gap and blocks Review approval.
+- Review verifies a senior PM role but finds a hard industry mismatch: Not aligned, category career_industry. This is not a scanner false positive.
+- Review finds a mislabeled marketing role: Not a fit, category role_function. Repeated examples can support a tested basic-screen improvement, not a broad ban on Marketing in PM domain titles.
+- An eligible role passes hard career constraints and has High resume fit: Queued. Prepare verifies a grounded base/tailored PDF before Ready.
+- One board succeeds and another fails: source coverage is Partial even if useful candidates were saved.
 - A possible Submit followed by a crash is Submission uncertain; reconcile before retry.
-- An older receipt arriving after rejection is preserved as an event without regressing the current outcome.
-- A fresh harness recovers the same Run checkpoint/Settings; a full Run continues independent work but reports required blocked items honestly.
+- An older receipt after rejection is preserved without regressing the outcome.
+- A fresh harness recovers the same Settings/Run. A full Run continues independent work and reports blocked work honestly.

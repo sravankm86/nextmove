@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values.",
   "tables": [
     {
@@ -112,7 +112,7 @@
     {
       "name": "Applications",
       "business_key": "Job key for canonical roles; immutable record identity for preserved legacy history",
-      "description": "Only verified role/scope admissions become new inventory. Career alignment must pass before Queued. Historical applications are preserved separately from new admission.",
+      "description": "Plausible PM candidates become Inventoried after basic semantics. Review owns full eligibility/career/resume acceptance before Queued. Needs eligibility and Shortlisted are legacy aliases only; preserve historical outcomes.",
       "fields": [
         {
           "name": "Application",
@@ -198,6 +198,26 @@
               }
             ]
           }
+        },
+        {
+          "name": "Scan evidence",
+          "type": "multilineText"
+        },
+        {
+          "name": "Scan policy version",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Decision category",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Decision reason",
+          "type": "multilineText"
+        },
+        {
+          "name": "Feedback versions (JSON)",
+          "type": "multilineText"
         },
         {
           "name": "Role eligibility",
@@ -416,7 +436,7 @@
     {
       "name": "Sources",
       "business_key": "Source key",
-      "description": "One official board/region. Enumerate all pages transiently; preserve coverage and minimal unresolved eligibility checks, not ineligible job records.",
+      "description": "One official board/region. Enumerate all pages transiently; preserve coverage and minimal source/identity checks; plausible role/scope ambiguities are inventoried for Review.",
       "fields": [
         {
           "name": "Source",

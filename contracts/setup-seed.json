@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -81,7 +81,18 @@
         "recall_first": true,
         "title_only_admission": false,
         "career_screen_before_queue": true,
-        "description_capture": "admission-focused"
+        "description_capture": "candidate-focused",
+        "inventory_gate": "keywords_and_basic_semantics",
+        "inventory_eligibility": "plausible_pending_review",
+        "career_screen_stage": "Review",
+        "final_eligibility_stage": "Review",
+        "queue_owner": "Review",
+        "feedback": {
+          "source": "review_dispositions",
+          "versioned_changes": true,
+          "protect_eligible_recall": true,
+          "career_rejections_are_scan_negatives": false
+        }
       },
       "verification": "Needs verification"
     },
@@ -126,7 +137,7 @@
     },
     {
       "key": "Inventory policy",
-      "value": "admission-only"
+      "value": "plausible-pm-candidates"
     },
     {
       "key": "Setup readiness",

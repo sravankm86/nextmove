@@ -104,7 +104,15 @@ def check(root):
     controls = {x["key"]: x["value"] for x in seed["controls"]}
     require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
-    require(policy["recall_first"] is True and policy["title_only_admission"] is False and policy["career_screen_before_queue"] is True, "Admission gates weakened")
+    require(policy["recall_first"] is True and policy["title_only_admission"] is False and policy["career_screen_before_queue"] is True, "Missing recall/basic-semantic/queue safeguards")
+    scan = next(c for c in command['commands'] if c['command'] == 'Scan')
+    require('career_goals' not in scan['required_resources'], 'Scan must not require career goals')
+    require(policy.get('career_screen_stage') == 'Review' and policy.get('final_eligibility_stage') == 'Review' and policy.get('queue_owner') == 'Review', 'Review must own final acceptance')
+    require(policy.get('inventory_gate') == 'keywords_and_basic_semantics', 'Wrong inventory boundary')
+    feedback = policy.get('feedback', {})
+    require(feedback.get('protect_eligible_recall') is True and feedback.get('career_rejections_are_scan_negatives') is False, 'Unsafe feedback learning')
+    app_fields = {f['name'] for f in lookup['Applications']['fields']}
+    require({'Scan evidence', 'Scan policy version', 'Decision category', 'Decision reason', 'Feedback versions (JSON)'}.issubset(app_fields), 'Missing disposition provenance')
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
     require(seed["submission_defaults"]["enabled"] is False and seed["submission_defaults"]["daily_submission_cap"] == 0, "Unsafe submission setup")

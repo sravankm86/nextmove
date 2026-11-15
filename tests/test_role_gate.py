@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from role_gate import admission, queue_allowed, title_screen
+from role_gate import admission, inventory_candidate, queue_allowed, title_screen
 
 
 class AdmissionTests(unittest.TestCase):
@@ -44,7 +44,36 @@ class AdmissionTests(unittest.TestCase):
     def test_goal_gate_is_separate(self):
         self.assertFalse(queue_allowed(role_decision='pass', career_decision='pending', career_evidence='', versions_current=True))
         self.assertFalse(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=False))
-        self.assertTrue(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=True))
+        self.assertFalse(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=True))
+        self.assertTrue(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=True, review_decision='approve'))
+
+    def test_plausible_ambiguity_is_inventory_not_review_approval(self):
+        row = {'title': 'Product Manager', 'identity_verified': True,
+               'availability_verified': True, 'role_hint': 'ambiguous_pm',
+               'basic_evidence': 'Official team owns platform roadmap; level unspecified'}
+        self.assertEqual(inventory_candidate(row), 'pass')
+        self.assertEqual(admission(row, years_threshold=8), 'pending')
+        row['career_decision'] = 'fail'
+        self.assertEqual(inventory_candidate(row), 'pass')
+        row['basic_evidence'] = ''
+        self.assertEqual(inventory_candidate(row), 'pending')
+
+    def test_inventory_rejects_clear_semantic_mismatch(self):
+        row = {'title': 'Senior Product Manager', 'identity_verified': True,
+               'availability_verified': True, 'role_hint': 'other',
+               'basic_evidence': 'Responsibilities exclusively marketing campaigns'}
+        self.assertEqual(inventory_candidate(row), 'reject')
+        row.update(role_hint='plausible_pm', clearly_junior=True,
+                   basic_evidence='Official entry-level rotational role')
+        self.assertEqual(inventory_candidate(row), 'reject')
+        row.update(clearly_junior=False, identity_verified=False)
+        self.assertEqual(inventory_candidate(row), 'pending')
+
+    def test_official_context_can_resolve_missing_title(self):
+        row = {'title': '', 'identity_verified': True,
+               'availability_verified': True, 'role_hint': 'plausible_pm',
+               'basic_evidence': 'Official function: product management; owns roadmap'}
+        self.assertEqual(inventory_candidate(row), 'pass')
 
 
 if __name__ == '__main__':

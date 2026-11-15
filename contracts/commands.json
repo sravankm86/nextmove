@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "tables": [
     "Companies",
     "Applications",
@@ -49,11 +49,10 @@
       "stage": "Scan",
       "mode": "prepare",
       "instructions": "stages/scan.md",
-      "scope": "Every Allow company/source; verified role admission and career screen",
+      "scope": "Every Allow company/source; keywords/basic semantics to Inventoried; no career screening",
       "required_resources": [
         "instructions_repository",
         "structured_store",
-        "career_goals",
         "role_policy",
         "content_output"
       ]
@@ -68,7 +67,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Gated current queue and explicitly retryable revalidation backlog",
+      "scope": "Inventoried and retryable backlog; full eligibility/career/resume review to Queued, with disposition feedback",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -86,7 +85,7 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Eligible Shortlisted roles with current evidence",
+      "scope": "Review-approved Queued roles with current evidence",
       "required_resources": [
         "instructions_repository",
         "structured_store",

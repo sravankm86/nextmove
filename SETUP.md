@@ -21,6 +21,6 @@ Legacy unreviewed Queued roles need eligibility/career revalidation. They do not
 
 ## Operation
 
-Scan uses admission-focused description checks and stores no clear unrelated roles. ROLE-ELIGIBILITY.md separates title candidates, admitted inventory and career queuing. Do not claim title-only company-grade equivalence or introduce hidden caps.
+Scan uses keywords/basic semantics and stores plausible PM candidates, including uncertain level, without career filtering. Review owns full eligibility/career/resume checks and Queued approval. ROLE-ELIGIBILITY.md and SCAN-OPTIMIZATION.md define boundaries and feedback. Do not claim title-only company-grade equivalence or introduce hidden caps.
 
 Keep one writer, current input versions, verified changes and recoverable handoffs. Apply remains scoped, paused by default and gated by answers/resume/availability/restrictions. Mail stays read-only. See docs/COMPANY-RESTRICTIONS.md and docs/SETUP-CHECKLIST.md.

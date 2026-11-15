@@ -1,15 +1,17 @@
 # Five responsibilities
 
-One agent is the default; manual harness switching uses the same contract. See COMMANDS.md.
+One agent is the default; manual harness switching uses identical contracts. See COMMANDS.md.
 
 | Stage | Output |
 |---|---|
-| Scan | Complete source observations; verify PM role/seniority before inventory; career screen before Queued |
-| Review | Current full-JD career/resume fit after hard gates; Shortlisted / Not a fit / Needs review |
-| Prepare | Grounded and visually verified base/tailored resume; Ready or explicit blocker |
+| Scan | Complete source observations; plausible PM candidates become Inventoried after keywords/basic semantics |
+| Review | Final role/scope and career/resume assessment; Queued / Not aligned / Not a fit / Needs review |
+| Prepare | Grounded, visually verified resume for Queued roles; Ready or blocker |
 | Apply | Authorized exact submission/receipt or uncertainty; default preflight |
 | Track | Read-only exact-role mail updates and checkpoint |
 
-Review reuses current career evidence. High career fit OR High resume fit can support Shortlisted only after hard admission/career constraints pass. Both Low is Not a fit; unresolved combinations need review. Resume fit cannot rescue a hard career contradiction.
+Scan does not check career goals or approve Queued. Review requires current full-JD eligibility and hard career constraints; High career fit OR High resume fit then supports Queued. Both Low is Not a fit; unknowns need review. Resume fit cannot waive hard exclusions. Shortlisted is a legacy alias only.
 
-A full run continues unaffected useful work and saves each boundary before advancing. A single-stage request stops. Inputs/progress/versions are in Airtable, content in Drive and instructions in Git. See LIFECYCLE.md and DATA-GOVERNANCE.md. No general task engine is required.
+Review dispositions feed versioned, recall-tested scanner improvements under SCAN-OPTIMIZATION.md. Career mismatches do not automatically become scanner exclusions.
+
+A full Run persists each boundary then advances accepted independent work. Single-stage commands stop. Airtable owns state, Drive owns content, Git owns instructions. See LIFECYCLE.md and DATA-GOVERNANCE.md.

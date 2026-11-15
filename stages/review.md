@@ -1,11 +1,23 @@
-# Review
+# Review: eligibility, career fit and preparation queue
 
-Use COMMANDS.md. Read current gated Queued roles and explicitly retryable review/legacy backlog. Legacy Needs eligibility records first require the same admission and career gates; do not bless old broad scanner labels.
+Use COMMANDS.md and ROLE-ELIGIBILITY.md. Read Inventoried roles and explicitly retryable Needs review/legacy backlog. Scan plausibility is not final eligibility. Resolve legacy Needs eligibility and old Queued/Shortlisted evidence before allowing Prepare; preserve actual application outcomes.
 
-Use the exact full JD, current goals and editable master. Reuse current verified career evidence where valid. Assess career fit and resume fit independently; goals/JDs are not candidate facts. Record rationale, gaps, identity, JD/goals/master versions and eligibility issues.
+Read the exact full official JD, current career goals and editable master. Verify PM function, availability and configured experience above threshold OR evidence-backed equivalent senior scope. Titles/pay alone do not establish grade. Unresolved evidence becomes Needs review with a specific next action, never an assumed negative.
 
-After hard admission/career gates pass: High on either axis supports Shortlisted; both Low means Not a fit; other unresolved/borderline combinations mean Needs review. A high resume fit cannot rescue a hard career contradiction or missing full JD.
+Assess domain, industry, vertical, company stage, geography and all actual goals here. Separate hard constraints from soft preferences. Assess career fit and resume fit independently, citing JD/goals/master versions and rationale. The master is the candidate-fact source; goals and requirements are not evidence of experience.
 
-Persist evidence and read back accepted changes. Do not reset human dispositions or submitted/terminal states. Retry unchanged blockers only after relevant evidence changes or explicit instruction. Use the Run checkpoint for remaining work, not generic Work Items.
+## Decisions
 
-A single Review invocation stops after its handoff. In a full Run, continue accepted independent work to Prepare.
+- Clear non-PM or below-scope candidate: Not a fit, Role eligibility Excluded, reason category role_function or seniority_scope.
+- Eligible role with a hard career contradiction: Not aligned, Career gate Fail, precise career reason category/evidence.
+- Eligibility and hard career constraints pass, with High career fit OR High resume fit: Queued for Prepare. Persist full current review acceptance/evidence.
+- Both fit axes Low: Not a fit, reason fit; no invented hard career exclusion.
+- Missing, borderline or unresolved evidence: Needs review with blocker/next action. Closed postings use Closed only with verified availability evidence; duplicates require canonical identity.
+
+A high resume fit cannot waive a hard career contradiction. Queued is the sole approved preparation queue; do not create new Shortlisted states. Company cooldowns are later submission blockers, not fit rejection.
+
+## Feedback without recall loss
+
+Every completed non-queue decision records a structured reason category, source quote, policy/content versions and review outcome on Applications. Distinguish scanner false positives (role_function/seniority_scope), career mismatches (career_domain/career_industry/career_vertical/career_stage/career_geography/career_other), fit, missing_evidence, availability, duplicate and human_choice. Pending evidence, closures and human choices are not automatically scanner mistakes.
+
+Follow SCAN-OPTIMIZATION.md to aggregate outcomes and propose versioned improvements. Never turn all non-queued examples into negatives or silently move career screening into Scan. Record meaningful changes in History, verify readback and save Run handoff. Single Review stops; a full Run advances accepted Queued roles to Prepare.

@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased — six-table design
+## Candidate inventory and Review-owned queuing
+
+- Scan inventories plausible PM candidates after keywords/basic semantics; no career-goal checks or Queued approvals.
+- Review owns final eligibility and career/resume checks; Queued replaces new Shortlisted emissions as the preparation queue. Preserve legacy states with evidence-based migration.
+- Add structured disposition feedback and versioned, recall-tested scanner improvements. Career mismatches are not automatically scanner mistakes.
+- Version 3 public schema/commands/configuration; live migrations remain explicit and independently verified.
+
+## Previous revision — six-table design (scan boundary superseded above)
 
 - Prefer one thorough single-agent Run; manually switched stages use identical gates and checkpoints.
 - Consolidate operational state into Companies, Applications, Sources, Runs, Settings and History. Retire generic orchestration tables.

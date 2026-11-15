@@ -1,6 +1,6 @@
-"""Small shared PM admission gate. Uses evidence supplied by a verified reader.
+"""Separate basic candidate inventory from final Review acceptance.
 
-Title screening finds candidates for verification; it never admits inventory.
+Title screening needs contextual evidence before candidate inventory.
 No model APIs, network calls, credentials or user data are required.
 """
 import re
@@ -37,10 +37,36 @@ def title_screen(title):
         return {'decision': 'reject', 'reason': 'Explicit other function without a PM role signal'}
     if JUNIOR.search(text):
         return {'decision': 'reject', 'reason': 'Explicit junior/entry PM title'}
-    return {'decision': 'verify_jd', 'reason': 'Verify PM function and configured senior scope/experience; title is not admission'}
+    return {'decision': 'verify_jd', 'reason': 'Perform basic contextual PM check; final scope/eligibility belongs to Review'}
 
 
-def admission(assessment, *, years_threshold):
+def inventory_candidate(assessment):
+    """Broad screen; no career inputs or exhaustive scope decision.
+
+    A reader supplies basic semantic evidence or an explicit ambiguity reason.
+    Identity/availability gaps remain Run checks. Full JD/scope uncertainty can
+    remain on the candidate row for Review. A keyword hit alone is insufficient.
+    """
+    if assessment.get('identity_verified') is not True or assessment.get('availability_verified') is not True:
+        return 'pending'
+    screen = title_screen(assessment.get('title'))
+    role_hint = assessment.get('role_hint')
+    evidence = assessment.get('basic_evidence')
+    if role_hint == 'other' and evidence:
+        return 'reject'
+    if assessment.get('clearly_junior') is True and evidence:
+        return 'reject'
+    # Verified context can rescue missing/nonstandard titles, not fabricated IDs.
+    if screen['decision'] == 'reject' and not (role_hint == 'plausible_pm' and evidence):
+        return 'reject'
+    if role_hint not in {'plausible_pm', 'ambiguous_pm'} or not evidence:
+        return 'pending'
+    if screen['decision'] == 'pending_metadata' and role_hint != 'plausible_pm':
+        return 'pending'
+    return 'pass'
+
+
+def review_eligibility(assessment, *, years_threshold):
     """Return pass/reject/pending. Never infer company-grade equivalence.
 
     years_threshold is exclusive. Low posted minimums alone do not prove scope
@@ -66,5 +92,13 @@ def admission(assessment, *, years_threshold):
     return 'pending'
 
 
-def queue_allowed(*, role_decision, career_decision, career_evidence, versions_current):
-    return role_decision == 'pass' and career_decision == 'pass' and bool(career_evidence) and versions_current is True
+def admission(assessment, *, years_threshold):
+    """Legacy callable alias for final Review eligibility, not inventory."""
+    return review_eligibility(assessment, years_threshold=years_threshold)
+
+
+def queue_allowed(*, role_decision, career_decision, career_evidence, versions_current,
+                  review_decision=None):
+    return (role_decision == 'pass' and career_decision == 'pass'
+            and bool(career_evidence) and versions_current is True
+            and review_decision == 'approve')

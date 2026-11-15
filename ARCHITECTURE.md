@@ -5,13 +5,13 @@ Default: one capable agent completes a thorough Run. Manual stage-by-stage harne
 | Table | Purpose |
 |---|---|
 | Companies | Explicit choices, notes and confirmed restrictions |
-| Applications | Admitted PM roles, career gate, fit, resume/submission state and preserved legacy history |
+| Applications | Plausible PM candidates, review/eligibility, career gate, fit, resume/submission state and preserved legacy history |
 | Sources | One board/region, coverage and cursor |
 | Runs | One full invocation by default, or one manual stage; scope, stage progress, pending checks, blockers and handoff |
 | Settings | Private references, criteria, execution policy and live controls |
 | History | Meaningful mutations/business events, failures and uncertainty |
 
-Git owns instructions. Drive owns documents, admitted-role captures, PDFs and bounded reports. Unrelated catalog rows are transient inputs, not a second hidden inventory.
+Git owns instructions. Drive owns documents, candidate-role captures, PDFs and bounded reports. Unrelated catalog rows are transient inputs, not a second hidden inventory.
 
 ~~~mermaid
 flowchart LR
@@ -32,13 +32,15 @@ Keep stage scopes, counts, blocked identities, artifacts and next cursor in one 
 
 Manual commands save the same shape and stop after one stage. The next harness reads state and appends ownership/attempt evidence in History; it needs no chat summary. One active writer owns mutations. A stale heartbeat does not prove a worker stopped; Airtable ownership fields are not atomic locks.
 
-## Admission and queue boundaries
+## Candidate inventory and review boundary
 
-Complete catalog enumeration is transient. Broad title aliases find PM candidates for verification; they do not create records. Confirm actual PM function and experience above the configured threshold OR evidence-backed equivalent senior scope. Missing titles and ambiguous levels require targeted checks. Only verified roles become Inventoried.
+Scan enumerates all catalogs transiently and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity/availability or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
 
-After admission, check domain, industry, vertical, company stage/geography and other current goals. Pass → Queued; hard mismatch → Not aligned; unknown → hold. A positive resume match cannot waive a hard career exclusion. ROLE-ELIGIBILITY.md defines the boundary.
+Review owns full-JD function/experience-or-equivalent-scope verification, current career goals and resume fit. Eligible aligned candidates with High career fit OR High resume fit become Queued for Prepare. Hard career mismatch → Not aligned; clear role/scope failure or both fit axes Low → Not a fit; unresolved → Needs review. Shortlisted is legacy only. See ROLE-ELIGIBILITY.md.
 
-Pending checks store minimal source/posting identity, URL, reason, input version and retry checkpoint in Runs. Use bounded checkpoint segments if needed; never truncate or create a general work-item framework. Preserve pending cases without calling them admitted inventory.
+Review dispositions use versioned reason categories. SCAN-OPTIMIZATION.md improves clear basic-screen errors while preserving eligible positives and testing sampled rejects. Career mismatches, missing evidence and closures are not automatically scanner negatives. This deliberately permits more candidate rows than verified-only inventory to protect recall.
+
+Runs holds bounded unresolved source/identity checkpoints; Applications holds plausible candidates and their review outcomes. Never truncate pending state or build a general work-item framework.
 
 ## Relationships and recovery
 
@@ -52,7 +54,7 @@ Persist all operational state in Airtable and content in registered Drive locati
 
 Use meaningful change/event history and run-level read scope instead of routine per-read rows. Airtable does not provide SQL uniqueness/foreign-key transactions or universal immutable logs through this design.
 
-Migrate only with authorization and verified durable backup. Preserve outcomes, notes, restrictions, source identities and resource references. Legacy unreviewed Queued rows become a revalidation backlog, not certified inventory under new gates. Never erase submitted/terminal history because search criteria changed.
+Migrate only with authorization and verified durable backup. Preserve outcomes, notes, restrictions, source identities and resource references. Legacy unreviewed Queued rows become a revalidation backlog, not certified review approval under new gates. Never erase submitted/terminal history because search criteria changed.
 
 Old unfiltered catalogs/retired tables may remain one-off private recovery archives. They are not new inventory. Future clear rejects retain aggregate counts only, reducing post-closure re-filtering of excluded roles. Investigate ambiguity while postings are available; disclose that retention tradeoff.
 

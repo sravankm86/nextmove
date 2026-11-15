@@ -5,8 +5,8 @@ storage:
   structured_provider: airtable
   content_provider: google_drive
   base: null
-  schema_version: 2
-  inventory_policy: admission-only
+  schema_version: 3
+  inventory_policy: plausible-pm-candidates
 execution:
   default: single-agent
   pipeline: [Scan, Review, Prepare, Apply, Track]
@@ -23,7 +23,18 @@ role_gate:
   career_screen_before_queue: true
 scan:
   complete_source_enumeration: true
-  description_policy: admission-focused
+  description_policy: candidate-focused
+  inventory_gate: keywords_and_basic_semantics
+  career_screen: false
+review:
+  owns_final_eligibility: true
+  owns_career_screen: true
+  queue_status: Queued
+  disposition_feedback: true
+scan_optimization:
+  versioned_changes: true
+  protect_eligible_recall: true
+  career_rejections_are_scan_negatives: false
   recovery_budget: null
 history:
   meaningful_changes: true

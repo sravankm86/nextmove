@@ -32,5 +32,5 @@ A model API key is not required. Data services may use OAuth/PAT/API authenticat
 
 ## Switching harnesses
 
-Release the old run owner before starting the next harness. The new session reads the same registry, pinned instructions, eligible queue and checkpoint, appends a Task Attempt and verifies access itself. Do not pass private progress only through a chat summary. Never copy browser sessions or secrets between providers as a shortcut.
+Release the old run owner before starting the next harness. The new session reads the same registry, pinned instructions, eligible queue and checkpoint, records the harness handoff in History and verifies access itself. Do not pass private progress only through a chat summary. Never copy browser sessions or secrets between providers as a shortcut.
 

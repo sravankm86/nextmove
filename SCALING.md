@@ -1,17 +1,11 @@
-# Scale through admission before storage
+# Scale through focused candidate inventory
 
-The largest saving is preventing irrelevant records, not hiding them in a view.
+Enumerate every official page transiently. Use broad PM keywords and basic semantic checks, storing plausible senior PM candidates as Inventoried. Clear unrelated/junior roles only contribute aggregate counts. Ambiguous plausible roles remain candidates for Review; unresolved identity remains a Run checkpoint.
 
-1. Enumerate all official pages transiently.
-2. Use a recall-oriented PM candidate screen.
-3. Verify exact PM function and experience/equivalent senior scope.
-4. Persist only admitted roles. Unresolved checks get minimal Run state; clear rejects get aggregate reason counts.
-5. Check career alignment before Queued; preserve existing human history.
+Review owns full eligibility, career-goal and resume-fit checks and approves Queued. Candidate inventory will be larger than the former fully verified admission model; this intentionally trades some storage/review work for a cheaper scan and stronger recall. Do not solve capacity by silently excluding ambiguous roles or career domains during Scan.
 
-No duplicate per-job Work Items, generic Task Attempts or Artifacts records. Use Applications, Sources and one Run per full invocation.
+Use SCAN-OPTIMIZATION.md to improve clear basic-screen errors from review reasons. Measure eligible-role recall and queue yield separately. Do not count every non-queued role as a scanner mistake.
 
-Description capture is admission-focused: read plausible/ambiguous postings for verification, retain admitted-role full descriptions/evidence and skip individual capture of clear unrelated roles. Incidental feed content is transient. Do not build an unfiltered shadow inventory in Drive. This sacrifices some post-closure re-filtering; investigate ambiguity before exclusion.
+Capture candidate descriptions/references in Drive; unrelated feed bodies remain transient. No duplicate Work Items, generic Task Attempts, Artifacts or unfiltered shadow catalog. Use Applications, Sources and one Run per full invocation. Reuse unchanged verified inputs and decisions, but recheck live gates/current versions; no unsupported freshness TTL.
 
-A one-off pre-migration archive is recoverable legacy evidence. Cleanup requires authorization, complete durable backup/replacement checks and preserved dependencies. Archive flags/views do not reclaim records.
-
-History still grows; six tables do not guarantee a Free-plan fit. Observe real limits without inventing retention windows, truncating work or buying plans. See DATA-GOVERNANCE.md.
+One-off legacy backups are recovery evidence. Cleanup requires authorization, durable backup and dependency verification. Views/archive flags do not reclaim records. History still grows and six tables do not guarantee Free-plan fit. Report actual limits/checkpoints; never truncate, buy plans or purge without authority.

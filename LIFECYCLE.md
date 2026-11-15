@@ -1,33 +1,29 @@
 # Role and application lifecycle
 
-Applications holds current business state; Runs holds execution progress. Keep admission, career alignment, resume fit, availability and outcomes separate.
+Applications holds business state; Runs holds execution progress. Keep candidate plausibility, final eligibility, career fit, resume fit, availability and outcomes separate.
 
 | Status | Meaning |
 |---|---|
-| Needs eligibility | Preserved legacy backlog requiring current role/scope checks; not admitted new inventory |
-| Inventoried | PM function and configured experience/equivalent scope verified; career screen may still be pending |
-| Not aligned | Admitted role fails a clear career-goal/domain constraint; not queued |
-| Queued | Role admission and career alignment passed with current evidence |
-| Shortlisted | Detailed assessment supports High career fit OR High resume fit after hard gates |
-| Not a fit | Detailed review completed with both fit axes Low |
-| Needs review | Unresolved/borderline evidence with a reason and next action |
-| Ready | Appropriate master-grounded resume and PDF verified; not submission authorization |
+| Inventoried | Passed Scan keywords/basic semantics; final eligibility and career review are pending |
+| Queued | Review approved current full-JD eligibility, hard career constraints and fit; ready for Prepare |
+| Not aligned | Review found a hard career-goal mismatch |
+| Not a fit | Review found clear role/scope failure or both fit axes Low; reason category distinguishes them |
+| Needs review | Missing/borderline evidence with a blocker and next action |
+| Ready | Master-grounded resume/PDF verified; not submission authorization |
 | Applied | Human reports submission or definite agent completion; receipt not implied |
 | Confirmed | Exact-role employer receipt/success evidence |
 | In process | Actual recruiter engagement, assessment, interview or scheduling |
 | Offer / Accepted | Explicit evidenced events |
 | Rejected / Withdrawn | Explicit employer rejection or candidate withdrawal |
-| Not pursuing | User chose not to apply; not an automated career-fit label |
-| Closed | Verified availability/cancellation outcome, not rejection |
-| Submission uncertain | A submission may have occurred; reconcile before retry |
-| Duplicate | Verified stable-identity duplicate, preserving canonical reference/history |
+| Not pursuing | Human chose not to apply; not a scanner negative |
+| Closed | Verified availability/cancellation outcome |
+| Submission uncertain | Possible submission; reconcile before retry |
+| Duplicate | Verified identity duplicate preserving canonical reference/history |
 
-New records are created only after admission. Clear admission failures never get a new Applications row; pending checks stay minimal Run state. Submitted/terminal legacy history survives new criteria. Legacy broad Queued entries must not masquerade as current admission/goal approval.
+Needs eligibility and Shortlisted are legacy read/migration aliases, not newly emitted statuses. Preserve their original values/history. Revalidate legacy Needs eligibility and old unreviewed Queued before using Inventoried/Queued under the new contract. A legacy Shortlisted becomes Queued only if current review evidence satisfies the new gate; no blanket rename. Never reset submitted/terminal records.
 
-Hard career constraints cannot be rescued by resume fit. Unknown/soft preferences are not invented hard negatives. No High with remaining Medium/Unresolved fit stays Needs review; a positive decision needs a verified full JD and current inputs.
+Only Scan creates new candidate inventory; only Review approves Queued. Prepare consumes Queued, not Inventoried. New candidate rows require recorded basic semantic evidence, not keyword hits alone. Unknown identity/availability remains pending in Runs. Missing full description blocks Review approval, not necessarily candidate capture.
 
-Separate actual Applied/Confirmed/Outcome dates from recorded time; leave unknowns blank. Preserve older non-regressing events in History. Posting absence alone does not close an active application; incomplete source scans do not prove absence.
+Hard career constraints cannot be rescued by resume fit. Soft preferences/unknowns are not invented hard negatives. Every review disposition has a reason category and input/policy versions for SCAN-OPTIMIZATION.md.
 
-Company holds do not change fit or remove Allow companies from coverage. Count distinct reported/evidenced submissions under the actual scope/window, including later outcomes as the rule requires. Generic rejection is not a company-wide cooldown.
-
-Updating instructions does not install human-edit triggers or migrate records automatically. Apply changes only during authorized work with verified deltas and preserved provenance.
+Separate actual event dates from recording time. Preserve older non-regressing events in History. Absence from incomplete scans is not closure. Company cooldowns are submission blockers, not fit exclusions. Instruction updates alone do not install triggers or migrate live records; apply verified deltas with provenance during authorized work.

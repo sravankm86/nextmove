@@ -5,7 +5,7 @@ Keep completed checks and actual references private. Use Verified / Blocked / No
 - [ ] Intended accounts/workspace/base and private Drive destinations verified; required consent completed.
 - [ ] Six core tables mapped, with types/options, links, immutable IDs and aliases read back.
 - [ ] Settings includes current goals/master/destinations, configured role threshold/scope benchmark and live controls.
-- [ ] New admission needs verified PM function and experience/equivalent scope; career screening precedes Queued.
+- [ ] Scan inventories plausible PM candidates; Review verifies full eligibility/career/resume evidence before Queued. Test disposition feedback and legacy status revalidation.
 - [ ] Pause applications true and no implied submission authorization/cap for fresh setup.
 - [ ] Single-agent Run is default; manual stages recover the same state.
 - [ ] Meaningful History and Run read scope tested with marked fixtures, not production applications.
