@@ -106,7 +106,7 @@ def check(root):
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
     require(policy["recall_first"] is True and policy["title_only_admission"] is False and policy["career_screen_before_queue"] is True, "Missing recall/basic-semantic/queue safeguards")
     scan = next(c for c in command['commands'] if c['command'] == 'Scan')
-    require('career_goals' not in scan['required_resources'], 'Scan must not require career goals')
+    require('career_goals' in scan['required_resources'], 'Scan must resolve current goals-derived role criteria')
     require(policy.get('career_screen_stage') == 'Review' and policy.get('final_eligibility_stage') == 'Review' and policy.get('queue_owner') == 'Review', 'Review must own final acceptance')
     require(policy.get('inventory_gate') == 'keywords_and_basic_semantics', 'Wrong inventory boundary')
     feedback = policy.get('feedback', {})
@@ -116,6 +116,8 @@ def check(root):
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
     require(pref.get('freeform_supported') is True and pref.get('embedded_commands_are_instructions') is False and pref.get('derived_values_require_source_version') is True, 'Unsafe preference interpretation')
+    require(pref.get('uses') == ['scan_criteria', 'review_queue'] and pref.get('source_revision_check_required') is True and pref.get('stage_readiness_required') is True, 'Missing two-stage preference readiness')
+    require(pref.get('explicit_unrestricted_distinct_from_unspecified') is True, 'Blank preferences must not mean unrestricted')
     for key in ['template', 'instructions']:
         require((root / pref.get(key, '__missing__')).is_file(), 'Missing preference contract file')
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")

@@ -1,6 +1,6 @@
 # Scan: plausible PM inventory with recall first
 
-Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read explicit Allow/Exclude choices, every configured official board/region and the versioned scan/role policy. Scan does not assess career goals or resume fit and cannot set Queued. Role-policy values are versioned extracted preference parameters, not user-authored procedures; follow CAREER-GOALS.md for provenance and unresolved inputs.
+Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read explicit Allow/Exclude choices, every configured official board/region and the versioned scan/role policy. Resolve the current Career Goals source revision and extract/verify its role-family, designation examples, desired seniority/experience/scope and explicit function/level exclusions under CAREER-GOALS.md. These determine broad scan criteria; Scan does not assess broader career fit or resume fit and cannot set Queued. Role-policy values are source-versioned extracted preferences, not an independent preference authority or user-authored procedures. At startup verify the source revision, refresh affected role-policy values and save criteria/readiness plus unresolved inputs before applying a screen. A current verified extraction may be reused; stale or untraceable Settings values may not silently override the document.
 
 ## Complete source coverage
 

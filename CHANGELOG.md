@@ -1,5 +1,11 @@
 # Changelog
 
+## Career Goals used at both boundaries
+
+- Derive and verify broad Scan role criteria from the current user preference source; Review uses the broader projection for Queued approval.
+- Add source-versioned extraction and per-stage/decision completeness checks with targeted clarification, optional unknowns and manual-handoff recovery.
+
+
 ## Preference-only career goals
 
 - Keep user goals free of agent instructions, resume history and execution configuration.

@@ -5,7 +5,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Command | Scope |
 |---|---|
 | Run / Run Nextmove | Default single agent: Scan → Review → Prepare → Apply → Track |
-| Scan | Complete source coverage and keywords/basic semantics → Inventoried; no career screen |
+| Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/retryable backlog → full eligibility/career/resume assessment → Queued |
 | Prepare | Current review-approved Queued roles |
 | Apply | Ready roles; default preflight unless separately authorized |
@@ -15,7 +15,7 @@ Quoted examples/setup discussions do not dispatch production work. A single stag
 
 ## Startup and ownership
 
-Discover/map the six tables, Settings and live controls. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the six tables, Settings and live controls. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference projection/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 

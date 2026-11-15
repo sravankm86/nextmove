@@ -160,6 +160,30 @@
     "freeform_supported": true,
     "embedded_commands_are_instructions": false,
     "derived_values_require_source_version": true,
-    "missing_preferences": "unresolved_not_invented"
+    "missing_preferences": "unresolved_not_invented",
+    "uses": [
+      "scan_criteria",
+      "review_queue"
+    ],
+    "scan_fields": [
+      "function",
+      "designation_examples",
+      "seniority",
+      "role_experience",
+      "scope",
+      "function_level_exclusions"
+    ],
+    "review_fields": [
+      "role_intent",
+      "domains_industries_verticals",
+      "responsibilities",
+      "compensation",
+      "location_work_arrangement",
+      "company_preferences",
+      "priorities_tradeoffs"
+    ],
+    "source_revision_check_required": true,
+    "stage_readiness_required": true,
+    "explicit_unrestricted_distinct_from_unspecified": true
   }
 }

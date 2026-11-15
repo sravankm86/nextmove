@@ -13,12 +13,12 @@ The primary workflow is **one agent completing a thorough end-to-end run**. You 
 | Drive | Goals, factual master, candidate-job descriptions, PDFs and bounded reports |
 | Active harness | Executes through its actual authenticated tools |
 
-See [ARCHITECTURE.md](ARCHITECTURE.md). End users supply preferences using ordinary prose or the optional [Career Goals template](templates/career-goals.md); [CAREER-GOALS.md](CAREER-GOALS.md) keeps all interpretation and workflow instructions in Git. No general work-item, attempt or artifact tables are needed.
+See [ARCHITECTURE.md](ARCHITECTURE.md). The same Career Goals source supplies broad function/seniority criteria for Scan and broader career-fit criteria for Review. End users supply preferences using ordinary prose or the optional [Career Goals template](templates/career-goals.md); [CAREER-GOALS.md](CAREER-GOALS.md) keeps all interpretation and workflow instructions in Git. No general work-item, attempt or artifact tables are needed.
 
 ## Candidate inventory, then review
 
 1. Scan every official catalog page and use broad PM keywords with basic semantic checks.
-2. Save plausible senior PM candidates as Inventoried, including uncertain level/function boundaries for Review. Clear unrelated/junior roles stay out; Scan does not assess career goals.
+2. Save plausible senior PM candidates as Inventoried, including uncertain level/function boundaries for Review. Clear unrelated/junior roles stay out; Scan derives role criteria from Career Goals but does not assess broader career fit.
 3. Review the full description for final role/scope eligibility, career goals and resume fit. Approved candidates become Queued for preparation; others receive explicit reasons or Needs review.
 4. Prepare verifies an honest resume, Apply submits only if authorized, and Track reconciles updates.
 

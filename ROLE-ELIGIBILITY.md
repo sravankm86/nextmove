@@ -6,6 +6,8 @@ Eligible-role recall is primary. Scan stores plausible PM candidates; Review est
 
 ## Scan: basic plausibility
 
+Derive role family, designation examples, seniority/role-experience/scope and explicit function/level exclusions from current Career Goals. Pin source revision and extraction version. Validate scan readiness under CAREER-GOALS.md; missing title synonyms may be derived broadly from the function, not demanded from the user. Missing or conflicting essential role intent requires clarification, not arbitrary exclusions.
+
 Enumerate every official page. Broad signals include Product Manager/Management/Mgr, technical/inbound/outbound/platform variants, Group PM, Product Lead/Owner, Head/Director/VP Product, Chief Product Officer, Member of Product Staff and localized equivalents. Abbreviations and mixed functions need basic contextual checks.
 
 Use official title, function/team, summary or available description for basic semantics. Exclude clearly unrelated functions and clearly junior roles. Do not require a seniority word or reject direct PM roles because their domain says finance, design or security. Do not turn career preferences into scan exclusions. Clear other functions without plausible PM ownership remain excluded.

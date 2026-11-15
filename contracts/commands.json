@@ -49,10 +49,11 @@
       "stage": "Scan",
       "mode": "prepare",
       "instructions": "stages/scan.md",
-      "scope": "Every Allow company/source; keywords/basic semantics to Inventoried; no career screening",
+      "scope": "Every Allow source; current goals-derived broad role criteria and basic semantics to Inventoried; no broader career-fit assessment",
       "required_resources": [
         "instructions_repository",
         "structured_store",
+        "career_goals",
         "role_policy",
         "content_output"
       ]

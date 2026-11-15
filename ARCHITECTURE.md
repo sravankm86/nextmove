@@ -34,7 +34,7 @@ Manual commands save the same shape and stop after one stage. The next harness r
 
 ## Candidate inventory and review boundary
 
-Scan enumerates all catalogs transiently and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity/availability or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
+Scan first derives broad function/designation/seniority criteria from the current Career Goals revision (or verifies its current extracted snapshot), then enumerates all catalogs transiently and uses broad PM aliases with basic semantic checks. Plausible senior PM candidates become Inventoried with eligibility Pending; ambiguous level is resolved by Review. Clear unrelated/junior roles contribute aggregate rejects. Unknown identity/availability or insufficient evidence of plausibility remains a minimal Run pending check. No career-goal filtering or Queued approvals during Scan.
 
 Review owns full-JD function/experience-or-equivalent-scope verification, current career goals and resume fit. Eligible aligned candidates with High career fit OR High resume fit become Queued for Prepare. Hard career mismatch → Not aligned; clear role/scope failure or both fit axes Low → Not a fit; unresolved → Needs review. Shortlisted is legacy only. See ROLE-ELIGIBILITY.md.
 
