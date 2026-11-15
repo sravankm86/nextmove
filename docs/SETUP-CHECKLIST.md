@@ -16,3 +16,5 @@ Keep completed checks and actual references private. Use Verified / Blocked / No
 - [ ] One owner and exact stage/count/blocker handoff understood.
 - [ ] No fake production completion or universal audit/SQL enforcement claim.
 - [ ] Private report records mappings, tested harness capabilities, blockers and next action.
+
+- [ ] Career Goals contains preferences only; ordinary prose is supported, extracted Settings values have source versions, and master/config references remain separate. See CAREER-GOALS.md.

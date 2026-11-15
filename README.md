@@ -13,7 +13,7 @@ The primary workflow is **one agent completing a thorough end-to-end run**. You 
 | Drive | Goals, factual master, candidate-job descriptions, PDFs and bounded reports |
 | Active harness | Executes through its actual authenticated tools |
 
-See [ARCHITECTURE.md](ARCHITECTURE.md). No general work-item, attempt or artifact tables are needed.
+See [ARCHITECTURE.md](ARCHITECTURE.md). End users supply preferences using ordinary prose or the optional [Career Goals template](templates/career-goals.md); [CAREER-GOALS.md](CAREER-GOALS.md) keeps all interpretation and workflow instructions in Git. No general work-item, attempt or artifact tables are needed.
 
 ## Candidate inventory, then review
 

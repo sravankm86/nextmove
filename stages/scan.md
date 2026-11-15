@@ -1,6 +1,6 @@
 # Scan: plausible PM inventory with recall first
 
-Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read explicit Allow/Exclude choices, every configured official board/region and the versioned scan/role policy. Scan does not assess career goals or resume fit and cannot set Queued.
+Follow COMMANDS.md and ROLE-ELIGIBILITY.md. Read explicit Allow/Exclude choices, every configured official board/region and the versioned scan/role policy. Scan does not assess career goals or resume fit and cannot set Queued. Role-policy values are versioned extracted preference parameters, not user-authored procedures; follow CAREER-GOALS.md for provenance and unresolved inputs.
 
 ## Complete source coverage
 

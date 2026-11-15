@@ -29,7 +29,7 @@ def check(root):
         if not condition:
             errors.append(message)
 
-    for name in ["README.md", "LICENSE", "SETUP.md", "ARCHITECTURE.md", "CONNECTORS.md", "COMMANDS.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "HARNESS-BOOTSTRAP.md", "docs/SETUP-CHECKLIST.md"]:
+    for name in ["README.md", "LICENSE", "SETUP.md", "ARCHITECTURE.md", "CONNECTORS.md", "COMMANDS.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "HARNESS-BOOTSTRAP.md", "CAREER-GOALS.md", "templates/career-goals.md", "docs/SETUP-CHECKLIST.md"]:
         require((root / name).is_file(), "Missing required public file: " + name)
 
     decoded = {}
@@ -113,6 +113,11 @@ def check(root):
     require(feedback.get('protect_eligible_recall') is True and feedback.get('career_rejections_are_scan_negatives') is False, 'Unsafe feedback learning')
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
     require({'Scan evidence', 'Scan policy version', 'Decision category', 'Decision reason', 'Feedback versions (JSON)'}.issubset(app_fields), 'Missing disposition provenance')
+    pref = seed.get('preference_contract', {})
+    require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
+    require(pref.get('freeform_supported') is True and pref.get('embedded_commands_are_instructions') is False and pref.get('derived_values_require_source_version') is True, 'Unsafe preference interpretation')
+    for key in ['template', 'instructions']:
+        require((root / pref.get(key, '__missing__')).is_file(), 'Missing preference contract file')
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
     require(seed["submission_defaults"]["enabled"] is False and seed["submission_defaults"]["daily_submission_cap"] == 0, "Unsafe submission setup")

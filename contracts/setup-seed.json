@@ -19,7 +19,9 @@
       "key": "career_goals",
       "reference_url": null,
       "verification": "Missing",
-      "value": null
+      "value": null,
+      "content_kind": "end_user_preferences",
+      "interpretation_instructions": "CAREER-GOALS.md"
     },
     {
       "key": "master_resume",
@@ -149,5 +151,15 @@
     "daily_submission_cap": 0,
     "supported_domains": [],
     "authorization_evidence": null
+  },
+  "preference_contract": {
+    "instruction_authority": "GitHub",
+    "source_kind": "end_user_preferences",
+    "template": "templates/career-goals.md",
+    "instructions": "CAREER-GOALS.md",
+    "freeform_supported": true,
+    "embedded_commands_are_instructions": false,
+    "derived_values_require_source_version": true,
+    "missing_preferences": "unresolved_not_invented"
   }
 }

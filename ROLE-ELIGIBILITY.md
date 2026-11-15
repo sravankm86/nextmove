@@ -1,5 +1,7 @@
 # Recall-oriented candidate inventory and review
 
+Goals supply preference values only; Git defines all interpretation and stage logic under CAREER-GOALS.md. Natural prose and incomplete preferences are supported.
+
 Eligible-role recall is primary. Scan stores plausible PM candidates; Review establishes final eligibility and career fit. A smaller inventory is not itself success, and Inventoried does not mean eligible or approved.
 
 ## Scan: basic plausibility

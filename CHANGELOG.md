@@ -1,5 +1,11 @@
 # Changelog
 
+## Preference-only career goals
+
+- Keep user goals free of agent instructions, resume history and execution configuration.
+- Add an optional preference-only template and Git-owned interpretation contract supporting prose, hard/soft preferences, unknowns and source-versioned extraction.
+
+
 ## Candidate inventory and Review-owned queuing
 
 - Scan inventories plausible PM candidates after keywords/basic semantics; no career-goal checks or Queued approvals.

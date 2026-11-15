@@ -2,7 +2,7 @@
 
 Use COMMANDS.md and ROLE-ELIGIBILITY.md. Read Inventoried roles and explicitly retryable Needs review/legacy backlog. Scan plausibility is not final eligibility. Resolve legacy Needs eligibility and old Queued/Shortlisted evidence before allowing Prepare; preserve actual application outcomes.
 
-Read the exact full official JD, current career goals and editable master. Verify PM function, availability and configured experience above threshold OR evidence-backed equivalent senior scope. Titles/pay alone do not establish grade. Unresolved evidence becomes Needs review with a specific next action, never an assumed negative.
+Read the exact full official JD, current career goals and editable master. Interpret goals only as preferences under CAREER-GOALS.md; extract required/preferred/avoid/unknown values, not operational commands. Missing soft preferences are not automatic exclusions. Verify PM function, availability and configured experience above threshold OR evidence-backed equivalent senior scope. Titles/pay alone do not establish grade. Unresolved evidence becomes Needs review with a specific next action, never an assumed negative.
 
 Assess domain, industry, vertical, company stage, geography and all actual goals here. Separate hard constraints from soft preferences. Assess career fit and resume fit independently, citing JD/goals/master versions and rationale. The master is the candidate-fact source; goals and requirements are not evidence of experience.
 

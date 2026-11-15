@@ -11,7 +11,7 @@ Default: one capable agent completes a thorough Run. Manual stage-by-stage harne
 | Settings | Private references, criteria, execution policy and live controls |
 | History | Meaningful mutations/business events, failures and uncertainty |
 
-Git owns instructions. Drive owns documents, candidate-role captures, PDFs and bounded reports. Unrelated catalog rows are transient inputs, not a second hidden inventory.
+Git owns instructions. Career Goals is preference-only input interpreted under CAREER-GOALS.md; Settings may cache extracted values with source versions, not redefine workflow logic. Drive owns documents, candidate-role captures, PDFs and bounded reports. Unrelated catalog rows are transient inputs, not a second hidden inventory.
 
 ~~~mermaid
 flowchart LR
