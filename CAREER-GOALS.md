@@ -70,6 +70,8 @@ Users may accept broad senior PM roles without a named product/team or specialis
 
 ## Resume-fit exclusions
 
+Keep positive specialties, confirmed gaps and preferences distinct. Interpret security subdomains, AI application versus infrastructure work, business workflows and hands-on skill boundaries under stages/review.md. A positive domain preference is not proof of a particular tool or tenure. Save newly confirmed factual skills in the master or registered candidate-fact source with provenance; goals retain preferences and exclusions. Do not change Scan's career-screen boundary when these values change.
+
 Users may list specialist responsibilities, product layers or customer personas they do not want to pursue, separately from broad industry preferences. Interpret their scope from the role's primary duties. A passing keyword is not an exclusion, and a new exclusion is not proof of a missing qualification. Keep personal examples and explicit stretch exceptions in the private source, never hardcoded in public scripts. Review applies these exclusions; Scan does not. Candidate facts still come from the master and confirmed user information.
 
 ## Authority and storage

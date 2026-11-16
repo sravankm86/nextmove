@@ -1,5 +1,11 @@
 # Changelog
 
+## Confirmed specialties and skill boundaries
+
+- Review distinguishes security specialties, AI application platforms from infrastructure, and AI-assisted prototypes/data queries from application coding.
+- Apply explicit domain exclusions and unclear-outbound preferences without repeatedly asking resolved questions. Keep narrower unproven requirements honest.
+- Strict funding-stage requirements have no inferred exceptions; missing official evidence remains a verification gap. Scan's recall-first role screen is unchanged.
+
 ## General senior PM preference
 
 - An explicit user preference can accept general senior PM roles on seniority and compensation, including disclosed generic tenure stretch. A missing team or AI assignment is no longer an invented blocker.

@@ -32,6 +32,20 @@ Where security preferences matter, distinguish security/governance central to th
 
 ## Outcomes and handoff
 
+### Interpreting confirmed specialties and skills
+
+Apply current private preference values and confirmed candidate facts at the level of the actual product charter. Related security labels are not interchangeable: SOC analyst/response workflows, posture management and data security differ from network/firewall products, XDR/endpoint detection engines and threat-intelligence products. A relevant specialty supports domain fit, not every named tool, framework, employer or years-of-experience requirement. Incidental integration with an excluded specialty is not a core mismatch. A role centered on an explicitly excluded or user-confirmed insufficient specialty is Not pursuing, not another request to confirm the same gap.
+
+Distinguish AI application software from underlying infrastructure. Agent/chat applications, workflow automation and application-building platforms are not automatically infrastructure because the title says platform. Determine whether the core responsibility is user-facing application capability or model training/serving, compute/GPU capacity, storage/networking, data preparation/ingestion/ETL or similar infrastructure. Apply the user's stated preference to that layer. Product-quality evaluations are not automatically data preparation or model infrastructure.
+
+AI-assisted prototyping and querying data are distinct from writing application code or having a prior software-engineering role. Honor an employer's explicit alternative allowing prototypes/low-code tools; do not invent Python/TypeScript proficiency, production coding, advanced SQL/database engineering, a named tool, or a required duration. A confirmed absence of required application coding is Not met; a prototype requirement can be Met with actual confirmed prototype capability. Use exact requirement wording and evidence.
+
+Broad business-domain experience does not establish every specialist workflow: finance is not proof of accounting/ledger/ERP expertise; HR is not proof of every HRIS integration. Avoid repeatedly asking for a broad domain already confirmed; ask only for a genuinely decision-critical narrower skill.
+
+If the user excludes unclear outbound/GTM roles, decline when the full posting cannot establish actual PM ownership; do not keep asking the user to choose that role type. This preference does not ban every outbound title with clear product ownership. An incomplete non-outbound posting may still need its full JD.
+
+A hard company-stage floor has no inferred exception. Seek official evidence that the company has reached the required stage or is public. A current verified below-floor company is Not pursuing; genuinely missing stage evidence stays Inventoried with a verification gap. Do not offer a below-floor exception after the user has ruled it out, infer that an unlettered round qualifies, or treat an acquisition as satisfying the floor without an explicit ownership policy.
+
 - Queued: explicit current approval; eligibility, qualifications, resume exclusions, essential fit and other hard career checks pass, with at least one High fit.
 - Queued provisionally: the same checks pass and the only deferred hard check is verification of this posting's applicable base pay. Save decision approve_provisional, deferred_checks [base_salary], career_requirements_pass null and base_salary_pass null; never pretend an unknown passed. Prepare may proceed; Apply may not.
 - Not pursuing: a verified hard failure, confirmed qualification failure or insufficient preferred majority under the applicable assessment path, relevant resume exclusion, essential mismatch or human decline. Record the decisive evidence and reason category. An actual employer rejection stays Rejected.
