@@ -12,7 +12,7 @@ Compare the JD with the current Career Goals. Personal criteria, priorities, dom
 
 | Career fit | Meaning | Score |
 |---|---|---:|
-| Low | At least one objective career criterion fails. | 1 |
+| Low | At least one objective career criterion fails. | 0 |
 | Medium | No objective failure; some career requirements match. | 2 |
 | High | No objective failure; all applicable career requirements match. | 3 |
 
@@ -30,6 +30,6 @@ Compare every distinct minimum and preferred qualification with the current edit
 
 With no preferred qualifications listed, that part is satisfied once all minimums pass. If missing evidence prevents a justified rating, leave it Unresolved and use Need review.
 
-Add the two scores: 6 or more → Queued; 4 to below 6 → Need review; below 4 → Not pursuing. The current numeric mapping is recorded in contracts/policy-versions.json. No hidden domain gate, preferred-majority rule or salary-only provisional queue applies. A missing score means Need review. This does not authorize submission or false resume claims.
+Add the two scores: 5 or 6 → Queued; 4 → Need review; below 4 → Not pursuing. The current numeric mapping is recorded in contracts/policy-versions.json. No hidden domain gate, preferred-majority rule or salary-only provisional queue applies. A missing score means Need review. This does not authorize submission or false resume claims.
 
 Always explain both ratings, their evidence and the resulting status in Agent notes. Example: `Career High (3): stated goals met. Resume Low (1): required background missing. Total 4 → Need review.` State the exact question when blocked. Keep full evidence and fixed input/JD versions in History/Drive under DATA.md, verify writes and stop after Review.
