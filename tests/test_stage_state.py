@@ -8,7 +8,7 @@ class StateTests(unittest.TestCase):
         self.inputs={'goals':'goals-v1','master':'master-v1','policy':'review-v3','eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.app={'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
-        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True}}
+        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'base_salary_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True}}
     def test_manual_queue_cannot_create_acceptance(self):
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
@@ -67,6 +67,17 @@ class StateTests(unittest.TestCase):
         for key in ['qualifications_pass','resume_exclusions_pass','essential_fit_pass','non_compensation_requirements_pass']:
             state=copy.deepcopy(self.state);state['review'][key]=None
             self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+
+    def test_known_failing_salary_cannot_hide_behind_a_career_pass(self):
+        state=copy.deepcopy(self.state);state['review']['base_salary_pass']=False
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+
+    def test_apply_requires_ready_even_when_a_verified_pdf_is_retained(self):
+        data=b'verified-pdf';digest=hashlib.sha256(data).hexdigest()
+        app={**self.app,'Lifecycle status':'Ready','Resume link':'file-example','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
+        state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1'}
+        self.assertTrue(s.apply_ready(app,state,[self.run],self.inputs,data))
+        self.assertFalse(s.apply_ready({**app,'Lifecycle status':'Queued'},state,[self.run],self.inputs,data))
 
     def test_exact_identity_does_not_merge_regional_or_same_title_roles(self):
         a={'company_id':'employer-example','role_id':'req-a','job_url':'https://jobs.example.test/roles/a?utm_source=mail'}

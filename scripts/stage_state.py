@@ -110,7 +110,8 @@ def review_ready(app, state, runs, current_inputs):
         return False
     decision, deferred = review.get('decision'), review.get('deferred_checks', [])
     if decision == 'approve':
-        if review.get('career_requirements_pass') is not True or deferred:
+        if (review.get('career_requirements_pass') is not True
+                or review.get('base_salary_pass') is not True or deferred):
             return False
     elif decision == 'approve_provisional':
         if (deferred != ['base_salary'] or review.get('career_requirements_pass') is not None
@@ -135,7 +136,8 @@ def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_ve
     Submission authorization, company controls and form checks remain separate.
     """
     review = (state or {}).get('review', {})
-    return bool(review.get('decision') == 'approve'
+    return bool(app.get('Lifecycle status') == 'Ready'
+                and review.get('decision') == 'approve'
                 and review.get('career_requirements_pass') is True
                 and not review.get('deferred_checks')
                 and not attempt_blocks_retry(app, state)
