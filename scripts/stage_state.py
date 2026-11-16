@@ -147,7 +147,7 @@ def merge_state(previous, *, record_id, job_key, stage, run_id, values):
     return result
 
 
-def run_progress(run):
+def run_progress(run, *, progress_contexts=None):
     """Read merged current progress plus legacy separate fields without writing pins."""
     def parsed(value):
         if value in [None, '']:
@@ -160,6 +160,14 @@ def run_progress(run):
         return value
     base = parsed(run.get('Checkpoint (JSON)'))
     result = dict(base) if isinstance(base, dict) else ({'legacy_checkpoint_raw': base} if base is not None else {})
+    context = (progress_contexts or {}).get(run.get('id'))
+    if context and result.get('_progress_context_event') != context['event_id']:
+        raw = run.get('Checkpoint (JSON)')
+        digest = hashlib.sha256((raw or '').encode()).hexdigest() if isinstance(raw, (str, type(None))) else None
+        if digest not in context['accepted_checkpoint_hashes']:
+            raise ValueError('Run progress changed after preservation; reconcile the context')
+        result = json.loads(json.dumps(context['checkpoint']))
+        result['_progress_context_event'] = context['event_id']
     for field, key in [('Stages (JSON)', 'stages'), ('Pending checks (JSON)', 'pending_checks'),
                        ('Handoff (JSON)', 'handoff'), ('Next command', 'next_action'),
                        ('Mode', 'execution_mode'), ('Backup/report URL', 'report_url')]:
@@ -167,3 +175,22 @@ def run_progress(run):
         if key not in result and value is not None:
             result[key] = value
     return result
+
+
+def run_progress_contexts(histories):
+    """Resolve immutable progress preservation records without rewriting old Runs."""
+    matches = {}
+    for event in histories:
+        try:
+            data = json.loads(event.get('Field changes (JSON)', '{}'))
+        except (ValueError, TypeError):
+            continue
+        if not isinstance(data, dict) or data.get('schema') != 'nextmove.run-progress.v1':
+            continue
+        run_id = data['original_run_id']
+        rank = (event.get('Recorded at', ''), event.get('Event key', ''))
+        if run_id not in matches or rank > matches[run_id][0]:
+            matches[run_id] = (rank, {'event_id': event['id'],
+                'accepted_checkpoint_hashes': data['accepted_checkpoint_hashes'],
+                'checkpoint': data['checkpoint']})
+    return {key: value[1] for key, value in matches.items()}
