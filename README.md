@@ -88,6 +88,8 @@ For manual switching, release the previous owner and open the next configured ha
 
 Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
+When preferences allow AI-first roles across domains, Review does not reject a role merely for its business domain. Domain expertise is assessed when the JD explicitly asks for it in minimum or preferred qualifications; independent hard restrictions still apply.
+
 Review checks the actual qualifications and private resume-fit exclusions, rejects verified failing base-pay ceilings early, and records concise decision reasons. Only base-pay verification may be deferred for provisional preparation; submission requires it resolved. Duplicate prevention uses exact employer role IDs or job links, rather than comparing every regional variant.
 
 Users may explicitly prefer general senior PM roles based on seniority and salary, with matching signals such as AI in preferred qualifications increasing career fit. Review records bounded generic-tenure flexibility without requiring an undisclosed team assignment or claiming unproven experience. Every role still needs overall JD alignment and all critical minimums; required prior engineering experience cannot be replaced by technical PM collaboration. Specialist postings keep the full qualification checks.

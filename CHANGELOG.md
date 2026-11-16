@@ -1,5 +1,11 @@
 # Changelog
 
+## AI-first roles across business domains
+
+- An explicit AI-first domain preference overrides broad business-domain exclusions. Evaluate requested domain knowledge from actual minimum/preferred qualifications instead of inferring it from the product or customer.
+- Preserve independent critical qualifications, product-layer and hard career restrictions; do not turn preferred domain experience into a mandatory veto. No Scan or schema change.
+
+
 ## Clear Drive destinations and critical qualification guard
 
 - Setup creates or reuses Role specific and Audit trail inside the private main folder, with verified Settings mappings and ID-preserving cleanup.

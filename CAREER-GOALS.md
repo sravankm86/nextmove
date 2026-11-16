@@ -74,6 +74,10 @@ Keep positive specialties, confirmed gaps and preferences distinct. Interpret se
 
 Users may list specialist responsibilities, product layers or customer personas they do not want to pursue, separately from broad industry preferences. Interpret their scope from the role's primary duties. A passing keyword is not an exclusion, and a new exclusion is not proof of a missing qualification. Keep personal examples and explicit stretch exceptions in the private source, never hardcoded in public scripts. Review applies these exclusions; Scan does not. Candidate facts still come from the master and confirmed user information. A preference for general senior PM roles never supplies missing qualifications; retain overall JD alignment and all critical minimums, including required prior professional backgrounds. Generic tenure flexibility cannot imply engineering or specialist experience.
 
+## AI-first domain openness
+
+Capture whether users welcome AI-first products across otherwise unfamiliar business domains. An explicit preference overrides older broad business-domain exclusions for qualifying AI-first charters. Review uses the actual minimum and preferred qualifications to assess requested domain expertise; the domain of customers alone is not a candidate-skill requirement. Distinguish domain openness from separately stated product-layer and other hard restrictions. Store these as preference values, with interpretation in stages/review.md.
+
 ## Authority and storage
 
 Git: instructions and the interpretation contract above. Drive: end-user goals and factual master as distinct documents. Airtable: operational state, references, extracted preference values with provenance and live controls. Chat/local files are not sole memory.
