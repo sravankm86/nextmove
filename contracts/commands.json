@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "tables": [
     "Companies",
     "Applications",
@@ -68,7 +68,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Inventoried and retryable backlog; full eligibility/career/resume review to Queued, with disposition feedback",
+      "scope": "Inventoried, retryable Need review and stale unsubmitted approvals; exact JD, career score and resume score determine outcome",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -133,5 +133,11 @@
         "mailbox"
       ]
     }
-  ]
+  ],
+  "run_preflight": {
+    "for_every_command": true,
+    "instructions": "WORKFLOW.md#run-checks-objective-duplicate-discovery",
+    "duplicate_owner": "Run",
+    "refresh_for_new_scan_postings": true
+  }
 }

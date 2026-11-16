@@ -1,5 +1,14 @@
 # Changelog
 
+## Three-step Review and nine lifecycle states
+
+- Review is a portable JD → career fit → resume fit frame. Personal preferences stay in the private Career Goals document.
+- Need review separates assessed uncertainty from new inventory; Duplicate records objective Run-owned identity resolution.
+- New score routing replaces old OR-fit, preferred-majority and provisional-salary acceptance. Old input pins and outcomes remain recoverable.
+
+Older entries describe historical releases, not current routing instructions.
+
+
 ## AI-first roles across business domains
 
 - An explicit AI-first domain preference overrides broad business-domain exclusions. Evaluate requested domain knowledge from actual minimum/preferred qualifications instead of inferring it from the product or customer.

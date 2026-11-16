@@ -5,17 +5,20 @@ from lifecycle import STATUSES, END_STATES, normalize
 from stage_state import application_write, run_progress, attempt_blocks_retry
 
 class LifecycleTests(unittest.TestCase):
-    def test_seven_states_and_endpoint(self):
-        self.assertEqual(len(STATUSES),7)
-        self.assertEqual(END_STATES,{'Interviewing','Not pursuing','Rejected'})
+    def test_nine_states_and_endpoint(self):
+        self.assertEqual(len(STATUSES),9)
+        self.assertEqual(END_STATES,{'Interviewing','Not pursuing','Rejected','Duplicate'})
         self.assertEqual(normalize('Confirmed'),'Applied')
+        self.assertEqual(normalize('Needs review'),'Need review')
+        self.assertEqual(normalize('Duplicate'),'Duplicate')
+        self.assertEqual(application_write({'Lifecycle status':'Need review'}),{'Lifecycle status':'Need review'})
         self.assertEqual(normalize('In process'),'Interviewing')
         self.assertEqual(normalize('Offer'),'Interviewing')
         self.assertIsNone(normalize('invented state'))
     def test_unknown_review_and_uncertain_attempt_never_create_success(self):
-        self.assertEqual(normalize('Shortlisted'),'Inventoried')
+        self.assertEqual(normalize('Shortlisted'),'Need review')
         self.assertEqual(normalize('Shortlisted',review_approved=True),'Queued')
-        self.assertEqual(normalize('Submission uncertain'),'Inventoried')
+        self.assertEqual(normalize('Submission uncertain'),'Need review')
         self.assertEqual(normalize('Submission uncertain',last_verified_stage='Ready'),'Ready')
         self.assertTrue(attempt_blocks_retry({'Lifecycle status':'Ready'},{'submission':{'attempt_key':'attempt-example'}}))
         for legacy in ['Confirmed','Needs review','Offer','Submission uncertain']:

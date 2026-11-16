@@ -1,72 +1,35 @@
-# Review: qualifications, career fit and preparation queue
+# Review: three steps
 
-Use WORKFLOW.md and DATA.md. Freeze the requested Inventoried scope from live Airtable. Read the complete exact official job description, current Career Goals and editable master. Reuse an integrity-verified exact saved official description; do not substitute a company summary or title. Missing descriptions remain Inventoried. Preserve human notes and submitted/terminal outcomes. Re-read each affected row before writing.
+Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review assesses Inventoried roles and retryable Need review roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
 
-For a default Review or full Run, also revalidate unsubmitted Queued/Ready roles whose accepted goals, master, job content or decision-policy versions are stale before they advance. An explicit narrower scope, such as Inventoried-only, takes precedence. Do not reopen human-declined, submitted or terminal outcomes merely because inputs changed.
+## Step 1. Extract the job description
 
-## Decision order
+Read the complete exact official JD, or an integrity-verified saved copy. Extract responsibilities, minimum and preferred qualifications, compensation and work restrictions. Preserve the employer's alternatives and distinguish requirements from examples. Missing or incomplete evidence means Need review, with the exact gap in Agent notes.
 
-1. Check exact employer role ID or canonical job link against existing company records and known applications. Use scripts/stage_state.py:exact_job_match. Do not compare every regional variant, infer identity from a title/description similarity, or merge distinct posting IDs. Unmatched migration history is a one-time reconciliation gap; do not invent its identity. An exact prior application blocks another automatic submission.
-2. Check the applicable advertised annual base-salary upper endpoint. A verified upper endpoint that fails the configured requirement is Not pursuing immediately, category career_compensation. A low band minimum is not a failure when its maximum passes. Record the actual band and basis; total compensation, bonus, equity, OTE and another role's salary do not prove base pay. A decisive verified failure needs no further qualification scoring. Keep the full source recoverable.
-3. Check other hard career requirements and private resume-fit exclusions: product function, senior scope, location, company stage, domain, responsibilities, work type and any confirmed language constraints. Apply exclusions to the role's main responsibilities and customer persona, not incidental words. An excluded specialist area is Not pursuing unless current goals contain an applicable exception. Apply the AI-first domain preference below before treating a business domain as an exclusion. An AI employer does not make every product suitable. Check the configured general senior PM preference below before inventing a team/domain blocker.
-4. By default, assess every distinct minimum and preferred qualification against the master and confirmed user facts. Store requirement, Met / Not met / Unknown, and the supporting candidate and JD evidence. All mandatory minimums and more than half of distinct preferred qualifications must pass, except under the explicit general senior PM preference below. Use scripts/role_gate.py:qualification_gate. Preserve AND/OR alternatives and employer-accepted equivalent experience; do not double-count or inflate soft-skill bullets. No listed preferred qualifications means not applicable, not an invented failure. An unlabelled requirements section is assessed as requirements with the original wording preserved.
-5. Assess Career fit and Resume fit independently using central responsibilities, product layer and customer persona. Explain real overlaps and essential gaps. At least one High fit is necessary, but cannot override a failed qualification, resume-fit exclusion, essential mismatch or hard career requirement. A stretch needs explicit user approval and exact saved scope; it is never a claim that the missing skill is possessed.
+## Step 2. Assess career fit
 
-For the default qualification path, missing resume evidence is Unknown, not proof of absence. A user-confirmed missing required skill is Not met. If confirmed failures already decide the result, decline it without asking unnecessary questions. If a missing fact could change the decision, keep Inventoried and put the smallest specific question in Agent notes. Partial preferred evidence can pass only when confirmed matches already exceed half; unresolved evidence that could change a failing majority remains pending. Do not label an unassessed role qualified.
+Compare the JD with the current Career Goals. Personal criteria, priorities, domain preferences, exceptions and acceptable tradeoffs come from that private document. Do not infer required candidate expertise from the product's domain or copy another user's preferences into this file.
 
-## AI-first domain preference
+| Career fit | Meaning | Score |
+|---|---|---:|
+| Low | At least one objective career criterion fails. | 1 |
+| Medium | No objective failure; some career requirements match. | 2 |
+| High | No objective failure; all applicable career requirements match. | 3 |
 
-When current goals accept AI-first roles across domains, identify whether AI or agents are central to the actual product, workflow and success outcomes. Employer branding, an AI keyword or everyday AI-tool use alone is insufficient. For a qualifying role, do not decline or downgrade fit solely because the product serves an unfamiliar business domain, industry or customer group. This preference takes precedence over older broad business-domain exclusions. Do not infer that building an accounting agent requires being an accountant.
+Use the stated comparison and units. Unknown is not a confirmed failure or a pass. Record each meaningful match, failure and unresolved criterion with evidence; ask for decision-critical clarification.
 
-Domain expertise matters when the JD explicitly asks for it in minimum or preferred qualifications. Assess the exact wording against the master and confirmed facts, preserving OR/equivalent alternatives. Missing required domain evidence is Unknown, not proof of absence; a confirmed missing required skill fails. A preferred domain qualification contributes to the applicable preferred-majority check rather than becoming a new mandatory veto. Do not add a domain-experience condition that the employer did not state. Broad AI familiarity does not prove named critical technical skills.
+## Step 3. Assess resume fit
 
-Keep separately stated product-layer, function, work-type, seniority, compensation, geography, funding and factual requirements in force. Domain openness does not silently erase an explicit infrastructure/data-preparation restriction or required engineering background. Explain any independent restriction or actual qualification gap with its exact evidence; do not disguise it as a domain rejection.
+Compare every distinct minimum and preferred qualification with the current editable master and confirmed candidate facts. Record Met, Not met or Unknown with JD and candidate evidence. Preserve explicit OR/equivalent alternatives. Preferences are not proof of experience, and an unmentioned skill is not proof of its absence. Assess overall interview-shortlist plausibility without inventing a probability.
 
-Save ai_first_domain_preference_applied, the central AI-product evidence, whether domain expertise is explicitly requested and its exact JD qualification reference. No new tracker column is required. Correct affected decisions after a preference change; do not reopen human declines or submitted/terminal outcomes automatically.
+| Resume fit | Meaning | Score |
+|---|---|---:|
+| Low | At least one minimum qualification is not met. | 1 |
+| Medium | All minimums met; at least one preferred qualification is not met. | 3 |
+| High | All minimum and preferred qualifications met. | 2 |
 
-## General senior PM preference
+With no preferred qualifications listed, that part is satisfied once all minimums pass. If missing evidence prevents a justified rating, leave it Unresolved and use Need review.
 
-When current goals explicitly accept general senior PM roles on role seniority and compensation alone, use that preference for a complete posting whose responsibilities and requirements do not demand specialist product/domain expertise. Generic product strategy, roadmaps, execution, leadership and broad AI-tool use are not specialist requirements. A missing team name or unconfirmed AI assignment is not a blocker for such a role. A blank, truncated or boilerplate-only posting is insufficient evidence that a role is general. A generic title does not qualify a specialist charter.
+Add the two scores: 6 or more → Queued; 4 to below 6 → Need review; below 4 → Not pursuing. The current numeric mapping is recorded in contracts/policy-versions.json. No hidden domain gate, preferred-majority rule or salary-only provisional queue applies. A missing score means Need review. This does not authorize submission or false resume claims.
 
-A general title, senior pay or attractive domain never waives a critical qualification. Compare the complete JD with both current Career Goals and the factual master, including required previous professional roles, engineering/coding, specialist knowledge, education alternatives and leadership scope. Prior engineering experience is not established by collaborating with engineers, AI-assisted prototypes, a technical PM title or a technical degree. A confirmed missing required background is Not pursuing; decision-critical missing evidence remains Inventoried. Preserve explicit OR/equivalent alternatives. Record a requirement-by-requirement ledger even for the general-role path, plus critical_minimums_pass and overall_alignment_pass. Both must be true before approval.
-
-Honor the user's stated treatment of generic experience minimums. An explicit flexibility on the number of years in an otherwise evidenced PM background or on noncritical preferred qualifications may be applied only within its exact saved scope. It does not waive a distinct missing professional background or leadership responsibility. If the charter makes a nominally generic requirement critical, do not assume the earlier flexibility covers it. Save qualification_method general_senior_pm, the user's preference evidence and the waived requirements as not assessed under that preference; never mark unproven experience Met or invent resume facts. Preserve independent hard restrictions such as geography, company restrictions, confirmed language constraints and exact prior applications. Specialist roles keep the default qualification and essential-fit checks.
-
-Verify actual senior PM scope; neither a low minimum alone nor employer prestige decides it. Reject a verified failing applicable base ceiling. Reuse the existing salary-only provisional exception when seniority and all remaining applicable checks pass. Use scripts/role_gate.py:general_pm_gate and save general_role_verified, general_preference_applied and seniority_pass as explicit booleans.
-
-Rate Career fit High when this general posting contains a role-level positive hint matching the user's interests, including AI in preferred qualifications. Do not demand a confirmed AI product assignment as well. With no such hint, record an honest independent fit rating; direct transferable senior PM evidence may establish High Resume fit. Company-wide marketing alone does not establish a role-level AI hint. This preference never authorizes submission or false application answers.
-
-## Seniority and security scope
-
-Use meaningful PM ownership, experience, autonomy, strategy, product complexity and accountable outcomes. A high applicable role-specific band plus substantive end-to-end PM ownership can support senior scope without an exact grade mapping. A low minimum or multi-level band is not a junior ceiling. Salary alone, another role's band or company prestige cannot qualify explicit junior/non-PM work. Use review_eligibility with evidence-backed scope or pay-supported ownership; benchmark values stay private.
-
-Where security preferences matter, distinguish security/governance central to the core AI product from supporting identity, privacy, compliance or security operations. Assess actual charter and private exclusions, not employer category alone. Internal employee, sales and learning AI products remain acceptable when the goals allow them. APIs, SDKs, finance or healthcare mentioned incidentally do not trigger a whole-domain exclusion.
-
-## Outcomes and handoff
-
-### Interpreting confirmed specialties and skills
-
-Apply current private preference values and confirmed candidate facts at the level of the actual product charter. Related security labels are not interchangeable: SOC analyst/response workflows, posture management and data security differ from network/firewall products, XDR/endpoint detection engines and threat-intelligence products. A relevant specialty supports domain fit, not every named tool, framework, employer or years-of-experience requirement. Incidental integration with an excluded specialty is not a core mismatch. A role centered on an explicitly excluded or user-confirmed insufficient specialty is Not pursuing, not another request to confirm the same gap.
-
-Distinguish AI application software from underlying infrastructure. Agent/chat applications, workflow automation and application-building platforms are not automatically infrastructure because the title says platform. Determine whether the core responsibility is user-facing application capability or model training/serving, compute/GPU capacity, storage/networking, data preparation/ingestion/ETL or similar infrastructure. Apply the user's stated preference to that layer. Product-quality evaluations are not automatically data preparation or model infrastructure.
-
-AI-assisted prototyping and querying data are distinct from writing application code or having a prior software-engineering role. Honor an employer's explicit alternative allowing prototypes/low-code tools; do not invent Python/TypeScript proficiency, production coding, advanced SQL/database engineering, a named tool, or a required duration. A confirmed absence of required application coding is Not met; a prototype requirement can be Met with actual confirmed prototype capability. Use exact requirement wording and evidence.
-
-Broad business-domain experience does not establish every specialist workflow: finance is not proof of accounting/ledger/ERP expertise; HR is not proof of every HRIS integration. Avoid repeatedly asking for a broad domain already confirmed; ask only for a genuinely decision-critical narrower skill.
-
-If the user excludes unclear outbound/GTM roles, decline when the full posting cannot establish actual PM ownership; do not keep asking the user to choose that role type. This preference does not ban every outbound title with clear product ownership. An incomplete non-outbound posting may still need its full JD.
-
-A hard company-stage floor has no inferred exception. Seek official evidence that the company has reached the required stage or is public. A current verified below-floor company is Not pursuing; genuinely missing stage evidence stays Inventoried with a verification gap. Do not offer a below-floor exception after the user has ruled it out, infer that an unlettered round qualifies, or treat an acquisition as satisfying the floor without an explicit ownership policy.
-
-- Queued: explicit current approval; eligibility, qualifications, resume exclusions, essential fit and other hard career checks pass, with at least one High fit.
-- Queued provisionally: the same checks pass and the only deferred hard check is verification of this posting's applicable base pay. Save decision approve_provisional, deferred_checks [base_salary], career_requirements_pass null and base_salary_pass null; never pretend an unknown passed. Prepare may proceed; Apply may not.
-- Not pursuing: a verified hard failure, confirmed qualification failure or insufficient preferred majority under the applicable assessment path, relevant resume exclusion, essential mismatch or human decline. Record the decisive evidence and reason category. An actual employer rejection stays Rejected.
-- Inventoried: genuinely insufficient information. State exactly what is missing, why it matters and what the user or next agent must supply. An unresolved company-stage, language or core qualification check cannot be treated as merely missing salary.
-
-Agent notes briefly explains the decision, especially each lifecycle change, using concrete evidence. Examples: `Not pursuing: advertised annual base $180k–$240k is below the configured maximum requirement.`; `Inventoried: prior software-engineering experience is required but not established. Please confirm whether you have it.`; `Queued: minimums met; 4/6 preferred met; strong enterprise-agent ownership. Base pay still needs verification before Apply.` Preserve unresolved material restrictions; keep detailed reasoning and exact prior notes in History. Never overwrite Manual notes.
-
-Save the complete stage snapshot under DATA.md before updating the row. Review metadata includes role_eligible, qualifications_pass, resume_exclusions_pass, essential_fit_pass, non_compensation_requirements_pass, career_requirements_pass, base_salary_pass, deferred_checks, decision, reason_category, exact JD hash and current input versions. Unknown checks stay null. Link the exact per-role assessment in Drive and Review run. Verify persisted values and account for every frozen item; one batch is not the whole stage. A single Review stops before Prepare.
-
-## Feedback and recall
-
-Read current Manual notes/status and save newly observed feedback without rewriting it. A human status conflicting with an older note remains unchanged until clarified. Distinguish Scan function/seniority errors from career/qualification/exclusion failures, missing evidence, exact duplicates and human choices. These career/qualification checks belong only to Review, not Scan. Keep Scan broad. Use independent validation before claiming precision/recall gains; disagreement notes are calibration examples, not a representative test set.
+Always explain both ratings, their evidence and the resulting status in Agent notes. Example: `Career High (3): stated goals met. Resume Low (1): required background missing. Total 4 → Need review.` State the exact question when blocked. Keep full evidence and fixed input/JD versions in History/Drive under DATA.md, verify writes and stop after Review.

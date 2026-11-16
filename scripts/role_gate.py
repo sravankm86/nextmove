@@ -191,3 +191,73 @@ def base_maximum_gate(assessment, *, threshold, currency, period):
             or not math.isfinite(maximum) or maximum < 0):
         return 'pending'
     return 'pass' if maximum > threshold else 'reject'
+
+
+# Current Review frame. Earlier helpers remain for reading historical decisions;
+# new Review routing uses these ratings and the versioned score contract only.
+def review_frame_contract():
+    import json
+    from pathlib import Path
+    policy = json.loads((Path(__file__).resolve().parents[1] / 'contracts/policy-versions.json').read_text())
+    return policy['review'], policy['review_scoring']
+
+
+def _findings(items):
+    values = []
+    for item in items:
+        value = item.get('status')
+        if value not in {'met', 'not_met', 'unknown'}:
+            raise ValueError('Expected met, not_met or unknown')
+        if value != 'unknown' and not item.get('evidence'):
+            raise ValueError('A known finding requires source evidence')
+        values.append(value)
+    return values
+
+
+def career_rating(criteria):
+    values = _findings(criteria)
+    if any(v == 'not_met' and c.get('objective') is True for c, v in zip(criteria, values)):
+        return 'Low'
+    if not values or 'unknown' in values:
+        return 'Unresolved'
+    return 'High' if all(v == 'met' for v in values) else 'Medium'
+
+
+def resume_rating(minimum, preferred, *, minimum_listed=True, preferred_listed=True):
+    required, desired = _findings(minimum), _findings(preferred)
+    if 'not_met' in required:
+        return 'Low'
+    if 'unknown' in required or minimum_listed and not required:
+        return 'Unresolved'
+    if not preferred_listed:
+        return 'High'
+    if 'not_met' in desired:
+        return 'Medium'
+    if not desired or 'unknown' in desired:
+        return 'Unresolved'
+    return 'High'
+
+
+def scored_review(career, resume, *, objective_failure=False, minimum_failure=False, contract=None):
+    if contract is None:
+        _, contract = review_frame_contract()
+    for axis in ['career', 'resume']:
+        mapping = contract[axis]
+        if set(mapping) != {'Low', 'Medium', 'High'} or any(type(v) is not int for v in mapping.values()) or set(mapping.values()) != {1, 2, 3}:
+            raise ValueError('Each axis requires the explicit one-to-three score mapping')
+    if career not in {'Low', 'Medium', 'High', 'Unresolved'} or resume not in {'Low', 'Medium', 'High', 'Unresolved'}:
+        raise ValueError('Unknown fit rating')
+    c, r = contract['career'].get(career), contract['resume'].get(resume)
+    total = c + r if c is not None and r is not None else None
+    if contract.get('confirmed_failure_override') is True and (objective_failure or minimum_failure):
+        outcome = 'Not pursuing'
+    elif total is None:
+        outcome = 'Need review'
+    elif total >= contract['queue_minimum']:
+        outcome = 'Queued'
+    elif total >= contract['need_review_minimum']:
+        outcome = 'Need review'
+    else:
+        outcome = 'Not pursuing'
+    return {'career_rating': career, 'career_score': c, 'resume_rating': resume,
+            'resume_score': r, 'total': total, 'outcome': outcome}

@@ -20,7 +20,7 @@ Applications stays at 28 columns. Reuse Assessment summary as Agent notes after 
 
 Complete review snapshots require explicit review.role_eligible and review.career_requirements_pass booleans, accepted full-JD decision/hash/provenance and fixed inputs. Migrate only explicit Eligible/Excluded and Pass/Fail values to true/false; unknown stays null. Migration never approves a job. Verify original legitimate approvals, current PDF verification and pending-attempt blocking after retirement. Prior snapshot versions remain readable for recovery; only explicit current checks establish acceptance.
 
-WORKFLOW.md defines the seven-state mapping. Preserve exact prior status/confirmation/uncertainty/duplicate references and outcomes in History. Populate any missing submission attempt evidence before collapsing an uncertain-submit status; otherwise leave the item blocked. Configure the seven select choices, apply/verify mappings, then remove unused old choices. Confirmed maps to Applied without discarding confirmations. Interviewing is the final tracked recruiting stage; offers/acceptance and later recruiting outcomes are outside automatic scope.
+WORKFLOW.md defines the nine-state mapping. Preserve exact prior status/confirmation/uncertainty/duplicate references and outcomes in History. Populate any missing submission attempt evidence before collapsing an uncertain-submit status; otherwise leave the item blocked. Configure the nine select choices, apply/verify mappings, then remove unused old choices. Confirmed maps to Applied without discarding confirmations. Interviewing is the final tracked recruiting stage; offers/acceptance and later recruiting outcomes are outside automatic scope.
 
 ## Release and deployment checks
 

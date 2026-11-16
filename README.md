@@ -9,12 +9,12 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | Stage | Work | Result |
 |---|---|---|
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
-| [Review](stages/review.md) | Read the full JD and assess role/seniority, hard career requirements and independent career/resume fit. | Approved candidates become Queued; others remain pending or become Not pursuing, with reasons. |
+| [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse or tailor from the factual master, record grounded changes and verify the rendered PDF. | Ready with an exact resume file/version. |
 | [Apply](stages/apply.md) | Check authorization, answers, real form access, exact resume and company restrictions. | Applied after an established submission; uncertainty blocks retries. Default is preflight. |
 | [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
-The seven statuses are **Inventoried, Queued, Ready, Applied, Interviewing, Not pursuing and Rejected**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#seven-lifecycle-states).
+The nine statuses are **Inventoried, Need review, Queued, Ready, Applied, Interviewing, Not pursuing, Rejected and Duplicate**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#nine-lifecycle-states).
 
 Inventory and the preparation queue are states in the same Applications table. Reasons, confirmation, missing evidence and uncertain attempts do not need separate lifecycle states. A manually selected status does not create review approval, verify a PDF or authorize submission.
 
@@ -88,11 +88,9 @@ For manual switching, release the previous owner and open the next configured ha
 
 Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
-When preferences allow AI-first roles across domains, Review does not reject a role merely for its business domain. Domain expertise is assessed when the JD explicitly asks for it in minimum or preferred qualifications; independent hard restrictions still apply.
+Review has three steps: extract the exact JD, score career fit against the user's Career Goals, and score resume fit against the user's master using minimum and preferred qualifications. Add the scores to route Queued, Need review or Not pursuing. Unknown evidence stays Need review. Ratings and explanations are visible; full evidence and versions are recoverable. See [the Review frame](stages/review.md) for the score tables.
 
-Review checks the actual qualifications and private resume-fit exclusions, rejects verified failing base-pay ceilings early, and records concise decision reasons. Only base-pay verification may be deferred for provisional preparation; submission requires it resolved. Duplicate prevention uses exact employer role IDs or job links, rather than comparing every regional variant.
-
-Users may explicitly prefer general senior PM roles based on seniority and salary, with matching signals such as AI in preferred qualifications increasing career fit. Review records bounded generic-tenure flexibility without requiring an undisclosed team assignment or claiming unproven experience. Every role still needs overall JD alignment and all critical minimums; required prior engineering experience cannot be replaced by technical PM collaboration. Specialist postings keep the full qualification checks.
+Run owns objective duplicate discovery before stage work and for new scan candidates. Confirmed redundant rows use Duplicate with a saved canonical reference; reobserved jobs do not create extra rows. Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
 
 Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
 

@@ -10,7 +10,7 @@ Use repeatable official feeds/readers and code for parsing, identities, broad ti
 
 ## Basic candidate screen
 
-Deduplicate using exact company-scoped employer role IDs or canonical job links against existing records. Do not compare every regional variant or merge different posting IDs by description similarity. Preserve migration identity gaps for one-time reconciliation.
+Use the Run identity index and Run checks in WORKFLOW.md for duplicate discovery before inserting candidates. Return newly encountered identity evidence to Run for resolution; do not create redundant rows. Review performs no duplicate discovery.
 
 Use broad PM keywords, aliases, localized and unlevelled titles. Check official title, team/function, summary or readily available description for plausible product-management work and senior scope. Exclude clear unrelated functions and clearly junior roles. Do not infer company grade from title, demand Senior in every title, or treat low minimum years alone as proof of insufficient scope.
 

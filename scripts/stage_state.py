@@ -103,6 +103,32 @@ def review_ready(app, state, runs, current_inputs):
     if 'High' not in [app.get('Career fit'), app.get('Resume fit')]:
         return False
     review = state.get('review', {})
+    from role_gate import review_frame_contract, scored_review
+    frame_policy, contract = review_frame_contract()
+    if current_inputs.get('policy') == frame_policy:
+        if review.get('assessment_method') != contract['assessment_method']:
+            return False
+        saved = review.get('scoring', {})
+        try:
+            expected = scored_review(app.get('Career fit'), app.get('Resume fit'),
+                                     objective_failure=review.get('objective_failure') is True,
+                                     minimum_failure=review.get('minimum_failure') is True)
+        except (ValueError, KeyError, TypeError):
+            return False
+        if saved != expected or expected['outcome'] != 'Queued' or review.get('decision') != 'approve':
+            return False
+        if not review.get('evidence') or not review.get('assessment_complete'):
+            return False
+        check = state.get('run_checks', {}).get('duplicate', {})
+        rid = state.get('stage_runs', {}).get('review')
+        if (check.get('status') not in {'unique', 'canonical'} or not check.get('evidence')
+                or check.get('checked_in_run') != rid or app.get('Review run') != [rid]):
+            return False
+        versions = stage_versions(state, 'review', runs)
+        return bool(all(versions.get(k) and versions[k] == current_inputs.get(k)
+                        for k in ['goals', 'master', 'policy', 'eligibility_policy'])
+                    and review.get('jd_hash') == current_inputs.get('jd_hash')
+                    and review.get('jd_hash') and review.get('current_description'))
     if review.get('qualification_method') == 'general_senior_pm':
         if (not all(review.get(k) is True for k in ['general_role_verified',
                     'general_preference_applied', 'seniority_pass'])
@@ -253,3 +279,26 @@ def run_progress_contexts(histories):
                 'accepted_checkpoint_hashes': data['accepted_checkpoint_hashes'],
                 'checkpoint': data['checkpoint']})
     return {key: value[1] for key, value in matches.items()}
+
+
+def run_duplicate_match(left, right):
+    """Run-owned objective identity. Titles/dates corroborate, never prove identity."""
+    if not left.get('company_id') or left.get('company_id') != right.get('company_id'):
+        return {'decision': 'distinct', 'basis': 'different or unknown company'}
+    lid = left.get('role_id') if left.get('role_id_verified') is True else None
+    rid = right.get('role_id') if right.get('role_id_verified') is True else None
+    lu = canonical_job_url(left.get('job_url')) if left.get('job_url_verified_specific') is True else None
+    ru = canonical_job_url(right.get('job_url')) if right.get('job_url_verified_specific') is True else None
+    same_link = bool(lu and lu == ru)
+    if lid and rid:
+        if lid == rid:
+            return {'decision': 'duplicate', 'basis': 'verified company-scoped employer role ID'}
+        return {'decision': 'unresolved' if same_link else 'distinct',
+                'basis': 'conflicting verified IDs/link' if same_link else 'distinct verified role IDs'}
+    if same_link:
+        return {'decision': 'duplicate', 'basis': 'verified exact posting-specific canonical link'}
+    name = lambda x: ' '.join((x or '').casefold().split())
+    if (name(left.get('role_name')) and name(left.get('role_name')) == name(right.get('role_name'))
+            and left.get('posted_date') and left.get('posted_date') == right.get('posted_date')):
+        return {'decision': 'unresolved', 'basis': 'same title/date only; exact identity needs verification'}
+    return {'decision': 'distinct', 'basis': 'no confirmed shared posting identity'}

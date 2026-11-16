@@ -2,7 +2,7 @@
 
 Default is preflight. A full Run, a Ready resume or a bare Apply command does not authorize unlimited submissions.
 
-Require scripts/stage_state.py:apply_ready and all live authorization/form/restriction controls. Resolve any provisional base-pay check through current verified Review before submitting. A prepared resume never waives salary or qualifications.
+Require scripts/stage_state.py:apply_ready and all live authorization/form/restriction controls. Resolve outstanding evidence and require current scored Review before submitting. A prepared resume never waives salary or qualifications.
 
 Read live pause/stop, explicit scoped authorization, answers, exact role history, whether the actual application form is accessible and accepting submissions, review/master/resume versions and every applicable company quota/cooldown. Reconcile uncertainty. Generic rejection does not establish company-wide restriction; unknown rule/scope/boundary or answers block affected submissions. See stages/apply.md.
 

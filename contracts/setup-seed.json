@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -115,18 +115,11 @@
           "protect_eligible_recall": true,
           "career_rejections_are_scan_negatives": false
         },
-        "qualification_gate": {
-          "all_mandatory_minimums": true,
-          "preferred_fraction_strictly_above": 0.5,
-          "unknown_is_failure": false,
-          "stage": "Review",
-          "configured_general_pm_exception": "stages/review.md; opt in from current goals; never infer it"
-        },
         "resume_fit_exclusions_source": "career_goals",
-        "provisional_queue_deferred_checks": [
-          "base_salary"
-        ],
-        "duplicate_identity": "company-scoped exact employer role ID or canonical job link"
+        "duplicate_identity": "company-scoped exact employer role ID or canonical job link",
+        "review_assessment": "three_step_v1",
+        "review_scoring_contract": "contracts/policy-versions.json",
+        "duplicate_discovery_owner": "Run"
       },
       "verification": "Needs verification"
     },

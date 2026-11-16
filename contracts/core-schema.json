@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -109,7 +109,7 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "28 physical fields including relationships. Current job facts, seven-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "28 physical fields including relationships. Current job facts, nine-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -139,6 +139,9 @@
                 "name": "Inventoried"
               },
               {
+                "name": "Need review"
+              },
+              {
                 "name": "Queued"
               },
               {
@@ -155,6 +158,9 @@
               },
               {
                 "name": "Rejected"
+              },
+              {
+                "name": "Duplicate"
               }
             ]
           }

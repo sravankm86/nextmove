@@ -1,21 +1,34 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "scan": "de42e872-basic-PM-v3",
-  "review": "AI-first-domain-qualification-v8",
+  "review": "three-step-scored-review-v9",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
-    "When current goals accept AI-first roles across domains, business domain alone cannot reject a role. Assess domain expertise only where explicitly requested in minimum/preferred qualifications; preserve independent critical skills and hard restrictions.",
-    "Review interprets current confirmed specialties, skill boundaries, unclear-outbound preferences and strict company-stage requirements; Scan remains broad and factual resumes remain protected.",
-    "General senior PM flexibility is bounded to explicit noncritical generic-tenure/preferred stretches; all roles require evidenced critical minimums and overall JD alignment. Prior engineering/coding cannot be inferred from PM collaboration or prototypes.",
-    "Review now checks qualifications and private resume exclusions; eligibility allows evidenced pay plus meaningful PM ownership. Scan relevance remains unchanged.",
-    "A behavior change must explicitly version its affected decision policy.",
-    "Record the repository revision for audit; a formatting or schema-only commit does not by itself invalidate an unchanged decision policy.",
-    "Current goals, master, exact job content and accepted PDF versions must still match at stage boundaries.",
-    "Posting availability is no longer a Scan/Review exclusion or maintained Application field. Apply still checks that the actual form can accept a submission; previous availability-only holds require targeted Review, never automatic approval.",
-    "Lifecycle routing ends at Interviewing. Confirmation is evidence under Applied; reasons and outstanding attempts never substitute for review/PDF/submission safeguards. Lifecycle/schema changes do not alter role or hard-career criteria.",
-    "A verified failing applicable base ceiling is an immediate Review decline. Salary-only provisional approval permits preparation, never submission."
+    "Career Goals supplies personal criteria and exceptions; the master supplies candidate facts. Public Review defines only extraction, ratings and score routing.",
+    "Run owns objective duplicate discovery; IDs or verified posting-specific links confirm identity, names/dates corroborate. Preserve actual application history.",
+    "Use the explicit current score mapping and total thresholds; do not add hidden OR-fit, majority, salary-only or hard-failure gates. Unknown evidence is not a confirmed failure.",
+    "Freeze source/policy/JD/PDF identities; revalidate affected decisions when they change. Historical approvals do not manufacture current scored acceptance.",
+    "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores."
   ],
   "posting_availability": "apply-form-only-v1",
-  "lifecycle": "seven-states-interview-end-v1",
-  "identity": "exact-role-id-or-link-v1"
+  "lifecycle": "nine-states-review-duplicate-v2",
+  "identity": "run-objective-identity-v2",
+  "review_scoring": {
+    "assessment_method": "three_step_v1",
+    "career": {
+      "Low": 1,
+      "Medium": 2,
+      "High": 3
+    },
+    "resume": {
+      "Low": 1,
+      "Medium": 3,
+      "High": 2
+    },
+    "queue_minimum": 6,
+    "need_review_minimum": 4,
+    "confirmed_failure_override": false,
+    "unknown_outcome": "Need review",
+    "no_preferred_listed": "Satisfied once minimums pass"
+  }
 }

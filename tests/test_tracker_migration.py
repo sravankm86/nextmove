@@ -44,7 +44,7 @@ class MigrationTests(unittest.TestCase):
         for value in [None, 'Pending', 'Fail']:
             state, _, status = migrate({**self.app, 'Career gate': value}, self.state, [self.run])
             self.assertIsNot(state['review']['career_requirements_pass'], True)
-            self.assertEqual(status, 'Needs review')
+            self.assertEqual(status, 'Need review')
 
     def test_historical_outcome_and_unknown_identity_are_preserved(self):
         state, _, status = migrate({**self.app, 'Lifecycle status': 'Applied', 'Job key': None,
