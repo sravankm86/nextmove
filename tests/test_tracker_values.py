@@ -26,6 +26,21 @@ class TrackerValuesTests(unittest.TestCase):
         self.assertEqual(v.salary_ranges('Equity grants of $10,000–$30,000', description=True), [])
         self.assertEqual(v.salary_ranges('Manage payments for a range of customers with $1M–$10M revenue.', description=True), [])
 
+    def test_numeric_salary_keeps_one_real_band(self):
+        bands = [dict(minimum=100000, maximum=200000, currency='USD', period='year', basis='base'),
+                 dict(minimum=150000, maximum=300000, currency='USD', period='year', basis='base'),
+                 dict(minimum=250000, maximum=400000, currency='CAD', period='year', basis='base')]
+        self.assertEqual(v.salary_endpoints(bands, currency='USD'), (150000, 300000))
+        self.assertEqual(v.salary_endpoints(bands, currency='GBP'), (None, None))
+
+    def test_numeric_salary_rejects_unknown_units_and_nonbase(self):
+        for extra in [dict(period='month'), dict(basis='total cash'), dict(minimum=None),
+                      dict(maximum=float('nan')), dict(minimum=True), dict(minimum=400000)]:
+            band = dict(minimum=100000, maximum=200000, currency='USD', period='year', basis='base')
+            band.update(extra)
+            self.assertEqual(v.salary_endpoints([band], currency='USD'), (None, None))
+        self.assertEqual(v.salary_endpoints([dict(minimum=100, maximum=200, currency='USD')], currency='USD'), (None, None))
+
     def test_optional_equity_and_pay_equity_are_distinct(self):
         self.assertEqual(v.additional_compensation('We support pay equity and equal opportunity.'), ['Not stated'])
         self.assertEqual(v.additional_compensation('May receive equity grants and an annual bonus.'), ['Equity', 'Bonus'])

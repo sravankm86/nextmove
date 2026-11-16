@@ -39,13 +39,13 @@ The private main Drive folder has two working children: **Role specific** for cu
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
 | Companies | Allow/Exclude choices and confirmed application restrictions | 15 |
-| Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 28 |
+| Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 29 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
 | Runs | Frozen inputs, ownership, progress and handoff | 20 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 
-The 95-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 96-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 ## Where to find each rule
 

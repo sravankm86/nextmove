@@ -111,7 +111,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':15,'Applications':28,'Sources':13,'Runs':20,'Settings':6,'History':13}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':15,'Applications':29,'Sources':13,'Runs':20,'Settings':6,'History':13}, 'Unexpected minimal table profile')
     require(not core.get('common_fields') and all(t.get('common_fields')==[] for t in tables), 'Do not duplicate native metadata across tables')
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
     require(len(resources) == len(set(resources)), "Duplicate Settings key")
@@ -137,7 +137,7 @@ def check(root):
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
     from stage_state import CORE_FIELDS
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 28, 'Expected the 28-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 29, 'Expected the 29-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     from stage_state import RETIRED_FIELDS

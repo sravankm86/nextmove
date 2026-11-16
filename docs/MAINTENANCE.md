@@ -4,7 +4,7 @@ This file is for deliberate maintenance, not every stage startup. README.md maps
 
 ## Field audit and retirement
 
-The minimal target is 95 columns across six tables: Companies 15, Applications 28, Sources 13, Runs 20, Settings 6 and History 13, including required reciprocal links. A live audit can find more fields. Audit every actual field for a current consumer, useful human action, required evidence/identity or recoverability; populated does not imply necessary, and empty does not imply dispensable. Keep configured cooldown fields even before first use. Preserve archived-source disabling and real relational links.
+The minimal target is 96 columns across six tables: Companies 15, Applications 29, Sources 13, Runs 20, Settings 6 and History 13, including required reciprocal links. A live audit can find more fields. Audit every actual field for a current consumer, useful human action, required evidence/identity or recoverability; populated does not imply necessary, and empty does not imply dispensable. Keep configured cooldown fields even before first use. Preserve archived-source disabling and real relational links.
 
 Produce a private per-field report with live field ID/name/type, population, decision, purpose, replacement, dependency checks and deletion readiness. Check formulas, views, automations/interfaces and known integrations; disclose inaccessible view configurations/external consumers. Private identifiers/content never belong in public Git. A recommendation is not permission to delete unpreserved information.
 
@@ -16,7 +16,7 @@ Update aliases, every reader/writer, generated contracts/templates and private m
 
 ## Applications and lifecycle migration
 
-Applications stays at 28 columns. Reuse Assessment summary as Agent notes after consolidating Blocker and preserving Decision category in review.reason_category. Primary Application becomes Application ID, formula RECORD_ID(); rename alone is insufficient. Preserve former Record kind/Availability/Sources/Last seen at/Career gate/Updated at values and source provenance in History. Legacy pending candidates use operational state; preserve historical unmatched keys and submitted outcomes.
+Applications targets 29 columns after replacing Posted salary range with numeric Starting salary and Max salary under DATA.md. Preserve and verify the old salary text before retiring it. Reuse Assessment summary as Agent notes after consolidating Blocker and preserving Decision category in review.reason_category. Primary Application becomes Application ID, formula RECORD_ID(); rename alone is insufficient. Preserve former Record kind/Availability/Sources/Last seen at/Career gate/Updated at values and source provenance in History. Legacy pending candidates use operational state; preserve historical unmatched keys and submitted outcomes.
 
 Complete review snapshots require explicit review.role_eligible and review.career_requirements_pass booleans, accepted full-JD decision/hash/provenance and fixed inputs. Migrate only explicit Eligible/Excluded and Pass/Fail values to true/false; unknown stays null. Migration never approves a job. Verify original legitimate approvals, current PDF verification and pending-attempt blocking after retirement. Prior snapshot versions remain readable for recovery; only explicit current checks establish acceptance.
 

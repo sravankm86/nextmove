@@ -20,7 +20,7 @@ If identity cannot be established, keep a minimal Run pending check with URL, re
 
 ## Inventory and handoff
 
-Follow DATA.md for compact display fields: salary ranges only, explicit additional-compensation labels, short place values and the permitted work-arrangement values. Keep location-specific salary conditions and exact source text in evidence; no raw JSON or explanatory paragraphs in display columns. Preserve Manual notes and any manual disposition on reobservation.
+Follow DATA.md for compact display fields: numeric Starting salary and Max salary from one verified band under the configured salary_display units, explicit additional-compensation labels, short place values and the permitted work-arrangement values. Keep location-specific salary conditions and exact source text in evidence; no raw JSON or explanatory paragraphs in display columns. Preserve Manual notes and any manual disposition on reobservation.
 
 Create or update candidates as Inventoried, recording stable identity, official posting URL and source provenance in History plus a verified Scan run and basic-semantic metadata snapshot under DATA.md. Save Job evidence and an exact indexed source capture containing full description/provenance, employer posting aliases, salary basis/currency/location/level, work restrictions and true posting date. Keep compact display values on Applications; save explicit gaps in Agent notes/Run. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
 

@@ -51,7 +51,7 @@ Save accepted stage outputs before advancing. Continue independent useful work s
 
 Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
 
-Use the 28-column tracker under DATA.md. Write concise current context and next action in Agent notes; never overwrite Manual notes. Resolve explicit review checks and structured feedback from History. Sources remains board-level scanner state, not an Applications field. Do not require posting availability during Scan/Review or maintain Last seen at; check the real form during Apply.
+Use the 29-column tracker under DATA.md. Write concise current context and next action in Agent notes; never overwrite Manual notes. Resolve explicit review checks and structured feedback from History. Sources remains board-level scanner state, not an Applications field. Do not require posting availability during Scan/Review or maintain Last seen at; check the real form during Apply.
 
 ## Clarification rules
 

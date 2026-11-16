@@ -1,5 +1,5 @@
 {
-  "version": 9,
+  "version": 10,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -109,7 +109,7 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "28 physical fields including relationships. Current job facts, nine-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "29 physical fields including relationships. Current job facts, nine-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -170,8 +170,18 @@
           "type": "multilineText"
         },
         {
-          "name": "Posted salary range",
-          "type": "singleLineText"
+          "name": "Starting salary",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Max salary",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
         },
         {
           "name": "Additional compensation",
@@ -788,7 +798,8 @@
     "Lifecycle status",
     "Manual notes",
     "Agent notes",
-    "Posted salary range",
+    "Starting salary",
+    "Max salary",
     "Additional compensation",
     "Location",
     "Work arrangement",

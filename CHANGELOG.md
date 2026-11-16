@@ -1,5 +1,7 @@
 # Changelog
 
+- Split salary display into numeric Starting salary and Max salary (schema 10; 29 Application fields). Preserve all bands and units in evidence; decision-policy versions remain unchanged.
+
 ## Ordered fit scores
 
 - Career and resume fit both use Low 1, Medium 2, High 3. Total thresholds remain 6 for Queued, 4–5 for Need review and below 4 for Not pursuing.

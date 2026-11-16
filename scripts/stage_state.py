@@ -10,8 +10,8 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run', 'submission': 'Submission run'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Posted salary range','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','Submission attempt key','Applied on','Confirmation reference','History','Scan run','Review run','Preparation run','Submission run']
-RETIRED_FIELDS = ['Record kind','Availability','Sources','Last seen at','Career gate','Assessment summary','Blocker','Decision category','Updated at']
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','Submission attempt key','Applied on','Confirmation reference','History','Scan run','Review run','Preparation run','Submission run']
+RETIRED_FIELDS = ['Posted salary range','Record kind','Availability','Sources','Last seen at','Career gate','Assessment summary','Blocker','Decision category','Updated at']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None):

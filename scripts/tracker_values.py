@@ -2,6 +2,7 @@
 import ast
 import html
 import json
+import math
 import re
 
 
@@ -95,6 +96,30 @@ def compact_salary(*values):
     # A source may repeat the same band with a symbol and an explicit currency.
     specific = {re.sub(r'^[^\d]+', '', s) for s in ranges if re.match(CODE, s, re.I)}
     return '; '.join(s for s in ranges if not s.startswith('$') or re.sub(r'^[^\d]+', '', s) not in specific)
+
+
+def salary_endpoints(bands, *, currency, period='year', basis='base'):
+    """Select one verified advertised band, never an envelope or FX conversion.
+
+    Callers verify posting identity, units, basis and band conditions from the
+    official source. Selection is the highest advertised maximum in the chosen
+    display currency; Review must still check location/level applicability.
+    All source bands and conditions remain in evidence. Equal maxima retain
+    source order. Unknown or incompatible values return two missing values.
+    """
+    valid = []
+    for band in bands:
+        if (band.get('currency'), band.get('period'), band.get('basis')) != (currency, period, basis):
+            continue
+        lo, hi = band.get('minimum'), band.get('maximum')
+        if any(isinstance(x, bool) or not isinstance(x, (int, float)) or not math.isfinite(x) for x in (lo, hi)):
+            continue
+        if 0 < lo <= hi:
+            valid.append(band)
+    if not valid:
+        return None, None
+    selected = max(valid, key=lambda band: band['maximum'])
+    return selected['minimum'], selected['maximum']
 
 
 def additional_compensation(*values):

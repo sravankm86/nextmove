@@ -7,7 +7,7 @@ This is the single operational reference for Airtable, evidence, history and sta
 | Table | Purpose | Target columns, including reciprocal links |
 |---|---|---:|
 | Companies | Explicit targeting and confirmed company application restrictions | 15 |
-| Applications | Candidate, review, resume and application state | 28 |
+| Applications | Candidate, review, resume and application state | 29 |
 | Sources | Official catalog/region, reader and complete pagination checkpoint | 13 |
 | Runs | Frozen inputs, execution progress, ownership and concise handoff | 20 |
 | Settings | Private references, versions, controls and verification | 6 |
@@ -29,15 +29,15 @@ History keeps Event key, Operation ID, Event type, Recorded at, Occurred at, Act
 
 Parse/enumerate, normalize identities, compare hashes and verify saved values in code outside model context. Save only plausible PM candidates; clear unrelated/junior feed rows contribute aggregate counts, not an unfiltered shadow catalog. Use bounded batches sized to actual tool/field limits. Sources holds catalog progress, Runs holds execution progress, Applications holds current job state, History holds exact decisions/deltas and Drive holds content. Reuse validated unchanged inputs without skipping relevant version/live-control checks. No hidden page caps or unsupported time-based freshness assumptions. Views/archive flags do not reclaim row capacity; History still grows. No automatic retention purge, base splitting or paid upgrade.
 
-## The 28-column application tracker
+## The 29-column application tracker
 
-Applications uses the 28 fields in scripts/stage_state.py:CORE_FIELDS and contracts/core-schema.json. Company, four stage Run links and the reciprocal History link are included in that count. Git owns instructions, Airtable owns operational state and Drive owns content. Read DATA.md before stage work.
+Applications uses the 29 fields in scripts/stage_state.py:CORE_FIELDS and contracts/core-schema.json. Company, four stage Run links and the reciprocal History link are included in that count. Git owns instructions, Airtable owns operational state and Drive owns content. Read DATA.md before stage work.
 
 ## Identity and everyday review
 
 The primary field is Application ID, a formula containing RECORD_ID(). It exposes Airtable's existing stable row identity; do not generate a company/title label or send input into this field. Keep Company and Role as separate facts. Job key identifies the employer posting for deduplication across scans; a new Airtable row ID alone cannot prevent duplicate jobs. Preserve historical unmatched keys as unknown rather than inventing them.
 
-Show Company, Role, Lifecycle status, Manual notes, Agent notes, Posted salary range, Additional compensation, Location, Work arrangement, Job posted date, Career fit, Resume fit, Job description link and Resume link for everyday work. Keep Manual notes beside status. Views are a convenience, not a substitute for the 28-column physical schema.
+Show Company, Role, Lifecycle status, Manual notes, Agent notes, Starting salary, Max salary, Additional compensation, Location, Work arrangement, Job posted date, Career fit, Resume fit, Job description link and Resume link for everyday work. Keep Manual notes beside status. Views are a convenience, not a substitute for the 29-column physical schema.
 
 ## Human and agent notes
 
@@ -47,7 +47,7 @@ Agent notes is the single concise current handoff: decision and its concrete evi
 
 ## Compact job facts
 
-Salary contains only distinct advertised ranges, currency and rate unit where applicable. Missing ranges stay blank. Additional compensation uses Equity, Bonus, Commission, Bonus or commission, Not stated; a mention is not a promised grant. Location contains short places. Work arrangement is Remote/Hybrid/On-site/Unspecified. Use scripts/tracker_values.py; never manufacture envelopes across currencies, levels or locations. Job evidence preserves exact JD, salary conditions and assessment evidence. A remote pay band does not establish remote eligibility.
+Starting salary and Max salary are numeric endpoints from the same verified advertised base-pay band. Store one configured currency and period across the table, registered in Settings.applications_schema.salary_display; derive these units from the user’s compensation preferences and confirm when ambiguous. Never mix currencies or annual/monthly/hourly values, convert currencies implicitly, substitute total compensation or put text/zero in a missing numeric field. Select the highest advertised maximum in that currency and its actual paired minimum; equal maxima retain source order. This display does not establish that every location or level qualifies: Review checks applicable conditions in Job evidence. Leave both blank when no compatible verified band exists. Preserve every original band, currency, period, component, location/level condition and source reference in evidence; never infer a missing endpoint. Additional compensation uses Equity, Bonus, Commission, Bonus or commission, Not stated; a mention is not a promised grant. Location contains short places. Work arrangement is Remote/Hybrid/On-site/Unspecified. Use scripts/tracker_values.py; never manufacture envelopes across currencies, levels or locations. Job evidence preserves exact JD, salary conditions and assessment evidence. A remote pay band does not establish remote eligibility.
 
 There is no Availability or Last seen at column and no requirement to monitor whether inventoried jobs remain open. Scan/Review do not reject an otherwise supported candidate solely because posting access is unavailable. A saved exact official JD can support Review; missing required description evidence still means Needs review. When Scan reobserves a role, record source membership, observation time and content fingerprint in History. A changed fingerprint requires comparison and affected re-review; observation time alone does not establish a change. Apply still verifies that the actual form can accept submission and records an obstacle in Agent notes/History.
 
@@ -65,9 +65,9 @@ Record kind retires after a one-time normalization: unreviewed legacy candidates
 
 Retired columns may remain during cutover, but writers never use or recreate them. Stop affected work if required snapshot migration is missing; do not infer approval from status or silently discard facts. Current evidence/PDF identity, resume verification, unique attempt identity, four stage Run links and the true History relationship remain required. The same state supports one complete agent Run or separate manually initiated harness stages.
 
-## Stage metadata and the 28-field tracker
+## Stage metadata and the 29-field tracker
 
-Applications holds current job facts, status/manual notes, role eligibility, independent fit ratings, human/agent notes, the current PDF reference/hash/verification, attempt identity and four stage Run links. `scripts/stage_state.py` defines its 28-field allowlist and pure metadata readers/guards. It rejects writes to retired fields; do not recreate them to resume an old plan. Resolve live field IDs and aliases first. Every new candidate has a unique canonical Job key and one allowed Company. Preserve unmatched legacy history by native record identity rather than inventing employer IDs.
+Applications holds current job facts, status/manual notes, role eligibility, independent fit ratings, human/agent notes, the current PDF reference/hash/verification, attempt identity and four stage Run links. `scripts/stage_state.py` defines its 29-field allowlist and pure metadata readers/guards. It rejects writes to retired fields; do not recreate them to resume an old plan. Resolve live field IDs and aliases first. Every new candidate has a unique canonical Job key and one allowed Company. Preserve unmatched legacy history by native record identity rather than inventing employer IDs.
 
 Duplicate prevention uses the company-scoped employer role ID or canonical job link, with exact identifiers recovered from source metadata. Distinct regional posting IDs are not automatically compared or merged. Migration rows missing both identities remain a documented one-time gap. Preserve actual application history; title similarity alone never proves a duplicate.
 
@@ -146,3 +146,7 @@ Settings `field_retirement_manifest` registers the verified private before-image
 Existing extra columns may remain until their information is preserved and verified; do not recreate them or treat a recommended retirement list as completed migration. Read frozen older Runs without changing their input pins. Resolve merged progress through run_progress. Aliases map names, not unsupported coercions. Unclear date/time text remains unresolved; computed fields never receive input. New installs use the minimal blueprint. Existing installs save exact field-ID mappings and a per-table migration manifest in Settings/History before any deletion. Include native reciprocal links in column counts; deleting them can remove the real relationship.
 
 The lifecycle has nine states under WORKFLOW.md. Inventoried means awaiting first review; Need review means unresolved or middle-band assessment. Duplicate means Run has verified a redundant row with objective identity evidence and a canonical reference. Preserve original statuses, candidate/application history, source links and manual notes before migration. Existing queued approvals need new scored acceptance before advancing; old ratings cannot be silently reinterpreted. No availability monitoring or extra duplicate/score columns are introduced.
+
+## Salary column migration
+
+Preserve the exact Posted salary range values and all source conditions in a verified private per-record artifact before retirement. Create Starting salary and Max salary as Number fields; parse verified official bands with scripts/tracker_values.py:salary_endpoints. Reread live inputs, write only intended numeric values, audit before/after by native record ID and verify all rows and protected human/application state. Do not rerun Review or change decisions for a display-only migration. Register units, field IDs, evidence, blanks/reasons and retirement readiness in Settings.applications_schema and the migration Run. Retire Posted salary range only after preservation and readback; writers must not depend on it. If deletion is unsupported, give the exact remaining UI action.

@@ -1,4 +1,4 @@
-"""Pure migration helpers for the 28-column tracker; no account access or writes.
+"""Pure migration helpers for the 29-column tracker; no account access or writes.
 
 The harness supplies named live records and resolved complete snapshots, persists
 the proposed state in History, rereads it, and only then consolidates display data.
