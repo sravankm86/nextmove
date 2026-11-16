@@ -152,11 +152,11 @@ def canonical_job_url(value):
     parts = urlsplit(value.strip())
     if parts.scheme not in {'http', 'https'} or not parts.netloc:
         return None
-    tracking = {'gh_src', 'lever-source', 'ashby_source', 'source', 'src', 'ref'}
+    tracking = {'gh_src', 'lever-source', 'ashby_source'}
     query = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True)
              if not k.lower().startswith('utm_') and k.lower() not in tracking]
     return urlunsplit(('https', parts.netloc.lower().removeprefix('www.'),
-                       parts.path.rstrip('/'), urlencode(sorted(query)), ''))
+                       parts.path.rstrip('/'), urlencode(sorted(query)), parts.fragment))
 
 
 def exact_job_match(left, right):

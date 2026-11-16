@@ -85,5 +85,7 @@ class StateTests(unittest.TestCase):
         self.assertFalse(s.exact_job_match(a,{**a,'role_id':'req-b','job_url':'https://jobs.example.test/roles/b'}))
         self.assertFalse(s.exact_job_match(a,{**a,'company_id':'other-employer'}))
         self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/?jobId=1'),s.canonical_job_url('https://jobs.example.test/?jobId=2'))
+        self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/?ref=role-a'),s.canonical_job_url('https://jobs.example.test/?ref=role-b'))
+        self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/#/job/one'),s.canonical_job_url('https://jobs.example.test/#/job/two'))
 
 if __name__=='__main__':unittest.main()

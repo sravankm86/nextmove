@@ -2,6 +2,8 @@
 
 Use WORKFLOW.md and DATA.md. Freeze the requested Inventoried scope from live Airtable. Read the complete exact official job description, current Career Goals and editable master. Reuse an integrity-verified exact saved official description; do not substitute a company summary or title. Missing descriptions remain Inventoried. Preserve human notes and submitted/terminal outcomes. Re-read each affected row before writing.
 
+For a default Review or full Run, also revalidate unsubmitted Queued/Ready roles whose accepted goals, master, job content or decision-policy versions are stale before they advance. An explicit narrower scope, such as Inventoried-only, takes precedence. Do not reopen human-declined, submitted or terminal outcomes merely because inputs changed.
+
 ## Decision order
 
 1. Check exact employer role ID or canonical job link against existing company records and known applications. Use scripts/stage_state.py:exact_job_match. Do not compare every regional variant, infer identity from a title/description similarity, or merge distinct posting IDs. Unmatched migration history is a one-time reconciliation gap; do not invent its identity. An exact prior application blocks another automatic submission.
