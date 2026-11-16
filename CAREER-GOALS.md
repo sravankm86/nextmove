@@ -64,6 +64,10 @@ If multiple verified bands apply to acceptable locations for the same requisitio
 
 An explicit either IC or manager preference allows both. Do not require direct reports on IC roles or infer manager status from Product Manager wording; assess scope and actual responsibilities. If the user restricts role type, verify the actual structure before approval. scripts/role_gate.py provides a conservative normalized base-maximum gate; readers still establish official source, numeric parsing and band applicability.
 
+## General senior PM preferences
+
+Users may accept broad senior PM roles without a named product/team or specialist prior expertise. Capture whether seniority and compensation alone are decisive, whether generic tenure or leadership-tenure minimums may be treated as stretch, and which role-level preferred signals increase appeal. These are preference values, not proof of candidate experience. Review applies the explicit exception in stages/review.md; a specialist role or incomplete posting cannot silently use it. Keep independent location and company restrictions unless the user explicitly changes them. Do not turn this preference into a Scan domain filter.
+
 ## Resume-fit exclusions
 
 Users may list specialist responsibilities, product layers or customer personas they do not want to pursue, separately from broad industry preferences. Interpret their scope from the role's primary duties. A passing keyword is not an exclusion, and a new exclusion is not proof of a missing qualification. Keep personal examples and explicit stretch exceptions in the private source, never hardcoded in public scripts. Review applies these exclusions; Scan does not. Candidate facts still come from the master and confirmed user information.

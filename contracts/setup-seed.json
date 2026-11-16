@@ -99,7 +99,8 @@
           "all_mandatory_minimums": true,
           "preferred_fraction_strictly_above": 0.5,
           "unknown_is_failure": false,
-          "stage": "Review"
+          "stage": "Review",
+          "configured_general_pm_exception": "stages/review.md; opt in from current goals; never infer it"
         },
         "resume_fit_exclusions_source": "career_goals",
         "provisional_queue_deferred_checks": [

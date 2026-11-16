@@ -103,6 +103,11 @@ def review_ready(app, state, runs, current_inputs):
     if 'High' not in [app.get('Career fit'), app.get('Resume fit')]:
         return False
     review = state.get('review', {})
+    if review.get('qualification_method') == 'general_senior_pm':
+        if (not all(review.get(k) is True for k in ['general_role_verified',
+                    'general_preference_applied', 'seniority_pass'])
+                or not review.get('general_preference_evidence')):
+            return False
     if review.get('role_eligible') is not True:
         return False
     if not all(review.get(k) is True for k in ['qualifications_pass', 'resume_exclusions_pass',

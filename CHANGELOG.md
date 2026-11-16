@@ -1,5 +1,11 @@
 # Changelog
 
+## General senior PM preference
+
+- An explicit user preference can accept general senior PM roles on seniority and compensation, including disclosed generic tenure stretch. A missing team or AI assignment is no longer an invented blocker.
+- Role-level preferred AI signals can establish High career fit. Specialist and incomplete postings cannot silently use this exception.
+- Preserve independent restrictions, salary checks, factual resumes and submission controls. No new columns or lifecycle states.
+
 ## Qualifications and resume-fit review
 
 - Review checks all minimum qualifications and a majority of preferred qualifications against actual evidence, applies private resume-fit exclusions and rejects verified failing base-pay ceilings first.

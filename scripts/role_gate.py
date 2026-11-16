@@ -96,6 +96,31 @@ def review_eligibility(assessment, *, years_threshold):
     return 'pending'
 
 
+def general_pm_gate(assessment):
+    """Explicit user preference; reader verifies general scope, never the title alone.
+
+    This accepts a disclosed generic-qualification exception, not fabricated skills.
+    Specialist requirements and incomplete descriptions cannot use this route.
+    """
+    if assessment.get('preference_enabled') is not True:
+        return 'not_applicable'
+    if assessment.get('description_complete') is not True:
+        return 'pending'
+    if (assessment.get('general_role_verified') is not True
+            or assessment.get('no_required_specialist_expertise') is not True):
+        return 'not_applicable'
+    for key in ['seniority_pass', 'remaining_hard_restrictions_pass']:
+        if assessment.get(key) is False:
+            return 'reject'
+        if assessment.get(key) is not True:
+            return 'pending'
+    if assessment.get('base_salary_pass') is False:
+        return 'reject'
+    if assessment.get('base_salary_pass') is True:
+        return 'approve'
+    return 'approve_provisional' if assessment.get('allow_salary_provisional') is True else 'pending'
+
+
 def qualification_gate(minimum, preferred, *, preferred_listed=True):
     """Evaluate evidence-based qualification findings; unknown is not failure.
 

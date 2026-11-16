@@ -13,6 +13,14 @@ class StateTests(unittest.TestCase):
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
         self.assertFalse(s.review_ready(self.app,changed,[self.run],self.inputs))
+    def test_general_pm_exception_needs_its_own_preference_and_scope_evidence(self):
+        state=copy.deepcopy(self.state);r=state['review'];r['qualification_method']='general_senior_pm'
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+        r.update(general_role_verified=True,general_preference_applied=True,seniority_pass=True,
+                 general_preference_evidence={'source_revision':'goals-v1','preference':'General senior PM roles accepted'})
+        self.assertTrue(s.review_ready(self.app,state,[self.run],self.inputs))
+        r['general_role_verified']=False
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
     def test_schema_only_release_preserves_policy_but_changed_inputs_block(self):
         self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs))
         for key in ['goals','master','policy','eligibility_policy','jd_hash']:

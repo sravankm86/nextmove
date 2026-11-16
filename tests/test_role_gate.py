@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from role_gate import admission, base_maximum_gate, inventory_candidate, queue_allowed, title_screen, qualification_gate
+from role_gate import admission, base_maximum_gate, inventory_candidate, queue_allowed, title_screen, qualification_gate, general_pm_gate
 
 
 class AdmissionTests(unittest.TestCase):
@@ -133,6 +133,30 @@ class QualificationTests(unittest.TestCase):
         self.assertEqual(admission(evidence,years_threshold=8),'pass')
         evidence['meaningful_pm_ownership']=False
         self.assertEqual(admission(evidence,years_threshold=8),'pending')
+
+class GeneralPMTests(unittest.TestCase):
+    def evidence(self):
+        return dict(preference_enabled=True, description_complete=True,
+                    general_role_verified=True, no_required_specialist_expertise=True,
+                    seniority_pass=True, remaining_hard_restrictions_pass=True,
+                    base_salary_pass=True, allow_salary_provisional=True)
+    def test_requires_explicit_preference_and_complete_general_posting(self):
+        a=self.evidence();a['preference_enabled']=False
+        self.assertEqual(general_pm_gate(a),'not_applicable')
+        a=self.evidence();a['description_complete']=False
+        self.assertEqual(general_pm_gate(a),'pending')
+        a=self.evidence();a['no_required_specialist_expertise']=False
+        self.assertEqual(general_pm_gate(a),'not_applicable')
+    def test_salary_and_seniority_still_control(self):
+        self.assertEqual(general_pm_gate(self.evidence()),'approve')
+        for key in ['seniority_pass','base_salary_pass','remaining_hard_restrictions_pass']:
+            a=self.evidence();a[key]=False
+            self.assertEqual(general_pm_gate(a),'reject')
+    def test_only_unknown_salary_can_be_provisional(self):
+        a=self.evidence();a['base_salary_pass']=None
+        self.assertEqual(general_pm_gate(a),'approve_provisional')
+        a['seniority_pass']=None
+        self.assertEqual(general_pm_gate(a),'pending')
 
 if __name__ == '__main__':
     unittest.main()

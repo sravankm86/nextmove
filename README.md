@@ -88,6 +88,8 @@ Expect thorough configured source coverage, recall-oriented candidate capture, e
 
 Review checks the actual qualifications and private resume-fit exclusions, rejects verified failing base-pay ceilings early, and records concise decision reasons. Only base-pay verification may be deferred for provisional preparation; submission requires it resolved. Duplicate prevention uses exact employer role IDs or job links, rather than comparing every regional variant.
 
+Users may explicitly prefer general senior PM roles based on seniority and salary, with matching signals such as AI in preferred qualifications increasing career fit. Review records this exception without requiring an undisclosed team assignment or claiming unproven experience. Specialist postings keep the full qualification checks.
+
 Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
 
 ## Contributing and license

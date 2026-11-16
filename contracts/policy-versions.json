@@ -1,9 +1,10 @@
 {
   "schema_version": 8,
   "scan": "de42e872-basic-PM-v3",
-  "review": "qualifications-exclusions-salary-v4",
+  "review": "general-senior-pm-v5",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
+    "An explicit general senior PM preference may replace generic qualification and domain gates with seniority and compensation; specialist requirements, other hard restrictions and truthful resumes remain protected.",
     "Review now checks qualifications and private resume exclusions; eligibility allows evidenced pay plus meaningful PM ownership. Scan relevance remains unchanged.",
     "A behavior change must explicitly version its affected decision policy.",
     "Record the repository revision for audit; a formatting or schema-only commit does not by itself invalidate an unchanged decision policy.",
