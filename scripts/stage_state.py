@@ -105,68 +105,35 @@ def review_ready(app, state, runs, current_inputs):
     review = state.get('review', {})
     from role_gate import review_frame_contract, scored_review
     frame_policy, contract = review_frame_contract()
-    if current_inputs.get('policy') == frame_policy:
-        if review.get('assessment_method') != contract['assessment_method']:
-            return False
-        saved = review.get('scoring', {})
-        try:
-            expected = scored_review(app.get('Career fit'), app.get('Resume fit'),
-                                     objective_failure=review.get('objective_failure') is True,
-                                     minimum_failure=review.get('minimum_failure') is True)
-        except (ValueError, KeyError, TypeError):
-            return False
-        if saved != expected or expected['outcome'] != 'Queued' or review.get('decision') != 'approve':
-            return False
-        if not review.get('evidence') or not review.get('assessment_complete'):
-            return False
-        check = state.get('run_checks', {}).get('duplicate', {})
-        rid = state.get('stage_runs', {}).get('review')
-        if (check.get('status') not in {'unique', 'canonical'} or not check.get('evidence')
-                or check.get('checked_in_run') != rid or app.get('Review run') != [rid]):
-            return False
-        versions = stage_versions(state, 'review', runs)
-        return bool(all(versions.get(k) and versions[k] == current_inputs.get(k)
-                        for k in ['goals', 'master', 'policy', 'eligibility_policy'])
-                    and review.get('jd_hash') == current_inputs.get('jd_hash')
-                    and review.get('jd_hash') and review.get('current_description'))
-    if review.get('qualification_method') == 'general_senior_pm':
-        if (not all(review.get(k) is True for k in ['general_role_verified',
-                    'general_preference_applied', 'seniority_pass'])
-                or not review.get('general_preference_evidence')):
-            return False
-    if review.get('role_eligible') is not True:
+    if current_inputs.get('policy') != frame_policy:
         return False
-    if not all(review.get(k) is True for k in ['qualifications_pass', 'resume_exclusions_pass',
-                                               'essential_fit_pass', 'non_compensation_requirements_pass',
-                                               'critical_minimums_pass', 'overall_alignment_pass']):
+    if review.get('assessment_method') != contract['assessment_method']:
         return False
-    decision, deferred = review.get('decision'), review.get('deferred_checks', [])
-    if decision == 'approve':
-        if (review.get('career_requirements_pass') is not True
-                or review.get('base_salary_pass') is not True or deferred):
-            return False
-    elif decision == 'approve_provisional':
-        if (deferred != ['base_salary'] or review.get('career_requirements_pass') is not None
-                or review.get('base_salary_pass') is not None):
-            return False
-    else:
+    saved = review.get('scoring', {})
+    try:
+        expected = scored_review(app.get('Career fit'), app.get('Resume fit'),
+                                 objective_failure=review.get('objective_failure') is True,
+                                 minimum_failure=review.get('minimum_failure') is True)
+    except (ValueError, KeyError, TypeError):
         return False
+    if saved != expected or expected['outcome'] != 'Queued' or review.get('decision') != 'approve':
+        return False
+    if not review.get('evidence') or not review.get('assessment_complete'):
+        return False
+    check = state.get('run_checks', {}).get('duplicate', {})
     rid = state.get('stage_runs', {}).get('review')
-    if not rid or app.get('Review run') != [rid]:
+    if (check.get('status') not in {'unique', 'canonical'} or not check.get('evidence')
+            or check.get('checked_in_run') != rid or app.get('Review run') != [rid]):
         return False
     versions = stage_versions(state, 'review', runs)
-    # Deployment/schema-only commits do not change a decision policy. Record the
-    # instruction revision for audit; compare the versioned decision rules.
-    if not all(versions.get(k) and versions.get(k) == current_inputs.get(k) for k in ['goals', 'master', 'policy', 'eligibility_policy']):
-        return False
-    return bool(review.get('jd_hash') and review['jd_hash'] == current_inputs.get('jd_hash') and review.get('current_description'))
+    return bool(all(versions.get(k) and versions[k] == current_inputs.get(k)
+                    for k in ['goals', 'master', 'policy', 'eligibility_policy'])
+                and review.get('jd_hash') == current_inputs.get('jd_hash')
+                and review.get('jd_hash') and review.get('current_description'))
 
 
 def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None):
-    """Provisional salary approval can prepare a PDF but cannot submit it.
-
-    Submission authorization, company controls and form checks remain separate.
-    """
+    """Submission authorization, company controls and form checks stay separate."""
     review = (state or {}).get('review', {})
     return bool(app.get('Lifecycle status') == 'Ready'
                 and review.get('decision') == 'approve'

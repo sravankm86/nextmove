@@ -28,8 +28,21 @@ Compare every distinct minimum and preferred qualification with the current edit
 | Medium | All minimums met; at least one preferred qualification is not met. | 2 |
 | High | All minimum and preferred qualifications met. | 3 |
 
-With no preferred qualifications listed, that part is satisfied once all minimums pass. If missing evidence prevents a justified rating, leave it Unresolved and use Need review.
+With no preferred qualifications listed, that part is satisfied once all minimums pass. Leave an unsupported rating Unresolved; do not invent experience or assign a low score just to complete the arithmetic.
 
-Add the two scores: 5 or 6 → Queued; 4 → Need review; below 4 → Not pursuing. The current numeric mapping is recorded in contracts/policy-versions.json. No hidden domain gate, preferred-majority rule or salary-only provisional queue applies. A missing score means Need review. This does not authorize submission or false resume claims.
+Apply these decisions in order. For a missing score, consider every score allowed by its rating table. Stop when all possible totals mean Not pursuing; do not spend time resolving qualifications that cannot change that outcome. An unresolved career assessment always stays Need review, even if resume fit is low.
 
-Always explain both ratings, their evidence and the resulting status in Agent notes. Example: `Career High (3): stated goals met. Resume Low (1): required background missing. Total 4 → Need review.` State the exact question when blocked. Keep full evidence and fixed input/JD versions in History/Drive under DATA.md, verify writes and stop after Review.
+| Check, in this order | Decision |
+|---|---|
+| Career fit is Unresolved | Need review |
+| Every possible total is Not pursuing | Not pursuing |
+| Any score is Unresolved | Need review |
+| Total 5–6 | Queued |
+| Total 4 | Need review |
+| Total 0–3 | Not pursuing |
+
+Keep an unassessed or unresolved resume rating as Unresolved after an early stop. Explain the confirmed career failure and why even the highest resume score cannot change the decision. This does not authorize submission or false resume claims.
+
+Always explain both available ratings, their evidence and the resulting status in Agent notes. State the exact question when blocked. Keep full evidence and fixed input/JD identities in History/Drive under DATA.md, verify writes and stop after Review.
+
+This file is the only source for Review scores and routing. `scripts/role_gate.py` reads these tables. Its automatic instruction fingerprint identifies the exact file used; users do not maintain a second scoring configuration or a manual Review version. Unknown or malformed rules must stop affected work, not fall back to older defaults.

@@ -1,34 +1,17 @@
 {
   "schema_version": 10,
   "scan": "de42e872-basic-PM-v3",
-  "review": "three-step-scored-review-v10",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
     "Career Goals supplies personal criteria and exceptions; the master supplies candidate facts. Public Review defines only extraction, ratings and score routing.",
     "Run owns objective duplicate discovery; IDs or verified posting-specific links confirm identity, names/dates corroborate. Preserve actual application history.",
-    "Use the explicit current score mapping and total thresholds; do not add hidden OR-fit, majority, salary-only or hard-failure gates. Unknown evidence is not a confirmed failure.",
+    "Review scores and routing live only in stages/review.md. Use its ordered decisions, preserve unknown evidence, and pin its automatic content fingerprint.",
     "Freeze source/policy/JD/PDF identities; revalidate affected decisions when they change. Historical approvals do not manufacture current scored acceptance.",
     "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores."
   ],
   "posting_availability": "apply-form-only-v1",
   "lifecycle": "nine-states-review-duplicate-v2",
   "identity": "run-objective-identity-v2",
-  "review_scoring": {
-    "assessment_method": "three_step_v1",
-    "career": {
-      "Low": 1,
-      "Medium": 2,
-      "High": 3
-    },
-    "resume": {
-      "Low": 1,
-      "Medium": 2,
-      "High": 3
-    },
-    "queue_minimum": 6,
-    "need_review_minimum": 4,
-    "confirmed_failure_override": false,
-    "unknown_outcome": "Need review",
-    "no_preferred_listed": "Satisfied once minimums pass"
-  }
+  "review_source": "stages/review.md",
+  "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py"
 }

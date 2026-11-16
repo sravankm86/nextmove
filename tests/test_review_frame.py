@@ -2,6 +2,8 @@ import copy
 import re
 import sys
 import unittest
+import tempfile
+import hashlib
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
@@ -39,21 +41,38 @@ class ReviewFrameTests(unittest.TestCase):
 
     def test_all_nine_current_score_combinations_and_unknown(self):
         _,contract=review_frame_contract()
-        self.assertEqual(contract['career'],{'Low':1,'Medium':2,'High':3})
+        self.assertEqual(contract['career'],{'Low':0,'Medium':2,'High':3})
         self.assertEqual(contract['resume'],{'Low':1,'Medium':2,'High':3})
-        expected=[['Not pursuing','Not pursuing','Need review'],['Not pursuing','Need review','Need review'],['Need review','Need review','Queued']]
+        expected=[['Not pursuing','Not pursuing','Not pursuing'],['Not pursuing','Need review','Queued'],['Need review','Queued','Queued']]
         for ci,c in enumerate(['Low','Medium','High']):
             for ri,r in enumerate(['Low','Medium','High']):
                 self.assertEqual(scored_review(c,r,contract=contract)['outcome'],expected[ci][ri])
         self.assertEqual(scored_review('High','Unresolved',contract=contract)['outcome'],'Need review')
         self.assertEqual(scored_review('High','Low',minimum_failure=True,contract=contract)['outcome'],'Need review')
 
-    def test_failure_override_requires_an_explicit_contract_change(self):
-        _,contract=review_frame_contract();contract=copy.deepcopy(contract);contract['resume']={'Low':1,'Medium':2,'High':3}
-        self.assertEqual(scored_review('High','High',contract=contract)['outcome'],'Queued')
-        self.assertEqual(scored_review('High','Medium',contract=contract)['outcome'],'Need review')
-        contract['confirmed_failure_override']=True
-        self.assertEqual(scored_review('High','Low',minimum_failure=True,contract=contract)['outcome'],'Not pursuing')
+    def test_impossible_resume_bounds_stop_but_unknown_career_always_waits(self):
+        for resume in ['Low','Medium','High','Unresolved']:
+            self.assertEqual(scored_review('Low',resume)['outcome'],'Not pursuing')
+            self.assertEqual(scored_review('Unresolved',resume)['outcome'],'Need review')
+        result=scored_review('Low','Unresolved')
+        self.assertIsNone(result['resume_score'])
+        self.assertIsNone(result['total'])
+        self.assertEqual(scored_review('Medium','Unresolved')['outcome'],'Need review')
+        self.assertEqual(scored_review('High','Unresolved')['outcome'],'Need review')
+
+    def test_review_file_alone_changes_scores_and_automatic_identity(self):
+        source=Path(__file__).resolve().parents[1]/'stages/review.md'
+        original,contract=review_frame_contract()
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'review.md'
+            text=source.read_text().replace('Total 5–6','Total 4–6').replace('Total 4 |','Total 3 |').replace('Total 0–3','Total 0–2')
+            path.write_text(text)
+            identity,changed=review_frame_contract(path)
+            self.assertNotEqual(identity,original)
+            self.assertEqual(identity,'review-sha256:'+hashlib.sha256(path.read_bytes()).hexdigest())
+            self.assertEqual(scored_review('High','Low',contract=changed)['outcome'],'Queued')
+            path.write_text(text.replace('Total 4–6','Total 5–6'))
+            with self.assertRaises(ValueError):review_frame_contract(path)
 
     def test_invalid_or_unsupported_claims_do_not_become_scores(self):
         with self.assertRaises(ValueError):career_rating([{'status':'met'}])

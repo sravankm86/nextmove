@@ -2,37 +2,39 @@ import copy,hashlib,json,sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import stage_state as s
+from role_gate import review_frame_contract,scored_review
 
 class StateTests(unittest.TestCase):
     def setUp(self):
-        self.inputs={'goals':'goals-v1','master':'master-v1','policy':'review-v3','eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
+        self.inputs={'goals':'goals-v1','master':'master-v1','policy':review_frame_contract()[0],'eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.app={'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
         self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'base_salary_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True,'critical_minimums_pass':True,'overall_alignment_pass':True}}
+        self.state['review'].update(assessment_method='three_step_v1',scoring=scored_review('High','Medium'),evidence='Verified indexed qualification evidence',assessment_complete=True)
+        self.state['run_checks']={'duplicate':{'status':'unique','checked_in_run':'run-example','evidence':'Verified official role ID'}}
+
     def test_manual_queue_cannot_create_acceptance(self):
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
         self.assertFalse(s.review_ready(self.app,changed,[self.run],self.inputs))
-    def test_general_pm_exception_needs_its_own_preference_and_scope_evidence(self):
-        state=copy.deepcopy(self.state);r=state['review'];r['qualification_method']='general_senior_pm'
+    def test_legacy_preference_flags_cannot_replace_current_scored_acceptance(self):
+        self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs))
+        state=copy.deepcopy(self.state);state['review'].pop('scoring')
+        state['review'].update(general_role_verified=True,general_preference_applied=True,seniority_pass=True)
         self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
-        r.update(general_role_verified=True,general_preference_applied=True,seniority_pass=True,
-                 general_preference_evidence={'source_revision':'goals-v1','preference':'General senior PM roles accepted'})
-        self.assertTrue(s.review_ready(self.app,state,[self.run],self.inputs))
-        r['general_role_verified']=False
-        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+
     def test_schema_only_release_preserves_policy_but_changed_inputs_block(self):
         self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs))
         for key in ['goals','master','policy','eligibility_policy','jd_hash']:
             self.assertFalse(s.review_ready(self.app,self.state,[self.run],{**self.inputs,key:'changed'}))
-    def test_queue_needs_explicit_hard_requirement_checks_without_gate_column(self):
-        for key in ['role_eligible','career_requirements_pass']:
-            for value in [None,False,'Pass']:
-                state=copy.deepcopy(self.state);state['review'][key]=value
-                self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+    def test_queue_needs_current_scores_and_evidence_without_extra_gate_columns(self):
+        for key in ['evidence','assessment_complete','assessment_method','scoring']:
+            state=copy.deepcopy(self.state);state['review'].pop(key)
+            self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
         for field in s.RETIRED_FIELDS:
             with self.assertRaises(ValueError):s.application_write({field:'old value'})
         with self.assertRaises(ValueError):s.application_write({'Application ID':'invented'})
+
     def test_later_complete_snapshot_supersedes_old_approval(self):
         history=[{'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(s.payload([self.state]))}]
         later=copy.deepcopy(self.state);later['review']['decision']='Not aligned'
@@ -60,25 +62,22 @@ class StateTests(unittest.TestCase):
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'})
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set())
 
-    def test_provisional_salary_can_prepare_but_cannot_apply(self):
-        state=copy.deepcopy(self.state)
-        state['review'].update(decision='approve_provisional',career_requirements_pass=None,
-                               base_salary_pass=None,deferred_checks=['base_salary'])
-        self.assertTrue(s.review_ready(self.app,state,[self.run],self.inputs))
+    def test_provisional_or_unresolved_review_cannot_prepare_or_apply(self):
+        state=copy.deepcopy(self.state);state['review']['decision']='approve_provisional'
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
         self.assertFalse(s.apply_ready(self.app,state,[self.run],self.inputs))
-        state['review']['deferred_checks'].append('language')
-        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
-        state['review'].update(deferred_checks=['base_salary'],base_salary_pass=False)
+        state['review']['decision']='approve';state['review']['scoring']=scored_review('Unresolved','High')
         self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
 
-    def test_qualification_or_exclusion_failure_cannot_be_queued_by_high_career_fit(self):
-        for key in ['qualifications_pass','resume_exclusions_pass','essential_fit_pass','non_compensation_requirements_pass','critical_minimums_pass','overall_alignment_pass']:
-            state=copy.deepcopy(self.state);state['review'][key]=None
-            self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+    def test_changed_ratings_cannot_reuse_a_prior_queue_score(self):
+        for field in ['Career fit','Resume fit']:
+            app={**self.app,field:'Low'}
+            self.assertFalse(s.review_ready(app,self.state,[self.run],self.inputs))
 
-    def test_known_failing_salary_cannot_hide_behind_a_career_pass(self):
-        state=copy.deepcopy(self.state);state['review']['base_salary_pass']=False
-        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+    def test_old_policy_label_cannot_bypass_current_scoring(self):
+        inputs={**self.inputs,'policy':'review-v3'}
+        run=copy.deepcopy(self.run);run['Input versions (JSON)']=json.dumps({'stage_inputs':{'review':inputs}})
+        self.assertFalse(s.review_ready(self.app,self.state,[run],inputs))
 
     def test_apply_requires_ready_even_when_a_verified_pdf_is_retained(self):
         data=b'verified-pdf';digest=hashlib.sha256(data).hexdigest()

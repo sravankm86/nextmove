@@ -118,8 +118,9 @@
         "resume_fit_exclusions_source": "career_goals",
         "duplicate_identity": "company-scoped exact employer role ID or canonical job link",
         "review_assessment": "three_step_v1",
-        "review_scoring_contract": "contracts/policy-versions.json",
-        "duplicate_discovery_owner": "Run"
+        "review_scoring_contract": "stages/review.md",
+        "duplicate_discovery_owner": "Run",
+        "review_policy_identity": "automatic Review file SHA-256"
       },
       "verification": "Needs verification"
     },

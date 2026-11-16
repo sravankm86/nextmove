@@ -47,6 +47,9 @@ The private main Drive folder has two working children: **Role specific** for cu
 
 The 96-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
+Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
+
+
 ## Where to find each rule
 
 There are 11 operational instruction files. Each concern has one owner; maintenance and public-project policies are separate.

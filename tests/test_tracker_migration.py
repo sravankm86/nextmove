@@ -26,11 +26,11 @@ class MigrationTests(unittest.TestCase):
             'goals': 'goals-example', 'master': 'master-example', 'policy': 'review-example',
             'eligibility_policy': 'scope-example'}}}}
 
-    def test_preserves_acceptance_notes_provenance_and_retry_guard(self):
+    def test_preserves_old_evidence_without_certifying_current_acceptance(self):
         original = copy.deepcopy(self.app)
         state, notes, status = migrate(self.app, self.state, [self.run])
         self.assertEqual(self.app, original)
-        self.assertEqual(status, 'Queued')
+        self.assertEqual(status, 'Need review')  # Preserve old evidence; current rules require revalidation.
         self.assertEqual(notes, 'Strong fit\nNext: Confirm salary')
         self.assertEqual(state['source']['memberships'], ['source-example'])
         self.assertEqual(state['review']['reason_category'], 'missing_evidence')
@@ -38,7 +38,7 @@ class MigrationTests(unittest.TestCase):
         self.assertTrue(s.attempt_blocks_retry(self.app, state))
         stripped = {k: v for k, v in self.app.items() if k not in s.RETIRED_FIELDS}
         current = {**s.stage_versions(state, 'review', [self.run]), 'jd_hash': 'jd-example'}
-        self.assertTrue(s.review_ready(stripped, state, [self.run], current))
+        self.assertFalse(s.review_ready(stripped, state, [self.run], current))
 
     def test_unknown_or_failed_career_check_never_inherits_approval_from_status(self):
         for value in [None, 'Pending', 'Fail']:
