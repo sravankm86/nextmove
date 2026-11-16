@@ -8,7 +8,7 @@ class StateTests(unittest.TestCase):
         self.inputs={'goals':'goals-v1','master':'master-v1','policy':'review-v3','eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.app={'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
-        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True}}
+        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True}}
     def test_manual_queue_cannot_create_acceptance(self):
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
@@ -51,5 +51,28 @@ class StateTests(unittest.TestCase):
         self.assertEqual(s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies={'company-example'}),candidate)
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'})
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set())
+
+    def test_provisional_salary_can_prepare_but_cannot_apply(self):
+        state=copy.deepcopy(self.state)
+        state['review'].update(decision='approve_provisional',career_requirements_pass=None,
+                               base_salary_pass=None,deferred_checks=['base_salary'])
+        self.assertTrue(s.review_ready(self.app,state,[self.run],self.inputs))
+        self.assertFalse(s.apply_ready(self.app,state,[self.run],self.inputs))
+        state['review']['deferred_checks'].append('language')
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+        state['review'].update(deferred_checks=['base_salary'],base_salary_pass=False)
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+
+    def test_qualification_or_exclusion_failure_cannot_be_queued_by_high_career_fit(self):
+        for key in ['qualifications_pass','resume_exclusions_pass','essential_fit_pass','non_compensation_requirements_pass']:
+            state=copy.deepcopy(self.state);state['review'][key]=None
+            self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+
+    def test_exact_identity_does_not_merge_regional_or_same_title_roles(self):
+        a={'company_id':'employer-example','role_id':'req-a','job_url':'https://jobs.example.test/roles/a?utm_source=mail'}
+        self.assertTrue(s.exact_job_match(a,{**a,'job_url':'https://jobs.example.test/roles/a'}))
+        self.assertFalse(s.exact_job_match(a,{**a,'role_id':'req-b','job_url':'https://jobs.example.test/roles/b'}))
+        self.assertFalse(s.exact_job_match(a,{**a,'company_id':'other-employer'}))
+        self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/?jobId=1'),s.canonical_job_url('https://jobs.example.test/?jobId=2'))
 
 if __name__=='__main__':unittest.main()

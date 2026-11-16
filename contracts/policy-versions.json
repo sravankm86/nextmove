@@ -1,16 +1,18 @@
 {
   "schema_version": 8,
   "scan": "de42e872-basic-PM-v3",
-  "review": "de42e872-review-v3",
-  "eligibility": "de42e872-role-policy-v3",
+  "review": "qualifications-exclusions-salary-v4",
+  "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
-    "Role relevance and career-fit decision-policy versions are unchanged; posting availability has its own versioned apply-only policy.",
+    "Review now checks qualifications and private resume exclusions; eligibility allows evidenced pay plus meaningful PM ownership. Scan relevance remains unchanged.",
     "A behavior change must explicitly version its affected decision policy.",
     "Record the repository revision for audit; a formatting or schema-only commit does not by itself invalidate an unchanged decision policy.",
     "Current goals, master, exact job content and accepted PDF versions must still match at stage boundaries.",
     "Posting availability is no longer a Scan/Review exclusion or maintained Application field. Apply still checks that the actual form can accept a submission; previous availability-only holds require targeted Review, never automatic approval.",
-    "Lifecycle routing ends at Interviewing. Confirmation is evidence under Applied; reasons and outstanding attempts never substitute for review/PDF/submission safeguards. Lifecycle/schema changes do not alter role or hard-career criteria."
+    "Lifecycle routing ends at Interviewing. Confirmation is evidence under Applied; reasons and outstanding attempts never substitute for review/PDF/submission safeguards. Lifecycle/schema changes do not alter role or hard-career criteria.",
+    "A verified failing applicable base ceiling is an immediate Review decline. Salary-only provisional approval permits preparation, never submission."
   ],
   "posting_availability": "apply-form-only-v1",
-  "lifecycle": "seven-states-interview-end-v1"
+  "lifecycle": "seven-states-interview-end-v1",
+  "identity": "exact-role-id-or-link-v1"
 }

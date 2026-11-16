@@ -1,5 +1,12 @@
 # Changelog
 
+## Qualifications and resume-fit review
+
+- Review checks all minimum qualifications and a majority of preferred qualifications against actual evidence, applies private resume-fit exclusions and rejects verified failing base-pay ceilings first.
+- Salary-only provisional queueing supports preparation; submission requires the pay check resolved.
+- Senior scope can use applicable pay plus meaningful PM ownership. Duplicate prevention uses exact role IDs or job links, with no regional similarity matching.
+- Agent notes explains concrete decision reasons and specific clarification needs; no database columns or lifecycle states added.
+
 ## Consolidated instructions and interview endpoint
 
 - Eleven operational instruction files with a README map and one owner for each rule; redundant documents and deprecated markers removed.

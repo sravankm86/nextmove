@@ -16,7 +16,9 @@ class MigrationTests(unittest.TestCase):
                     'Assessment summary': 'Strong fit', 'Blocker': 'Confirm salary',
                     'Decision category': 'missing_evidence', 'Sources': ['source-example']}
         self.state = {'record_id': 'role-example', 'stage_runs': {'review': 'run-example'},
-                      'review': {'decision': 'approve', 'jd_hash': 'jd-example', 'current_description': True},
+                      'review': {'decision': 'approve', 'jd_hash': 'jd-example', 'current_description': True,
+                                 'qualifications_pass': True, 'resume_exclusions_pass': True,
+                                 'essential_fit_pass': True, 'non_compensation_requirements_pass': True},
                       'submission': {'attempt_key': 'attempt-example'}}
         self.run = {'id': 'run-example', 'Input versions (JSON)': {'stage_inputs': {'review': {
             'goals': 'goals-example', 'master': 'master-example', 'policy': 'review-example',

@@ -14,6 +14,7 @@ Copy templates/career-goals.md into the registered private Google Doc, or keep o
 | Compensation | Minimum versus target, base versus total, currency, period, equity and flexibility |
 | Domain | Technologies, industries, verticals, customers and product types |
 | Responsibilities | Desired work, ownership, leadership, impact and unwanted duties |
+| Resume-fit exclusions | Specialist responsibilities, product areas or customer personas to avoid, with any explicit stretch exceptions |
 | Location | Required versus preferred places, work arrangement, relocation and travel |
 | Company | Stage, size, culture and other desired characteristics |
 | Priorities | Non-negotiables, ranked preferences, flexibility and undecided items |
@@ -55,13 +56,17 @@ User values stay in the private goals document; never hardcode a user's amount, 
 
 For an explicit requirement that the advertised base maximum be above a threshold, Review compares the verified annual base range upper endpoint strictly greater than that value, in the stated currency/period and applicable location/level. Equality does not pass an above requirement. The lower endpoint need not exceed the threshold. Passing says the advertised band can reach the desired level, not that an offer is guaranteed. Bonus, equity, OTE and total compensation do not substitute for base.
 
-Scan captures exact advertised salary text, currency, period, component and location/level associations, but does not reject plausible PM candidates for compensation. Review applies the salary requirement before Queued. Record salary reasoning separately from role/seniority evidence and use career_compensation for a verified mismatch.
+Scan captures exact advertised salary text, currency, period, component and location/level associations, but does not reject plausible PM candidates for compensation. Review rejects a verified failing band immediately. It may provisionally queue a strong-fit role when only applicable base-pay verification is missing; Apply requires that verification to pass. Record salary reasoning separately from role/seniority evidence and use career_compensation for a verified mismatch.
 
-Absent or incomplete upper bounds, estimated salary, unclear component, mismatched currency/period or unclear location/level applicability remain Inventoried with a specific review blocker when the compensation gate is required. A starting salary is not an upper bound. Inspect the official description/compensation disclosure for gaps; do not borrow a higher band from a different role/location or silently assume an exchange rate. For foreign-currency roles, use an explicitly configured, source-dated conversion policy if one exists; otherwise keep the comparison unresolved. Do not silently exclude all international roles.
+Absent or incomplete upper bounds, estimated salary, unclear component, mismatched currency/period or unclear location/level applicability are unresolved, never automatic failures. If every other queue requirement passes, stages/review.md allows explicit salary-only provisional Queued; otherwise keep Inventoried with a specific blocker. Known failing base pay cannot use this exception. A starting salary is not an upper bound. Inspect the official description/compensation disclosure for gaps; do not borrow a higher band from a different role/location or silently assume an exchange rate. For foreign-currency roles, use an explicitly configured, source-dated conversion policy if one exists; otherwise keep the comparison unresolved. Do not silently exclude all international roles.
 
 If multiple verified bands apply to acceptable locations for the same requisition, preserve each and identify the qualifying location/level; do not imply every location qualifies. A fixed amount counts as both endpoints only when explicitly the complete applicable base offer. A soft target may inform ranking without becoming a hard gate. Unspecified individual offer minimum/total target remains unspecified even when the user states an advertised-band requirement.
 
 An explicit either IC or manager preference allows both. Do not require direct reports on IC roles or infer manager status from Product Manager wording; assess scope and actual responsibilities. If the user restricts role type, verify the actual structure before approval. scripts/role_gate.py provides a conservative normalized base-maximum gate; readers still establish official source, numeric parsing and band applicability.
+
+## Resume-fit exclusions
+
+Users may list specialist responsibilities, product layers or customer personas they do not want to pursue, separately from broad industry preferences. Interpret their scope from the role's primary duties. A passing keyword is not an exclusion, and a new exclusion is not proof of a missing qualification. Keep personal examples and explicit stretch exceptions in the private source, never hardcoded in public scripts. Review applies these exclusions; Scan does not. Candidate facts still come from the master and confirmed user information.
 
 ## Authority and storage
 

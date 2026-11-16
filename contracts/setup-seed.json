@@ -94,7 +94,18 @@
           "versioned_changes": true,
           "protect_eligible_recall": true,
           "career_rejections_are_scan_negatives": false
-        }
+        },
+        "qualification_gate": {
+          "all_mandatory_minimums": true,
+          "preferred_fraction_strictly_above": 0.5,
+          "unknown_is_failure": false,
+          "stage": "Review"
+        },
+        "resume_fit_exclusions_source": "career_goals",
+        "provisional_queue_deferred_checks": [
+          "base_salary"
+        ],
+        "duplicate_identity": "company-scoped exact employer role ID or canonical job link"
       },
       "verification": "Needs verification"
     },

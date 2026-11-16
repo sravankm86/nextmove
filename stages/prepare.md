@@ -1,6 +1,6 @@
 # Prepare
 
-Use WORKFLOW.md. Process review-approved Queued roles with current accepted full-JD eligibility, career and fit evidence. Inventoried is not preparation-ready; legacy Shortlisted requires evidence-based revalidation. The designated editable master is the sole factual source; never modify it, invent claims or copy requirements as experience.
+Use WORKFLOW.md. Process review-approved Queued roles with current accepted full-JD eligibility, qualifications, resume exclusions, career and fit evidence. Explicit salary-only provisional approval may prepare; unresolved qualifications, stage, location or essential fit may not. Inventoried is not preparation-ready; legacy Shortlisted requires evidence-based revalidation. The designated editable master is the sole factual source; never modify it, invent claims or copy requirements as experience.
 
 Reuse a suitable approved base PDF or tailor by selecting/reordering/shortening grounded evidence. Preserve meaning, qualifications, dates, metrics and uncertainty. Record current master/JD versions, claim grounding and exact change notes, including base reuse with no tailoring.
 

@@ -2,11 +2,15 @@
 
 Default is preflight. A full Run, a Ready resume or a bare Apply command does not authorize unlimited submissions.
 
+Require scripts/stage_state.py:apply_ready and all live authorization/form/restriction controls. Resolve any provisional base-pay check through current verified Review before submitting. A prepared resume never waives salary or qualifications.
+
 Read live pause/stop, explicit scoped authorization, answers, exact role history, whether the actual application form is accessible and accepting submissions, review/master/resume versions and every applicable company quota/cooldown. Reconcile uncertainty. Generic rejection does not establish company-wide restriction; unknown rule/scope/boundary or answers block affected submissions. See stages/apply.md.
 
 Only supported authorized browser actions may submit. Follow RESUME-FILES.md to verify the exact PDF file/version. Before Submit, persist/read back Submission attempt key and Submission run on Applications and a durable History intent/checkpoint with exact role, PDF file identity/version and approved answers under DATA.md. Reconcile an existing attempt before retry even if the UI status says Ready. Capture actual success/receipt, date and evidence. Definite submission → Applied. Exact-role receipt adds Confirmation reference/History while staying Applied. Unresolved possible submission stays at the last verified pre-submit stage with prominent Agent notes and a blocking saved attempt; never invent Applied or Ready. Never retry blind or infer non-submission from absent mail.
 
 Keep meaningful attempt/receipt events in History and current state on Applications. Runs records stage progress and blockers. No general Task Attempts table is needed.
+
+Check exact company-scoped employer role IDs or canonical job links against all recorded applications, including rejected history and unresolved attempts. Do not compare every regional variant or infer duplicates by title/description. Missing migration identity needs reconciliation only for affected records.
 
 Use one submission writer and respect human edits. Do not send recruiting mail. Single-stage invocation stops at its handoff; a full Run can continue Track or other unaffected authorized work while reporting blocked submissions.
 

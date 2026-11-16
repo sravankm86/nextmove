@@ -25,7 +25,7 @@ One active writer. Never seize an owner solely on timeout. Missing global access
 
 Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified time-based freshness assumption, hidden page/item/time cap or false completion after one batch.
 
-Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility and career/resume fit before Queued. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
+Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review alone verifies final eligibility, qualifications, private resume-fit exclusions and career/resume fit before Queued. Apply requires resolved role-specific base pay; an explicit salary-only provisional queue can proceed to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
 
 Preserve human outcomes/notes. Read Manual notes and current status under DATA.md before processing and writing a job; record newly observed feedback in the stage snapshot/History without rewriting the notes. Legacy Queued rows require explicit current review evidence, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
 
@@ -62,7 +62,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | State | Meaning and next action |
 |---|---|
 | Inventoried | Scan admitted a plausible PM role. Review is pending, incomplete or waiting for evidence. |
-| Queued | Review explicitly approved current full-JD role eligibility, hard career requirements and at least one High fit axis. Prepare is next. |
+| Queued | Review explicitly approved current qualifications, exclusions, eligibility and fit. Only base-pay verification may be explicitly deferred; Prepare is next and Apply remains blocked until resolved. |
 | Ready | The grounded resume/PDF is verified. Apply may perform preflight; submission needs separate authorization. |
 | Applied | The human reported or the agent established submission. Confirmation is additional evidence, not a new state. |
 | Interviewing | Active recruiter engagement, screening, assessment, interview or scheduling. This is the endpoint of Nextmove's recruiting lifecycle. |
@@ -77,7 +77,7 @@ Missing information stays at the last justified stage with a specific next actio
 
 An uncertain Submit stays at its last verified pre-submission stage, normally Ready, with a prominent uncertainty note and saved attempt identity/outcome. Never label an unverified resume Ready or claim Applied without evidence. The outstanding attempt blocks another Submit regardless of manual status resets; reconcile it first. Hold other work that could obscure the outstanding attempt and its exact submitted PDF.
 
-Keep confirmations in Confirmation reference and History, eligibility in Role eligibility, independent fit ratings in Career fit/Resume fit, and reasons in review metadata/Agent notes. High resume fit cannot override a hard career contradiction. Review-owned career rejections are not automatic scan exclusions.
+Keep confirmations in Confirmation reference and History, eligibility in Role eligibility, independent fit ratings in Career fit/Resume fit, and reasons in review metadata/Agent notes. Neither High fit axis overrides a hard career contradiction, confirmed qualification failure or essential resume mismatch. Only base pay can be explicitly deferred for provisional preparation. Review-owned career rejections are not automatic scan exclusions.
 
 ## Existing status migration
 

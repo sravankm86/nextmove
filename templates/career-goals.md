@@ -34,6 +34,13 @@
 - Preferred customer segments or verticals:
 - Preferred product types or maturity:
 
+## Resume Fit and Specialist Work to Avoid
+
+- Specialist product areas or responsibilities I do not want:
+- Customer personas requiring expertise I do not want to build:
+- Confirmed required skills or languages I do not have:
+- Explicit role-specific stretch exceptions:
+
 ## Responsibilities and Career Direction
 
 - Responsibilities I want:

@@ -86,6 +86,8 @@ For manual switching, release the previous owner and open the next configured ha
 
 Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
+Review checks the actual qualifications and private resume-fit exclusions, rejects verified failing base-pay ceilings early, and records concise decision reasons. Only base-pay verification may be deferred for provisional preparation; submission requires it resolved. Duplicate prevention uses exact employer role IDs or job links, rather than comparing every regional variant.
+
 Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
 
 ## Contributing and license

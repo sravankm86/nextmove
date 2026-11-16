@@ -84,9 +84,47 @@ def review_eligibility(assessment, *, years_threshold):
     years = assessment.get('experience_years_target')
     experience_pass = isinstance(years, (int, float)) and not isinstance(years, bool) and years > years_threshold and bool(assessment.get('experience_evidence'))
     scope_pass = assessment.get('equivalent_senior_scope') is True and bool(assessment.get('scope_evidence'))
-    if experience_pass or scope_pass:
+    pay_scope_pass = (assessment.get('pay_supported_scope') is True
+                      and assessment.get('meaningful_pm_ownership') is True
+                      and bool(assessment.get('role_specific_pay_evidence'))
+                      and bool(assessment.get('scope_evidence'))
+                      and assessment.get('explicitly_below_scope') is not True)
+    if experience_pass or scope_pass or pay_scope_pass:
         return 'pass'
     if assessment.get('explicitly_below_scope') is True and assessment.get('scope_evidence'):
+        return 'reject'
+    return 'pending'
+
+
+def qualification_gate(minimum, preferred, *, preferred_listed=True):
+    """Evaluate evidence-based qualification findings; unknown is not failure.
+
+    The reader identifies distinct requirements, preserves AND/OR alternatives,
+    and supplies candidate/JD evidence. This function does not infer skills.
+    """
+    def statuses(items):
+        result = []
+        for item in items:
+            status = item.get('status')
+            if status not in {'met', 'not_met', 'unknown'}:
+                raise ValueError('Qualification status must be met/not_met/unknown')
+            if status != 'unknown' and not item.get('evidence'):
+                raise ValueError('A qualification finding needs evidence')
+            result.append(status)
+        return result
+    required, desirable = statuses(minimum), statuses(preferred)
+    if 'not_met' in required:
+        return 'reject'
+    if 'unknown' in required:
+        return 'pending'
+    if not preferred_listed:
+        return 'pass'
+    if not desirable:
+        return 'pending'
+    matched, unknown = desirable.count('met'), desirable.count('unknown')
+    if matched * 2 > len(desirable):
+        return 'pass'
+    if (matched + unknown) * 2 <= len(desirable):
         return 'reject'
     return 'pending'
 
@@ -97,10 +135,12 @@ def admission(assessment, *, years_threshold):
 
 
 def queue_allowed(*, role_decision, career_decision, career_evidence, versions_current,
-                  review_decision=None):
+                  review_decision=None, qualifications_decision=None,
+                  resume_exclusions_pass=None, essential_fit_pass=None):
     return (role_decision == 'pass' and career_decision == 'pass'
             and bool(career_evidence) and versions_current is True
-            and review_decision == 'approve')
+            and review_decision == 'approve' and qualifications_decision == 'pass'
+            and resume_exclusions_pass is True and essential_fit_pass is True)
 
 
 def base_maximum_gate(assessment, *, threshold, currency, period):
