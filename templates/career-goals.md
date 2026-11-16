@@ -37,12 +37,14 @@
 - Flexibility on generic experience/leadership-tenure minimums for those roles:
 - Preferred signals that make those general roles especially attractive:
 
-## Resume Fit and Specialist Work to Avoid
+## Core Experience and Acceptable Stretches
 
-- Specialist product areas or responsibilities I do not want:
-- Customer personas requiring expertise I do not want to build:
-- Confirmed required skills or languages I do not have:
-- Explicit role-specific stretch exceptions:
+- Core accomplishments and product/customer responsibilities I want to build on:
+- Importance of direct or equivalent demonstrated experience for central minimum qualifications:
+- Material adjacent gaps I am comfortable exploring:
+- Foundational changes of specialty or track record I am not seeking:
+- Confirmed factual limitations, distinguished from unmentioned skills:
+- Explicit role-specific stretch preferences:
 
 ## Responsibilities and Career Direction
 

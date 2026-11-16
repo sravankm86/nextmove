@@ -18,6 +18,17 @@ Compare the JD with the current Career Goals. Personal criteria, priorities, dom
 
 Use the stated comparison and units. Unknown is not a confirmed failure or a pass. Record each meaningful match, failure and unresolved criterion with evidence; ask for decision-critical clarification.
 
+When Career Goals requires demonstrated core fit, use the JD's central responsibilities and minimum qualifications to identify what matters most. Separate a required product/customer/specialist track record from an adjacent technique or component and from general PM skills. Preserve OR/equivalent alternatives. A preferred qualification, incidental tool or industry label is not automatically an essential minimum.
+
+Compare those central minimums with concrete accomplishments in the complete editable master and confirmed candidate facts:
+
+- Direct or equivalent evidence supports core fit. Broad domain familiarity or a shared keyword alone does not establish a specialized track record.
+- A materially different essential track record with no direct or equivalent support fails the user's demonstrated-core-fit preference: Career Low. Cite the central JD requirement and the missing supporting experience; apply the early-stop decisions below.
+- Demonstrated central capability with a material adjacent gap belongs in Need review while the fit is clarified. Leave career fit Unresolved and identify exactly what would resolve it. Do not turn a minor preferred-only gap into an automatic hold; assess it in Step 3.
+- An unavailable/incomplete master, unclear requirement or genuinely ambiguous equivalence leaves career fit Unresolved. Absence of a keyword is insufficient to declare a core mismatch.
+
+This is a preference about demonstrated suitability. It does not prove the candidate has never acquired an unmentioned skill. Keep that factual distinction in the resume findings. Do not infer an experience-based exclusion from an industry, title or technology label. Apply separately stated work-type bans, company preferences and hard constraints from current Career Goals; demonstrated core fit does not waive them.
+
 ## Step 3. Assess resume fit
 
 Compare every distinct minimum and preferred qualification with the current editable master and confirmed candidate facts. Record Met, Not met or Unknown with JD and candidate evidence. Preserve explicit OR/equivalent alternatives. Preferences are not proof of experience, and an unmentioned skill is not proof of its absence. Assess overall interview-shortlist plausibility without inventing a probability.
