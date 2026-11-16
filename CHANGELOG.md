@@ -1,5 +1,12 @@
 # Changelog
 
+## Clear Drive destinations and critical qualification guard
+
+- Setup creates or reuses Role specific and Audit trail inside the private main folder, with verified Settings mappings and ID-preserving cleanup.
+- General senior PM review still requires overall JD alignment and all critical minimums. Generic tenure flexibility cannot imply prior engineering, coding, specialist or leadership experience. Readiness guards require explicit checks.
+- Scan improvements remain recall-first: exact reobservation and contextual function disambiguation, without automatically converting career rejections into scan exclusions.
+
+
 ## Confirmed specialties and skill boundaries
 
 - Review distinguishes security specialties, AI application platforms from infrastructure, and AI-assisted prototypes/data queries from application coding.

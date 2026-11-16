@@ -84,6 +84,14 @@ Before activation, replay against reviewed eligible positives (including eligibl
 
 Primary target is eligible-PM recall, not queue yield. Every known eligible regression must be fixed or explicitly accepted by the user; unknown cases cannot be counted as safe exclusions. Without adequate evidence keep the current screen and save the proposal. A low queue rate caused by career preferences does not justify narrowing Scan.
 
+## Conservative precision improvements
+
+Reduce repeated work through exact posting identity and content fingerprints. Reobserving an unchanged declined posting preserves its outcome; it does not create another record or reset it to Inventoried. New decision inputs or changed job content trigger targeted Review under the requested scope.
+
+For apparent function mistakes, check the actual accountability: ownership of product decisions, customer problems and roadmap/outcomes. Clear marketing-only, sales-only or strategy-advisory work without plausible PM ownership can fail the existing basic-semantic screen. Mixed, outbound, platform and unlevelled PM titles remain candidates when ownership is plausible or uncertain. Do not use those words as blanket negatives.
+
+Report the attainable reduction honestly. Infra/security specialization, pay, funding, geography and candidate qualifications are Review-owned reasons, not mislabeled function errors. Moving those exclusions ahead of inventory changes the stage boundary and needs an explicit user decision plus held-out recall evaluation. An inventory-only replay cannot measure false negatives among rejected source jobs. Keep proposals unactivated when that evidence is missing; protect positive aliases and uncertain cases.
+
 ## Activate and monitor
 
 A validated behavior change needs an authorized instruction/Settings update, a version identifier and a History event linking evaluation evidence. Do not self-modify hidden prompts. Version references must be durable and recoverable by another harness. Git updates require repository write capability; otherwise hand off the concrete proposal.

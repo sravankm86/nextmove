@@ -1,11 +1,11 @@
 {
   "schema_version": 8,
   "scan": "de42e872-basic-PM-v3",
-  "review": "confirmed-specialties-and-skills-v6",
+  "review": "critical-minimums-and-overall-alignment-v7",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
     "Review interprets current confirmed specialties, skill boundaries, unclear-outbound preferences and strict company-stage requirements; Scan remains broad and factual resumes remain protected.",
-    "An explicit general senior PM preference may replace generic qualification and domain gates with seniority and compensation; specialist requirements, other hard restrictions and truthful resumes remain protected.",
+    "General senior PM flexibility is bounded to explicit noncritical generic-tenure/preferred stretches; all roles require evidenced critical minimums and overall JD alignment. Prior engineering/coding cannot be inferred from PM collaboration or prototypes.",
     "Review now checks qualifications and private resume exclusions; eligibility allows evidenced pay plus meaningful PM ownership. Scan relevance remains unchanged.",
     "A behavior change must explicitly version its affected decision policy.",
     "Record the repository revision for audit; a formatting or schema-only commit does not by itself invalidate an unchanged decision policy.",

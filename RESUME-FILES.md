@@ -2,6 +2,17 @@
 
 Drive stores content. Airtable stores the exact file reference, version and verification. A filename alone never identifies the submitted resume.
 
+## Folder placement
+
+Setup creates or reuses two folders directly inside the designated private main folder:
+
+- Role specific: customized resume PDFs, editable counterparts and role-specific change notes, cover letters or other application materials. Use the registered resume_output folder.
+- Audit trail: run reports, job captures, assessment evidence, process metadata, manifests, verification results and migration archives. Use the registered content_output folder.
+
+Keep Career Goals, the factual master and approved reusable base at their registered locations; moving them is unnecessary. Reuse equivalent existing names, including longer user labels. An existing Archived resumes folder is optional user organization, not another mandatory setup destination. Do not automatically archive or alter submitted files.
+
+For an authorized cleanup, inspect each file and its current parents, save a move manifest in History, change only the verified parent and read back the result. Moving a Drive file preserves its ID and links. Never delete, overwrite or change sharing just to organize folders. Missing or ambiguous destination mappings block affected writes rather than falling back to a cluttered main folder.
+
 ## Names
 
 Use readable names with these patterns. Values below are fictional.

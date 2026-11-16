@@ -34,6 +34,8 @@ flowchart LR
 
 Git owns all procedures. Drive owns Career Goals, the factual master, resumes, job captures and reports. Airtable owns targeting, candidate/application state, source progress, fixed inputs, checkpoints and history. The active harness executes through its own authenticated connections; connections do not transfer between providers.
 
+The private main Drive folder has two working children: **Role specific** for customized resumes and application materials, and **Audit trail** for captures, assessments, run reports and process metadata. Setup creates or reuses them and registers their IDs in Airtable. Source documents keep their verified locations; existing links remain valid.
+
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
 | Companies | Allow/Exclude choices and confirmed application restrictions | 15 |
@@ -88,7 +90,7 @@ Expect thorough configured source coverage, recall-oriented candidate capture, e
 
 Review checks the actual qualifications and private resume-fit exclusions, rejects verified failing base-pay ceilings early, and records concise decision reasons. Only base-pay verification may be deferred for provisional preparation; submission requires it resolved. Duplicate prevention uses exact employer role IDs or job links, rather than comparing every regional variant.
 
-Users may explicitly prefer general senior PM roles based on seniority and salary, with matching signals such as AI in preferred qualifications increasing career fit. Review records this exception without requiring an undisclosed team assignment or claiming unproven experience. Specialist postings keep the full qualification checks.
+Users may explicitly prefer general senior PM roles based on seniority and salary, with matching signals such as AI in preferred qualifications increasing career fit. Review records bounded generic-tenure flexibility without requiring an undisclosed team assignment or claiming unproven experience. Every role still needs overall JD alignment and all critical minimums; required prior engineering experience cannot be replaced by technical PM collaboration. Specialist postings keep the full qualification checks.
 
 Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
 

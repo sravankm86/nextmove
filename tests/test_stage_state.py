@@ -8,7 +8,7 @@ class StateTests(unittest.TestCase):
         self.inputs={'goals':'goals-v1','master':'master-v1','policy':'review-v3','eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.app={'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
-        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'base_salary_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True}}
+        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'base_salary_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True,'critical_minimums_pass':True,'overall_alignment_pass':True}}
     def test_manual_queue_cannot_create_acceptance(self):
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
@@ -72,7 +72,7 @@ class StateTests(unittest.TestCase):
         self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
 
     def test_qualification_or_exclusion_failure_cannot_be_queued_by_high_career_fit(self):
-        for key in ['qualifications_pass','resume_exclusions_pass','essential_fit_pass','non_compensation_requirements_pass']:
+        for key in ['qualifications_pass','resume_exclusions_pass','essential_fit_pass','non_compensation_requirements_pass','critical_minimums_pass','overall_alignment_pass']:
             state=copy.deepcopy(self.state);state['review'][key]=None
             self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
 

@@ -111,7 +111,8 @@ def review_ready(app, state, runs, current_inputs):
     if review.get('role_eligible') is not True:
         return False
     if not all(review.get(k) is True for k in ['qualifications_pass', 'resume_exclusions_pass',
-                                               'essential_fit_pass', 'non_compensation_requirements_pass']):
+                                               'essential_fit_pass', 'non_compensation_requirements_pass',
+                                               'critical_minimums_pass', 'overall_alignment_pass']):
         return False
     decision, deferred = review.get('decision'), review.get('deferred_checks', [])
     if decision == 'approve':

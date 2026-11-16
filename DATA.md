@@ -85,6 +85,10 @@ Read the application's History links and relevant Runs in bounded batches, parse
 
 Migration may create immutable context-only Runs instead of altering old execution metadata. These have type Migration, explicitly declare that no new job stage was executed, and preserve the original execution Run ID. Snapshot `original_execution_runs` retains those identities. Such a context can back a migrated acceptance only when the original per-job explicit acceptance and exact input identities were preserved and verified; migration itself never approves a job.
 
+## Registered Drive destinations
+
+Use Settings.resume_output for the Role specific child folder and Settings.content_output for the Audit trail child folder. Both values retain root_folder_id; verify their actual parent and privacy. RESUME-FILES.md owns placement and safe cleanup rules. Reuse existing folders and current file IDs; the master/goals/base retain their independently registered locations. Store run captures, reports and metadata in Audit trail, not the main folder or resume destination.
+
 ## Input versions and evidence
 
 Runs `Input versions (JSON).stage_inputs` holds shared fixed inputs by stage: goals/master/policy/instruction versions as applicable. Per-job review metadata holds its exact `jd_hash`, explicit `decision`, current-description provenance and review time. Rare mixed/legacy contexts use explicit `version_overrides`; null means unknown, not permission to inherit a current value. Freeze accepted input identities. A changed input scope creates a new stage segment/snapshot identity; never rewrite the pins underlying older approvals.

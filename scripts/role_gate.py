@@ -109,7 +109,8 @@ def general_pm_gate(assessment):
     if (assessment.get('general_role_verified') is not True
             or assessment.get('no_required_specialist_expertise') is not True):
         return 'not_applicable'
-    for key in ['seniority_pass', 'remaining_hard_restrictions_pass']:
+    for key in ['seniority_pass', 'remaining_hard_restrictions_pass',
+                'critical_minimums_pass', 'overall_alignment_pass']:
         if assessment.get(key) is False:
             return 'reject'
         if assessment.get(key) is not True:

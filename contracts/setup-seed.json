@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -33,13 +33,33 @@
       "key": "content_output",
       "reference_url": null,
       "verification": "Missing",
-      "value": null
+      "value": null,
+      "destination": {
+        "child_folder": "Audit trail",
+        "parent": "designated private main folder",
+        "reuse_existing": true,
+        "value_fields": [
+          "folder_id",
+          "root_folder_id"
+        ],
+        "verify_parent_and_privacy": true
+      }
     },
     {
       "key": "resume_output",
       "reference_url": null,
       "verification": "Missing",
-      "value": null
+      "value": null,
+      "destination": {
+        "child_folder": "Role specific",
+        "parent": "designated private main folder",
+        "reuse_existing": true,
+        "value_fields": [
+          "folder_id",
+          "root_folder_id"
+        ],
+        "verify_parent_and_privacy": true
+      }
     },
     {
       "key": "approved_base_resume",

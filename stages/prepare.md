@@ -6,7 +6,7 @@ Reuse a suitable approved base PDF or tailor by selecting/reordering/shortening 
 
 Follow RESUME-FILES.md for filenames, versions, reuse and page length. Create the agreed PDF in the registered Drive destination, render/visually inspect it and verify factual integrity, suitability and readable layout. Unsupported claims, stale inputs, missing master or failed PDF verification block Ready. A link alone is not readiness.
 
-Store Resume link, Resume version, Resume verified at and Preparation run on Applications. Preserve input pins, grounded changes/base reuse, claim evidence, exact filenames, editable source and visual verification in the preparation snapshot/result under DATA.md; prior values stay in History. Runs stores progress/blockers. No generic artifact table or separate content folders are required.
+Store Resume link, Resume version, Resume verified at and Preparation run on Applications. Preserve input pins, grounded changes/base reuse, claim evidence, exact filenames, editable source and visual verification in the preparation snapshot/result under DATA.md; prior values stay in History. Runs stores progress/blockers. No generic artifact table is required. Store customized application materials in Role specific and process evidence in Audit trail under RESUME-FILES.md.
 
 Preserve human history and submission gates. A single command stops; a full Run advances only accepted work to authorized Apply/preflight.
 

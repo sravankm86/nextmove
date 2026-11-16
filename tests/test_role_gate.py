@@ -139,6 +139,7 @@ class GeneralPMTests(unittest.TestCase):
         return dict(preference_enabled=True, description_complete=True,
                     general_role_verified=True, no_required_specialist_expertise=True,
                     seniority_pass=True, remaining_hard_restrictions_pass=True,
+                    critical_minimums_pass=True, overall_alignment_pass=True,
                     base_salary_pass=True, allow_salary_provisional=True)
     def test_requires_explicit_preference_and_complete_general_posting(self):
         a=self.evidence();a['preference_enabled']=False
@@ -147,6 +148,14 @@ class GeneralPMTests(unittest.TestCase):
         self.assertEqual(general_pm_gate(a),'pending')
         a=self.evidence();a['no_required_specialist_expertise']=False
         self.assertEqual(general_pm_gate(a),'not_applicable')
+    def test_general_role_cannot_waive_engineering_background_or_overall_mismatch(self):
+        for key in ["critical_minimums_pass", "overall_alignment_pass"]:
+            for value, expected in [(False, "reject"), (None, "pending")]:
+                a=self.evidence();a[key]=value
+                self.assertEqual(general_pm_gate(a), expected)
+            a=self.evidence();del a[key]
+            self.assertEqual(general_pm_gate(a), "pending")
+
     def test_salary_and_seniority_still_control(self):
         self.assertEqual(general_pm_gate(self.evidence()),'approve')
         for key in ['seniority_pass','base_salary_pass','remaining_hard_restrictions_pass']:

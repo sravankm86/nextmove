@@ -19,7 +19,8 @@ class MigrationTests(unittest.TestCase):
                       'review': {'decision': 'approve', 'jd_hash': 'jd-example', 'current_description': True,
                                  'qualifications_pass': True, 'resume_exclusions_pass': True,
                                  'essential_fit_pass': True, 'non_compensation_requirements_pass': True,
-                                 'base_salary_pass': True},
+                                 'base_salary_pass': True, 'critical_minimums_pass': True,
+                                 'overall_alignment_pass': True},
                       'submission': {'attempt_key': 'attempt-example'}}
         self.run = {'id': 'run-example', 'Input versions (JSON)': {'stage_inputs': {'review': {
             'goals': 'goals-example', 'master': 'master-example', 'policy': 'review-example',
