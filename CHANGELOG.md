@@ -1,5 +1,11 @@
 # Changelog
 
+## Ordered fit scores
+
+- Career and resume fit both use Low 1, Medium 2, High 3. Total thresholds remain 6 for Queued, 4–5 for Need review and below 4 for Not pursuing.
+- Correct the numeric contract, Review table, regression coverage and registered field descriptions without inventing new job assessments.
+
+
 ## Three-step Review and nine lifecycle states
 
 - Review is a portable JD → career fit → resume fit frame. Personal preferences stay in the private Career Goals document.

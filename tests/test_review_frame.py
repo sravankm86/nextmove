@@ -37,16 +37,18 @@ class ReviewFrameTests(unittest.TestCase):
         self.assertEqual(resume_rating([finding('met')],[],preferred_listed=False),'High')
         self.assertEqual(resume_rating([],[],preferred_listed=True),'Unresolved')
 
-    def test_all_nine_written_score_combinations_and_unknown(self):
-        contract={'career':{'Low':1,'Medium':2,'High':3},'resume':{'Low':1,'Medium':3,'High':2},'queue_minimum':6,'need_review_minimum':4,'confirmed_failure_override':False}
-        expected=[['Not pursuing','Need review','Not pursuing'],['Not pursuing','Need review','Need review'],['Need review','Queued','Need review']]
+    def test_all_nine_current_score_combinations_and_unknown(self):
+        _,contract=review_frame_contract()
+        self.assertEqual(contract['career'],{'Low':1,'Medium':2,'High':3})
+        self.assertEqual(contract['resume'],{'Low':1,'Medium':2,'High':3})
+        expected=[['Not pursuing','Not pursuing','Need review'],['Not pursuing','Need review','Need review'],['Need review','Need review','Queued']]
         for ci,c in enumerate(['Low','Medium','High']):
             for ri,r in enumerate(['Low','Medium','High']):
                 self.assertEqual(scored_review(c,r,contract=contract)['outcome'],expected[ci][ri])
         self.assertEqual(scored_review('High','Unresolved',contract=contract)['outcome'],'Need review')
         self.assertEqual(scored_review('High','Low',minimum_failure=True,contract=contract)['outcome'],'Need review')
 
-    def test_alternate_ordered_mapping_is_explicit_not_silently_assumed(self):
+    def test_failure_override_requires_an_explicit_contract_change(self):
         _,contract=review_frame_contract();contract=copy.deepcopy(contract);contract['resume']={'Low':1,'Medium':2,'High':3}
         self.assertEqual(scored_review('High','High',contract=contract)['outcome'],'Queued')
         self.assertEqual(scored_review('High','Medium',contract=contract)['outcome'],'Need review')

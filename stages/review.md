@@ -25,8 +25,8 @@ Compare every distinct minimum and preferred qualification with the current edit
 | Resume fit | Meaning | Score |
 |---|---|---:|
 | Low | At least one minimum qualification is not met. | 1 |
-| Medium | All minimums met; at least one preferred qualification is not met. | 3 |
-| High | All minimum and preferred qualifications met. | 2 |
+| Medium | All minimums met; at least one preferred qualification is not met. | 2 |
+| High | All minimum and preferred qualifications met. | 3 |
 
 With no preferred qualifications listed, that part is satisfied once all minimums pass. If missing evidence prevents a justified rating, leave it Unresolved and use Need review.
 
