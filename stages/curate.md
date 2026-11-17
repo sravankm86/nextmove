@@ -42,7 +42,7 @@ Rules the function enforces, which agents must not bypass by hand:
 - Only Rolling windows are computed. Calendar or Fixed windows, mixed or unconfirmed scope, or a rule with Community / Not found confidence → Needs clarification, with the exact question saved in the Run.
 - Role family / Exact role rules do not hold the whole company; Apply checks the affected roles.
 - Blocked (permanent) is preserved untouched. Only the user removes it.
-- Not assessed means the employer policy has not been researched. Apply treats it as blocking.
+- Not assessed means the employer policy has not been researched. Neither Not assessed nor Needs clarification blocks Apply; only Held and Blocked (permanent) do, and Apply records any restriction the careers site shows.
 
 An elapsed Apply blocked until does not authorize submission. It is an estimate until Apply recomputes it.
 

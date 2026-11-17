@@ -160,7 +160,16 @@ def compute_hold(company, events, now, personal_limit=None, personal_timezone=No
     return {'status': 'No known hold', 'blocked_until': None, 'reasons': reasons}
 
 
+VERIFIED_BLOCKS = ('Held', 'Blocked (permanent)')
+
+
 def apply_allowed(company, events, now, personal_limit=None, personal_timezone=None):
-    """Apply preflight: recompute live; only a verified No known hold permits Submit."""
+    """Apply preflight: recompute live; only a verified block stops Submit.
+
+    Held (an enforceable employer rule or the user's personal limit is reached) and
+    Blocked (permanent) stop the submission. Needs clarification and Not assessed do not:
+    the careers site surfaces any real restriction during the application, and Apply then
+    records it on the company row (stages/apply.md "Company application holds").
+    """
     result = compute_hold(company, events, now, personal_limit, personal_timezone)
-    return result['status'] == 'No known hold', result
+    return result['status'] not in VERIFIED_BLOCKS, result

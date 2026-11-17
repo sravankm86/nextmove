@@ -56,13 +56,22 @@ class CompanyPolicyTests(unittest.TestCase):
         role = dict(base, **{'Restriction scope': 'Exact role'})
         self.assertEqual(compute_hold(role, [], NOW)['status'], 'No known hold')
 
-    def test_permanent_block_and_unassessed_policy_stop_apply(self):
+    def test_only_verified_blocks_stop_apply(self):
         allowed, result = apply_allowed({'Application hold status': 'Blocked (permanent)', 'Policy confidence': 'User'}, [], NOW)
         self.assertFalse(allowed)
         self.assertEqual(result['status'], 'Blocked (permanent)')
         allowed, result = apply_allowed({}, [], NOW)
-        self.assertFalse(allowed)
+        self.assertTrue(allowed)
         self.assertEqual(result['status'], 'Not assessed')
+        unclear = {'Policy confidence': 'Community', 'Max applications': 2, 'Application window (days)': 30,
+                   'Application window type': 'Rolling', 'Restriction scope': 'Company'}
+        allowed, result = apply_allowed(unclear, [], NOW)
+        self.assertTrue(allowed)
+        self.assertEqual(result['status'], 'Needs clarification')
+        events = [{'kind': 'submission', 'at': NOW - timedelta(days=d)} for d in (1, 2, 3)]
+        allowed, result = apply_allowed({'Policy confidence': 'Not found'}, events, NOW)
+        self.assertFalse(allowed)
+        self.assertEqual(result['status'], 'Held')
         self.assertTrue(apply_allowed({'Policy confidence': 'Not found'}, [], NOW)[0])
 
     def test_scan_reads_only_allowed_companies_without_permanent_block(self):

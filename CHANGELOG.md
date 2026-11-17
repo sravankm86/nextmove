@@ -1,5 +1,10 @@
 # Changelog
 
+## Apply blocks only verified company restrictions
+
+- `company_policy.apply_allowed` now stops a submission only for Held (an enforceable employer rule or the personal limit is reached) or Blocked (permanent). Needs clarification and Not assessed no longer block.
+- When the careers site shows a restriction during an application, Apply stops that role and records the rule on the company row (Policy confidence Official) with History.
+
 ## Verified feedback inbox and blind Review replay
 
 - Manual notes now feeds evals: capture exact feedback, deduplicate by stable identity, verify eval/snapshot/History, then clear only unchanged text. Ambiguous and obsolete feedback remains in inactive/pending cases.
