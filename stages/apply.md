@@ -1,6 +1,6 @@
 # Apply: submit verified applications with a browser agent
 
-Use WORKFLOW.md, DATA.md and RESUME-FILES.md. Apply opens the real application page for a Ready role, fills it from the user's answer bank, uploads the exact verified resume linked to that role and submits, within the user's on/off switch and daily limit. It never never guesses an answer and never retries an uncertain submission.
+Use WORKFLOW.md, DATA.md and RESUME-FILES.md. Apply opens the real application page for a Ready role, fills it from the user's answer bank, uploads the exact verified resume linked to that role and submits, within the user's on/off switch and daily limit. It never guesses an answer and never retries an uncertain submission.
 
 Default is preflight: everything except pressing Submit. A full Run, a Ready label or a bare Apply command does not authorize submissions; only `Pause applications` set to `false` with a daily limit above zero does.
 
