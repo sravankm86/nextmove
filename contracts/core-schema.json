@@ -1,6 +1,6 @@
 {
-  "version": 11,
-  "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
+  "version": 12,
+  "description": "Seven-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
@@ -869,6 +869,149 @@
         {
           "name": "Notes",
           "type": "multilineText"
+        }
+      ]
+    },
+    {
+      "name": "Review eval",
+      "business_key": "Application record",
+      "description": "Golden answer key for Review built from the user's graded Manual notes: frozen verdict and reason, holdout split, the latest eval prediction and its match. Self-contained (no links) so Applications and Runs gain no columns. DATA.md \"Review eval\".",
+      "fields": [
+        {
+          "name": "Example",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Application record",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Job link",
+          "type": "url"
+        },
+        {
+          "name": "Your verdict",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pursue"
+              },
+              {
+                "name": "Not pursuing"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Reason",
+          "type": "multilineText"
+        },
+        {
+          "name": "Reason type",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pay"
+              },
+              {
+                "name": "Location"
+              },
+              {
+                "name": "Seniority"
+              },
+              {
+                "name": "Company"
+              },
+              {
+                "name": "Work type"
+              },
+              {
+                "name": "Domain"
+              },
+              {
+                "name": "Specialist gap"
+              },
+              {
+                "name": "Technical background"
+              },
+              {
+                "name": "Consumer"
+              },
+              {
+                "name": "Internal tools"
+              },
+              {
+                "name": "Language"
+              },
+              {
+                "name": "Excluded company"
+              },
+              {
+                "name": "Strong match"
+              },
+              {
+                "name": "Other"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Split",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Train"
+              },
+              {
+                "name": "Holdout"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Active",
+          "type": "checkbox"
+        },
+        {
+          "name": "Inputs snapshot",
+          "type": "url"
+        },
+        {
+          "name": "Last prediction",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Queued"
+              },
+              {
+                "name": "Need review"
+              },
+              {
+                "name": "Not pursuing"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Last eval",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Added on",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
+        },
+        {
+          "name": "Match",
+          "type": "formula"
         }
       ]
     }

@@ -1,5 +1,10 @@
 # Changelog
 
+## Review eval table (schema 12)
+
+- Seventh table, Review eval: a frozen golden answer key built from the user's graded Manual notes (verdict, reason, reason type, Train/Holdout split), plus each eval's prediction and an Agree / False queue / Missed / Deferred match. Notes that no longer fit current criteria are archived and left out. DATA.md "Review eval" holds the rules.
+- `scripts/review_eval.py:score` reports status match, false queues, missed roles and deferrals; an eval never changes Applications. stages/review.md is unchanged, so the Review fingerprint is unchanged.
+
 ## Review: pay, expired roles and resume-fit judgment
 
 - Review opens the live posting first; an empty, missing or closed posting is set to Not pursuing with a plain "Role expired" note. A technical block falls back to the saved JD.

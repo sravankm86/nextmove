@@ -74,8 +74,8 @@ def check(root):
         return errors
     tables = core["tables"]
     names = [t["name"] for t in tables]
-    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History"}
-    require(len(names) == 6 and set(names) == expected, "Expected exactly six active logical tables")
+    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval"}
+    require(len(names) == 7 and set(names) == expected, "Expected exactly seven active logical tables")
     lookup = {t["name"]:t for t in tables}
     for table in tables:
         fields = table["fields"]
@@ -96,7 +96,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':25,'Applications':29,'Sources':13,'Runs':21,'Settings':6,'History':13}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':25,'Applications':29,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES, HOLD_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require([c['name'] for c in companies['Search status']['options']['choices']] == SEARCH_STATUSES and 'Proposed' in SEARCH_STATUSES, 'Companies Search status must offer Proposed/Allow/Exclude')

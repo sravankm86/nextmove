@@ -1,5 +1,5 @@
 {
-  "schema_version": 11,
+  "schema_version": 12,
   "scan": "de42e872-basic-PM-v3",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [

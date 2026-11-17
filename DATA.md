@@ -2,7 +2,7 @@
 
 The single reference for Airtable, evidence, history and stage handoff. contracts/core-schema.json is the machine-readable blueprint. Read only the section you need; keep bulk records and verification out of model context.
 
-## Six tables
+## Seven tables
 
 | Table | Purpose | Columns, including reciprocal links |
 |---|---|---:|
@@ -12,6 +12,7 @@ The single reference for Airtable, evidence, history and stage handoff. contract
 | Runs | Frozen inputs, progress, ownership and handoff | 21 |
 | Settings | Private references, policies, controls and verification | 6 |
 | History | Field-level changes, decisions, business events and failures | 13 |
+| Review eval | Golden answer key for Review from graded Manual notes | 13 |
 
 Native record IDs and createdTime replace metadata columns. Primary display fields are not uniqueness constraints: writers validate business keys, link cardinality and intended deltas. Columns outside this blueprint are not written; docs/MAINTENANCE.md covers retiring them.
 
@@ -33,6 +34,13 @@ Native record IDs and createdTime replace metadata columns. Primary display fiel
 **Settings.** Key, Value, Reference URL, Version, Verification, Notes. Private resource references, extracted preferences with their source revision, policies (`company_policy`, `submission_policy`) and live controls (`Pause applications`, `Stop all`). Procedures and command routing stay in Git.
 
 **History.** Event key, Operation ID, Event type, Recorded at, Occurred at, Actor / channel, Table reference, Record reference, Field changes (JSON), Evidence URL, Notes, Application, Run. Use explicit event types (Review accepted, Field change, Submission intent, Confirmation received, Write failed, Write uncertain). Keep actual event time separate from recording time.
+
+**Review eval.** Example, Application record, Job link, Your verdict (Pursue/Not pursuing), Reason, Reason type, Split (Train/Holdout), Active, Inputs snapshot, Last prediction (Queued/Need review/Not pursuing), Last eval, Added on, Match. The golden answer key for Review, built from the user's graded Manual notes.
+
+- Add a row only when a note states a clear verdict under the current Career Goals and stages/review.md. A note that no longer matches current criteria is archived to History, cleared from Manual notes and left out. Expired roles and notes without a verdict stay out.
+- Your verdict and Reason are frozen once added; the user edits them, agents do not. Set Active off to retire a row rather than deleting it. Keep about a quarter as Holdout and never use Holdout reasons to tune instructions.
+- An eval replays Review blind (no Manual notes, Agent notes or prior status shown), writes only Last prediction, Last eval and a Run of type Experiment, and never changes Applications. Inputs snapshot links the frozen JD and evidence in Drive.
+- `scripts/review_eval.py:score` reports status match (agree / total), false queues, missed roles and deferrals (Need review); report Holdout separately.
 
 ## Everyday view and notes
 
