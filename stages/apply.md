@@ -33,7 +33,7 @@ The answer bank is the user's Google Doc in their Drive, linked from Settings.an
 1. Skip the role before pressing Submit; it stays Ready.
 2. Add the question to the Doc's **Specific questions** table: exact question text, the company (or "any" if it is generic), an empty Answer, the waiting role, today's date, and for a dropdown the options in brackets after the question. If the same question is already there, add this role to its Waiting roles instead of a new row.
 3. Write the role's Agent notes: `Apply: waiting for your answer to "<question>" in the answer bank.`
-4. List every new question in the run summary so the user sees them in one place.
+4. List every new question in the run summary. The Applications view **Waiting for answers** shows every role still waiting.
 
 If this harness cannot edit the Doc, skip step 2, put the questions in the run summary and ask the user to add them.
 
