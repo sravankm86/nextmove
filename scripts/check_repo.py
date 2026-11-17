@@ -89,7 +89,7 @@ def check(root):
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
     from lifecycle import STATUSES
     lifecycle = next(f for f in lookup['Applications']['fields'] if f['name']=='Lifecycle status')
-    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==9, 'Expected nine lifecycle states with Need review and Duplicate')
+    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==10, 'Expected ten lifecycle states with Need review and Duplicate')
     counts = {}
     for table in tables:
         fields = {f['name'] for f in table['fields']}

@@ -30,14 +30,14 @@ The answer bank is the user's Google Doc in their Drive, linked from Settings.an
 
 **Unanswered required question.** Never guess, infer or invent. Instead:
 
-1. Skip the role before pressing Submit; it stays Ready.
+1. Stop before pressing Submit and set the role's Lifecycle status to **Needs answer** (no attempt key is written).
 2. Add the question to the Doc's **Specific questions** table: exact question text, the company (or "any" if it is generic), an empty Answer, the waiting role, today's date, and for a dropdown the options in brackets after the question. If the same question is already there, add this role to its Waiting roles instead of a new row.
 3. Write the role's Agent notes: `Apply: waiting for your answer to "<question>" in the answer bank.`
-4. List every new question in the run summary. The Applications view **Waiting for answers** shows every role still waiting.
+4. List every new question in the run summary.
 
 If this harness cannot edit the Doc, skip step 2, put the questions in the run summary and ask the user to add them.
 
-**When the user answers,** the next Apply run reads the filled-in rows as approved answers, gives each waiting role a fresh preflight and continues. A row whose Answer is still empty keeps its roles waiting.
+**When the user answers,** the next Apply run checks every Needs answer role. If all its questions now have answers in the Doc, set it back to Ready (History records the change) and process it normally with a fresh preflight. If any of its questions is still empty, it stays Needs answer.
 
 ## Which rows are picked up
 

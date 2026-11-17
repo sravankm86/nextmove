@@ -13,7 +13,7 @@
     "Apply submits only when Pause applications is off and Settings.submission_policy.max_per_day allows (scripts/submission_policy.py:submission_gate), plus apply_ready, the company hold check and the fixed safety rules. Answers come only from the answer bank."
   ],
   "posting_availability": "apply-form-only-v1",
-  "lifecycle": "nine-states-review-duplicate-v2",
+  "lifecycle": "ten-states-needs-answer-v3",
   "identity": "run-objective-identity-v2",
   "review_source": "stages/review.md",
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",

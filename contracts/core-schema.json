@@ -278,7 +278,7 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "29 physical fields including relationships. Current job facts, nine-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "29 physical fields including relationships. Current job facts, ten-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -315,6 +315,9 @@
               },
               {
                 "name": "Ready"
+              },
+              {
+                "name": "Needs answer"
               },
               {
                 "name": "Applied"
