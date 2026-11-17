@@ -1,5 +1,10 @@
 # Changelog
 
+## Every session starts with a connection check
+
+- SETUP.md "Start a session": the agent finds the private base, tests Airtable, Google Drive/Docs, web, browser and mailbox access, asks the user for any missing connection, checks for another active writer, reports each stage as Ready or Blocked and records a `Harness check` History event before running the requested stage.
+- AGENTS.md, CLAUDE.md, CODEX.md, README.md and the saved harness prompt point to it, so a newly onboarded agent runs it without a custom prompt beyond the base link.
+
 ## Public instructions carry no personal preferences
 
 - Scan, the title screen and Review eligibility read the target role family from private Settings `role_family` (format: templates/role-family.example.json). The repository no longer assumes any role.

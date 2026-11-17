@@ -91,7 +91,7 @@ No model API key is required. Connectors may use service APIs internally. A fork
 
 ## Set up and run
 
-Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Then use `Run Nextmove` for the full authorized sequence or `Curate`, `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
+Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Each new session, and each newly onboarded agent, starts with its connection check: the agent asks for any missing Airtable, Google, web, browser or mailbox connection, then reports which stages are ready. Then use `Run Nextmove` for the full authorized sequence or `Curate`, `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
 
 For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked.
 
