@@ -6,16 +6,28 @@ This is the single operational reference for Airtable, evidence, history and sta
 
 | Table | Purpose | Target columns, including reciprocal links |
 |---|---|---:|
-| Companies | Explicit targeting and confirmed company application restrictions | 15 |
+| Companies | Curate-owned targeting (Proposed/Allow/Exclude), company fit, funding, employer policies and computed holds | 25 |
 | Applications | Candidate, review, resume and application state | 29 |
 | Sources | Official catalog/region, reader and complete pagination checkpoint | 13 |
-| Runs | Frozen inputs, execution progress, ownership and concise handoff | 20 |
+| Runs | Frozen inputs, execution progress, ownership and concise handoff | 21 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Field-level changes, decisions, business events and failures | 13 |
 
 Native record IDs and createdTime are available without duplicate metadata columns. Do not add a common six-column metadata bundle to every table. Preserve useful historical actor/timestamp information before retiring redundant columns. Primary display fields are not SQL uniqueness constraints. Validate business keys, links/cardinality and intended deltas in the writer.
 
-Companies keeps Company, Company key, Search status, Notes, Max applications, Application window (days), Application window type, Rejection cooldown (days), Restriction scope, Apply blocked until, Application hold status, Restriction details / source, Restriction timezone, plus the Applications and Sources reciprocal links. Optional company research belongs in registered content, not mandatory tracking columns. Rejection event time and actual rule verification belong in History; Apply recomputes restrictions immediately before submission.
+Companies keeps Company, Company key, Search status, Manual notes, Agent notes, Origin, Company fit, Funding stage, Latest funding, Funding date, Company evidence, Policy confidence, Policy verified at, Max applications, Application window (days), Application window type, Rejection cooldown (days), Restriction scope, Apply blocked until, Application hold status, Restriction details / source, Restriction timezone, plus the Applications and Sources reciprocal links and the Curate run link. stages/curate.md owns every write and scripts/company_policy.py defines the allowed choices and hold math.
+
+- Search status: Proposed (agent-discovered, awaiting the user), Allow, Exclude. Only the human sets Allow/Exclude. Scan reads Allow rows unless the hold is Blocked (permanent).
+- Manual notes is human-owned (formerly Notes); Agent notes is Curate's concise current decision and next action, with prior values in History.
+- Origin: Seed (pre-Curate list), User, Discovered. Company fit: High/Medium/Low/Unresolved against Career Goals company preferences only.
+- Funding stage (ordered: Pre-seed / Seed, Series A–D, Series E+, Late private, Public, Unknown), Latest funding (compact `Series C · $150M · lead`), Funding date. Company evidence links the Drive capture.
+- Policy confidence: Official, Recruiter, User (enforced); Community (recorded, not enforced); Not found (researched, no rule). Blank means Not assessed. Policy verified at is the research time.
+- Application hold status: Not assessed, No known hold, Held, Blocked (permanent), Needs clarification. Apply blocked until is a UTC dateTime estimate written by Curate; Apply recomputes before Submit and only No known hold permits it.
+- The personal limit (Settings `company_policy`, default 3 per rolling 30 days per company; Career Goals may override) applies to every company on top of employer rules.
+
+Optional long company research belongs in registered content, not extra columns. Rejection event times and rule-verification evidence belong in History.
+
+Pre-Curate migration fields (Job Inventory, Migration key, Source record, Raw source record, and `Apply blocked until (legacy text)`, the old free-text column renamed when the dateTime field was added) are not part of the target. Preserve their values in indexed Drive content under docs/MAINTENANCE.md before retiring them; do not write new values into them. If a live base still lacks the Proposed, Blocked (permanent) or Run type Curate select choices (some connectors cannot add choices), add them in the Airtable UI before first use and record the step in History.
 
 Sources keeps Source key as its primary field, Company, Official careers URL, Catalog URL, Region, Reader, Reader version, Latest coverage, Checkpoint (JSON), Last error, Last scanned at, Last run and Archived at. Source key is a stable board identity, not a job identity. During migration merge the former source_id into the existing primary field before retiring its duplicate. Reader identifies a reusable reviewed script/feed reader; its version and durable location must be recoverable. The checkpoint holds cursor/end proof, counts, manifest identity, reader/pagination details and pending source evidence. Archived at disables an intentionally retired source; do not resurrect it just because other archive helpers retire. Every active configured official board/region remains in scope.
 

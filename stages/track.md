@@ -12,6 +12,6 @@ Uncertain submissions are reconciled, never resubmitted automatically. Missing m
 
 Record message/receipt identities, confirmation/rejection/engagement dates and evidence in History. Update current status/Confirmation reference and concise Agent notes; preserve human-owned Manual notes and earlier useful evidence. Runs/Settings retain exact mailbox scope, cursor, counts and unresolved identities; no separate mail-audit table is needed.
 
-A rejection changes a company hold only under a confirmed applicable rule; preserve exact trigger scope/time and never invent a company-wide ban. Verify all saved changes and handoff. A single Track stops; a full Run reports remaining required gaps.
+Record every employer rejection as a History event with its actual Occurred at and exact role, so Curate's hold recompute (stages/curate.md) can apply any confirmed cooldown. When a message states an application limit or waiting period, save the quoted statement and message identity in History for Curate to record as Recruiter confidence. Track does not edit Companies policy fields and never invents a company-wide ban. Verify all saved changes and handoff. A single Track stops; a full Run reports remaining required gaps.
 
 For a first Track without a successful checkpoint, use the earliest known application/observation event among tracked scope, record the basis and paginate from it. Observation timestamps come from History, not a removed Last seen at column. If the boundary cannot be established, ask under WORKFLOW.md while continuing independent work.

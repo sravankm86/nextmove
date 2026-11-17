@@ -4,7 +4,8 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 
 | Command | Scope |
 |---|---|
-| Run / Run Nextmove | Default single agent: Scan → Review → Prepare → Apply → Track (ends at Interviewing) |
+| Run / Run Nextmove | Default single agent: Curate → Scan → Review → Prepare → Apply → Track (ends at Interviewing) |
+| Curate / Companies | Recompute every company application hold; research employer limits/cooldowns; on cadence propose Series C+ funded companies as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles |
@@ -15,7 +16,7 @@ Quoted examples/setup discussions do not dispatch production work. A single stag
 
 ## Startup and ownership
 
-Discover/map the six tables, Settings and live controls. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the six tables, Settings and live controls. Curate runs first in a Run so Scan reads the current Allow list and Apply sees current holds; a Partial Curate does not block Scan/Review/Prepare, but Apply needs its hold recompute. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 
@@ -49,7 +50,7 @@ Review owns final eligibility/hard career checks and approves Queued; Prepare re
 
 Save accepted stage outputs before advancing. Continue independent useful work safely, but blocked required stages/items mean Partial/Blocked. Verify every planned item and count before Complete. No work means verified empty eligible scope, not invented coverage.
 
-Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
+Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report Curate results (holds by status, policies researched by confidence, discovery feed coverage, Proposed companies awaiting the user), source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
 
 Use the 29-column tracker under DATA.md. Write concise current context and next action in Agent notes; never overwrite Manual notes. Resolve explicit review checks and structured feedback from History. Sources remains board-level scanner state, not an Applications field. Do not require posting availability during Scan/Review or maintain Last seen at; check the real form during Apply.
 
@@ -81,7 +82,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Rejected | Actual employer rejection. |
 | Duplicate | Run confirmed a redundant record and saved its canonical record and objective evidence. |
 
-The successful path is Inventoried → Queued → Ready → Applied → Interviewing, with Need review available before approval. Need review is retried when its missing facts change or the user requests it. A company cooldown does not change fit. Preserve human declines and submitted/terminal outcomes. Offers and post-interview outcomes remain outside automatic tracking scope.
+The successful path is Inventoried → Queued → Ready → Applied → Interviewing, with Need review available before approval. Need review is retried when its missing facts change or the user requests it. A company cooldown or hold does not change fit; Curate owns holds under stages/curate.md. Preserve human declines and submitted/terminal outcomes. Offers and post-interview outcomes remain outside automatic tracking scope.
 
 An uncertain Submit stays at its last verified pre-submission stage, normally Ready, with a prominent uncertainty note and saved attempt identity/outcome. Never label an unverified resume Ready or claim Applied without evidence. The outstanding attempt blocks another Submit regardless of manual status resets; reconcile it first. Hold other work that could obscure the outstanding attempt and its exact submitted PDF.
 

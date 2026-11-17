@@ -1,5 +1,12 @@
 # Changelog
 
+## Curate: company management upstream of Scan (schema 11)
+
+- New first stage, [Curate](stages/curate.md): recomputes every company's application hold, researches employer application limits and rejection cooldowns, and on its cadence proposes newly funded Series C+ companies that fit Career Goals. Run order is now Curate → Scan → Review → Prepare → Apply → Track.
+- Companies grows to 25 columns: Search status gains Proposed; hold gains Blocked (permanent); new Agent notes, Origin, Company fit, Funding stage, Latest funding, Funding date, Company evidence, Policy confidence, Policy verified at and a Curate run link. Notes is renamed Manual notes (human-owned). Runs gains Run type Curate and the Curate companies inverse link (21 columns).
+- `scripts/company_policy.py` is the single implementation of hold math, used by Curate and by Apply's pre-submit check. A default personal limit of 3 applications per company in any rolling 30 days applies on top of employer rules. Only Official, Recruiter or User policies are enforced; Community reports need confirmation. Not assessed now blocks Submit.
+- Discovered companies are never auto-allowed; the user moves Proposed to Allow or Exclude. A permanent block needs user confirmation and stops Scan for that company. Holds never change fit.
+
 ## Keep the existing pending label
 
 - Retain Need review as the canonical pending state and existing Airtable option. Remove the proposed choice rename. Scores and routing thresholds are unchanged; historical Needs attention outputs refer to the same pending state.

@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -125,10 +125,49 @@
       "verification": "Needs verification"
     },
     {
+      "key": "company_policy",
+      "value": {
+        "personal_application_limit": {
+          "max_applications": 3,
+          "window_days": 30,
+          "window_type": "Rolling",
+          "scope": "Company",
+          "timezone": null
+        },
+        "personal_limit_source": "user default; Career Goals may override with an explicit value",
+        "discovery": {
+          "min_funding_stage": "Series C",
+          "admission": "Proposed",
+          "auto_allow": false,
+          "cadence_days": 7,
+          "first_run_lookback_days": 90,
+          "feeds": [],
+          "feeds_note": "Each feed is a Settings-registered official/news/filing source with its own checkpoint; blank feeds mean discovery is blocked, not complete."
+        },
+        "policy_research": {
+          "enforceable_confidence": [
+            "Official",
+            "Recruiter",
+            "User"
+          ],
+          "community_reports_enforced": false,
+          "reverify_after_days": 180
+        },
+        "permanent_block": {
+          "requires_user_confirmation": true,
+          "stops_scan": true
+        },
+        "holds_change_fit": false,
+        "apply_requires_hold_status": "No known hold"
+      },
+      "verification": "Needs verification"
+    },
+    {
       "key": "execution_policy",
       "value": {
         "default": "single-agent",
         "pipeline": [
+          "Curate",
           "Scan",
           "Review",
           "Prepare",
@@ -189,7 +228,8 @@
     "missing_preferences": "unresolved_not_invented",
     "uses": [
       "scan_criteria",
-      "review_queue"
+      "review_queue",
+      "company_curation"
     ],
     "scan_fields": [
       "function",
@@ -210,6 +250,13 @@
     ],
     "source_revision_check_required": true,
     "stage_readiness_required": true,
-    "explicit_unrestricted_distinct_from_unspecified": true
+    "explicit_unrestricted_distinct_from_unspecified": true,
+    "curate_fields": [
+      "company_preferences",
+      "company_stage_size",
+      "domains_industries_verticals",
+      "location_work_arrangement",
+      "personal_application_limit"
+    ]
   }
 }

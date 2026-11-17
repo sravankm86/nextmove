@@ -16,7 +16,7 @@ For a bug, provide a redacted harness/capability description, instruction revisi
 4. Run `python scripts/check_repo.py`. For a core schema change, also run `python scripts/build_schema.py` and confirm the generated file is committed.
 5. Run `python -m unittest discover -s tests -v` for admission/career-gate regressions. Explain validation honestly. Repository checks do not prove a live scan, connector grant or cross-harness integration. Test live behavior only in your own authorized private resources and publish only redacted findings.
 
-Keep reviews small enough to assess. Do not silently change the career-fit OR rule, resume-fact source, source coverage, basic Scan semantics or Review eligibility/career gates, user-selected company scope, submission consent, one-writer ownership or audit claims. Propose intentional tradeoffs explicitly. Update CHANGELOG.md for user-visible behavior or schema changes.
+Keep reviews small enough to assess. Do not silently change the career-fit OR rule, resume-fact source, source coverage, basic Scan semantics, Curate's Proposed-only company admission and hold rules (scripts/company_policy.py), or Review eligibility/career gates, user-selected company scope, submission consent, one-writer ownership or audit claims. Propose intentional tradeoffs explicitly. Update CHANGELOG.md for user-visible behavior or schema changes.
 
 CI uses standard-library Python and read-only GitHub permissions. Do not add external uploads, credentials, model API calls or paid service execution to public checks. Gitignore rules and regex checks reduce accidental disclosure; they cannot prove that every kind of private text is absent. Inspect the diff yourself before pushing.
 

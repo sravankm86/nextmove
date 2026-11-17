@@ -2,6 +2,9 @@
 
 These cases are invented, not private data.
 
+- Curate finds a Series D announcement for a company matching Career Goals: it adds the company as Proposed with Company fit High and a draft Sources row. Scan ignores it until the user sets Allow. A Series B round is counted but not added.
+- A user has three applications at one company in the past 30 days: Curate sets Held with Apply blocked until the date the oldest of those three leaves the window. Scan and Review continue; Apply refuses until its own recheck returns No known hold.
+- A forum post claims a six-month cooldown after rejection: Curate records it as Community confidence and sets Needs clarification rather than enforcing it.
 - A Senior Product Manager posting with basic PM ownership signals becomes Inventoried with eligibility Pending. Scan does not assess its industry against career goals.
 - A flat Product Manager title with unclear level remains a plausible candidate; Review resolves full scope. Staff Product Designer is a clear other function and is not inventoried.
 - Missing identity stays in minimal Run checks. Missing full JD on an otherwise plausible candidate is a capture gap and blocks Review approval.

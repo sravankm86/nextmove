@@ -1,6 +1,6 @@
 # Nextmove
 
-Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It finds plausible senior product-management roles, reviews their fit, prepares truthful resumes, supports authorized applications and tracks recruiting progress through the interview stage.
+Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It keeps your target-company list current (funding discovery, employer application limits and rejection cooldowns), finds plausible senior product-management roles, reviews their fit, prepares truthful resumes, supports authorized applications and tracks recruiting progress through the interview stage.
 
 One agent can run the whole sequence. You can also start each stage manually in a different harness. Both use the same saved state, evidence and safeguards. This repository is not a hosted app, scheduler or automatic launcher for other harnesses.
 
@@ -8,6 +8,7 @@ One agent can run the whole sequence. You can also start each stage manually in 
 
 | Stage | Work | Result |
 |---|---|---|
+| [Curate](stages/curate.md) | Recompute company application holds, research employer limits and cooldowns, and propose newly funded Series C+ companies that match Career Goals. | Current holds; Proposed companies await your Allow/Exclude. |
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse or tailor from the factual master, record grounded changes and verify the rendered PDF. | Ready with an exact resume file/version. |
@@ -27,6 +28,7 @@ flowchart LR
     Agent <--> Airtable[Six Airtable tables: saved state]
     Agent <--> Drive[Google Drive: content and evidence]
     Agent --> Boards[Official catalogs and application sites]
+    Funding[Funding news and employer policy pages] --> Agent
     Mail[Read-only recruiting mailbox] --> Agent
     Airtable --> Next[Same agent or manually chosen next harness]
     Drive --> Next
@@ -38,21 +40,21 @@ The private main Drive folder has two working children: **Role specific** for cu
 
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
-| Companies | Allow/Exclude choices and confirmed application restrictions | 15 |
+| Companies | Proposed/Allow/Exclude targeting, company fit, funding, employer policies and holds | 25 |
 | Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 29 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
-| Runs | Frozen inputs, ownership, progress and handoff | 20 |
+| Runs | Frozen inputs, ownership, progress and handoff | 21 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 
-The 96-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 107-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
 
 ## Where to find each rule
 
-There are 11 operational instruction files. Each concern has one owner; maintenance and public-project policies are separate.
+There are 12 operational instruction files. Each concern has one owner; maintenance and public-project policies are separate.
 
 | Question | Read |
 |---|---|
@@ -64,7 +66,8 @@ There are 11 operational instruction files. Each concern has one owner; maintena
 | Scan criteria, pagination and recall-tested improvement? | [Scan](stages/scan.md) |
 | Final role/seniority, compensation and fit decisions? | [Review](stages/review.md) |
 | Resume production and verification? | [Prepare](stages/prepare.md), with [file/version rules](RESUME-FILES.md) |
-| Company quotas, cooldowns and submission safeguards? | [Apply](stages/apply.md) |
+| Company list, funding discovery, employer quotas/cooldowns and holds? | [Curate](stages/curate.md) |
+| Submission safeguards and the final pre-submit hold check? | [Apply](stages/apply.md) |
 | Receipts, recruiter engagement and mailbox checkpoints? | [Track](stages/track.md) |
 | Deliberate field retirement, deployment and release checks? | [Maintenance](docs/MAINTENANCE.md) |
 
@@ -76,14 +79,15 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - Separate authenticated connections in every harness, plus any browser or mailbox tools that its stages require. You handle sign-in, consent and MFA; unsupported capabilities remain blockers.
 - [Career preferences](templates/career-goals.md), in ordinary prose or the optional template: desired function, designation, seniority/scope, compensation, domains, responsibilities, geography and priorities. This document contains preferences, not agent instructions.
 - One accurate designated editable master resume; an approved base PDF is optional. Goals are not evidence of experience.
-- Explicit company choices, known application restrictions and answers to decision-critical questions. Agents must ask when a missing answer changes the work.
+- Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
+- Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
 - Explicit submission scope and approved answers before real applications. Track needs read-only mailbox access.
 
 No model API key is required. Connectors may use service APIs internally. A fork does not copy private data, authentication or another person's setup. Plain chat without suitable tools cannot execute these stages.
 
 ## Set up and run
 
-Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Then use `Run Nextmove` for the full authorized sequence or `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
+Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Then use `Run Nextmove` for the full authorized sequence or `Curate`, `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
 
 For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked. Do not run production work through an unresolved migration pause.
 

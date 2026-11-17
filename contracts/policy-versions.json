@@ -1,5 +1,5 @@
 {
-  "schema_version": 10,
+  "schema_version": 11,
   "scan": "de42e872-basic-PM-v3",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
@@ -7,11 +7,14 @@
     "Run owns objective duplicate discovery; IDs or verified posting-specific links confirm identity, names/dates corroborate. Preserve actual application history.",
     "Review scores and routing live only in stages/review.md. Use its ordered decisions, preserve unknown evidence, and pin its automatic content fingerprint.",
     "Freeze source/policy/JD/PDF identities; revalidate affected decisions when they change. Historical approvals do not manufacture current scored acceptance.",
-    "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores."
+    "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores.",
+    "Curate owns company targeting proposals, employer-policy research and computed holds. Holds never change role fit; Apply recomputes the hold with scripts/company_policy.py:apply_allowed before Submit."
   ],
   "posting_availability": "apply-form-only-v1",
   "lifecycle": "nine-states-review-duplicate-v2",
   "identity": "run-objective-identity-v2",
   "review_source": "stages/review.md",
-  "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py"
+  "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",
+  "company_curation": "curate-holds-v1",
+  "company_policy_source": "stages/curate.md and scripts/company_policy.py"
 }
