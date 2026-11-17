@@ -2,7 +2,7 @@
 
 Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review normally assesses Inventoried roles and retryable Need review roles; an explicit reassessment may also include Queued and Not pursuing roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
 
-Use current linked Companies and saved Curate evidence in both a full Run and a standalone Review. Only human-Allow companies without a permanent block advance automatically; skip out-of-scope existing roles without changing their scores or lifecycle, and record the reason in the Run. Temporary holds, unresearched employer policies and incomplete discovery do not delay fit assessment or queueing. They remain submission controls, not fit criteria.
+Use current linked Companies and saved Curate evidence in both a full Run and a standalone Review. Only human-Allow companies without a permanent block advance automatically. A role at a company the user has set to Exclude becomes Not pursuing, with Agent notes saying the company is on the user's excluded list; its fit scores are left unchanged. Skip other out-of-scope existing roles (for example at Proposed companies) without changing their scores or lifecycle, and record the reason in the Run. Temporary holds, unresearched employer policies and incomplete discovery do not delay fit assessment or queueing. They remain submission controls, not fit criteria.
 
 ## Step 1. Extract the job description
 
@@ -23,7 +23,7 @@ Compare the role's overall product space and work with the current Career Goals:
 | Medium | No explicit disqualifier; the role matches some desired work or preferences. | 2 |
 | High | No explicit disqualifier; the role matches the desired product space and applicable preferences. | 3 |
 
-Use the user's actual comparisons and units. Missing pay is not a salary failure. A missing candidate specialty is not a career preference failure. Explain the evidence and any unresolved preference or posting fact.
+Use the user's actual comparisons and units. Missing pay is not by itself a salary failure; when Career Goals says how to treat a posting without pay (for example by the company's other pay bands or the title's seniority), apply that rule. A missing candidate specialty is not a career preference failure. Explain the evidence and any unresolved preference or posting fact.
 
 ## Step 3. Assess resume fit
 

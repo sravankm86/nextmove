@@ -5,6 +5,8 @@
 - Review opens the live posting first; an empty, missing or closed posting is set to Not pursuing with a plain "Role expired" note. A technical block falls back to the saved JD.
 - Pay is taken from anywhere in the posting (including pay-transparency footers); the highest band in the user's currency is used even when the applicable band is uncertain, and an ambiguous base-or-total figure at or below the bar fails either way.
 - Resume fit: unprovable traits count as met; missing specialist domains, customer segments or personas, engineering backgrounds, languages or citizenship requirements in the minimum or preferred qualifications mean Low; concept-level matches score Medium; user-confirmed gaps are not re-asked. Scores and routing are unchanged.
+- Roles at a company the user has set to Exclude become Not pursuing with a plain note (fit scores unchanged); Proposed-company roles are still skipped until the user decides.
+- Missing pay follows the user's Career Goals rule when one exists (for example the company's other pay bands or the title's seniority) instead of always staying unresolved.
 
 ## Readable Agent notes
 
