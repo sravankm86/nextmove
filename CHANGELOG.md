@@ -1,5 +1,10 @@
 # Changelog
 
+## Resume format defaults
+
+- Prepare now carries default resume format and style rules: one page judged from the rendered PDF, page and font settings, section order without a separate Skills section, ATS checks, language for a senior reader, and identical wording across versions. Explicit user instructions override them. No schema or decision-policy change.
+
+
 ## AI-first roles across business domains
 
 - An explicit AI-first domain preference overrides broad business-domain exclusions. Evaluate requested domain knowledge from actual minimum/preferred qualifications instead of inferring it from the product or customer.
