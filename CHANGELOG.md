@@ -1,5 +1,10 @@
 # Changelog
 
+## Prepare: resume choice, shortlist estimate and gaps in Agent notes
+
+- A Ready role's Agent notes now say which resume was used and why, an estimated shortlist chance on a 1–10 scale (the agent's judgment, not a measured probability) and the main gaps.
+- Base reuse no longer counts gaps the master cannot fill: tailoring is reserved for roles where the master holds evidence the chosen base leaves out.
+
 ## Review eval table (schema 12)
 
 - Seventh table, Review eval: a frozen golden answer key built from the user's graded Manual notes (verdict, reason, reason type, Train/Holdout split), plus each eval's prediction and an Agree / False queue / Missed / Deferred match. Notes that no longer fit current criteria are archived and left out. DATA.md "Review eval" holds the rules.

@@ -56,7 +56,7 @@ Agent notes tells the user, in plain English, why the agent set the row's curren
 - **Say what and why.** Start with the status, then the main reason in everyday words: what about the role or the user's background led to it.
 - **Name the confusion.** If something is unclear or missing, say exactly what it is and why it matters for the decision.
 - **Say what happens next.** End with the next step, or what the user needs to do, when there is one.
-- **Keep it short and plain.** One to three sentences, under about 60 words. Full sentences; no internal field names, codes, scores written as sums, record IDs, file hashes, JSON or Markdown; spell out abbreviations.
+- **Keep it short and plain.** One to three sentences, under about 60 words. A Ready note may give the estimated shortlist chance as "about N/10" (stages/prepare.md); no other scores. Full sentences; no internal field names, codes, scores written as sums, record IDs, file hashes, JSON or Markdown; spell out abbreviations.
 - **Be concrete.** Name the actual requirement, preference, company rule or question rather than a category.
 
 Examples (fictional):
@@ -67,7 +67,7 @@ Examples (fictional):
 | Need review | Needs review: the role fits your goals, but the posting does not say whether it is based in the US or London, and you only want US roles. Once the location is confirmed, it can be decided. |
 | Not pursuing | Not pursuing: the role requires five years of hands-on payments engineering, and your background shows product leadership but no engineering track record. |
 | Not pursuing | Role expired: the posting was no longer available when checked on 17 Nov. |
-| Ready | Ready: your AI-native base resume already covers all the key requirements, so it was reused as is. It will be submitted when applications are switched on. |
+| Ready | Ready: your AI-native base was reused because it leads with shipping AI agents and zero-to-one work, this role's core asks. Shortlist chance about 7/10. Gaps: no consumer-product experience. |
 | Needs answer | Waiting for your answer: the form asks "Are you willing to work on-site three days a week?" and the answer bank has no answer. Add it in the answer bank and this role will continue. |
 | Applied | Applied on 18 Nov; the confirmation page showed reference A123. |
 | Rejected | Rejected: the company emailed on 20 Nov to say they are moving forward with other candidates. |
