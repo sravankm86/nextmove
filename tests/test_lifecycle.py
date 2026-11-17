@@ -10,6 +10,8 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(END_STATES,{'Interviewing','Not pursuing','Rejected','Duplicate'})
         self.assertEqual(normalize('Confirmed'),'Applied')
         self.assertEqual(normalize('Needs review'),'Need review')
+        self.assertEqual(normalize('Need review'),'Need review')
+        self.assertEqual(normalize('Needs attention'),'Need review')
         self.assertEqual(normalize('Duplicate'),'Duplicate')
         self.assertEqual(application_write({'Lifecycle status':'Need review'}),{'Lifecycle status':'Need review'})
         self.assertEqual(normalize('In process'),'Interviewing')

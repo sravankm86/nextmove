@@ -7,6 +7,16 @@
 - `scripts/company_policy.py` is the single implementation of hold math, used by Curate and by Apply's pre-submit check. A default personal limit of 3 applications per company in any rolling 30 days applies on top of employer rules. Only Official, Recruiter or User policies are enforced; Community reports need confirmation. Not assessed now blocks Submit.
 - Discovered companies are never auto-allowed; the user moves Proposed to Allow or Exclude. A permanent block needs user confirmation and stops Scan for that company. Holds never change fit.
 
+## Keep the existing pending label
+
+- Retain Need review as the canonical pending state and existing Airtable option. Remove the proposed choice rename. Scores and routing thresholds are unchanged; historical Needs attention outputs refer to the same pending state.
+
+## Career preferences and resume suitability
+
+- Career fit evaluates desired product space and explicit preferences; resume fit evaluates critical asks across the whole JD against demonstrated candidate evidence. Keep experience and capability facts outside Career Goals.
+- Both ratings use Unresolved 0, Low 1, Medium 2, High 3. The Review table is the sole routing source, including the total-two exception. Replace the pending label with Needs attention and preserve the existing Need review storage alias until an in-place rename.
+- Revalidate old approvals when these inputs change; evaluation predictions do not modify Applications.
+
 - Split salary display into numeric Starting salary and Max salary (schema 10; 29 Application fields). Preserve all bands and units in evidence; decision-policy versions remain unchanged.
 
 ## Ordered fit scores

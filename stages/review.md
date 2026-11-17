@@ -4,56 +4,48 @@ Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the iden
 
 ## Step 1. Extract the job description
 
-Read the complete exact official JD, or an integrity-verified saved copy. Extract responsibilities, minimum and preferred qualifications, compensation and work restrictions. Preserve the employer's alternatives and distinguish requirements from examples. Missing or incomplete evidence means Need review, with the exact gap in Agent notes.
+Read the complete exact official JD, or an integrity-verified saved copy. Extract the product space, central responsibilities, minimum and preferred qualifications, compensation and work restrictions. Preserve the employer's OR/equivalent alternatives. Distinguish requirements from examples and identify missing evidence.
 
 ## Step 2. Assess career fit
 
-Compare the JD with the current Career Goals. Personal criteria, priorities, domain preferences, exceptions and acceptable tradeoffs come from that private document. Do not infer required candidate expertise from the product's domain or copy another user's preferences into this file.
+Compare the role's overall product space and work with the current Career Goals: what the user wants and does not want. Apply stated compensation, location, title, seniority, work-type and company preferences. Personal preferences belong in the private goals, not this public frame. Candidate accomplishments and missing experience do not change career fit; assess those in Step 3.
 
 | Career fit | Meaning | Score |
 |---|---|---:|
-| Low | At least one objective career criterion fails. | 0 |
-| Medium | No objective failure; some career requirements match. | 2 |
-| High | No objective failure; all applicable career requirements match. | 3 |
+| Unresolved | Decision-critical role facts or preferences are unclear. | 0 |
+| Low | An explicit disqualifying preference fails, or the role is outside the desired product space. | 1 |
+| Medium | No explicit disqualifier; the role matches some desired work or preferences. | 2 |
+| High | No explicit disqualifier; the role matches the desired product space and applicable preferences. | 3 |
 
-Use the stated comparison and units. Unknown is not a confirmed failure or a pass. Record each meaningful match, failure and unresolved criterion with evidence; ask for decision-critical clarification.
-
-When Career Goals requires demonstrated core fit, use the JD's central responsibilities and minimum qualifications to identify what matters most. Separate a required product/customer/specialist track record from an adjacent technique or component and from general PM skills. Preserve OR/equivalent alternatives. A preferred qualification, incidental tool or industry label is not automatically an essential minimum.
-
-Compare those central minimums with concrete accomplishments in the complete editable master and confirmed candidate facts:
-
-- Direct or equivalent evidence supports core fit. Broad domain familiarity or a shared keyword alone does not establish a specialized track record.
-- A materially different essential track record with no direct or equivalent support fails the user's demonstrated-core-fit preference: Career Low. Cite the central JD requirement and the missing supporting experience; apply the early-stop decisions below.
-- Demonstrated central capability with a material adjacent gap belongs in Need review while the fit is clarified. Leave career fit Unresolved and identify exactly what would resolve it. Do not turn a minor preferred-only gap into an automatic hold; assess it in Step 3.
-- An unavailable/incomplete master, unclear requirement or genuinely ambiguous equivalence leaves career fit Unresolved. Absence of a keyword is insufficient to declare a core mismatch.
-
-This is a preference about demonstrated suitability. It does not prove the candidate has never acquired an unmentioned skill. Keep that factual distinction in the resume findings. Do not infer an experience-based exclusion from an industry, title or technology label. Apply separately stated work-type bans, company preferences and hard constraints from current Career Goals; demonstrated core fit does not waive them.
+Use the user's actual comparisons and units. Missing pay is not a salary failure. A missing candidate specialty is not a career preference failure. Explain the evidence and any unresolved preference or posting fact.
 
 ## Step 3. Assess resume fit
 
-Compare every distinct minimum and preferred qualification with the current editable master and confirmed candidate facts. Record Met, Not met or Unknown with JD and candidate evidence. Preserve explicit OR/equivalent alternatives. Preferences are not proof of experience, and an unmentioned skill is not proof of its absence. Assess overall interview-shortlist plausibility without inventing a probability.
+Compare the complete editable master and confirmed candidate facts with the whole JD. Identify the critical asks from responsibilities, minimum and preferred qualifications, and judge whether demonstrated direct or equivalent accomplishments make a credible case for an interview. Minimum/preferred labels inform this judgment but do not replace it. A preferred specialty can be critical to the actual work; an incidental tool is not automatically critical. Preserve OR/equivalent alternatives.
+
+Record Met, Not met or Unknown with JD and candidate evidence. Distinguish a confirmed missing capability from unclear evidence. Missing keywords alone do not establish a gap. Do not invent experience, equate broad domain familiarity with a specialist track record or invent numerical shortlist probabilities.
 
 | Resume fit | Meaning | Score |
 |---|---|---:|
-| Low | At least one minimum qualification is not met. | 1 |
-| Medium | All minimums met; at least one preferred qualification is not met. | 2 |
-| High | All minimum and preferred qualifications met. | 3 |
+| Unresolved | Evidence or equivalence for a critical ask is genuinely unclear. | 0 |
+| Low | A critical ask or mandatory minimum lacks demonstrated direct or credible equivalent support. | 1 |
+| Medium | Critical asks and minimums are supported; remaining gaps are secondary or reasonably transferable. | 2 |
+| High | Strong demonstrated match to critical asks, minimums and important preferred qualifications. | 3 |
 
-With no preferred qualifications listed, that part is satisfied once all minimums pass. Leave an unsupported rating Unresolved; do not invent experience or assign a low score just to complete the arithmetic.
+Explain why each consequential requirement is critical or secondary. Reuse confirmed facts already supplied; do not repeatedly ask about a confirmed gap. Facts removed from Career Goals remain candidate evidence, not preferences. Store their source in private resume/candidate evidence under DATA.md; never add unsupported claims to the master.
 
-Apply these decisions in order. For a missing score, consider every score allowed by its rating table. Stop when all possible totals mean Not pursuing; do not spend time resolving qualifications that cannot change that outcome. An unresolved career assessment always stays Need review, even if resume fit is low.
+Add both scores and use this table. Assess both axes; the former early-stop and unconditional unresolved-career rules no longer apply. Unresolved is a rating with score zero, not proof of failure. Do not add a separate veto or substitute an old routing rule.
 
 | Check, in this order | Decision |
 |---|---|
-| Career fit is Unresolved | Need review |
-| Every possible total is Not pursuing | Not pursuing |
-| Any score is Unresolved | Need review |
+| Total 2 with Unresolved | Need review |
 | Total 5–6 | Queued |
-| Total 4 | Need review |
-| Total 0–3 | Not pursuing |
+| Total 3–4 | Need review |
+| Total 2 without Unresolved | Not pursuing |
+| Total 0–1 | Not pursuing |
 
-Keep an unassessed or unresolved resume rating as Unresolved after an early stop. Explain the confirmed career failure and why even the highest resume score cannot change the decision. This does not authorize submission or false resume claims.
+Consequently High + Low is Need review, Low + Low is Not pursuing, and Unresolved + Unresolved or Unresolved + Low is Not pursuing. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
 
-Always explain both available ratings, their evidence and the resulting status in Agent notes. State the exact question when blocked. Keep full evidence and fixed input/JD identities in History/Drive under DATA.md, verify writes and stop after Review.
+Agent notes briefly explains both ratings, the critical evidence or gap, and the resulting status. For Need review, state exactly what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
 
-This file is the only source for Review scores and routing. `scripts/role_gate.py` reads these tables. Its automatic instruction fingerprint identifies the exact file used; users do not maintain a second scoring configuration or a manual Review version. Unknown or malformed rules must stop affected work, not fall back to older defaults.
+This file is the only source for scores and routing. scripts/role_gate.py reads these tables and fingerprints this file automatically. Do not maintain a second scoring configuration or manual Review version. Unknown or malformed rules must stop affected work, not fall back to older defaults.

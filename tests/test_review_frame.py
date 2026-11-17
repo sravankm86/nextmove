@@ -21,7 +21,7 @@ class ReviewFrameTests(unittest.TestCase):
         text=(Path(__file__).resolve().parents[1]/'stages/review.md').read_text()
         sections=[text.split('## Step 2.')[1].split('## Step 3.')[0],text.split('## Step 3.')[1]]
         for axis,section in zip(['career','resume'],sections):
-            values={label:int(score) for label,score in re.findall(r'\| (Low|Medium|High) \|[^\n|]+\| (\d+) \|',section)}
+            values={label:int(score) for label,score in re.findall(r'\| (Unresolved|Low|Medium|High) \|[^\n|]+\| (\d+) \|',section)}
             self.assertEqual(values,contract[axis])
 
     def test_career_objective_failure_differs_from_soft_preference(self):
@@ -30,42 +30,42 @@ class ReviewFrameTests(unittest.TestCase):
         self.assertEqual(career_rating([finding('met'),finding('met')]),'High')
         self.assertEqual(career_rating([finding('unknown',objective=True)]),'Unresolved')
 
-    def test_resume_uses_all_preferred_not_majority(self):
-        self.assertEqual(resume_rating([finding('met')],[finding('met'),finding('met'),finding('not_met')]),'Medium')
+    def test_resume_uses_critical_asks_across_the_whole_jd(self):
+        self.assertEqual(resume_rating([finding('met')],[finding('not_met')]),'Medium')
         self.assertEqual(resume_rating([finding('met')],[finding('met')]),'High')
         self.assertEqual(resume_rating([finding('not_met')],[finding('met')]),'Low')
         self.assertEqual(resume_rating([finding('unknown')],[finding('met')]),'Unresolved')
-        self.assertEqual(resume_rating([finding('met')],[finding('unknown')]),'Unresolved')
+        self.assertEqual(resume_rating([finding('met')],[finding('unknown')]),'Medium')
+        self.assertEqual(resume_rating([finding('met')],[finding('not_met')],critical=[finding('not_met')]),'Low')
+        self.assertEqual(resume_rating([finding('met')],[finding('met')],critical=[finding('unknown')]),'Unresolved')
         self.assertEqual(resume_rating([finding('met')],[],preferred_listed=False),'High')
         self.assertEqual(resume_rating([],[],preferred_listed=True),'Unresolved')
 
-    def test_all_nine_current_score_combinations_and_unknown(self):
+    def test_all_sixteen_score_combinations(self):
         _,contract=review_frame_contract()
-        self.assertEqual(contract['career'],{'Low':0,'Medium':2,'High':3})
-        self.assertEqual(contract['resume'],{'Low':1,'Medium':2,'High':3})
-        expected=[['Not pursuing','Not pursuing','Not pursuing'],['Not pursuing','Need review','Queued'],['Need review','Queued','Queued']]
-        for ci,c in enumerate(['Low','Medium','High']):
-            for ri,r in enumerate(['Low','Medium','High']):
-                self.assertEqual(scored_review(c,r,contract=contract)['outcome'],expected[ci][ri])
-        self.assertEqual(scored_review('High','Unresolved',contract=contract)['outcome'],'Need review')
-        self.assertEqual(scored_review('High','Low',minimum_failure=True,contract=contract)['outcome'],'Need review')
-
-    def test_impossible_resume_bounds_stop_but_unknown_career_always_waits(self):
-        for resume in ['Low','Medium','High','Unresolved']:
-            self.assertEqual(scored_review('Low',resume)['outcome'],'Not pursuing')
-            self.assertEqual(scored_review('Unresolved',resume)['outcome'],'Need review')
-        result=scored_review('Low','Unresolved')
-        self.assertIsNone(result['resume_score'])
-        self.assertIsNone(result['total'])
-        self.assertEqual(scored_review('Medium','Unresolved')['outcome'],'Need review')
-        self.assertEqual(scored_review('High','Unresolved')['outcome'],'Need review')
+        ratings=['Unresolved','Low','Medium','High']
+        self.assertEqual(contract['career'],dict(zip(ratings,range(4))))
+        self.assertEqual(contract['resume'],dict(zip(ratings,range(4))))
+        expected=[['Not pursuing','Not pursuing','Need review','Need review'],
+                  ['Not pursuing','Not pursuing','Need review','Need review'],
+                  ['Need review','Need review','Need review','Queued'],
+                  ['Need review','Need review','Queued','Queued']]
+        for ci,c in enumerate(ratings):
+            for ri,r in enumerate(ratings):
+                result=scored_review(c,r,contract=contract)
+                self.assertEqual(result['outcome'],expected[ci][ri])
+                self.assertEqual(result['total'],ci+ri)
+        self.assertEqual(scored_review('High','Low',minimum_failure=True)['outcome'],'Need review')
+        self.assertEqual(scored_review('Low','High',objective_failure=True)['outcome'],'Need review')
+        self.assertEqual(scored_review('Unresolved','Low')['outcome'],'Not pursuing')
+        self.assertEqual(scored_review('Unresolved','Medium')['outcome'],'Need review')
 
     def test_review_file_alone_changes_scores_and_automatic_identity(self):
         source=Path(__file__).resolve().parents[1]/'stages/review.md'
         original,contract=review_frame_contract()
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'review.md'
-            text=source.read_text().replace('Total 5–6','Total 4–6').replace('Total 4 |','Total 3 |').replace('Total 0–3','Total 0–2')
+            text=source.read_text().replace('Total 5–6','Total 4–6').replace('Total 3–4','Total 3')
             path.write_text(text)
             identity,changed=review_frame_contract(path)
             self.assertNotEqual(identity,original)
