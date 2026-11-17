@@ -4,6 +4,10 @@
 
 - Seventh table, Review eval: a frozen golden answer key built from the user's graded Manual notes (verdict, reason, reason type, Train/Holdout split), plus each eval's prediction and an Agree / False queue / Missed / Deferred match. Notes that no longer fit current criteria are archived and left out. DATA.md "Review eval" holds the rules.
 - `scripts/review_eval.py:score` reports status match, false queues, missed roles and deferrals; an eval never changes Applications. stages/review.md is unchanged, so the Review fingerprint is unchanged.
+## Lean Companies table
+
+- Retired Origin, Company fit, Latest funding and Funding date; Companies now has 21 fields. Setup, schema generation, stage instructions and repository checks use the reduced profile.
+- Funding stage remains structured. Financing details, creation origin and advisory company assessments stay in versioned Company evidence and History; Review uses current goals and verified facts. No Scan scope, Review scoring, employer-policy or application-hold rules changed.
 
 ## Review: pay, expired roles and resume-fit judgment
 

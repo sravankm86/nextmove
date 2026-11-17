@@ -12,12 +12,12 @@ from stage_state import application_write, merge_company_state, payload, resolve
 class CurateHandoffTests(unittest.TestCase):
     def setUp(self):
         self.company = {'id': 'company-example', 'Search status': 'Allow',
-                        'Application hold status': 'Held', 'Company fit': 'Low'}
+                        'Application hold status': 'Held', 'Funding stage': 'Series B'}
         self.candidate = {'Company': ['company-example'], 'Job key': 'employer:role',
                           'Role': 'Senior Product Manager', 'Lifecycle status': 'Inventoried',
                           'Role eligibility': 'Pending'}
 
-    def test_temporary_hold_and_advisory_company_fit_do_not_filter_inventory(self):
+    def test_temporary_hold_and_below_preference_funding_do_not_filter_inventory(self):
         for status in ['Held', 'Not assessed', 'Needs clarification', 'No known hold']:
             company = {**self.company, 'Application hold status': status}
             self.assertTrue(scan_enabled(company))
@@ -41,7 +41,11 @@ class CurateHandoffTests(unittest.TestCase):
 
     def test_curate_snapshot_recovers_without_an_application_or_job_key(self):
         values = {'holds': {'status': 'Complete'}, 'policy_research': {'status': 'Partial'},
-                  'discovery': {'status': 'Blocked', 'pending_feeds': ['feed-example']}}
+                  'discovery': {'status': 'Blocked', 'pending_feeds': ['feed-example']},
+                  'funding': {'stage': 'Series C', 'amount': '$100M', 'event_date': '2025-12-01',
+                              'source': 'official-announcement', 'retrieved_at': '2026-01-01'},
+                  'company_fit': {'rating': 'High', 'reason': 'Meets stated company preferences'},
+                  'origin': 'Discovered'}
         state = merge_company_state(None, company_id=self.company['id'], company_key='employer',
                                     run_id='curate-run', values=values)
         event = {'Recorded at': '2026-01-01', 'Field changes (JSON)': json.dumps(payload([state]))}

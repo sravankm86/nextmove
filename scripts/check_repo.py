@@ -96,9 +96,11 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':25,'Applications':29,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':21,'Applications':29,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES, HOLD_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
+    require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
+            'Retired company columns must stay outside the active schema')
     require([c['name'] for c in companies['Search status']['options']['choices']] == SEARCH_STATUSES and 'Proposed' in SEARCH_STATUSES, 'Companies Search status must offer Proposed/Allow/Exclude')
     require([c['name'] for c in companies['Application hold status']['options']['choices']] == HOLD_STATUSES and 'Blocked (permanent)' in HOLD_STATUSES, 'Companies hold choices must include Blocked (permanent)')
     pipeline = ['Curate', 'Scan', 'Review', 'Prepare', 'Apply', 'Track']

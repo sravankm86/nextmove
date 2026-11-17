@@ -9,8 +9,6 @@ SEARCH_STATUSES = ['Proposed', 'Allow', 'Exclude']
 HOLD_STATUSES = ['Not assessed', 'No known hold', 'Held', 'Blocked (permanent)', 'Needs clarification']
 POLICY_CONFIDENCE = ['Official', 'Recruiter', 'User', 'Community', 'Not found']
 ENFORCEABLE = {'Official', 'Recruiter', 'User'}
-COMPANY_FIT = ['High', 'Medium', 'Low', 'Unresolved']
-ORIGINS = ['Seed', 'User', 'Discovered']
 WINDOW_TYPES = ['Rolling', 'Calendar', 'Fixed', 'Unconfirmed']
 RESTRICTION_SCOPES = ['Company', 'Role family', 'Exact role', 'Mixed', 'Unconfirmed']
 # Ordered: a minimum stage admits every later stage. Unknown never qualifies.

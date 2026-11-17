@@ -8,7 +8,7 @@ Curate has three parts. Run them in this order; each one checkpoints separately 
 |---|---|---|
 | 1. Hold recompute | Every Run and every single Curate command | Application hold status, Apply blocked until, Agent notes |
 | 2. Policy research | Companies whose employer policy is Not assessed, unverified or due for reverification | Policy fields, Policy confidence, Policy verified at, Restriction details / source |
-| 3. Funding discovery and re-evaluation | When `company_policy.discovery.cadence_days` has elapsed since the last successful discovery checkpoint, or on explicit request | New Proposed rows, Company fit, funding fields, draft Sources |
+| 3. Funding discovery and re-evaluation | When `company_policy.discovery.cadence_days` has elapsed since the last successful discovery checkpoint, or on explicit request | New Proposed rows, Funding stage, Company evidence, Agent notes, company snapshots and draft Sources |
 
 Scan, Review and Prepare do not wait for parts 2 and 3. Part 1 must finish before Apply. A blocked or partial Curate leaves Scan to run on the current Allow list; report the gap rather than stopping unrelated work.
 
@@ -17,10 +17,10 @@ Scan, Review and Prepare do not wait for parts 2 and 3. Part 1 must finish befor
 | Question | Field | Owner |
 |---|---|---|
 | Should Scan read this company's boards? | Search status: Proposed / Allow / Exclude | Human. Curate only proposes. |
-| Does the company match Career Goals? | Company fit: High / Medium / Low / Unresolved | Curate |
+| Does the company match Career Goals? | Advisory assessment in History/Company evidence, summarized in Agent notes | Curate |
 | May we submit an application right now? | Application hold status and Apply blocked until | Curate computes; Apply recomputes before Submit |
 
-Do not merge these. A hold or cooldown never lowers Company fit or role fit, and never changes Search status. Scan reads exactly the companies where `scripts/company_policy.py:scan_enabled` is true: Search status Allow and hold not Blocked (permanent).
+Do not merge these. A hold or cooldown never lowers the company assessment or role fit, and never changes Search status. Scan reads exactly the companies where `scripts/company_policy.py:scan_enabled` is true: Search status Allow and hold not Blocked (permanent).
 
 ## Startup
 
@@ -64,20 +64,24 @@ This part can be large on the first pass (every company starts Not assessed). Wo
 
 Discovery finds companies that recently raised money and may match Career Goals. It reads only the feeds registered in `company_policy.discovery.feeds` (official press pages, VC portfolio/news pages, funding news sites, regulatory filings, newsletters in the read-only mailbox). Each feed keeps its own checkpoint (last item identity and time) in the Run and Settings. The first run looks back `first_run_lookback_days`. No feeds registered means discovery is Blocked, not Complete; ask the user which feeds to register.
 
+Keep Companies lean: only Funding stage is a structured funding column. Save supporting round labels, amounts, event dates, investors, verified operating parent and historical rounds in Company evidence/History. Collect the facts required by current goals; an undisclosed amount or missing event date is not itself an eligibility failure or a reason to block Review. Discovery still checks event dates against its feed window, with dates and cursors kept in the discovery checkpoint/evidence. Distinguish event dates from source retrieval time and verify decisive company facts when new evidence changes them.
+
+Use verified current public/private or parent status and the latest supported financing. For a private company, retain its highest verified named funding stage when a later investment is unlabelled; do not invent a series from the amount or assume that investment advances the stage. Keep secondary share trades, acquisition prices, valuations, announced targets and investor fund closes separate from money raised by the company. For acquired businesses apply the user’s parent-status preference using verified closing evidence, preserving historical rounds separately.
+
 For each funding event:
 
-1. Normalize the company identity (legal/brand name, official domain) and the Company key. If the company already exists in any Search status, update its funding fields and Agent notes only; never re-propose an Exclude.
+1. Normalize the company identity (legal/brand name, official domain) and the Company key. If the company already exists in any Search status, update Funding stage, Company evidence, Agent notes and its company snapshot only; never re-propose an Exclude.
 2. Admission gate: the round must satisfy `funding_qualifies(stage, min_funding_stage)`; the default minimum is Series C, and later private rounds, Late private and Public companies qualify. Unknown stage does not qualify; keep it in the Run as unresolved rather than adding a row.
-3. Score Company fit against Career Goals company preferences only (domain/product area, stage and size, location/work arrangement, stated avoids). High/Medium/Low need concrete evidence; missing decisive facts → Unresolved. Company-level fit is not evidence of any role’s salary, location, seniority or qualifications. Headquarters location alone does not establish where a company hires; preserve role-level questions for Review. A Low fit is recorded in the Run aggregate counts, not added as a row.
-4. Create the row with Search status **Proposed**, Origin Discovered, Company fit, Funding stage, Latest funding (round · amount · lead, compact), Funding date, Company evidence and Application hold status Not assessed. Agent notes states why it fits and what the user must decide.
+3. Assess the company against Career Goals company preferences only (domain/product area, stage and size, location/work arrangement, stated avoids). High/Medium/Low need concrete evidence; missing decisive facts → Unresolved. Company-level fit is not evidence of any role’s salary, location, seniority or qualifications. Headquarters location alone does not establish where a company hires; preserve role-level questions for Review. Save the advisory rating and reasons in the company snapshot and Company evidence. A newly discovered Low-fit company is recorded in the Run aggregate counts, not added as a row; existing companies keep their rows and targeting.
+4. Create the row with Search status **Proposed**, Funding stage, Company evidence and Application hold status Not assessed. Save creation origin, funding details and the advisory assessment in the company snapshot under DATA.md. Agent notes states why it fits and what the user must decide.
 5. Find the official careers board and supported reader (for example Greenhouse, Lever, Ashby, Workday) and draft a Sources row linked to the company with Latest coverage Unverified. Reuse an existing board/region Source key rather than creating another draft; preserve its accepted coverage and cursor instead of resetting it to Unverified. Unknown catalog/reader details remain explicit pending configuration. Scan ignores the draft until the user changes Search status to Allow; Scan then validates configuration and reports any gap.
 6. Research its employer policy (part 2) so it is ready if approved.
 
-Re-evaluation: for existing Allow companies, when a discovered event shows acquisition, shutdown, major layoffs, a change of business, or new facts that change Company fit, update Company fit and Agent notes and add a Run question proposing the change. Never change an Allow or Exclude yourself.
+Re-evaluation: for existing Allow companies, when a discovered event shows acquisition, shutdown, major layoffs, a change of business, or new facts that change the company assessment, update Funding stage and Company evidence as supported, save the revised assessment in History and update Agent notes and add a Run question proposing the change. Never change an Allow or Exclude yourself.
 
 ## Human decisions
 
-The user approves a Proposed company by setting Search status to Allow, or declines it by setting Exclude (with an optional reason in Manual notes). Declined companies keep their row so discovery does not propose them again. Curate reports pending Proposed rows in every handoff, grouped by Company fit.
+The user approves a Proposed company by setting Search status to Allow, or declines it by setting Exclude (with an optional reason in Manual notes). Declined companies keep their row so discovery does not propose them again. Curate reports pending Proposed rows in every handoff, grouped by the saved advisory assessment.
 
 A permanent block (for example a lifetime application limit already reached, or a user decision not to apply again) requires explicit user confirmation, saved in History. Curate may propose it as a Run question; once confirmed, set Application hold status Blocked (permanent). The company keeps its Search status and Sources, but Scan stops reading it. Unblocking is a user action.
 

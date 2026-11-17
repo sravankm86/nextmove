@@ -4,7 +4,7 @@ Follow WORKFLOW.md and DATA.md. Scan enumerates every official board of every in
 
 ## Scope and criteria
 
-Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow and hold not Blocked (permanent)). Proposed and Exclude companies are skipped and reported as such; temporary holds, Company fit and policy confidence are not filters. A standalone Scan uses current Companies and saved Curate output; it does not run Curate research or discovery.
+Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow and hold not Blocked (permanent)). Proposed and Exclude companies are skipped and reported as such; temporary holds, funding stage, Curate’s advisory assessment and policy confidence are not filters. A standalone Scan uses current Companies and saved Curate output; it does not run Curate research or discovery.
 
 Snapshot in-scope company and source IDs in the Run scope, then reread company targeting before each inventory write and pass current Companies records to `application_write`. A company that leaves scope keeps its existing rows.
 
