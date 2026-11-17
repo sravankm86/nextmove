@@ -1,5 +1,9 @@
 # Changelog
 
+## Simpler submission guard rails
+
+- Apply's guard rails are now just the `Pause applications` switch and one daily limit (`Settings.submission_policy.max_per_day`). Expiry, per-run/weekly caps, allowed-site lists, supervised first submissions, pacing and the configurable circuit breaker are gone. Fixed rules stay: no passwords or account creation, stop on unanswered required questions, never retry or continue after an unclear submission, company limits and holds.
+
 ## Reject Low on either Review axis
 
 - A supported Low career or resume fit now means Not pursuing before numeric routing. Other thresholds and Unresolved scores are unchanged. Explicit reassessment can include Queued and Not pursuing applications; Manual notes remains human-owned.

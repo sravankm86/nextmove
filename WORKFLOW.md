@@ -9,7 +9,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
-| Apply | Ready roles without unresolved attempts → browser preflight; submit only within the standing authorization (Settings.submission_policy) |
+| Apply | Ready roles without unresolved attempts → browser preflight; submit only when Pause applications is off and the daily limit allows |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
 
 Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, but cannot infer submission permission or launch another harness.
@@ -48,7 +48,7 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Changed decision inputs require revalidation.
 
-Review alone approves Queued (stages/review.md). Prepare produces the verified resume (stages/prepare.md). Apply submits only under the standing authorization and persists the attempt before Submit (stages/apply.md). Never blind-retry, and never infer non-submission from missing mail.
+Review alone approves Queued (stages/review.md). Prepare produces the verified resume (stages/prepare.md). Apply submits only when Pause applications is off and the daily limit allows, and persists the attempt before Submit (stages/apply.md). Never blind-retry, and never infer non-submission from missing mail.
 
 ## Stage boundaries and exit
 
