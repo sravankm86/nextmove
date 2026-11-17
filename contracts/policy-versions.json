@@ -10,15 +10,15 @@
     "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores.",
     "Curate owns company targeting proposals, employer-policy research and computed holds. Holds never change role fit; Apply recomputes the hold with scripts/company_policy.py:apply_allowed before Submit.",
     "Prepare reuses an approved base only with complete coverage and a current master; otherwise it tailors from the closest base under the registered resume guidelines. Base creation is offline. resume_ready checks the recorded path evidence.",
-    "Apply submits only under an enabled, unexpired standing authorization in Settings.submission_policy, evaluated by scripts/submission_policy.py:submission_gate, plus apply_ready, the company hold check and live controls. Answers come only from the answer bank."
+    "Apply submits only when Pause applications is off and Settings.submission_policy.max_per_day allows (scripts/submission_policy.py:submission_gate), plus apply_ready, the company hold check and the fixed safety rules. Answers come only from the answer bank."
   ],
   "posting_availability": "apply-form-only-v1",
-  "lifecycle": "nine-states-review-duplicate-v2",
+  "lifecycle": "ten-states-needs-answer-v3",
   "identity": "run-objective-identity-v2",
   "review_source": "stages/review.md",
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",
   "company_curation": "curate-holds-v1",
   "company_policy_source": "stages/curate.md and scripts/company_policy.py",
   "preparation": "base-reuse-or-tailor-v1",
-  "submission": "standing-authorization-v1"
+  "submission": "basic-guard-rails-v2"
 }

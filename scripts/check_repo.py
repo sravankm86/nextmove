@@ -89,7 +89,7 @@ def check(root):
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
     from lifecycle import STATUSES
     lifecycle = next(f for f in lookup['Applications']['fields'] if f['name']=='Lifecycle status')
-    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==9, 'Expected nine lifecycle states with Need review and Duplicate')
+    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==10, 'Expected ten lifecycle states with Need review and Duplicate')
     counts = {}
     for table in tables:
         fields = {f['name'] for f in table['fields']}
@@ -123,7 +123,7 @@ def check(root):
     require({"master_resume", "resume_guidelines", "base_resumes"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
     require(next(c for c in command["commands"] if c["command"] == "Apply")["mode"] == "review", "Apply must default to preflight")
     from submission_policy import DEFAULT_POLICY, policy_problems
-    require(DEFAULT_POLICY['enabled'] is False and DEFAULT_POLICY['mode'] == 'preflight' and DEFAULT_POLICY['caps'] == {'per_run': 0, 'per_day': 0, 'per_week': 0}, 'Submission policy must default to preflight with zero caps')
+    require(DEFAULT_POLICY == {'max_per_day': 0}, 'Submission policy must default to a zero daily limit')
     require(seed['submission_defaults'].get('policy') == DEFAULT_POLICY and not policy_problems(DEFAULT_POLICY), 'Seeded submission policy must match scripts/submission_policy.py defaults')
     require((root / 'templates/answer-bank.md').is_file(), 'Missing answer bank template')
     controls = {x["key"]: x["value"] for x in seed["controls"]}

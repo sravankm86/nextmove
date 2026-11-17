@@ -5,8 +5,9 @@ from lifecycle import STATUSES, END_STATES
 from stage_state import application_write, run_progress, attempt_blocks_retry
 
 class LifecycleTests(unittest.TestCase):
-    def test_nine_states_and_endpoint(self):
-        self.assertEqual(len(STATUSES),9)
+    def test_ten_states_and_endpoint(self):
+        self.assertEqual(len(STATUSES),10)
+        self.assertEqual(STATUSES.index('Needs answer'),STATUSES.index('Ready')+1)
         self.assertEqual(END_STATES,{'Interviewing','Not pursuing','Rejected','Duplicate'})
         self.assertEqual(application_write({'Lifecycle status':'Need review'}),{'Lifecycle status':'Need review'})
     def test_uncertain_attempt_blocks_and_legacy_labels_are_rejected(self):

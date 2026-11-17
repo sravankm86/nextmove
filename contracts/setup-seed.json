@@ -1,5 +1,5 @@
 {
-  "version": 9,
+  "version": 10,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -97,7 +97,8 @@
       "reference_url": null,
       "verification": "Missing",
       "value": null,
-      "template": "templates/answer-bank.md"
+      "template": "templates/answer-bank.md",
+      "note": "Private Google Doc in the user's Drive; Apply adds unanswered required questions to its Specific questions table."
     },
     {
       "key": "submission_policy",
@@ -225,28 +226,7 @@
   ],
   "submission_defaults": {
     "policy": {
-      "enabled": false,
-      "mode": "preflight",
-      "authorized_by": null,
-      "authorized_at": null,
-      "expires_at": null,
-      "caps": {
-        "per_run": 0,
-        "per_day": 0,
-        "per_week": 0
-      },
-      "allowed_ats": [],
-      "supervised_first_per_ats": 1,
-      "min_minutes_between_submissions": 5,
-      "circuit_breaker": {
-        "consecutive_failures": 2,
-        "uncertain_submissions": 1
-      },
-      "allow_account_creation": false,
-      "allow_credential_entry": false,
-      "unknown_required_question": "stop",
-      "optional_question_without_answer": "leave_blank",
-      "cover_letter": "only_if_prepared"
+      "max_per_day": 0
     },
     "policy_code": "scripts/submission_policy.py"
   },
