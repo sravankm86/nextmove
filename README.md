@@ -83,7 +83,7 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
 - Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
 - Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
-- A [daily submission limit and the Pause applications switch](stages/apply.md#guard-rails-you-control) and an [answer bank](templates/answer-bank.md) before real applications, plus a browser-capable agent signed into the sites you allow. Track needs read-only mailbox access.
+- A [daily submission limit and the Pause applications switch](stages/apply.md#guard-rails-you-control) and an answer bank Google Doc in your Drive ([blank template](templates/answer-bank.md)) before real applications, plus a browser-capable agent signed into the sites you allow. Track needs read-only mailbox access.
 
 No model API key is required. Connectors may use service APIs internally. A fork does not copy private data, authentication or another person's setup. Plain chat without suitable tools cannot execute these stages.
 

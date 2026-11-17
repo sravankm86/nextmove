@@ -19,16 +19,25 @@ Two settings, both edited only by the user:
 
 `scripts/submission_policy.py:submission_gate` applies both. The fixed rules below and the company limits and holds always apply on top; they are not configurable.
 
-## Answer bank: Settings.answer_bank
+## Answer bank: a private Google Doc
 
-All form answers come from the registered answer bank (template: templates/answer-bank.md) or from facts already in the role's verified resume. The master supplies resume facts only. Rules:
+The answer bank is the user's Google Doc in their Drive, linked from Settings.answer_bank (blank template: templates/answer-bank.md). It is never stored in the repository. Read it at the start of every Apply run. All form answers come from it or from facts already in the role's verified resume.
 
-- **Required question, answer in the bank:** use it exactly. If it needs adapting (for example, choosing the closest dropdown option), the adapted answer must mean the same thing; otherwise stop.
-- **Required question, no answer in the bank:** stop that role as `needs_answer`, save the exact question text, field type and options, and continue with other roles. Never guess, infer or invent.
+- **Required question, answer in the bank:** use it exactly. If it needs adapting (for example, choosing the closest dropdown option), the adapted answer must mean the same thing; otherwise treat it as unanswered.
 - **Optional question without an answer:** leave it blank.
-- **Legal attestations, work authorization, sponsorship, relocation, start date, compensation, criminal history, non-compete, previous employment at this company:** answer only from the bank. A free-text compensation field with no bank value stops the role.
-- **Voluntary demographic or EEO questions:** use the bank's preference (typically "decline to self-identify"); if the bank has none and the question is required, stop.
-- **Essays and custom free-text questions:** stop unless the bank has an approved answer for that exact question.
+- **Legal attestations, work authorization, sponsorship, relocation, start date, compensation, criminal history, non-compete, previous employment at this company, essays and custom free-text questions:** answer only from the bank.
+- **Voluntary demographic or EEO questions:** use the bank's preference; if it has none and the question is required, treat it as unanswered.
+
+**Unanswered required question.** Never guess, infer or invent. Instead:
+
+1. Skip the role before pressing Submit; it stays Ready.
+2. Add the question to the Doc's **Specific questions** table: exact question text, the company (or "any" if it is generic), an empty Answer, the waiting role, today's date, and for a dropdown the options in brackets after the question. If the same question is already there, add this role to its Waiting roles instead of a new row.
+3. Write the role's Agent notes: `Apply: waiting for your answer to "<question>" in the answer bank.`
+4. List every new question in the run summary so the user sees them in one place.
+
+If this harness cannot edit the Doc, skip step 2, put the questions in the run summary and ask the user to add them.
+
+**When the user answers,** the next Apply run reads the filled-in rows as approved answers, gives each waiting role a fresh preflight and continues. A row whose Answer is still empty keeps its roles waiting.
 
 ## Which rows are picked up
 
@@ -38,7 +47,7 @@ A role is eligible only when all of these hold:
 2. The company passes `scripts/company_policy.py:apply_allowed` (see Company application holds).
 3. No earlier application exists for the same company-scoped role ID or canonical job link, including rejected and external applications.
 4. The resume behind Resume link downloads, and its SHA-256 equals Resume version.
-5. The answer bank is registered and verified.
+5. The answer bank Doc is linked in Settings.answer_bank and readable.
 
 Process eligible roles in this order: oldest Resume verified at first. The daily limit or an unclear submission can end the Run before the list is done; report the rest as pending, not failed.
 
@@ -66,7 +75,7 @@ Process eligible roles in this order: oldest Resume verified at first. The daily
 Stop the role, record the exact reason and screenshot, and move on (or stop the Run where noted):
 
 - Sign-in required with no active session, account creation, password, 2FA or CAPTCHA.
-- A required question the bank cannot answer, an essay, an assessment, a video or a scheduling step.
+- An assessment, a video or a scheduling step. (Unanswered required questions follow the answer-bank flow above.)
 - The posting, employer, title or requisition ID differs from the Job key, or the posting is closed.
 - The resume hash does not match, or the form needs a document Prepare did not verify.
 - The page asks for payment, government ID numbers, bank details or anything beyond a normal application.
@@ -75,7 +84,7 @@ Stop the role, record the exact reason and screenshot, and move on (or stop the 
 
 ## Writes and handoff
 
-Agent notes gives the one-line outcome per role, for example `Apply: submitted, confirmation #A123.` or `Apply: stopped, required question "Expected salary" not in answer bank.` Never overwrite Manual notes. History keeps preflight records, intents, confirmations, screenshot locations and stop reasons; the stage snapshot keeps `submission` metadata under DATA.md. Runs records counts: eligible, preflighted, submitted, stopped by reason, unclear, pending because of the daily limit.
+Agent notes gives the one-line outcome per role, for example `Apply: submitted, confirmation #A123.` or `Apply: waiting for your answer to "Expected salary" in the answer bank.` Never overwrite Manual notes. History keeps preflight records, intents, confirmations, screenshot locations and stop reasons; the stage snapshot keeps `submission` metadata under DATA.md. Runs records counts: eligible, preflighted, submitted, waiting for an answer, stopped by reason, unclear, pending because of the daily limit.
 
 Before advancing, verify that the accepted review still matches the current goals, role policy, master and job description; changed inputs require re-review or re-preparation. Do not send recruiting mail. A single Apply command stops at its handoff; a full Run continues with Track.
 
@@ -92,6 +101,6 @@ An elapsed Apply blocked until does not authorize submission, prove role eligibi
 
 ## Getting started
 
-1. Leave `Pause applications` on and run Apply: every Ready role gets a preflight, and missing answers show up. Add them to the answer bank.
+1. Leave `Pause applications` on and run Apply: every Ready role gets a preflight, and unanswered questions land in the answer bank's Specific questions table. Fill in the answers.
 2. Set `max_per_day` to a small number (for example 3) and `Pause applications` to `false`.
 3. Raise the daily limit when you are comfortable. Set `Pause applications` back to `true` at any time to stop.

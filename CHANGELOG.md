@@ -2,6 +2,7 @@
 
 ## Simpler submission guard rails
 
+- The answer bank is a private Google Doc linked from Settings.answer_bank. When a required question has no answer, Apply skips that role, adds the question to the Doc's Specific questions table, notes it on the role and in the run summary, and uses the answer on the next run.
 - Apply's guard rails are now just the `Pause applications` switch and one daily limit (`Settings.submission_policy.max_per_day`). Expiry, per-run/weekly caps, allowed-site lists, supervised first submissions, pacing and the configurable circuit breaker are gone. Fixed rules stay: no passwords or account creation, stop on unanswered required questions, never retry or continue after an unclear submission, company limits and holds.
 
 ## Reject Low on either Review axis

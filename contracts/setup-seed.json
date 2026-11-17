@@ -97,7 +97,8 @@
       "reference_url": null,
       "verification": "Missing",
       "value": null,
-      "template": "templates/answer-bank.md"
+      "template": "templates/answer-bank.md",
+      "note": "Private Google Doc in the user's Drive; Apply adds unanswered required questions to its Specific questions table."
     },
     {
       "key": "submission_policy",
