@@ -66,6 +66,8 @@
 - Required company characteristics:
 - Preferred company stage, size or culture:
 - Company characteristics to avoid:
+- Minimum funding stage for newly discovered companies (for example Series C or later):
+- Personal limit on applications per company (for example 3 in any 30 days):
 
 ## Priorities and Tradeoffs
 

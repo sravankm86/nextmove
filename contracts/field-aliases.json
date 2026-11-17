@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "aliases": {
     "Applications": {
       "Company": [
@@ -65,6 +65,9 @@
       ]
     },
     "Companies": {
+      "Manual notes": [
+        "Notes"
+      ],
       "Sources": [
         "Catalog Sources"
       ]

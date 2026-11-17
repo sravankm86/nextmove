@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "tables": [
     "Companies",
     "Applications",
@@ -14,6 +14,7 @@
     "manual"
   ],
   "pipeline": [
+    "Curate",
     "Scan",
     "Review",
     "Prepare",
@@ -32,13 +33,33 @@
       "stage": "Full run",
       "mode": "prepare",
       "instructions": "WORKFLOW.md",
-      "scope": "Whole authorized end-to-end plan; continue unaffected work, checkpoint blockers",
+      "scope": "Whole authorized end-to-end plan (Curate \u2192 Scan \u2192 Review \u2192 Prepare \u2192 Apply \u2192 Track); continue unaffected work, checkpoint blockers",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "career_goals",
         "role_policy",
-        "execution_policy"
+        "execution_policy",
+        "company_policy"
+      ]
+    },
+    {
+      "command": "Curate",
+      "aliases": [
+        "curate",
+        "companies",
+        "company management"
+      ],
+      "stage": "Curate",
+      "mode": "prepare",
+      "instructions": "stages/curate.md",
+      "scope": "Recompute every company hold; research unassessed/stale employer policies; on its configured cadence discover Series C+ funded companies as Proposed. Never sets Allow/Exclude or submits.",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "career_goals",
+        "company_policy",
+        "content_output"
       ]
     },
     {
@@ -111,7 +132,8 @@
         "structured_store",
         "master_resume",
         "career_goals",
-        "role_policy"
+        "role_policy",
+        "company_policy"
       ],
       "submission_resources": [
         "answer_bank",

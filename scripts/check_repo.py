@@ -32,8 +32,8 @@ def check(root):
     for name in ["README.md", "LICENSE", "AGENTS.md", "WORKFLOW.md", "SETUP.md", "DATA.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "CAREER-GOALS.md", "RESUME-FILES.md", "docs/MAINTENANCE.md", "templates/career-goals.md"]:
         require((root / name).is_file(), "Missing required public file: " + name)
 
-    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['scan','review','prepare','apply','track']]
-    require(len(runtime)==11 and all((root/p).is_file() for p in runtime), 'Expected eleven canonical operational instruction files')
+    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['curate','scan','review','prepare','apply','track']]
+    require(len(runtime)==12 and all((root/p).is_file() for p in runtime), 'Expected twelve canonical operational instruction files')
     for obsolete in ['COMMANDS.md','ARCHITECTURE.md','CLARIFICATIONS.md','CONNECTORS.md','DATA-GOVERNANCE.md','HARNESS-BOOTSTRAP.md','LIFECYCLE.md','ROLE-ELIGIBILITY.md','SCALING.md','SCAN-OPTIMIZATION.md','STAGE-STATE.md','STORAGE.md','TRACKER.md','stages/shortlist.md','templates/profile.md','contracts/state-schema.json']:
         require(not (root/obsolete).exists(), 'Do not restore a duplicate/deprecated instruction authority: '+obsolete)
 
@@ -111,7 +111,12 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':15,'Applications':29,'Sources':13,'Runs':20,'Settings':6,'History':13}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':25,'Applications':29,'Sources':13,'Runs':21,'Settings':6,'History':13}, 'Unexpected minimal table profile')
+    from company_policy import SEARCH_STATUSES, HOLD_STATUSES
+    companies = {f['name']: f for f in lookup['Companies']['fields']}
+    require([c['name'] for c in companies['Search status']['options']['choices']] == SEARCH_STATUSES and 'Proposed' in SEARCH_STATUSES, 'Companies Search status must offer Proposed/Allow/Exclude')
+    require([c['name'] for c in companies['Application hold status']['options']['choices']] == HOLD_STATUSES and 'Blocked (permanent)' in HOLD_STATUSES, 'Companies hold choices must include Blocked (permanent)')
+    require(command['pipeline'][0] == 'Curate' and next(x['value'] for x in seed['policies'] if x['key'] == 'execution_policy')['pipeline'][0] == 'Curate', 'Curate must run upstream of Scan')
     require(not core.get('common_fields') and all(t.get('common_fields')==[] for t in tables), 'Do not duplicate native metadata across tables')
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
     require(len(resources) == len(set(resources)), "Duplicate Settings key")
@@ -146,10 +151,15 @@ def check(root):
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
     require(pref.get('freeform_supported') is True and pref.get('embedded_commands_are_instructions') is False and pref.get('derived_values_require_source_version') is True, 'Unsafe preference interpretation')
-    require(pref.get('uses') == ['scan_criteria', 'review_queue'] and pref.get('source_revision_check_required') is True and pref.get('stage_readiness_required') is True, 'Missing two-stage preference readiness')
+    require(pref.get('uses') == ['scan_criteria', 'review_queue', 'company_curation'] and pref.get('source_revision_check_required') is True and pref.get('stage_readiness_required') is True, 'Missing two-stage preference readiness')
     require(pref.get('explicit_unrestricted_distinct_from_unspecified') is True, 'Blank preferences must not mean unrestricted')
     for key in ['template', 'instructions']:
         require((root / pref.get(key, '__missing__')).is_file(), 'Missing preference contract file')
+    company = next(x["value"] for x in seed["policies"] if x["key"] == "company_policy")
+    discovery = company["discovery"]
+    require(discovery["admission"] == "Proposed" and discovery["auto_allow"] is False, "Discovered companies must stay Proposed")
+    require(company["permanent_block"]["requires_user_confirmation"] is True and company["holds_change_fit"] is False and company["apply_requires_hold_status"] == "No known hold", "Unsafe company hold policy")
+    require(company["policy_research"]["community_reports_enforced"] is False, "Community reports cannot be enforced as confirmed rules")
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
     require(seed["submission_defaults"]["enabled"] is False and seed["submission_defaults"]["daily_submission_cap"] == 0, "Unsafe submission setup")

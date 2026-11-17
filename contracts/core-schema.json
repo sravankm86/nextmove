@@ -1,11 +1,11 @@
 {
-  "version": 10,
+  "version": 11,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
       "business_key": "Company key",
-      "description": "Explicit company choices and confirmed simple quota/cooldown rules. Complex unclear rules block submission; no automatic Allow.",
+      "description": "Curate owns this table: human Allow/Exclude targeting, agent-discovered Proposed companies, company fit and funding, researched employer policies and computed application holds. No automatic Allow.",
       "fields": [
         {
           "name": "Company",
@@ -21,6 +21,9 @@
           "options": {
             "choices": [
               {
+                "name": "Proposed"
+              },
+              {
                 "name": "Allow"
               },
               {
@@ -30,8 +33,137 @@
           }
         },
         {
-          "name": "Notes",
+          "name": "Manual notes",
           "type": "multilineText"
+        },
+        {
+          "name": "Agent notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Origin",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Seed"
+              },
+              {
+                "name": "User"
+              },
+              {
+                "name": "Discovered"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Company fit",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "High"
+              },
+              {
+                "name": "Medium"
+              },
+              {
+                "name": "Low"
+              },
+              {
+                "name": "Unresolved"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Funding stage",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Pre-seed / Seed"
+              },
+              {
+                "name": "Series A"
+              },
+              {
+                "name": "Series B"
+              },
+              {
+                "name": "Series C"
+              },
+              {
+                "name": "Series D"
+              },
+              {
+                "name": "Series E+"
+              },
+              {
+                "name": "Late private"
+              },
+              {
+                "name": "Public"
+              },
+              {
+                "name": "Unknown"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Latest funding",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Funding date",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
+        },
+        {
+          "name": "Company evidence",
+          "type": "url"
+        },
+        {
+          "name": "Policy confidence",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Official"
+              },
+              {
+                "name": "Recruiter"
+              },
+              {
+                "name": "User"
+              },
+              {
+                "name": "Community"
+              },
+              {
+                "name": "Not found"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Policy verified at",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
         },
         {
           "name": "Max applications",
@@ -49,7 +181,23 @@
         },
         {
           "name": "Application window type",
-          "type": "singleLineText"
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Rolling"
+              },
+              {
+                "name": "Calendar"
+              },
+              {
+                "name": "Fixed"
+              },
+              {
+                "name": "Unconfirmed"
+              }
+            ]
+          }
         },
         {
           "name": "Rejection cooldown (days)",
@@ -60,7 +208,26 @@
         },
         {
           "name": "Restriction scope",
-          "type": "singleLineText"
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Company"
+              },
+              {
+                "name": "Role family"
+              },
+              {
+                "name": "Exact role"
+              },
+              {
+                "name": "Mixed"
+              },
+              {
+                "name": "Unconfirmed"
+              }
+            ]
+          }
         },
         {
           "name": "Apply blocked until",
@@ -88,6 +255,9 @@
               },
               {
                 "name": "Held"
+              },
+              {
+                "name": "Blocked (permanent)"
               },
               {
                 "name": "Needs clarification"
@@ -449,6 +619,9 @@
                 "name": "Full run"
               },
               {
+                "name": "Curate"
+              },
+              {
                 "name": "Scan"
               },
               {
@@ -710,6 +883,13 @@
       "target_table": "Companies",
       "cardinality": "0..1",
       "inverse_field": "Applications"
+    },
+    {
+      "from_table": "Companies",
+      "field": "Curate run",
+      "target_table": "Runs",
+      "cardinality": "0..1",
+      "inverse_field": "Curate companies"
     },
     {
       "from_table": "Sources",
