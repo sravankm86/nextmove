@@ -11,12 +11,13 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
 | Apply | Ready roles without unresolved attempts → browser preflight; submit only when Pause applications is off and the daily limit allows |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
+| Review eval | Score Review against the Review eval answer key (DATA.md "Review eval"); never changes Applications |
 
 Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, but cannot infer submission permission or launch another harness.
 
 ## Startup and ownership
 
-Discover/map the six tables, Settings and live controls. Curate runs first in a Run so Scan reads the current Allow list and Apply sees current holds; a Partial Curate does not block Scan/Review/Prepare, but Apply needs its hold recompute. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the seven tables, Settings and live controls. Curate runs first in a Run so Scan reads the current Allow list and Apply sees current holds; a Partial Curate does not block Scan/Review/Prepare, but Apply needs its hold recompute. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 

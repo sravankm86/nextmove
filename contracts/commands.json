@@ -6,7 +6,8 @@
     "Sources",
     "Runs",
     "Settings",
-    "History"
+    "History",
+    "Review eval"
   ],
   "default_command": "Run",
   "execution_modes": [

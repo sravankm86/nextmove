@@ -1,4 +1,4 @@
-"""Build the six-table public blueprint. No account access or provisioning."""
+"""Build the seven-table public blueprint. No account access or provisioning."""
 import json
 from pathlib import Path
 
@@ -37,12 +37,14 @@ def main():
     table('Runs', [field('Run key'), field('Run type', 'singleSelect', ['Full run', 'Curate', 'Scan', 'Review', 'Prepare', 'Apply', 'Track', 'Migration', 'Experiment']), field('Status', 'singleSelect', execution), field('Owner'), field('Instruction revision'), field('Input versions (JSON)', 'multilineText'), field('Scope (JSON)', 'multilineText'), field('Checkpoint (JSON)', 'multilineText'), field('Expected items', 'number'), field('Completed items', 'number'), field('Blocked items', 'number'), field('Started at', 'dateTime'), field('Finished at', 'dateTime'), field('Agent notes', 'multilineText')], 'Run key', 'One row per full run by default; manual stage invocations use the identical checkpoint/handoff shape. No per-job work-item or general attempt tables.')
     table('Settings', [field('Key'), field('Value', 'multilineText'), field('Reference URL', 'url'), field('Version'), field('Verification', 'singleSelect', ['Located', 'Verified', 'Missing', 'Needs verification', 'Inaccessible']), field('Notes', 'multilineText')], 'Key', 'Private resource references, criteria, scope and live controls. Instructions/command routes stay in Git.')
     table('History', [field('Event key'), field('Operation ID'), field('Event type'), field('Recorded at', 'dateTime'), field('Occurred at', 'dateTime'), field('Actor / channel'), field('Table reference'), field('Record reference'), field('Field changes (JSON)', 'multilineText'), field('Evidence URL', 'url'), field('Notes', 'multilineText')], 'Event key', 'Meaningful mutations and business events; failed/uncertain operations retain evidence. No routine per-read/per-row access logging. Not a universal immutable audit system.')
+    from review_eval import VERDICTS, REASON_TYPES, SPLITS, PREDICTIONS
+    table('Review eval', [field('Example'), field('Application record'), field('Job link', 'url'), field('Your verdict', 'singleSelect', VERDICTS), field('Reason', 'multilineText'), field('Reason type', 'singleSelect', REASON_TYPES), field('Split', 'singleSelect', SPLITS), field('Active', 'checkbox'), field('Inputs snapshot', 'url'), field('Last prediction', 'singleSelect', PREDICTIONS), field('Last eval'), field('Added on', 'date'), field('Match', 'formula')], 'Application record', 'Golden answer key for Review built from the user\'s graded Manual notes: frozen verdict and reason, holdout split, the latest eval prediction and its match. Self-contained (no links) so Applications and Runs gain no columns. DATA.md "Review eval".')
     links = [
         ('Applications', 'Company', 'Companies', '0..1'), ('Companies', 'Curate run', 'Runs', '0..1'),
         ('Sources', 'Company', 'Companies', '1'), ('Sources', 'Last run', 'Runs', '0..1'),
         ('History', 'Application', 'Applications', 'many'), ('History', 'Run', 'Runs', '0..1'),
         ('Applications', 'Scan run', 'Runs', '0..1'), ('Applications', 'Review run', 'Runs', '0..1'), ('Applications', 'Preparation run', 'Runs', '0..1'), ('Applications', 'Submission run', 'Runs', '0..1')]
-    result = {'version': 12, 'description': 'Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.', 'tables': tables, 'links': [{'from_table': a, 'field': b, 'target_table': c, 'cardinality': d} for a,b,c,d in links]}
+    result = {'version': 13, 'description': 'Seven-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.', 'tables': tables, 'links': [{'from_table': a, 'field': b, 'target_table': c, 'cardinality': d} for a,b,c,d in links]}
     inverse = {('Companies','Curate run'):'Curate companies',('Applications','Company'):'Applications',('Sources','Company'):'Sources',('Sources','Last run'):'Sources',('History','Run'):'History'}
     for link in result['links']:
         if (link['from_table'],link['field']) in inverse:

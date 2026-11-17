@@ -27,7 +27,7 @@ Curate hands human-approved companies and factual company evidence to Scan/Revie
 flowchart LR
     User[Human preferences and authorization] --> Agent[One active AI harness]
     Git[GitHub instructions] --> Agent
-    Agent <--> Airtable[Six Airtable tables: saved state]
+    Agent <--> Airtable[Seven Airtable tables: saved state]
     Agent <--> Drive[Google Drive: content and evidence]
     Agent --> Boards[Official catalogs and application sites]
     Funding[Funding news and employer policy pages] --> Agent
@@ -48,8 +48,9 @@ The private main Drive folder has two working children: **Role specific** for cu
 | Runs | Frozen inputs, ownership, progress and handoff | 21 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
+| Review eval | Golden answer key from your graded notes, and each eval's prediction and match | 13 |
 
-The 103-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 116-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
