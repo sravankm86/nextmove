@@ -1,5 +1,10 @@
 # Changelog
 
+## Apply blocks only verified company restrictions
+
+- `company_policy.apply_allowed` now stops a submission only for Held (an enforceable employer rule or the personal limit is reached) or Blocked (permanent). Needs clarification and Not assessed no longer block.
+- When the careers site shows a restriction during an application, Apply stops that role and records the rule on the company row (Policy confidence Official) with History.
+
 ## Prepare: resume choice, shortlist estimate and gaps in Agent notes
 
 - A Ready role's Agent notes now say which resume was used and why, an estimated shortlist chance on a 1–10 scale (the agent's judgment, not a measured probability) and the main gaps.

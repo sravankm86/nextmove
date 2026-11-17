@@ -175,7 +175,7 @@
           "stops_scan": true
         },
         "holds_change_fit": false,
-        "apply_requires_hold_status": "No known hold"
+        "apply_blocking_hold_statuses": ["Held", "Blocked (permanent)"]
       },
       "verification": "Needs verification"
     },

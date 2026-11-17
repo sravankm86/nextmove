@@ -23,7 +23,7 @@ Native record IDs and createdTime replace metadata columns. Primary display fiel
 - Funding amounts, event dates, exact round labels, investors, parent/historical facts and creation origin belong in Company evidence and History, not additional Companies columns. Curate saves its advisory assessment and reasons in the company snapshot (`curate.company_fit`); Agent notes gives the short explanation. Review uses the facts against current goals, not the cached assessment as its role score.
 - Origin, Company fit, Latest funding and Funding date are retired columns. Do not request them as live fields, recreate them during setup or write them. Historical snapshots may retain these keys as evidence.
 - Policy confidence: Official, Recruiter, User (enforced); Community (recorded, not enforced); Not found (researched, no rule). Blank means Not assessed.
-- Application hold status: Not assessed, No known hold, Held, Blocked (permanent), Needs clarification. Apply blocked until is Curate's UTC estimate; Apply recomputes before Submit.
+- Application hold status: Not assessed, No known hold, Held, Blocked (permanent), Needs clarification. Only Held and Blocked (permanent) block Apply. Apply blocked until is Curate's UTC estimate; Apply recomputes before Submit and records restrictions the careers site shows.
 - The personal limit in Settings `company_policy` (default 3 per company per rolling 30 days; Career Goals may override) applies on top of employer rules.
 
 **Applications.** The 29 fields in scripts/stage_state.py:CORE_FIELDS, including Company, four stage Run links and History. The primary field Application ID is the formula RECORD_ID(); never write to it. Job key is the canonical employer posting identity for deduplication.

@@ -90,14 +90,15 @@ Before advancing, verify that the accepted review still matches the current goal
 
 ## Company application holds
 
-Curate (stages/curate.md) owns company policies and writes Application hold status and Apply blocked until. Apply does not edit policy fields; it rechecks immediately before every Submit:
+Curate (stages/curate.md) owns company policy research and writes Application hold status and Apply blocked until. Apply rechecks immediately before every Submit and records any restriction the careers site itself shows:
 
 1. Reread the company row, all Applied rows, unresolved attempt keys, known external applications and rejection events in History for that company.
-2. Call `scripts/company_policy.py:apply_allowed` with the Settings `company_policy` personal limit (or the Career Goals override pinned in the Run). Submit only when it returns No known hold. Held, Blocked (permanent), Needs clarification and Not assessed all block the affected submissions; save the returned reasons in Agent notes and History.
-3. Check Role family / Exact role rules in Restriction details / source against this role. Any unresolved rule or boundary blocks that role.
-4. If the result differs from the saved company hold, write the recomputed value with History so Curate and the next harness see it.
+2. Call `scripts/company_policy.py:apply_allowed` with the Settings `company_policy` personal limit (or the Career Goals override pinned in the Run). Only a verified block stops the submission: Held (an enforceable employer rule or your personal limit is reached) or Blocked (permanent). Needs clarification and Not assessed do not block; proceed and let the careers site show any real restriction. Save the returned reasons in Agent notes and History.
+3. Check Role family / Exact role rules in Restriction details / source against this role. A verified rule that covers this role blocks it; an unclear one does not.
+4. If the careers site shows a restriction while applying (for example "you have reached the maximum number of applications" or a waiting period after a rejection), stop that role, record the exact wording and a screenshot, and update the company row: the rule fields, Policy confidence Official, Policy verified at, Restriction details / source and the recomputed hold. Write History so Curate and the next harness see it.
+5. If the recomputed result differs from the saved company hold, write the new value with History.
 
-An elapsed Apply blocked until does not authorize submission, prove role eligibility or override another limit. A hold does not lower role fit or remove a role from Queued/Ready. Do not infer a company cooldown from a generic rejection; report new policy evidence to Curate through History. Pass the current Companies records to apply_ready as well as running this hold check; a valid score or PDF cannot bypass Exclude, Proposed or a permanent block.
+An elapsed Apply blocked until does not authorize submission, prove role eligibility or override another limit. A hold does not lower role fit or remove a role from Queued/Ready. Do not infer a company cooldown from a generic rejection; record only restrictions the careers site or employer states. Pass the current Companies records to apply_ready as well as running this hold check; a valid score or PDF cannot bypass Exclude, Proposed or a permanent block.
 
 ## Getting started
 
