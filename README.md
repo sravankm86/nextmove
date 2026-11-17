@@ -11,7 +11,7 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | [Curate](stages/curate.md) | Recompute company application holds, research employer limits and cooldowns, and propose newly funded Series C+ companies that match Career Goals. | Current holds; Proposed companies await your Allow/Exclude. |
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
-| [Prepare](stages/prepare.md) | Reuse or tailor from the factual master, record grounded changes and verify the rendered PDF. | Ready with an exact resume file/version. |
+| [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
 | [Apply](stages/apply.md) | Check authorization, answers, real form access, exact resume and company restrictions. | Applied after an established submission; uncertainty blocks retries. Default is preflight. |
 | [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
@@ -67,7 +67,7 @@ There are 12 operational instruction files. Each concern has one owner; maintena
 | How are end-user career preferences interpreted? | [CAREER-GOALS.md](CAREER-GOALS.md) |
 | Scan criteria, pagination and recall-tested improvement? | [Scan](stages/scan.md) |
 | Final role/seniority, compensation and fit decisions? | [Review](stages/review.md) |
-| Resume production and verification? | [Prepare](stages/prepare.md), with [file/version rules](RESUME-FILES.md) |
+| Resume production and verification? | [Prepare](stages/prepare.md), with [file/version rules](RESUME-FILES.md) and the [resume guidelines frame](templates/resume-guidelines.md) |
 | Company list, funding discovery, employer quotas/cooldowns and holds? | [Curate](stages/curate.md) |
 | Submission safeguards and the final pre-submit hold check? | [Apply](stages/apply.md) |
 | Receipts, recruiter engagement and mailbox checkpoints? | [Track](stages/track.md) |
@@ -80,7 +80,7 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - Your own Airtable and Google accounts, sufficient service capacity and the intended private destinations.
 - Separate authenticated connections in every harness, plus any browser or mailbox tools that its stages require. You handle sign-in, consent and MFA; unsupported capabilities remain blockers.
 - [Career preferences](templates/career-goals.md), in ordinary prose or the optional template: desired function, designation, seniority/scope, compensation, domains, responsibilities, geography and priorities. This document contains preferences, not agent instructions.
-- One accurate designated editable master resume; an approved base PDF is optional. Goals are not evidence of experience.
+- One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
 - Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
 - Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
 - Explicit submission scope and approved answers before real applications. Track needs read-only mailbox access.

@@ -132,6 +132,13 @@ def check(root):
         aliases += cmd["aliases"]
     require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
     require(command["application_submission_default"] is False, "Unsafe submission default")
+    from resume_guidelines import load_schema, render_markdown
+    frame = load_schema()
+    ids = [x['id'] for x in frame['sections']]
+    require(len(ids) == len(set(ids)) and all(len({f['id'] for f in x['fields']}) == len(x['fields']) and x['fields'][-1]['id'] == 'instructions' for x in frame['sections']), 'Resume guidelines frame needs unique IDs and an Instructions field per section')
+    require((root / 'templates/resume-guidelines.md').read_text() == render_markdown(schema=frame), 'templates/resume-guidelines.md is stale; run python scripts/resume_guidelines.py template')
+    prepare = next(c for c in command["commands"] if c["command"] == "Prepare")
+    require({"master_resume", "resume_guidelines", "base_resumes"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
     require(next(c for c in command["commands"] if c["command"] == "Apply")["mode"] == "review", "Apply must default to preflight")
     controls = {x["key"]: x["value"] for x in seed["controls"]}
     require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")

@@ -1,0 +1,739 @@
+{
+  "schema": "nextmove.resume-guidelines",
+  "version": 1,
+  "description": "Standard frame for the user's private resume guidelines. Sections and field IDs are stable so a document today and a configurable UX later share one structure. Values live only in the private guidelines; Git holds the frame.",
+  "field_types": {
+    "select": "one option",
+    "multi_select": "zero or more options",
+    "boolean": "true or false",
+    "number": "number",
+    "range": "min and max numbers",
+    "date": "ISO date",
+    "text": "natural language",
+    "list": "ordered text items",
+    "table": "rows with typed columns"
+  },
+  "sections": [
+    {
+      "id": "document",
+      "title": "Document",
+      "purpose": "Identifies this guidelines version and what it governs.",
+      "fields": [
+        {
+          "id": "version",
+          "label": "Version",
+          "type": "text",
+          "help": "Short label such as v03."
+        },
+        {
+          "id": "effective_date",
+          "label": "Effective date",
+          "type": "date",
+          "help": "ISO date the version takes effect."
+        },
+        {
+          "id": "status",
+          "label": "Status",
+          "type": "select",
+          "help": "Only an Approved version governs Prepare.",
+          "options": [
+            "Draft",
+            "Approved",
+            "Superseded"
+          ]
+        },
+        {
+          "id": "applies_to",
+          "label": "Applies to",
+          "type": "multi_select",
+          "help": "Resume types governed.",
+          "options": [
+            "Base resumes",
+            "Role-specific resumes"
+          ]
+        },
+        {
+          "id": "change_summary",
+          "label": "Change summary",
+          "type": "text",
+          "help": "What changed from the previous version."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "fact_source",
+      "title": "Fact source and allowed edits",
+      "purpose": "Where facts come from and what a resume may change.",
+      "fields": [
+        {
+          "id": "fact_source",
+          "label": "Fact source",
+          "type": "select",
+          "help": "The only source of resume facts.",
+          "options": [
+            "Registered editable master only"
+          ]
+        },
+        {
+          "id": "allowed_edits",
+          "label": "Allowed edits",
+          "type": "multi_select",
+          "help": "Edits a base or tailored version may make.",
+          "options": [
+            "Select bullets",
+            "Reorder bullets",
+            "Trim bullets",
+            "Adjust headline",
+            "Adjust summary emphasis",
+            "Adjust skills keywords",
+            "Expand or compress earlier roles"
+          ]
+        },
+        {
+          "id": "prohibited_edits",
+          "label": "Prohibited edits",
+          "type": "multi_select",
+          "help": "Always forbidden.",
+          "options": [
+            "Change any fact, number or date",
+            "Rephrase a fact so its meaning changes",
+            "Add claims not in the master",
+            "Present a job requirement as experience"
+          ]
+        },
+        {
+          "id": "bases_require_final_master",
+          "label": "Bases require a confirmed final master",
+          "type": "boolean",
+          "help": "If true, final base versions wait until the user confirms the master is final."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "selection",
+      "title": "Selection strategy",
+      "purpose": "How Prepare chooses between reusing a base and tailoring.",
+      "fields": [
+        {
+          "id": "strategy",
+          "label": "Strategy",
+          "type": "select",
+          "help": "Overall approach per role.",
+          "options": [
+            "Reuse a covering base, otherwise tailor from the closest base",
+            "Always tailor from the closest base",
+            "Reuse only; block when no base covers the role"
+          ]
+        },
+        {
+          "id": "reuse_threshold",
+          "label": "Reuse threshold",
+          "type": "select",
+          "help": "When a base counts as covering the role.",
+          "options": [
+            "Covers every critical requirement and main theme",
+            "Covers every critical requirement"
+          ]
+        },
+        {
+          "id": "tailor_from",
+          "label": "Tailor from",
+          "type": "select",
+          "help": "Starting point for a tailored version.",
+          "options": [
+            "Closest base",
+            "Master directly"
+          ]
+        },
+        {
+          "id": "new_base_trigger",
+          "label": "New base trigger",
+          "type": "select",
+          "help": "When Prepare recommends a new base for offline creation.",
+          "options": [
+            "Several roles share a theme no base covers",
+            "Never recommend"
+          ]
+        },
+        {
+          "id": "new_base_min_roles",
+          "label": "Roles needed to recommend a new base",
+          "type": "number",
+          "help": "Minimum queued roles sharing the uncovered theme."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "bases",
+      "title": "Base catalogue",
+      "purpose": "The precanned bases the user maintains offline.",
+      "fields": [
+        {
+          "id": "catalogue",
+          "label": "Bases",
+          "type": "table",
+          "help": "One row per base.",
+          "columns": [
+            {
+              "id": "base_id",
+              "type": "text"
+            },
+            {
+              "id": "name",
+              "type": "text"
+            },
+            {
+              "id": "theme",
+              "type": "text"
+            },
+            {
+              "id": "default_pages",
+              "type": "number"
+            },
+            {
+              "id": "one_page_version",
+              "type": "boolean"
+            },
+            {
+              "id": "status",
+              "type": "select",
+              "options": [
+                "Planned",
+                "Draft",
+                "Approved"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "variants",
+      "title": "Variant rules",
+      "purpose": "Choices between variants of the same base.",
+      "fields": [
+        {
+          "id": "rules",
+          "label": "Variants",
+          "type": "table",
+          "help": "One row per variant.",
+          "columns": [
+            {
+              "id": "base_id",
+              "type": "text"
+            },
+            {
+              "id": "variant",
+              "type": "text"
+            },
+            {
+              "id": "choose_when",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "company_grouping",
+      "title": "Company grouping",
+      "purpose": "Which base each company starts from.",
+      "fields": [
+        {
+          "id": "groups",
+          "label": "Groups",
+          "type": "table",
+          "help": "One row per base.",
+          "columns": [
+            {
+              "id": "base_id",
+              "type": "text"
+            },
+            {
+              "id": "companies",
+              "type": "list"
+            }
+          ]
+        },
+        {
+          "id": "unlisted_companies",
+          "label": "Unlisted companies",
+          "type": "select",
+          "help": "What to do for a company in no group.",
+          "options": [
+            "Assign per role and record with the application",
+            "Ask the user",
+            "Use the default base"
+          ]
+        },
+        {
+          "id": "default_base",
+          "label": "Default base",
+          "type": "text",
+          "help": "Base ID used when the option above is Use the default base."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "company_consistency",
+      "title": "Same-company consistency",
+      "purpose": "Keeps resumes sent to one company consistent.",
+      "fields": [
+        {
+          "id": "window_days",
+          "label": "Window (days)",
+          "type": "number",
+          "help": "Days after a submission during which the rule below applies."
+        },
+        {
+          "id": "within_window",
+          "label": "Within the window",
+          "type": "select",
+          "help": "Rule for further roles at the same company inside the window.",
+          "options": [
+            "Reuse the exact submitted version",
+            "Allow another version if consistent with earlier submissions"
+          ]
+        },
+        {
+          "id": "after_window",
+          "label": "After the window",
+          "type": "select",
+          "help": "Rule once the window has passed.",
+          "options": [
+            "Allow another version after comparing with every earlier submission and removing inconsistencies",
+            "Always reuse the first submitted version"
+          ]
+        },
+        {
+          "id": "submitted_files_editable",
+          "label": "Submitted files editable",
+          "type": "boolean",
+          "help": "Must be false: any change creates a new version."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "confidential_content",
+      "title": "Confidential content",
+      "purpose": "How sensitive content is handled.",
+      "fields": [
+        {
+          "id": "policy",
+          "label": "Policy",
+          "type": "select",
+          "help": "Who decides what sensitive content appears.",
+          "options": [
+            "User curates the master; no automatic exclusion",
+            "Exclude content tagged confidential in the master"
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "length",
+      "title": "Length",
+      "purpose": "Page targets and one-page versions.",
+      "fields": [
+        {
+          "id": "default_pages",
+          "label": "Default pages",
+          "type": "number",
+          "help": "Default length for bases and tailored versions."
+        },
+        {
+          "id": "max_pages",
+          "label": "Maximum pages",
+          "type": "number",
+          "help": "Never exceeded."
+        },
+        {
+          "id": "target_fill",
+          "label": "Target fill",
+          "type": "text",
+          "help": "How full the last page should be."
+        },
+        {
+          "id": "one_page_versions_for",
+          "label": "One-page versions kept for",
+          "type": "list",
+          "help": "Base IDs that keep a one-page version."
+        },
+        {
+          "id": "one_page_use_cases",
+          "label": "One-page use cases",
+          "type": "multi_select",
+          "help": "When a one-page version is used.",
+          "options": [
+            "Founder-led teams",
+            "Referrals",
+            "Recruiter request",
+            "Online form limit"
+          ]
+        },
+        {
+          "id": "one_page_rules",
+          "label": "One-page rules",
+          "type": "text",
+          "help": "How a one-page version is derived from its base."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "page_one",
+      "title": "Page one",
+      "purpose": "What a reader who stops after page 1 must already see.",
+      "fields": [
+        {
+          "id": "must_show",
+          "label": "Must show on page 1",
+          "type": "list",
+          "help": "One item per required highlight."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "title": "Layout and ATS",
+      "purpose": "Formatting that keeps resumes readable and ATS-safe.",
+      "fields": [
+        {
+          "id": "columns",
+          "label": "Columns",
+          "type": "select",
+          "help": "Page layout.",
+          "options": [
+            "Single column",
+            "Two columns"
+          ]
+        },
+        {
+          "id": "headings",
+          "label": "Standard headings",
+          "type": "multi_select",
+          "help": "Section headings used.",
+          "options": [
+            "Summary",
+            "Experience",
+            "Education",
+            "Skills",
+            "Certifications",
+            "Projects"
+          ]
+        },
+        {
+          "id": "disallowed_elements",
+          "label": "Disallowed elements",
+          "type": "multi_select",
+          "help": "Never used.",
+          "options": [
+            "Tables",
+            "Text boxes",
+            "Icons",
+            "Photos",
+            "Key content in headers or footers"
+          ]
+        },
+        {
+          "id": "fonts",
+          "label": "Allowed fonts",
+          "type": "multi_select",
+          "help": "Body fonts.",
+          "options": [
+            "Calibri",
+            "Arial",
+            "Helvetica",
+            "Garamond",
+            "Georgia"
+          ]
+        },
+        {
+          "id": "font_size_pt",
+          "label": "Font size (pt)",
+          "type": "range",
+          "help": "Body font size range."
+        },
+        {
+          "id": "date_format",
+          "label": "Date format",
+          "type": "text",
+          "help": "One consistent format."
+        },
+        {
+          "id": "outputs",
+          "label": "Outputs",
+          "type": "multi_select",
+          "help": "Files produced for every version.",
+          "options": [
+            "Text-based PDF",
+            "Editable Google Doc",
+            "Word document"
+          ]
+        },
+        {
+          "id": "bullet_length",
+          "label": "Bullet length",
+          "type": "select",
+          "help": "Maximum bullet length.",
+          "options": [
+            "One line",
+            "One to two lines",
+            "Up to three lines"
+          ]
+        },
+        {
+          "id": "bullet_pattern",
+          "label": "Bullet pattern",
+          "type": "select",
+          "help": "How bullets are written.",
+          "options": [
+            "Action, scope and result",
+            "Free form"
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "structure",
+      "title": "Structure",
+      "purpose": "Section order and per-section content rules.",
+      "fields": [
+        {
+          "id": "sections",
+          "label": "Sections in order",
+          "type": "table",
+          "help": "One row per resume section.",
+          "columns": [
+            {
+              "id": "order",
+              "type": "number"
+            },
+            {
+              "id": "section",
+              "type": "text"
+            },
+            {
+              "id": "content_rule",
+              "type": "text"
+            },
+            {
+              "id": "default_state",
+              "type": "select",
+              "options": [
+                "Expanded",
+                "Compressed",
+                "Optional"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "positioning",
+      "title": "Positioning",
+      "purpose": "What each base leads with and the evidence behind it.",
+      "fields": [
+        {
+          "id": "by_base",
+          "label": "Positioning by base",
+          "type": "table",
+          "help": "One row per base.",
+          "columns": [
+            {
+              "id": "base_id",
+              "type": "text"
+            },
+            {
+              "id": "lead_with",
+              "type": "text"
+            },
+            {
+              "id": "evidence",
+              "type": "list"
+            },
+            {
+              "id": "avoid",
+              "type": "list"
+            }
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "language",
+      "title": "Language",
+      "purpose": "Tone and wording rules.",
+      "fields": [
+        {
+          "id": "level",
+          "label": "Positioning level",
+          "type": "select",
+          "help": "Seniority the wording conveys.",
+          "options": [
+            "Senior",
+            "Staff",
+            "Principal",
+            "Staff or Principal",
+            "Director"
+          ]
+        },
+        {
+          "id": "style_rules",
+          "label": "Style rules",
+          "type": "multi_select",
+          "help": "Wording rules.",
+          "options": [
+            "State what was owned, decided and changed, not task lists",
+            "Plain, specific verbs",
+            "No filler words",
+            "Spell out abbreviations once",
+            "No employer-internal terms or internal product comparisons"
+          ]
+        },
+        {
+          "id": "not_highlights",
+          "label": "Never present as highlights or skills",
+          "type": "list",
+          "help": "Areas the user marks as outside their expertise; allowed only as facts within experience where the master states them."
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    },
+    {
+      "id": "files",
+      "title": "Files and verification",
+      "purpose": "Where versions are stored and what is checked before approval.",
+      "fields": [
+        {
+          "id": "storage",
+          "label": "Storage",
+          "type": "select",
+          "help": "Folder for bases and role versions.",
+          "options": [
+            "Registered Role specific folder"
+          ]
+        },
+        {
+          "id": "naming",
+          "label": "Naming",
+          "type": "select",
+          "help": "Filename and version rules.",
+          "options": [
+            "RESUME-FILES.md"
+          ]
+        },
+        {
+          "id": "base_registration",
+          "label": "Base registration",
+          "type": "select",
+          "help": "Where approved bases are registered.",
+          "options": [
+            "Settings base_resumes"
+          ]
+        },
+        {
+          "id": "pre_approval_checks",
+          "label": "Checks before approval",
+          "type": "multi_select",
+          "help": "Required before a base or role version is approved.",
+          "options": [
+            "Every fact checked against the master",
+            "Rendered PDF inspected",
+            "Guideline checklist passed",
+            "Same-company consistency checked"
+          ]
+        },
+        {
+          "id": "instructions",
+          "label": "Instructions",
+          "type": "text",
+          "help": "Natural-language guidance for this section. Structured fields above take precedence; a conflict is a question for the user."
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## Prepare: reuse a base or tailor under the resume guidelines
+
+- Resume guidelines use one standard frame (`contracts/resume-guidelines-schema.json`): 15 sections with stable IDs, typed fields (select, multi-select, boolean, number, range, date, list, table) and a natural-language Instructions field per section, ready to become a configurable form. `scripts/resume_guidelines.py` validates values and renders the blank template (`templates/resume-guidelines.md`) or a filled document. Prepare reads values by `section.field` ID; only an Approved version governs.
+- Prepare now produces one verified resume per Queued role by one of two paths: reuse an approved base that covers every critical requirement and main theme (built from the current master), or tailor a role version from the closest base following the user's private resume guidelines.
+- New Settings resources `resume_guidelines` and `base_resumes` (the legacy `approved_base_resume` reads as a one-entry library). Prepare applies the guidelines' same-company consistency rule before choosing a path.
+- `scripts/stage_state.py:resume_ready` now requires the recorded path and its evidence: complete coverage and matching base hash for reuse; claim grounding, guideline check and pinned guidelines version for tailored versions.
+- Creating or reworking bases stays an offline user workflow; Prepare only reports stale bases and recommends new themes.
+
 ## Curate handoff compatibility
 
 - Align example configuration, company evidence, live targeting and company snapshot recovery across Curate, Scan and Review. Temporary holds remain independent of fit; human targeting is rechecked before new inventory/advancement. Preserve existing application state when a company leaves scope.

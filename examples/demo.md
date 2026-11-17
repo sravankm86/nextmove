@@ -11,6 +11,8 @@ These cases are invented, not private data.
 - Review verifies a senior PM role but finds a hard industry mismatch: Not pursuing, category career_industry. This is not a scanner false positive.
 - Review finds a mislabeled marketing role: Not pursuing, category role_function. Repeated examples can support a tested basic-screen improvement, not a broad ban on Marketing in PM domain titles.
 - An eligible role passes hard career constraints and has High resume fit: Queued. Prepare verifies a grounded base/tailored PDF before Ready.
+- Prepare finds an approved platform base, built from the current master, that evidences every critical requirement of a queued role: it reuses that exact PDF (path base_reuse) and moves the role to Ready. No new file is created.
+- Another queued role needs regulated-workflow emphasis no base covers: Prepare tailors from the closest base, reorders bullets and adjusts the headline per the guidelines, maps every claim to the master, renders and inspects the PDF, then sets Ready. Three such roles in one Run add a new_base_recommended note; the user builds that base offline.
 - One board succeeds and another fails: source coverage is Partial even if useful candidates were saved.
 - A possible Submit followed by a crash keeps its last verified stage with a blocking saved attempt; reconcile before retry.
 - An older receipt after rejection is preserved without regressing the outcome.

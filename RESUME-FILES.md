@@ -20,7 +20,7 @@ Use readable names with these patterns. Values below are fictional.
 | File | Pattern | Example |
 |---|---|---|
 | Editable master | Name_Master_Resume | Alex_Rivera_Master_Resume |
-| Approved base PDF | Name_Base_Resume_YYYYMMDD_vNN.pdf | Alex_Rivera_Base_Resume_20261115_v01.pdf |
+| Approved base PDF | Name_Base_Theme_YYYYMMDD_vNN.pdf (Theme optional for a single base) | Alex_Rivera_Base_Platform_20261115_v01.pdf |
 | Role PDF | Name_Company_Role_JobID_YYYYMMDD_vNN.pdf | Alex_Rivera_ExampleCo_Principal_PM_R12345_20261115_v01.pdf |
 | Role editable source, when created | Same stem as role PDF | Alex_Rivera_ExampleCo_Principal_PM_R12345_20261115_v01.docx |
 | Change notes, when a separate file is useful | Same stem plus _Changes | Alex_Rivera_ExampleCo_Principal_PM_R12345_20261115_v01_Changes.md |
@@ -31,10 +31,12 @@ Use the user's preferred application name, underscores between words, ASCII lett
 
 Never rename or edit the factual master merely to enforce this convention. Keep existing approved files usable by verified reference; apply the convention to new files. Register the master and approved base separately in Settings. Do not create another master from a goals document.
 
-Prepare may reuse an approved base PDF when it fits the role. Store its exact reference/version and record base reuse with no tailoring; a duplicate role-named copy is optional, not proof of readiness. For a tailored version, create a new file, retain prior files and record its parent/master version, job identity, changes and verification. Do not overwrite a file that has been submitted.
+Bases are created and reworked offline by the user as a one-off workflow, following their private resume guidelines (standard frame: contracts/resume-guidelines-schema.json, blank form templates/resume-guidelines.md); these instructions do not create bases. Register each approved base in Settings.base_resumes with its theme/variant, length, PDF and editable references, content hash and the master version it was built from. A base built from an older master is stale for reuse until refreshed.
+
+Prepare (stages/prepare.md) either reuses an approved base PDF that fully covers the role, recording its exact reference/version and base reuse with no tailoring (a duplicate role-named copy is optional, not proof of readiness), or creates a tailored role version from the closest base under the registered resume guidelines. For a tailored version, create a new file, retain prior files and record its parent base, master and guidelines versions, job identity, changes and verification. Do not overwrite a file that has been submitted.
 
 Before Ready verify claims against the master, check the full relevant JD, inspect the rendered PDF for layout/readability and store Resume link, Resume version, Resume verified at and Preparation run on Applications. The preparation snapshot/result records the real filename, grounded changes/base reuse, master/goals/JD/policy versions and PDF verification under DATA.md. Resume version is a SHA-256 of the exact PDF bytes or a durable provider version tied to verified content; name/date alone is insufficient. If bytes cannot be hashed, record the supported provider version and how content was verified; unresolved version identity blocks submission.
 
-Use the user's requested page count. If unspecified, preserve the approved base length or ask when length materially changes the result; do not silently force every resume to one page. Keep the editable source when created. A factual or visual verification failure blocks Ready.
+Use the user's requested page count, then the length rules in the registered resume guidelines. If neither specifies, preserve the approved base length or ask when length materially changes the result; do not silently force every resume to one page. Keep the editable source when created. A factual or visual verification failure blocks Ready.
 
 Apply downloads/uses the exact accepted PDF, verifies the reference/version and records the exact submitted version in the immutable History intent/Submission run checkpoint before submission. Current resume edits cannot alter that submitted fact. Later edits require a new version and do not change prior submission history. A mismatch pauses that application. Follow stages/prepare.md and stages/apply.md.
