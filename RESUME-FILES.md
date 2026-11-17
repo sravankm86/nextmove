@@ -21,9 +21,9 @@ Use readable names with these patterns. Values below are fictional.
 |---|---|---|
 | Editable master | Name_Master_Resume | Alex_Rivera_Master_Resume |
 | Approved base PDF | Name_Base_Theme_YYYYMMDD_vNN.pdf (Theme optional for a single base) | Alex_Rivera_Base_Platform_20261115_v01.pdf |
-| Role PDF | Name_Company_Role_JobID_YYYYMMDD_vNN.pdf | Alex_Rivera_ExampleCo_Principal_PM_R12345_20261115_v01.pdf |
-| Role editable source, when created | Same stem as role PDF | Alex_Rivera_ExampleCo_Principal_PM_R12345_20261115_v01.docx |
-| Change notes, when a separate file is useful | Same stem plus _Changes | Alex_Rivera_ExampleCo_Principal_PM_R12345_20261115_v01_Changes.md |
+| Role PDF | Name_Company_Role_JobID_YYYYMMDD_vNN.pdf | Alex_Rivera_ExampleCo_Principal_Analyst_R12345_20261115_v01.pdf |
+| Role editable source, when created | Same stem as role PDF | Alex_Rivera_ExampleCo_Principal_Analyst_R12345_20261115_v01.docx |
+| Change notes, when a separate file is useful | Same stem plus _Changes | Alex_Rivera_ExampleCo_Principal_Analyst_R12345_20261115_v01_Changes.md |
 
 Use the user's preferred application name, underscores between words, ASCII letters/digits where practical and a short readable company/role. Remove filesystem separators and control characters. JobID is the real requisition ID; if absent use the first 10 hexadecimal characters of SHA-256 of the canonical Job key and record that mapping. Do not invent a requisition. Use the Run's recorded timezone/date; if none is configured use UTC and record that choice. vNN starts at v01 and increases for changed content; include more digits if needed. Do not use final, final2 or latest as version identifiers. If a filename is already occupied by different content, allocate the next version; Drive allows duplicate names, so check IDs and content too.
 

@@ -165,7 +165,48 @@ def check(root):
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
     require("MIT License" in (root / "LICENSE").read_text(), "Expected MIT license")
+    errors.extend(personal_content_issues(root))
     return errors
+
+
+PUBLIC_DOCS = ['AGENTS.md', 'WORKFLOW.md', 'DATA.md', 'README.md', 'SETUP.md', 'CAREER-GOALS.md', 'RESUME-FILES.md', 'CLAUDE.md']
+ROLE_WORDS = re.compile(r'(?i:product[- ]manag)|\bPMs?\b|\bSeries [A-D]\+')
+PRIVATE_IDS = [(re.compile(r'\bapp[A-Za-z0-9]{14}\b'), 'Airtable base ID'),
+               (re.compile(r'(?:drive|docs)\.google\.com/(?:file/d|drive/folders|document/d|spreadsheets/d)/[A-Za-z0-9_-]{20,}'), 'Google Drive file link'),
+               (re.compile(r'[A-Za-z0-9._%+-]+@(?!example\.|anthropic\.com|users\.noreply)[A-Za-z0-9.-]+\.[a-z]{2,}'), 'email address')]
+
+
+def personal_content_issues(root):
+    """The public repository must work for anyone: no user's role family, preferences or private IDs."""
+    found = []
+    texts = {path: (root / path).read_text(encoding='utf-8') for path in PUBLIC_DOCS if (root / path).is_file()}
+    texts.update({str(p.relative_to(root)): p.read_text(encoding='utf-8') for p in sorted((root / 'stages').glob('*.md'))})
+    texts.update({str(p.relative_to(root)): p.read_text(encoding='utf-8') for p in sorted((root / 'scripts').glob('*.py')) if p.name != 'check_repo.py'})
+    for path, text in texts.items():
+        if ROLE_WORDS.search(text):
+            found.append('%s names a specific role family or funding minimum; keep it in private Settings' % path)
+    for p in sorted(root.rglob('*')):
+        if not p.is_file() or '.git' in p.parts or p.suffix not in {'.md', '.py', '.json', '.yml', '.yaml', '.txt'} or p.name == 'check_repo.py':
+            continue
+        text = p.read_text(encoding='utf-8', errors='ignore')
+        for pattern, label in PRIVATE_IDS:
+            if pattern.search(text):
+                found.append('%s contains a private %s' % (p.relative_to(root), label))
+    sys.path.insert(0, str(root / 'scripts'))
+    import company_policy, inspect
+    if company_policy.DEFAULT_PERSONAL_LIMIT is not None:
+        found.append('company_policy.DEFAULT_PERSONAL_LIMIT must be None (the user sets any personal limit)')
+    if inspect.signature(company_policy.funding_qualifies).parameters['minimum'].default is not inspect.Parameter.empty:
+        found.append('funding_qualifies must not default a funding minimum')
+    seed = json.loads((root / 'contracts/setup-seed.json').read_text())
+    pol = {x['key']: x['value'] for x in seed['policies']}
+    if pol.get('role_family') is not None or pol['role_policy'].get('role_family') is not None:
+        found.append('Seeded role family must be empty; each user defines Settings role_family')
+    if pol['company_policy'].get('personal_application_limit') is not None or pol['company_policy']['discovery'].get('min_funding_stage') is not None:
+        found.append('Seeded personal limit and funding minimum must be empty')
+    if (pol.get('preparation_notes') or {}).get('shortlist_estimate') is not False:
+        found.append('Seeded shortlist estimate must default to off')
+    return found
 
 
 if __name__ == "__main__":

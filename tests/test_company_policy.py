@@ -12,13 +12,17 @@ def sub(day, kind='submission'):
     return {'kind': kind, 'at': datetime(2026, 11, day, 9, tzinfo=timezone.utc), 'key': kind + str(day)}
 
 
+# Example user configuration (fixtures only; the repository ships no personal limit).
+LIMIT = {'max_applications': 3, 'window_days': 30, 'window_type': 'Rolling', 'scope': 'Company'}
+
+
 class CompanyPolicyTests(unittest.TestCase):
-    def test_default_personal_limit_is_three_per_rolling_thirty_days(self):
-        self.assertEqual(DEFAULT_PERSONAL_LIMIT, {'max_applications': 3, 'window_days': 30,
-                                                  'window_type': 'Rolling', 'scope': 'Company'})
+    def test_personal_limit_only_applies_when_configured(self):
+        self.assertIsNone(DEFAULT_PERSONAL_LIMIT)
         assessed = {'Policy confidence': 'Not found'}
-        self.assertEqual(compute_hold(assessed, [sub(1), sub(2)], NOW)['status'], 'No known hold')
-        held = compute_hold(assessed, [sub(1), sub(2), sub(3)], NOW)
+        self.assertEqual(compute_hold(assessed, [sub(1), sub(2), sub(3), sub(4)], NOW)['status'], 'No known hold')
+        self.assertEqual(compute_hold(assessed, [sub(1), sub(2)], NOW, LIMIT)['status'], 'No known hold')
+        held = compute_hold(assessed, [sub(1), sub(2), sub(3)], NOW, LIMIT)
         self.assertEqual(held['status'], 'Held')
         self.assertEqual(held['blocked_until'], datetime(2026, 12, 1, 9, tzinfo=timezone.utc))
 
@@ -29,12 +33,12 @@ class CompanyPolicyTests(unittest.TestCase):
 
     def test_uncertain_attempts_occupy_capacity_and_duplicates_count_once(self):
         events = [sub(1), sub(1), sub(2, 'uncertain_attempt'), sub(3)]
-        self.assertEqual(compute_hold({'Policy confidence': 'Not found'}, events, NOW)['status'], 'Held')
-        self.assertEqual(compute_hold({'Policy confidence': 'Not found'}, events[:3], NOW)['status'], 'No known hold')
+        self.assertEqual(compute_hold({'Policy confidence': 'Not found'}, events, NOW, LIMIT)['status'], 'Held')
+        self.assertEqual(compute_hold({'Policy confidence': 'Not found'}, events[:3], NOW, LIMIT)['status'], 'No known hold')
 
     def test_date_only_events_are_conservative_without_timezone(self):
         result = compute_hold({'Policy confidence': 'Not found'},
-                              [{'kind': 'submission', 'at': date(2026, 11, d)} for d in (1, 2, 3)], NOW)
+                              [{'kind': 'submission', 'at': date(2026, 11, d)} for d in (1, 2, 3)], NOW, LIMIT)
         # Nov 1 ends at 11:59:59 UTC on Nov 2 in the latest zone; +30 days.
         self.assertEqual(result['blocked_until'], datetime(2026, 12, 2, 11, 59, 59, tzinfo=timezone.utc))
 
@@ -69,7 +73,7 @@ class CompanyPolicyTests(unittest.TestCase):
         self.assertTrue(allowed)
         self.assertEqual(result['status'], 'Needs clarification')
         events = [{'kind': 'submission', 'at': NOW - timedelta(days=d)} for d in (1, 2, 3)]
-        allowed, result = apply_allowed({'Policy confidence': 'Not found'}, events, NOW)
+        allowed, result = apply_allowed({'Policy confidence': 'Not found'}, events, NOW, LIMIT)
         self.assertFalse(allowed)
         self.assertEqual(result['status'], 'Held')
         self.assertTrue(apply_allowed({'Policy confidence': 'Not found'}, [], NOW)[0])
@@ -80,11 +84,13 @@ class CompanyPolicyTests(unittest.TestCase):
         self.assertFalse(scan_enabled({'Search status': 'Proposed'}))
         self.assertFalse(scan_enabled({'Search status': 'Exclude'}))
 
-    def test_funding_admission_is_series_c_or_later_and_unknown_fails(self):
+    def test_funding_admission_uses_the_configured_minimum(self):
         for stage in ['Series C', 'Series D', 'Series E+', 'Late private', 'Public']:
-            self.assertTrue(funding_qualifies(stage))
+            self.assertTrue(funding_qualifies(stage, 'Series C'))
         for stage in ['Pre-seed / Seed', 'Series A', 'Series B', 'Unknown', None]:
-            self.assertFalse(funding_qualifies(stage))
+            self.assertFalse(funding_qualifies(stage, 'Series C'))
+        with self.assertRaises(ValueError):
+            funding_qualifies('Series D', None)
 
     def test_naive_times_are_rejected(self):
         with self.assertRaises(ValueError):

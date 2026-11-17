@@ -9,9 +9,8 @@ import json
 from pathlib import Path
 
 VERDICTS = ('Pursue', 'Not pursuing')
-REASON_TYPES = ('Pay', 'Location', 'Seniority', 'Company', 'Work type', 'Domain', 'Specialist gap',
-                'Technical background', 'Consumer', 'Internal tools', 'Language', 'Excluded company',
-                'Strong match', 'Other')
+# Starter categories only; a private eval registry may define its own reason types.
+REASON_TYPES = ('Career fit', 'Resume fit', 'Pay', 'Location', 'Seniority', 'Company', 'Expired', 'Other')
 SPLITS = ('Train', 'Holdout')
 PREDICTIONS = ('Queued', 'Need review', 'Not pursuing')
 _AGREE = {('Pursue', 'Queued'), ('Not pursuing', 'Not pursuing')}

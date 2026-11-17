@@ -33,7 +33,7 @@
 - Domains or industries to avoid:
 - Preferred customer segments or verticals:
 - Preferred product types or maturity:
-- Interest in general senior PM and product leadership roles:
+- Interest in general roles in your function that are not tied to a specialty:
 - Preferred signals that make those general roles especially attractive:
 
 ## Responsibilities and Career Direction
@@ -56,8 +56,8 @@
 - Required company characteristics:
 - Preferred company stage, size or culture:
 - Company characteristics to avoid:
-- Minimum funding stage for newly discovered companies (for example Series C or later):
-- Personal limit on applications per company (for example 3 in any 30 days):
+- Minimum funding stage for newly discovered companies (no default; for example "Series B or later" or "public only"):
+- Personal limit on applications per company (no default; for example "2 in any 60 days" or "none"):
 
 ## Priorities and Tradeoffs
 

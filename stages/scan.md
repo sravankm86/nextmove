@@ -1,6 +1,6 @@
-# Scan: plausible PM inventory with recall first
+# Scan: plausible candidate inventory with recall first
 
-Follow WORKFLOW.md and DATA.md. Scan enumerates every official board of every in-scope company and stores plausible senior product-management candidates as Inventoried. It does not judge career fit or resume fit, certify eligibility or set Queued; Review owns those.
+Follow WORKFLOW.md and DATA.md. Scan enumerates every official board of every in-scope company and stores plausible candidates for the user's target role family as Inventoried. It does not judge career fit or resume fit, certify eligibility or set Queued; Review owns those.
 
 ## Scope and criteria
 
@@ -8,7 +8,7 @@ Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Sear
 
 Snapshot in-scope company and source IDs in the Run scope, then reread company targeting before each inventory write and pass current Companies records to `application_write`. A company that leaves scope keeps its existing rows.
 
-Derive the role family, designation examples, seniority/experience/scope and explicit function or level exclusions from the current Career Goals revision under CAREER-GOALS.md. Save the extracted criteria, source revision and readiness in Settings and the Run; reuse a verified extraction only while its revision matches. Missing title synonyms can be derived from the function; missing or conflicting essential role intent needs a question, not an invented exclusion.
+Derive the role family, designation examples, seniority/experience/scope and explicit function or level exclusions from the current Career Goals revision under CAREER-GOALS.md. Save the extracted criteria, source revision and readiness in Settings and the Run; the title patterns live in Settings `role_family` (format: templates/role-family.example.json) and Scan stops until it is set; reuse a verified extraction only while its revision matches. Missing title synonyms can be derived from the function; missing or conflicting essential role intent needs a question, not an invented exclusion.
 
 ## Complete source coverage
 
@@ -22,10 +22,10 @@ Source status: Complete when every planned source is verified, Partial when usab
 
 Run checks (WORKFLOW.md) own duplicate discovery: check the identity index before inserting and hand new identity evidence back to Run.
 
-Use broad PM signals: Product Manager/Management/Mgr and technical, inbound, outbound, platform or group variants; Product Lead/Owner; Head/Director/VP of Product; Chief Product Officer; Member of Product Staff; localized equivalents. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` separates `title_screen`, `inventory_candidate` and Review's `review_eligibility`; a title alone never admits a role.
+Use broad signals from Settings `role_family`: direct title patterns (including level variants and localized equivalents), broader patterns that need a context check, clearly different functions and clearly junior titles. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` separates `title_screen`, `inventory_candidate` and Review's `review_eligibility`, all driven by that definition; a title alone never admits a role.
 
 - Exclude clearly unrelated functions and clearly junior roles, with recorded evidence.
-- Keep direct PM roles whose domain says finance, design or security, unlevelled or flat titles, and roles with uncertain level: they enter Inventoried with Role eligibility Pending for Review.
+- Keep direct role-family matches whose domain names another field (for example finance, design or security), unlevelled or flat titles, and roles with uncertain level: they enter Inventoried with Role eligibility Pending for Review.
 - Do not require a seniority word, infer company grade from a title, treat a low minimum-years figure as proof of insufficient scope, or turn career preferences into scan exclusions.
 - Missing identity stays a Run pending check (URL, reason, next action). Insufficient evidence of plausibility stays pending, not rejected. A missing full JD does not block inventory but blocks Review approval.
 
@@ -39,7 +39,7 @@ Clear rejects become aggregate reason counts, not stored rows; unrelated feed bo
 
 ## Improving Scan from Review outcomes
 
-Eligible-PM recall comes first; a smaller inventory is not success. Review records a structured `review.reason_category` with evidence; use it to find Scan mistakes:
+Eligible-role recall comes first; a smaller inventory is not success. Review records a structured `review.reason_category` with evidence; use it to find Scan mistakes:
 
 | Category | Meaning for Scan |
 |---|---|

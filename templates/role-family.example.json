@@ -1,0 +1,35 @@
+{
+  "note": "Example only. Copy into your private Settings `role_family` and replace with the work you target. Patterns are Python regular expressions matched against the lower-cased title.",
+  "name": "product_management",
+  "direct_patterns": [
+    "\\bproduct\\s+(?:(?:inbound|outbound|technical|platform|portfolio|growth|group|security|senior|staff|principal|lead|ai|data|digital|tax)\\s+){0,3}(?:manager|mgr|management)\\b",
+    "\\bmember\\s+of\\s+product\\s+(?:staff|team)\\b",
+    "\\bproduct\\s+(?:owner|lead|leadership)\\b",
+    "produktmanager|produktmanagement|chef(?:fe)?\\s+de\\s+produit|responsable(?:\\s+de)?\\s+produit|director(?:a)?\\s+de\\s+producto|gerente\\s+de\\s+produt[oa]|gestor\\s+de\\s+produto|产品经理|產品經理|プロダクトマネージャー|제품\\s*관리자",
+    "^(?:(?:senior|sr\\.?|staff|principal|lead|group|technical|platform)\\s+)*(?:pm|gpm)\\b"
+  ],
+  "possible_patterns": [
+    "\\b(?:director|head|vp|svp|evp|vice president|chief)\\b.{0,45}\\bproduct\\b|\\bproduct\\b.{0,45}\\b(?:director|head|vp|svp|evp|vice president)\\b",
+    "\\b(?:gpm|cpo|pm|gm)\\b|\\bgeneral manager\\b"
+  ],
+  "other_function_patterns": [
+    "\\b(?:marketing|designer|design|security engineer|product security|support|success|sales|business development|communications|public relations|data scientist|data science|analytics|analyst|software engineer|engineering|engineer|legal|counsel|operations|supply chain|finance|policy|enablement|assistant|program manager|project manager)\\b"
+  ],
+  "junior_patterns": [
+    "^(?:intern|internship|junior|entry.level|graduate)\\b|\\bassociate\\s+(?:technical\\s+)?product\\s+(?:manager|mgr)\\b|\\bproduct\\s+(?:manager|mgr|management)\\s+(?:intern|internship|i|1)\\b"
+  ],
+  "ignore_patterns": [
+    "\\b\\d{1,2}(?:[:.]\\d{2})?\\s*(?:am|pm)\\b"
+  ],
+  "examples": {
+    "software_engineering": {
+      "name": "software_engineering",
+      "direct_patterns": [
+        "\\b(?:software|backend|frontend|full.?stack|platform)\\s+(?:engineer|developer)\\b"
+      ],
+      "junior_patterns": [
+        "^(?:intern|junior|entry.level|graduate)\\b"
+      ]
+    }
+  }
+}

@@ -863,6 +863,12 @@
           "options": {
             "choices": [
               {
+                "name": "Career fit"
+              },
+              {
+                "name": "Resume fit"
+              },
+              {
                 "name": "Pay"
               },
               {
@@ -875,31 +881,7 @@
                 "name": "Company"
               },
               {
-                "name": "Work type"
-              },
-              {
-                "name": "Domain"
-              },
-              {
-                "name": "Specialist gap"
-              },
-              {
-                "name": "Technical background"
-              },
-              {
-                "name": "Consumer"
-              },
-              {
-                "name": "Internal tools"
-              },
-              {
-                "name": "Language"
-              },
-              {
-                "name": "Excluded company"
-              },
-              {
-                "name": "Strong match"
+                "name": "Expired"
               },
               {
                 "name": "Other"
