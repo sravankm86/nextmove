@@ -1,11 +1,11 @@
 {
-  "version": 11,
+  "version": 12,
   "description": "Six-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
       "business_key": "Company key",
-      "description": "Curate owns this table: human Allow/Exclude targeting, agent-discovered Proposed companies, company fit and funding, researched employer policies and computed application holds. No automatic Allow.",
+      "description": "Curate owns this table: human Allow/Exclude targeting, agent-discovered Proposed companies, funding stage and company evidence, researched employer policies and computed application holds. No automatic Allow.",
       "fields": [
         {
           "name": "Company",
@@ -41,43 +41,6 @@
           "type": "multilineText"
         },
         {
-          "name": "Origin",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Seed"
-              },
-              {
-                "name": "User"
-              },
-              {
-                "name": "Discovered"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Company fit",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "High"
-              },
-              {
-                "name": "Medium"
-              },
-              {
-                "name": "Low"
-              },
-              {
-                "name": "Unresolved"
-              }
-            ]
-          }
-        },
-        {
           "name": "Funding stage",
           "type": "singleSelect",
           "options": {
@@ -110,19 +73,6 @@
                 "name": "Unknown"
               }
             ]
-          }
-        },
-        {
-          "name": "Latest funding",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Funding date",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
           }
         },
         {

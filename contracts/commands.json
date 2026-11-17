@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "tables": [
     "Companies",
     "Applications",
@@ -70,7 +70,7 @@
       "stage": "Scan",
       "mode": "prepare",
       "instructions": "stages/scan.md",
-      "scope": "Every current human-Allow source except permanently blocked companies; temporary holds and Company fit do not filter inventory. Broad role criteria/basic semantics to Inventoried.",
+      "scope": "Every current human-Allow source except permanently blocked companies; temporary holds, funding stage and saved company assessments do not filter inventory. Broad role criteria/basic semantics to Inventoried.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

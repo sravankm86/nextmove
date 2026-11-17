@@ -1,5 +1,5 @@
 {
-  "schema_version": 11,
+  "schema_version": 12,
   "scan": "de42e872-basic-PM-v3",
   "eligibility": "pay-and-PM-ownership-v4",
   "rules": [
@@ -17,7 +17,7 @@
   "identity": "run-objective-identity-v2",
   "review_source": "stages/review.md",
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",
-  "company_curation": "curate-holds-v1",
+  "company_curation": "curate-evidence-v2",
   "company_policy_source": "stages/curate.md and scripts/company_policy.py",
   "preparation": "base-reuse-or-tailor-v1",
   "submission": "basic-guard-rails-v2"

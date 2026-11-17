@@ -6,7 +6,7 @@ The single reference for Airtable, evidence, history and stage handoff. contract
 
 | Table | Purpose | Columns, including reciprocal links |
 |---|---|---:|
-| Companies | Curate-owned targeting, company fit, funding, employer policies and holds | 25 |
+| Companies | Curate-owned targeting, funding stage, company evidence, employer policies and holds | 21 |
 | Applications | Candidate, review, resume and application state | 29 |
 | Sources | Official catalog/region, reader and pagination checkpoint | 13 |
 | Runs | Frozen inputs, progress, ownership and handoff | 21 |
@@ -15,11 +15,12 @@ The single reference for Airtable, evidence, history and stage handoff. contract
 
 Native record IDs and createdTime replace metadata columns. Primary display fields are not uniqueness constraints: writers validate business keys, link cardinality and intended deltas. Columns outside this blueprint are not written; docs/MAINTENANCE.md covers retiring them.
 
-**Companies.** Company, Company key, Search status, Manual notes, Agent notes, Origin, Company fit, Funding stage, Latest funding, Funding date, Company evidence, Policy confidence, Policy verified at, Max applications, Application window (days), Application window type, Rejection cooldown (days), Restriction scope, Apply blocked until, Application hold status, Restriction details / source, Restriction timezone, plus Applications, Sources and Curate run links. stages/curate.md owns every write; scripts/company_policy.py defines the choices and hold math.
+**Companies.** Company, Company key, Search status, Manual notes, Agent notes, Funding stage, Company evidence, Policy confidence, Policy verified at, Max applications, Application window (days), Application window type, Rejection cooldown (days), Restriction scope, Apply blocked until, Application hold status, Restriction details / source, Restriction timezone, plus Applications, Sources and Curate run links. stages/curate.md owns every write; scripts/company_policy.py defines the choices and hold math.
 
 - Search status: Proposed (agent-discovered, awaiting the user), Allow, Exclude. Only the human sets Allow/Exclude.
-- Origin: Seed, User, Discovered. Company fit: High/Medium/Low/Unresolved against Career Goals company preferences only.
-- Funding stage is ordered (Pre-seed / Seed, Series A–D, Series E+, Late private, Public, Unknown). Latest funding is compact (`Series C · $150M · lead`). Company evidence links the Drive capture.
+- Funding stage is ordered (Pre-seed / Seed, Series A–D, Series E+, Late private, Public, Unknown). Company evidence links the versioned Drive facts and research used by Review. Keep the verified company maturity separate from the latest investment type; a later unlabelled or angel investment does not reset that maturity.
+- Funding amounts, event dates, exact round labels, investors, parent/historical facts and creation origin belong in Company evidence and History, not additional Companies columns. Curate saves its advisory assessment and reasons in the company snapshot (`curate.company_fit`); Agent notes gives the short explanation. Review uses the facts against current goals, not the cached assessment as its role score.
+- Origin, Company fit, Latest funding and Funding date are retired columns. Do not request them as live fields, recreate them during setup or write them. Historical snapshots may retain these keys as evidence.
 - Policy confidence: Official, Recruiter, User (enforced); Community (recorded, not enforced); Not found (researched, no rule). Blank means Not assessed.
 - Application hold status: Not assessed, No known hold, Held, Blocked (permanent), Needs clarification. Apply blocked until is Curate's UTC estimate; Apply recomputes before Submit.
 - The personal limit in Settings `company_policy` (default 3 per company per rolling 30 days; Career Goals may override) applies on top of employer rules.
@@ -92,9 +93,9 @@ Settings.resume_output is the Role specific folder; Settings.content_output is t
 
 ## Stage writes
 
-- **Curate:** company snapshots use `merge_company_state` with the company record ID and link to the Run, never to Applications. Run checkpoint `stages.curate` keeps holds, policy_research and discovery parts separately; discovery feed cursors live in Settings.company_policy.discovery.checkpoints and advance only after verified complete coverage.
+- **Curate:** company snapshots use `merge_company_state` with the company record ID and link to the Run, never to Applications. Save `funding` facts with source identity, retrieval time, event-date meaning and any uncertainty, `company_fit` with the advisory rating and evidence-based reason, and `origin` when known. Preserve prior snapshot sections when updating one part. These are History metadata, not Companies columns. Run checkpoint `stages.curate` keeps holds, policy_research and discovery parts separately; discovery feed cursors live in Settings.company_policy.discovery.checkpoints and advance only after verified complete coverage.
 - **Scan:** freeze scope from current Companies (`scan_enabled`) and active Sources; recheck targeting at the write boundary. `application_write(creating=True)` needs current Companies records, a new canonical Job key, Inventoried and Role eligibility Pending. Save source memberships, requisition IDs, aliases, capture selectors, observation times and fingerprints in `source`.
-- **Review:** save the three-step assessment (method, exact input identities, career and resume ratings, total, outcome, evidence, unresolved questions) before changing status, fit ratings, Review run and Agent notes. Record the decisive company evidence identity in `stage_inputs.review.company_evidence`; Company fit is advisory and never copied into Career fit.
+- **Review:** save the three-step assessment (method, exact input identities, career and resume ratings, total, outcome, evidence, unresolved questions) before changing status, fit ratings, Review run and Agent notes. Record the decisive company evidence identity in `stage_inputs.review.company_evidence`; Curate’s saved company assessment is advisory and never copied into Career fit.
 - **Prepare:** save `path`, base, base_version, base_master, guidelines version, coverage, company_consistency and, for tailored versions, change notes, `grounding`, `guideline_check`, editable source, file hash and visual verification. Set Preparation run, Resume link, Resume version and Resume verified at only after `resume_ready` passes on the downloaded bytes.
 - **Apply:** save the preflight record (application URL, field map, unresolved items, screenshots) and the `submission_gate` decision. Before Submit, write and read back the attempt intent (role, application URL, resume file ID and hash, answer digest), Submission attempt key and Submission run. Save the result or uncertainty; an existing attempt blocks any retry.
 - **Track:** save message identities, confirmation, rejection and engagement times in History; update Lifecycle status and Confirmation reference. Missing mail never proves non-submission.

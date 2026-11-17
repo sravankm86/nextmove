@@ -1,5 +1,10 @@
 # Changelog
 
+## Lean Companies table
+
+- Retired Origin, Company fit, Latest funding and Funding date; Companies now has 21 fields. Setup, schema generation, stage instructions and repository checks use the reduced profile.
+- Funding stage remains structured. Financing details, creation origin and advisory company assessments stay in versioned Company evidence and History; Review uses current goals and verified facts. No Scan scope, Review scoring, employer-policy or application-hold rules changed.
+
 ## Review: pay, expired roles and resume-fit judgment
 
 - Review opens the live posting first; an empty, missing or closed posting is set to Not pursuing with a plain "Role expired" note. A technical block falls back to the saved JD.

@@ -19,7 +19,7 @@ The ten statuses are **Inventoried, Need review, Queued, Ready, Needs answer, Ap
 
 Inventory and the preparation queue are states in the same Applications table. Reasons, confirmation, missing evidence and uncertain attempts are recorded as evidence; only a missing application answer gets its own status (Needs answer). A manually selected status does not create review approval, verify a PDF or authorize submission.
 
-Curate hands human-approved companies and factual company evidence to Scan/Review. Temporary application holds do not reduce inventory or fit; permanent blocks stop new inventory and automatic advancement. A standalone Scan or Review reads that saved handoff without launching company research. Draft boards become eligible only after human Allow and still need verification. Review assesses company facts against current goals rather than copying Company fit; changed funding/business evidence revalidates affected approvals. A partial Curate does not stop independent scanning/review, but stays visible in full-Run completion.
+Curate hands human-approved companies and factual company evidence to Scan/Review. Temporary application holds do not reduce inventory or fit; permanent blocks stop new inventory and automatic advancement. A standalone Scan or Review reads that saved handoff without launching company research. Draft boards become eligible only after human Allow and still need verification. Review assesses company facts against current goals rather than copying Curate’s saved advisory assessment; changed funding/business evidence revalidates affected approvals. A partial Curate does not stop independent scanning/review, but stays visible in full-Run completion.
 
 ## Architecture
 
@@ -42,14 +42,14 @@ The private main Drive folder has two working children: **Role specific** for cu
 
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
-| Companies | Proposed/Allow/Exclude targeting, company fit, funding, employer policies and holds | 25 |
+| Companies | Proposed/Allow/Exclude targeting, funding stage, company evidence, employer policies and holds | 21 |
 | Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 29 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
 | Runs | Frozen inputs, ownership, progress and handoff | 21 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 
-The 107-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 103-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
