@@ -51,8 +51,8 @@ An elapsed Apply blocked until does not authorize submission. It is an estimate 
 For each company whose Policy confidence or Policy verified at is blank, whose policy is unverified, or whose Policy verified at is older than `policy_research.reverify_after_days`, look for published limits on applications per period and waiting periods after rejection. Search in this order and stop at the first authoritative answer:
 
 1. The company's official careers site, candidate FAQ, application terms or application-form text. → **Official**
-2. A recruiter's written statement for this user (from Track mail evidence or Manual notes). → **Recruiter**
-3. An explicit statement by the user in chat, Manual notes or Career Goals. → **User**
+2. A recruiter's written statement for this user (from Track mail evidence or confirmed policy evidence in History). → **Recruiter**
+3. An explicit policy statement by the user in chat, Career Goals or confirmed policy evidence in History. → **User**
 4. Candidate reports such as forums or review sites. → **Community**. Record them in details but they are not enforced; the hold becomes Needs clarification until the user confirms.
 5. Nothing found after checking the sources above. → **Not found**; leave the numeric fields blank. Blank means no known employer rule, never zero or unlimited.
 
@@ -87,6 +87,6 @@ A permanent block (for example a lifetime application limit already reached, or 
 
 ## Writes, notes and handoff
 
-Manual notes is human-owned: read it and never overwrite it. Agent notes explains the company's current status in plain English (DATA.md "Writing Agent notes"); prior values go to History. Use the company snapshots and three-part checkpoints in DATA.md. Link touched companies to the Run with Curate run. Curate snapshots are company metadata, not Application snapshots. Save meaningful field changes, policy evidence, proposals and user decisions in History.
+Manual notes is a feedback inbox: capture, verify and clear it only under DATA.md. Agent notes explains the company's current status in plain English (DATA.md "Writing Agent notes"); prior values go to History. Use the company snapshots and three-part checkpoints in DATA.md. Link touched companies to the Run with Curate run. Curate snapshots are company metadata, not Application snapshots. Save meaningful field changes, policy evidence, proposals and user decisions in History.
 
 Handoff reports separately: holds recomputed (counts per status and any changes), policies researched by confidence level, discovery feeds read with coverage, new Proposed companies by fit, re-evaluation proposals, Needs clarification questions and the next action. Curate is Complete only when every non-Exclude company's hold is recomputed, every due policy is researched or explicitly blocked, and every due feed is read to its verified end.

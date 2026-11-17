@@ -109,3 +109,9 @@ Keep private data, account identifiers, resumes, job/mail snapshots and credenti
     python -m unittest discover -s tests -v
 
 These validate public contracts/helpers, not live scan completion or account readiness. Licensed under [MIT](LICENSE); no access to private data is granted.
+
+## Feedback that improves the workflow
+
+Manual notes is an inbox. Write what the agent should have done and why; partial feedback is useful too. On the next invocation the coordinator saves it as an eval case with evidence and audit history, verifies the capture, then clears the unchanged note. Your feedback survives in Review eval/Drive even after the inbox is empty. Unclear feedback stays pending instead of becoming a guessed answer key.
+
+Use **Capture feedback** to consume the inbox, and **Review eval** (or **Eval Review**) to test frozen cases with a fresh reviewer. Reports distinguish blind performance from a comparison of existing statuses. Normal stage runs capture feedback and propose tested improvements; they do not run unattended between invocations. DATA.md "Feedback inbox and Review eval" defines the shared process, including duplicate handling, holdout protection and rule-change review. No new table or per-stage instruction file is required.

@@ -33,7 +33,7 @@ Use broad PM signals: Product Manager/Management/Mgr and technical, inbound, out
 
 Create or update candidates as Inventoried with stable identity, official posting URL, Scan run and the source snapshot under DATA.md. Save Job evidence: an exact capture with the full description, posting aliases, salary basis, currency, location and level conditions, work restrictions and the true posting date. Display columns follow DATA.md compact job facts; never estimate values or borrow another posting's band.
 
-Reobserving a role updates only source metadata; it preserves human outcomes, Manual notes, review evidence and later states. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
+Reobserving a role updates only source metadata; it preserves human outcomes, review evidence and later states; consume Manual notes only through DATA.md’s verified feedback-inbox procedure. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
 
 Clear rejects become aggregate reason counts, not stored rows; unrelated feed bodies stay transient. Report observed, clear-rejected, plausible, newly inventoried, reobserved, identity-pending and capture-gap counts, plus source coverage and skipped companies. A single Scan stops here; a full Run hands Inventoried roles to Review.
 

@@ -5,6 +5,12 @@
 - `company_policy.apply_allowed` now stops a submission only for Held (an enforceable employer rule or the personal limit is reached) or Blocked (permanent). Needs clarification and Not assessed no longer block.
 - When the careers site shows a restriction during an application, Apply stops that role and records the rule on the company row (Policy confidence Official) with History.
 
+## Verified feedback inbox and blind Review replay
+
+- Manual notes now feeds evals: capture exact feedback, deduplicate by stable identity, verify eval/snapshot/History, then clear only unchanged text. Ambiguous and obsolete feedback remains in inactive/pending cases.
+- Added Capture feedback and Review eval command routes, the private eval registry, label-free input preparation, frozen-input prediction validation, recall/coverage/theme scoring and regression comparisons. Fresh blind review is separate from production writes; no automatic preference or rule promotion.
+- Supporting data stays private in versioned Audit trail files. Existing human labels/splits and the 13-field eval table remain intact; partial feedback is captured without a guessed verdict.
+
 ## Prepare: resume choice, shortlist estimate and gaps in Agent notes
 
 - A Ready role's Agent notes now say which resume was used and why, an estimated shortlist chance on a 1–10 scale (the agent's judgment, not a measured probability) and the main gaps.
