@@ -50,7 +50,7 @@ Review owns final eligibility/hard career checks and approves Queued; Prepare re
 
 Save accepted stage outputs before advancing. Continue independent useful work safely, but blocked required stages/items mean Partial/Blocked. Verify every planned item and count before Complete. No work means verified empty eligible scope, not invented coverage.
 
-Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
+Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report Curate results (holds by status, policies researched by confidence, discovery feed coverage, Proposed companies awaiting the user), source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
 
 Use the 29-column tracker under DATA.md. Write concise current context and next action in Agent notes; never overwrite Manual notes. Resolve explicit review checks and structured feedback from History. Sources remains board-level scanner state, not an Applications field. Do not require posting availability during Scan/Review or maintain Last seen at; check the real form during Apply.
 
