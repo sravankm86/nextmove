@@ -156,7 +156,7 @@ def check(root):
     company = next(x["value"] for x in seed["policies"] if x["key"] == "company_policy")
     discovery = company["discovery"]
     require(discovery["admission"] == "Proposed" and discovery["auto_allow"] is False, "Discovered companies must stay Proposed")
-    require(company["permanent_block"]["requires_user_confirmation"] is True and company["holds_change_fit"] is False and company["apply_requires_hold_status"] == "No known hold", "Unsafe company hold policy")
+    require(company["permanent_block"]["requires_user_confirmation"] is True and company["holds_change_fit"] is False and set(company.get("apply_blocking_hold_statuses", [])) == {"Held", "Blocked (permanent)"}, "Unsafe company hold policy")
     require(company["policy_research"]["community_reports_enforced"] is False, "Community reports cannot be enforced as confirmed rules")
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
