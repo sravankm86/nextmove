@@ -81,7 +81,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Needs answer | Apply met a required application question the answer bank cannot answer. The question is in the answer bank's Specific questions table; the role returns to Ready once it is answered. |
 | Applied | Submission is established; confirmation is additional evidence. |
 | Interviewing | Active recruiter engagement, screening, assessment or interview. Recruiting endpoint. |
-| Not pursuing | Review score is below the threshold, or the human chose to stop. |
+| Not pursuing | Review score is below the threshold, the posting expired, or the human chose to stop. |
 | Rejected | Actual employer rejection. |
 | Duplicate | Run confirmed a redundant record and saved its canonical record and objective evidence. |
 

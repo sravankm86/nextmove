@@ -57,6 +57,7 @@ Examples (fictional):
 | Queued | Queued: this is the AI agents platform work you want, and your experience covers every key requirement, including shipping agents at scale. Next, a resume will be prepared. |
 | Need review | Needs review: the role fits your goals, but the posting does not say whether it is based in the US or London, and you only want US roles. Once the location is confirmed, it can be decided. |
 | Not pursuing | Not pursuing: the role requires five years of hands-on payments engineering, and your background shows product leadership but no engineering track record. |
+| Not pursuing | Role expired: the posting was no longer available when checked on 17 Nov. |
 | Ready | Ready: your AI-native base resume already covers all the key requirements, so it was reused as is. It will be submitted when applications are switched on. |
 | Needs answer | Waiting for your answer: the form asks "Are you willing to work on-site three days a week?" and the answer bank has no answer. Add it in the answer bank and this role will continue. |
 | Applied | Applied on 18 Nov; the confirmation page showed reference A123. |
@@ -69,7 +70,7 @@ Company Agent notes follow the same rules, for example: `Held until about 3 Dece
 
 Starting salary and Max salary are numeric endpoints of one verified advertised base-pay band, in the single currency and period registered in Settings.applications_schema.salary_display. Pick the highest advertised maximum in that currency with its paired minimum; leave both blank when no compatible verified band exists. Never mix currencies or periods, convert implicitly, use total compensation or write zero. Additional compensation: Equity, Bonus, Commission, Bonus or commission, Not stated. Location holds short places; Work arrangement is Remote/Hybrid/On-site/Unspecified. Use scripts/tracker_values.py for parsing. Job evidence preserves the exact JD with every band, condition and location; Review checks applicability there.
 
-No availability column is kept and inventory is not monitored for closure. A saved exact official JD can support Review; Apply checks the live form. When Scan reobserves a role, record source membership, observation time and content fingerprint in History; a changed fingerprint triggers comparison and affected re-review.
+No availability column is kept and Scan does not monitor closures. Review opens the live posting when it can and sets an expired role to Not pursuing (stages/review.md Step 1); when the page cannot be reached, a saved exact official JD supports Review. Apply checks the live form. When Scan reobserves a role, record source membership, observation time and content fingerprint in History; a changed fingerprint triggers comparison and affected re-review.
 
 ## Stage metadata
 

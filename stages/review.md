@@ -6,7 +6,11 @@ Use current linked Companies and saved Curate evidence in both a full Run and a 
 
 ## Step 1. Extract the job description
 
+Open the Job description link first when it can be reached. If the link is empty, returns not found, redirects to a general careers page or says the posting is closed, the role has expired: set Not pursuing with Agent notes `Role expired: the posting was no longer available when checked on <date>.` and stop assessing it. If the page cannot be reached for a technical reason (a network block or timeout), use the saved copy and record that availability was not checked.
+
 Read the complete exact official JD, or an integrity-verified saved copy. Extract the product space, central responsibilities, minimum and preferred qualifications, compensation and work restrictions. Preserve the employer's OR/equivalent alternatives. Distinguish requirements from examples and identify missing evidence.
+
+Compensation: take the pay range stated anywhere in the posting, including pay-transparency or location sections at the end. With several bands in the user's currency, use the highest maximum and its paired minimum (DATA.md "Compact job facts") and write them to Starting salary and Max salary. Not knowing which band applies to the user's location or level does not make pay unknown. When a single figure or range is stated and it is unclear whether it is base or total pay, compare it anyway: at or below the user's base requirement, it fails either way. Pay is unknown only when the posting states none.
 
 ## Step 2. Assess career fit
 
@@ -26,6 +30,11 @@ Use the user's actual comparisons and units. Missing pay is not a salary failure
 Compare the complete editable master and confirmed candidate facts with the whole JD. Identify the critical asks from responsibilities, minimum and preferred qualifications, and judge whether demonstrated direct or equivalent accomplishments make a credible case for an interview. Minimum/preferred labels inform this judgment but do not replace it. A preferred specialty can be critical to the actual work; an incidental tool is not automatically critical. Preserve OR/equivalent alternatives.
 
 Record Met, Not met or Unknown with JD and candidate evidence. Distinguish a confirmed missing capability from unclear evidence. Missing keywords alone do not establish a gap. Do not invent experience, equate broad domain familiarity with a specialist track record or invent numerical shortlist probabilities.
+
+- **Traits a resume cannot show** (for example sharpness, judgment, curiosity, communication, bias for action) count as Met. They never make resume fit Unresolved.
+- **Specialist asks are critical.** A specialist domain (for example a particular security discipline, advertising or accessibility), a customer segment or persona (for example public sector, enterprise developers or consumer products), an engineering or highly technical background, a required language, or a citizenship or clearance requirement is critical when it appears in the minimum or preferred qualifications. If the candidate lacks it, resume fit is Low.
+- **Concept-level matches count.** When the candidate's work matches a requirement in concept but not in every specific detail, the requirement is supported: score Medium rather than Unresolved.
+- **Confirmed gaps.** Gaps the user has confirmed in private candidate evidence are Not met; do not ask about them again.
 
 | Resume fit | Meaning | Score |
 |---|---|---:|
