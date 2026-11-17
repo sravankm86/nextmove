@@ -9,12 +9,12 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | Stage | Work | Result |
 |---|---|---|
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
-| [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
+| [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Needs attention or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse or tailor from the factual master, record grounded changes and verify the rendered PDF. | Ready with an exact resume file/version. |
 | [Apply](stages/apply.md) | Check authorization, answers, real form access, exact resume and company restrictions. | Applied after an established submission; uncertainty blocks retries. Default is preflight. |
 | [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
-The nine statuses are **Inventoried, Need review, Queued, Ready, Applied, Interviewing, Not pursuing, Rejected and Duplicate**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#nine-lifecycle-states).
+The nine statuses are **Inventoried, Needs attention, Queued, Ready, Applied, Interviewing, Not pursuing, Rejected and Duplicate**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#nine-lifecycle-states).
 
 Inventory and the preparation queue are states in the same Applications table. Reasons, confirmation, missing evidence and uncertain attempts do not need separate lifecycle states. A manually selected status does not create review approval, verify a PDF or authorize submission.
 
@@ -91,7 +91,7 @@ For manual switching, release the previous owner and open the next configured ha
 
 Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
-Review has three steps: extract the exact JD, score career fit against the user's Career Goals, and score resume fit against the user's master using minimum and preferred qualifications. Add the scores to route Queued, Need review or Not pursuing. Unknown evidence stays Need review. Ratings and explanations are visible; full evidence and versions are recoverable. See [the Review frame](stages/review.md) for the score tables.
+Review has three steps: extract the exact JD, score career fit against the user's Career Goals, and score resume fit against the user's master using minimum and preferred qualifications. Add the scores to route Queued, Needs attention or Not pursuing. Unresolved is scored zero on either axis; the Review table defines its outcomes. Career fit concerns desired work; resume fit judges demonstrated suitability for the critical asks across the whole JD. Ratings and explanations are visible; full evidence and versions are recoverable. See [the Review frame](stages/review.md) for the score tables.
 
 Run owns objective duplicate discovery before stage work and for new scan candidates. Confirmed redundant rows use Duplicate with a saved canonical reference; reobserved jobs do not create extra rows. Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
 

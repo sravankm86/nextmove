@@ -1,5 +1,11 @@
 # Changelog
 
+## Career preferences and resume suitability
+
+- Career fit evaluates desired product space and explicit preferences; resume fit evaluates critical asks across the whole JD against demonstrated candidate evidence. Keep experience and capability facts outside Career Goals.
+- Both ratings use Unresolved 0, Low 1, Medium 2, High 3. The Review table is the sole routing source, including the total-two exception. Replace the pending label with Needs attention and preserve the existing Need review storage alias until an in-place rename.
+- Revalidate old approvals when these inputs change; evaluation predictions do not modify Applications.
+
 - Split salary display into numeric Starting salary and Max salary (schema 10; 29 Application fields). Preserve all bands and units in evidence; decision-policy versions remain unchanged.
 
 ## Ordered fit scores

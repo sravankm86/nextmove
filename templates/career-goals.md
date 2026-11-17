@@ -33,18 +33,8 @@
 - Domains or industries to avoid:
 - Preferred customer segments or verticals:
 - Preferred product types or maturity:
-- General senior PM roles without a named product or specialist expertise requirement:
-- Flexibility on generic experience/leadership-tenure minimums for those roles:
+- Interest in general senior PM and product leadership roles:
 - Preferred signals that make those general roles especially attractive:
-
-## Core Experience and Acceptable Stretches
-
-- Core accomplishments and product/customer responsibilities I want to build on:
-- Importance of direct or equivalent demonstrated experience for central minimum qualifications:
-- Material adjacent gaps I am comfortable exploring:
-- Foundational changes of specialty or track record I am not seeking:
-- Confirmed factual limitations, distinguished from unmentioned skills:
-- Explicit role-specific stretch preferences:
 
 ## Responsibilities and Career Direction
 

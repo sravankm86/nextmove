@@ -206,38 +206,42 @@ def review_frame_contract(review_path=None):
     except IndexError as exc:
         raise ValueError('Review requires its career and resume sections') from exc
     mappings = []
+    ratings = ['Unresolved', 'Low', 'Medium', 'High']
     for section in [career_text, resume_text]:
-        pairs = re.findall(r'^\|\s*(Low|Medium|High)\s*\|[^\n|]+\|\s*(\d+)\s*\|\s*$', section, re.M)
+        pairs = re.findall(r'^\|\s*(Unresolved|Low|Medium|High)\s*\|[^\n|]+\|\s*(\d+)\s*\|\s*$', section, re.M)
         mapping = {label: int(score) for label, score in pairs}
-        if len(pairs) != 3 or set(mapping) != {'Low', 'Medium', 'High'} or not mapping['Low'] < mapping['Medium'] < mapping['High']:
-            raise ValueError('Review needs three distinct ascending scores per rating table')
+        if len(pairs) != 4 or set(mapping) != set(ratings) or not all(mapping[a] < mapping[b] for a, b in zip(ratings, ratings[1:])):
+            raise ValueError('Review needs four distinct ascending scores per rating table')
         mappings.append(mapping)
-    conditions = ['Career fit is Unresolved', 'Every possible total is Not pursuing', 'Any score is Unresolved']
-    expected_statuses = ['Need review', 'Not pursuing', 'Need review']
-    decisions, special, totals = [], [], {}
+    decisions, totals, specials = [], {}, {}
     for line in text.splitlines():
         cells = [x.strip() for x in line.strip().strip('|').split('|')]
-        if len(cells) != 2 or cells[1] not in {'Queued', 'Need review', 'Not pursuing'}:
+        if len(cells) != 2 or cells[1] not in {'Queued', 'Needs attention', 'Not pursuing'}:
             continue
         check, outcome = cells
-        match = re.fullmatch(r'Total (\d+)(?:[–-](\d+))?', check)
-        if match:
-            lo, hi = int(match[1]), int(match[2] or match[1])
-            if lo > hi or any(t in totals for t in range(lo, hi + 1)):
-                raise ValueError('Review decision totals overlap or have a reversed range')
-            for value in range(lo, hi + 1):
-                totals[value] = outcome
-            decisions.append({'check': check, 'outcome': outcome})
-        elif check in conditions:
-            special.append((check, outcome))
-            decisions.append({'check': check, 'outcome': outcome})
-        else:
+        match = re.fullmatch(r'Total (\d+)(?:[–-](\d+))?(?: (with|without) Unresolved)?', check)
+        if not match:
             raise ValueError('Unsupported Review decision condition: ' + check)
-    if special != list(zip(conditions, expected_statuses)) or [x['check'] for x in decisions[:3]] != conditions:
-        raise ValueError('Review must preserve the explicit career/early-stop/missing-score decision order')
-    possible = {a + b for a in mappings[0].values() for b in mappings[1].values()}
-    if not possible.issubset(totals) or set(totals.values()) != {'Queued', 'Need review', 'Not pursuing'}:
-        raise ValueError('Review decision table must cover every possible total and outcome')
+        lo, hi, qualifier = int(match[1]), int(match[2] or match[1]), match[3]
+        if lo > hi or qualifier and lo != hi:
+            raise ValueError('Invalid Review total range')
+        for value in range(lo, hi + 1):
+            key = (value, qualifier)
+            if key in specials or not qualifier and value in totals:
+                raise ValueError('Duplicate Review total condition')
+            if qualifier:
+                specials[key] = outcome
+            else:
+                totals[value] = outcome
+        decisions.append({'check': check, 'outcome': outcome, 'minimum': lo, 'maximum': hi, 'unresolved': qualifier})
+    for career, c in mappings[0].items():
+        for resume, r in mappings[1].items():
+            qualifier = 'with' if 'Unresolved' in [career, resume] else 'without'
+            matched = [d for d in decisions if d['minimum'] <= c + r <= d['maximum'] and (d['unresolved'] is None or d['unresolved'] == qualifier)]
+            if len(matched) != 1:
+                raise ValueError('Review routing must cover each rating pair exactly once')
+    if {d['outcome'] for d in decisions} != {'Queued', 'Needs attention', 'Not pursuing'}:
+        raise ValueError('Review requires all three outcomes')
     return 'review-sha256:' + hashlib.sha256(raw).hexdigest(), {
         'assessment_method': 'three_step_v1', 'career': mappings[0], 'resume': mappings[1],
         'decisions': decisions, 'total_outcomes': totals}
@@ -264,23 +268,25 @@ def career_rating(criteria):
     return 'High' if all(v == 'met' for v in values) else 'Medium'
 
 
-def resume_rating(minimum, preferred, *, minimum_listed=True, preferred_listed=True):
+def resume_rating(minimum, preferred, *, critical=None, minimum_listed=True, preferred_listed=True):
+    # Critical asks are identified by the assessor from the whole JD, not keywords.
     required, desired = _findings(minimum), _findings(preferred)
-    if 'not_met' in required:
+    central = _findings(critical or [])
+    if 'not_met' in required or 'not_met' in central:
         return 'Low'
-    if 'unknown' in required or minimum_listed and not required:
+    if 'unknown' in required or 'unknown' in central or minimum_listed and not required:
         return 'Unresolved'
     if not preferred_listed:
         return 'High'
-    if 'not_met' in desired:
+    if 'not_met' in desired or 'unknown' in desired:
         return 'Medium'
-    if not desired or 'unknown' in desired:
+    if not desired:
         return 'Unresolved'
     return 'High'
 
 
 def scored_review(career, resume, *, objective_failure=False, minimum_failure=False, contract=None):
-    # Legacy flags remain accepted for callers, but cannot override the sole source.
+    # Legacy flags remain accepted but cannot override the published score routing.
     if contract is None:
         _, contract = review_frame_contract()
     ratings = {'Low', 'Medium', 'High', 'Unresolved'}
@@ -288,20 +294,13 @@ def scored_review(career, resume, *, objective_failure=False, minimum_failure=Fa
         raise ValueError('Unknown fit rating')
     for axis in ['career', 'resume']:
         mapping = contract[axis]
-        if set(mapping) != ratings - {'Unresolved'} or any(type(v) is not int for v in mapping.values()):
+        if set(mapping) != ratings or any(type(v) is not int for v in mapping.values()):
             raise ValueError('Each axis requires the published numeric rating table')
-    c, r = contract['career'].get(career), contract['resume'].get(resume)
-    total = c + r if c is not None and r is not None else None
-    outcomes = contract['total_outcomes']
-    possible = {a + b for a in ([c] if c is not None else contract['career'].values())
-                for b in ([r] if r is not None else contract['resume'].values())}
-    if career == 'Unresolved':
-        outcome = 'Need review'
-    elif all(outcomes[value] == 'Not pursuing' for value in possible):
-        outcome = 'Not pursuing'
-    elif total is None:
-        outcome = 'Need review'
-    else:
-        outcome = outcomes[total]
+    c, r = contract['career'][career], contract['resume'][resume]
+    total = c + r
+    qualifier = 'with' if 'Unresolved' in [career, resume] else 'without'
+    matched = [d for d in contract['decisions'] if d['minimum'] <= total <= d['maximum'] and (d['unresolved'] is None or d['unresolved'] == qualifier)]
+    if len(matched) != 1:
+        raise ValueError('Review routing must match exactly once')
     return {'career_rating': career, 'career_score': c, 'resume_rating': resume,
-            'resume_score': r, 'total': total, 'outcome': outcome}
+            'resume_score': r, 'total': total, 'outcome': matched[0]['outcome']}

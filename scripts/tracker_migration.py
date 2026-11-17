@@ -46,15 +46,15 @@ def migrate(application, previous, runs):
     }
     status = application.get('Lifecycle status')
     if status == 'Needs eligibility':
-        status = 'Need review'
+        status = 'Needs attention'
     elif status in {'Queued', 'Shortlisted'}:
         versions = stage_versions(state, 'review', runs)
         current = {**versions, 'jd_hash': review.get('jd_hash')}
         if not review_ready({**application, 'Lifecycle status': 'Queued'}, state, runs, current):
-            status = 'Need review'
+            status = 'Needs attention'
         elif status == 'Shortlisted':
             # Legacy labels are not promoted by a storage migration.
-            status = 'Need review'
+            status = 'Needs attention'
     notes = agent_notes(application)
     state['details']['tracker_migration_v7'].update(agent_notes_after=notes, lifecycle_after=status)
     return state, notes, status
