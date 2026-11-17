@@ -67,7 +67,7 @@ There are 12 operational instruction files. Each concern has one owner; maintena
 | How are end-user career preferences interpreted? | [CAREER-GOALS.md](CAREER-GOALS.md) |
 | Scan criteria, pagination and recall-tested improvement? | [Scan](stages/scan.md) |
 | Final role/seniority, compensation and fit decisions? | [Review](stages/review.md) |
-| Resume production and verification? | [Prepare](stages/prepare.md), with [file/version rules](RESUME-FILES.md) |
+| Resume production and verification? | [Prepare](stages/prepare.md), with [file/version rules](RESUME-FILES.md) and the [resume guidelines frame](templates/resume-guidelines.md) |
 | Company list, funding discovery, employer quotas/cooldowns and holds? | [Curate](stages/curate.md) |
 | Submission safeguards and the final pre-submit hold check? | [Apply](stages/apply.md) |
 | Receipts, recruiter engagement and mailbox checkpoints? | [Track](stages/track.md) |
@@ -80,7 +80,7 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - Your own Airtable and Google accounts, sufficient service capacity and the intended private destinations.
 - Separate authenticated connections in every harness, plus any browser or mailbox tools that its stages require. You handle sign-in, consent and MFA; unsupported capabilities remain blockers.
 - [Career preferences](templates/career-goals.md), in ordinary prose or the optional template: desired function, designation, seniority/scope, compensation, domains, responsibilities, geography and priorities. This document contains preferences, not agent instructions.
-- One accurate designated editable master resume, your private resume guidelines (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
+- One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
 - Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
 - Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
 - Explicit submission scope and approved answers before real applications. Track needs read-only mailbox access.

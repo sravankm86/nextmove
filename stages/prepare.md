@@ -11,11 +11,28 @@ Resolve and pin these registered Settings resources in the Run:
 | Key | Role |
 |---|---|
 | master_resume | The designated editable master: the only source of resume facts. Never modified by Prepare. |
-| resume_guidelines | The user's private resume guidelines: base catalogue and themes, company-to-base grouping, same-company consistency rule, length, layout, structure, positioning and language. Governs every selection and every tailored version. |
+| resume_guidelines | The user's private resume guidelines in the standard frame (contracts/resume-guidelines-schema.json, blank form templates/resume-guidelines.md). Governs every selection and every tailored version. |
 | base_resumes | The library of approved bases: for each, theme/variant, page length, exact PDF and editable source references, content version (hash) and the master version it was built from. A legacy single approved_base_resume counts as a one-entry library. |
 | resume_output / content_output | Role specific and Audit trail folders under RESUME-FILES.md. |
 
-A missing or inaccessible master or guidelines blocks Prepare for all roles; record the exact gap and ask. An empty base library means every role goes to the tailored path, which still needs a structural starting point from the guidelines. Public instructions contain no user's bases, companies or wording: all of that lives in the private guidelines and master.
+A missing or inaccessible master or guidelines blocks Prepare for all roles; record the exact gap and ask.
+
+## Reading the guidelines
+
+The guidelines use one standard frame: numbered sections with stable IDs, each holding typed fields (select, multi-select, boolean, number, range, date, list, table) and a natural-language Instructions field. The same frame can be a document today and a configurable form later; Prepare reads it the same way either way:
+
+- Read values by `section.field` ID, never by heading wording. Validate them with `scripts/resume_guidelines.py:validate`; an invalid value is a blocker to report, not something to guess.
+- Only `document.status` Approved governs Prepare. A Draft version is not used until the user approves it.
+- Structured values take precedence over a section's Instructions. Instructions refine within that section; a contradiction between them is a question for the user.
+- A blank field falls back to the defaults in this file. Where no default exists and the choice changes the resume, ask.
+- An older free-text guidelines document is mapped into the frame first (record the mapping and get the user's approval), not interpreted ad hoc.
+
+| Prepare step | Sections used |
+|---|---|
+| Step 2 same-company consistency | `company_consistency` |
+| Step 3 choose the path | `selection`, `bases`, `variants`, `company_grouping`, `length` (one-page versions) |
+| Step 4 tailored resume | `fact_source`, `length`, `page_one`, `layout`, `structure`, `positioning`, `language`, `confidential_content` |
+| Verification | `files.pre_approval_checks`, plus a `guideline_check` entry for every applicable field | An empty base library means every role goes to the tailored path, which still needs a structural starting point from the guidelines. Public instructions contain no user's bases, companies or wording: all of that lives in the private guidelines and master.
 
 ## Step 1: role requirements
 
@@ -35,7 +52,7 @@ Find every earlier submission to the same company (Applications, attempts and kn
 
 ## Step 4: tailored resume (only on the tailor path)
 
-Follow every rule in the registered resume guidelines. Where the guidelines are silent, use these defaults:
+Follow every applicable field and Instructions in the registered guidelines (sections listed above). Where a field is blank, use these defaults:
 
 - **Facts only from the master.** Name, contact, titles, employers, dates, education, team sizes and every metric stay identical to the master. Never invent, inflate, merge or reword a fact so its meaning or number changes. Never turn a JD requirement, a goal or an area the user marks as outside their expertise into a claimed skill or highlight.
 - **Allowed edits.** Select, order and trim bullets; adjust the headline, summary emphasis and skills keywords toward the role's themes; expand or compress earlier roles where the guidelines allow. Each change must make a mapped critical requirement or theme easier to see.
@@ -46,7 +63,7 @@ Follow every rule in the registered resume guidelines. Where the guidelines are 
 Then verify before Ready, and record each result:
 
 1. **Grounding:** every claim (bullet, headline, summary statement, skill) maps to a master passage; numbers and dates match exactly. Any unsupported or altered claim → `grounding: fail`.
-2. **Guideline check:** a checklist of each applicable guideline rule (structure, length, layout, language, positioning, consistency) with pass/fail.
+2. **Guideline check:** one pass/fail entry per applicable `section.field` (plus each section's Instructions), recorded with the guidelines version.
 3. **Coverage:** the updated coverage table shows each critical requirement evidenced or an honest `gap` that remains (never filled by invention).
 4. **Rendered PDF:** open and visually inspect every page for layout, overflow, page count, fonts and readability; confirm the PDF is text-based.
 

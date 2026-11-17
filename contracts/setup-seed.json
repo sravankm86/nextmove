@@ -73,7 +73,10 @@
       "verification": "Missing",
       "value": null,
       "content_kind": "end_user_resume_guidelines",
-      "note": "Private; governs base selection and every tailored resume. Never copied into Git."
+      "note": "Private; governs base selection and every tailored resume. Never copied into Git.",
+      "frame": "contracts/resume-guidelines-schema.json",
+      "template": "templates/resume-guidelines.md",
+      "governs_only_when": "document.status == Approved"
     },
     {
       "key": "base_resumes",
