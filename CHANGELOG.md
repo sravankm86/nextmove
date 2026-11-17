@@ -1,5 +1,9 @@
 # Changelog
 
+## Reject Low on either Review axis
+
+- A supported Low career or resume fit now means Not pursuing before numeric routing. Other thresholds and Unresolved scores are unchanged. Explicit reassessment can include Queued and Not pursuing applications; Manual notes remains human-owned.
+
 ## Cleanup
 
 - Removed finished-migration code and docs: tracker_migration.py, table_retirement.py, legacy run-progress readers, lifecycle label mapping, field-aliases.json, config.example.yaml, table CSV templates, the unreferenced examples file and the old Review gates (general PM, qualification majority, base-maximum, queue_allowed) superseded by the three-step score.

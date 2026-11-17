@@ -1,6 +1,6 @@
 # Review: three steps
 
-Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review assesses Inventoried roles and retryable Need review roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
+Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review normally assesses Inventoried roles and retryable Need review roles; an explicit reassessment may also include Queued and Not pursuing roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
 
 Use current linked Companies and saved Curate evidence in both a full Run and a standalone Review. Only human-Allow companies without a permanent block advance automatically; skip out-of-scope existing roles without changing their scores or lifecycle, and record the reason in the Run. Temporary holds, unresearched employer policies and incomplete discovery do not delay fit assessment or queueing. They remain submission controls, not fit criteria.
 
@@ -36,17 +36,18 @@ Record Met, Not met or Unknown with JD and candidate evidence. Distinguish a con
 
 Explain why each consequential requirement is critical or secondary. Reuse confirmed facts already supplied; do not repeatedly ask about a confirmed gap. Facts removed from Career Goals remain candidate evidence, not preferences. Store their source in private resume/candidate evidence under DATA.md; never add unsupported claims to the master.
 
-Add both scores and use this table. Assess both axes. Unresolved is a rating with score zero, not proof of failure. Do not add a separate veto or substitute an old routing rule.
+Apply the first row before total-score routing: Low on either career or resume fit means Not pursuing, regardless of the other score. Otherwise add both scores and follow the table. Unresolved scores zero and is not proof of failure. Once a supported Low makes the outcome certain, the other axis may remain Unresolved if unassessed; explain the decisive evidence and do not fabricate a rating.
 
 | Check, in this order | Decision |
 |---|---|
+| Either fit is Low | Not pursuing |
 | Total 2 with Unresolved | Need review |
 | Total 5–6 | Queued |
 | Total 3–4 | Need review |
 | Total 2 without Unresolved | Not pursuing |
 | Total 0–1 | Not pursuing |
 
-Consequently High + Low is Need review, Low + Low is Not pursuing, and Unresolved + Unresolved or Unresolved + Low is Not pursuing. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
+Consequently High + Low and Low + High are Not pursuing. Low + Low is Not pursuing. With no Low, the existing numeric treatment of Unresolved remains unchanged. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
 
 Agent notes briefly explains both ratings, the critical evidence or gap, and the resulting status. For Need review, state exactly what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
 

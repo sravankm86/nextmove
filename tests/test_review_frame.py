@@ -47,15 +47,15 @@ class ReviewFrameTests(unittest.TestCase):
         self.assertEqual(contract['career'],dict(zip(ratings,range(4))))
         self.assertEqual(contract['resume'],dict(zip(ratings,range(4))))
         expected=[['Not pursuing','Not pursuing','Need review','Need review'],
-                  ['Not pursuing','Not pursuing','Need review','Need review'],
-                  ['Need review','Need review','Need review','Queued'],
-                  ['Need review','Need review','Queued','Queued']]
+                  ['Not pursuing','Not pursuing','Not pursuing','Not pursuing'],
+                  ['Need review','Not pursuing','Need review','Queued'],
+                  ['Need review','Not pursuing','Queued','Queued']]
         for ci,c in enumerate(ratings):
             for ri,r in enumerate(ratings):
                 result=scored_review(c,r,contract=contract)
                 self.assertEqual(result['outcome'],expected[ci][ri])
                 self.assertEqual(result['total'],ci+ri)
-        self.assertEqual(scored_review('High','Low')['outcome'],'Need review')
+        self.assertEqual(scored_review('High','Low')['outcome'],'Not pursuing')
         self.assertEqual(scored_review('Unresolved','Low')['outcome'],'Not pursuing')
         self.assertEqual(scored_review('Unresolved','Medium')['outcome'],'Need review')
 
@@ -69,7 +69,7 @@ class ReviewFrameTests(unittest.TestCase):
             identity,changed=review_frame_contract(path)
             self.assertNotEqual(identity,original)
             self.assertEqual(identity,'review-sha256:'+hashlib.sha256(path.read_bytes()).hexdigest())
-            self.assertEqual(scored_review('High','Low',contract=changed)['outcome'],'Queued')
+            self.assertEqual(scored_review('Medium','Medium',contract=changed)['outcome'],'Queued')
             path.write_text(text.replace('Total 4–6','Total 5–6'))
             with self.assertRaises(ValueError):review_frame_contract(path)
 

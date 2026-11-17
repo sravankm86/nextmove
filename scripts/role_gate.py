@@ -116,11 +116,17 @@ def review_frame_contract(review_path=None):
             raise ValueError('Review needs four distinct ascending scores per rating table')
         mappings.append(mapping)
     decisions, totals, specials = [], {}, {}
+    low_outcome = None
     for line in text.splitlines():
         cells = [x.strip() for x in line.strip().strip('|').split('|')]
         if len(cells) != 2 or cells[1] not in {'Queued', 'Need review', 'Not pursuing'}:
             continue
         check, outcome = cells
+        if check == 'Either fit is Low':
+            if low_outcome is not None:
+                raise ValueError('Duplicate Low-fit routing rule')
+            low_outcome = outcome
+            continue
         match = re.fullmatch(r'Total (\d+)(?:[–-](\d+))?(?: (with|without) Unresolved)?', check)
         if not match:
             raise ValueError('Unsupported Review decision condition: ' + check)
@@ -136,6 +142,8 @@ def review_frame_contract(review_path=None):
             else:
                 totals[value] = outcome
         decisions.append({'check': check, 'outcome': outcome, 'minimum': lo, 'maximum': hi, 'unresolved': qualifier})
+    if low_outcome != 'Not pursuing':
+        raise ValueError('Review must publish Low on either axis as Not pursuing')
     for career, c in mappings[0].items():
         for resume, r in mappings[1].items():
             qualifier = 'with' if 'Unresolved' in [career, resume] else 'without'
@@ -146,7 +154,7 @@ def review_frame_contract(review_path=None):
         raise ValueError('Review requires all three outcomes')
     return 'review-sha256:' + hashlib.sha256(raw).hexdigest(), {
         'assessment_method': 'three_step_v1', 'career': mappings[0], 'resume': mappings[1],
-        'decisions': decisions, 'total_outcomes': totals}
+        'decisions': decisions, 'total_outcomes': totals, 'low_outcome': low_outcome}
 
 
 def _findings(items):
@@ -204,4 +212,5 @@ def scored_review(career, resume, *, contract=None):
     if len(matched) != 1:
         raise ValueError('Review routing must match exactly once')
     return {'career_rating': career, 'career_score': c, 'resume_rating': resume,
-            'resume_score': r, 'total': total, 'outcome': matched[0]['outcome']}
+            'resume_score': r, 'total': total,
+            'outcome': contract['low_outcome'] if 'Low' in [career, resume] else matched[0]['outcome']}
