@@ -1,5 +1,13 @@
 # Changelog
 
+## Public instructions carry no personal preferences
+
+- Scan, the title screen and Review eligibility read the target role family from private Settings `role_family` (format: templates/role-family.example.json). The repository no longer assumes any role.
+- No built-in personal application limit or discovery funding minimum: both come from the user's Career Goals via Settings. `funding_qualifies` requires an explicit minimum.
+- The Prepare shortlist estimate is opt-in through Settings `preparation_notes.shortlist_estimate` (off by default).
+- Neutral examples in Review, Prepare, DATA.md and the Career Goals template; starter eval reason types that a private registry can replace.
+- `check_repo.py` now fails when public instructions name a specific role family or funding minimum, or when any file contains a private Airtable base ID, Google Drive link or personal email address.
+
 ## Apply blocks only verified company restrictions
 
 - `company_policy.apply_allowed` now stops a submission only for Held (an enforceable employer rule or the personal limit is reached) or Blocked (permanent). Needs clarification and Not assessed no longer block.

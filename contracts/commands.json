@@ -54,7 +54,7 @@
       "stage": "Curate",
       "mode": "prepare",
       "instructions": "stages/curate.md",
-      "scope": "Recompute every company hold; research unassessed/stale employer policies; on its configured cadence discover Series C+ funded companies as Proposed. Never sets Allow/Exclude or submits.",
+      "scope": "Recompute every company hold; research unassessed/stale employer policies; on its configured cadence discover newly funded companies meeting the configured funding minimum as Proposed. Never sets Allow/Exclude or submits.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

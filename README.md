@@ -1,6 +1,6 @@
 # Nextmove
 
-Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It keeps your target-company list current (funding discovery, employer application limits and rejection cooldowns), finds plausible senior product-management roles, reviews their fit, prepares truthful resumes, supports authorized applications and tracks recruiting progress through the interview stage.
+Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It keeps your target-company list current (funding discovery, employer application limits and rejection cooldowns), finds plausible roles in the function you target, reviews their fit, prepares truthful resumes, supports authorized applications and tracks recruiting progress through the interview stage.
 
 One agent can run the whole sequence. You can also start each stage manually in a different harness. Both use the same saved state, evidence and safeguards. This repository is not a hosted app, scheduler or automatic launcher for other harnesses.
 
@@ -8,8 +8,8 @@ One agent can run the whole sequence. You can also start each stage manually in 
 
 | Stage | Work | Result |
 |---|---|---|
-| [Curate](stages/curate.md) | Recompute company application holds, research employer limits and cooldowns, and propose newly funded Series C+ companies that match Career Goals. | Current holds; Proposed companies await your Allow/Exclude. |
-| [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
+| [Curate](stages/curate.md) | Recompute company application holds, research employer limits and cooldowns, and propose newly funded companies that meet your Career Goals funding minimum. | Current holds; Proposed companies await your Allow/Exclude. |
+| [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible candidates for your target roles become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
 | [Apply](stages/apply.md) | A browser agent opens the real form, fills it from your answer bank and uploads the exact verified resume, within your on/off switch and daily limit. | Applied with confirmation; anything unclear stops that role. Default is preflight. |
@@ -80,6 +80,7 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 
 - Your own Airtable and Google accounts, sufficient service capacity and the intended private destinations.
 - Separate authenticated connections in every harness, plus any browser or mailbox tools that its stages require. You handle sign-in, consent and MFA; unsupported capabilities remain blockers.
+- Your target role family in private Settings `role_family`: a name and title patterns ([example](templates/role-family.example.json)). Nextmove ships no default role, funding minimum or application limit; each user sets their own.
 - [Career preferences](templates/career-goals.md), in ordinary prose or the optional template: desired function, designation, seniority/scope, compensation, domains, responsibilities, geography and priorities. This document contains preferences, not agent instructions.
 - One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
 - Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.

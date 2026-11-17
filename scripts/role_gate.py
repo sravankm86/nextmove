@@ -12,35 +12,56 @@ def normalize(value):
     return re.sub(r'\s+', ' ', text.replace('–', '-').replace('—', '-')).strip()
 
 
-DIRECT_PM = re.compile(r'\bproduct\s+(?:(?:inbound|outbound|technical|platform|portfolio|growth|group|security|senior|staff|principal|lead|ai|data|digital|tax)\s+){0,3}(?:manager|mgr|management)\b')
-FLAT_PM = re.compile(r'\bmember\s+of\s+product\s+(?:staff|team)\b')
-OWNER_LEAD = re.compile(r'\bproduct\s+(?:owner|lead|leadership)\b')
-LEADERSHIP = re.compile(r'\b(?:director|head|vp|svp|evp|vice president|chief)\b.{0,45}\bproduct\b|\bproduct\b.{0,45}\b(?:director|head|vp|svp|evp|vice president)\b')
-ABBREVIATION = re.compile(r'\b(?:gpm|cpo|pm|gm)\b|\bgeneral manager\b')
-LOCALIZED_PM = re.compile(r'produktmanager|produktmanagement|chef(?:fe)?\s+de\s+produit|responsable(?:\s+de)?\s+produit|director(?:a)?\s+de\s+producto|gerente\s+de\s+produt[oa]|gestor\s+de\s+produto|产品经理|產品經理|プロダクトマネージャー|제품\s*관리자')
-CLEAR_OTHER = re.compile(r'\b(?:marketing|designer|design|security engineer|product security|support|success|sales|business development|communications|public relations|data scientist|data science|analytics|analyst|software engineer|engineering|engineer|legal|counsel|operations|supply chain|finance|policy|enablement|assistant|program manager|project manager)\b')
-JUNIOR = re.compile(r'^(?:intern|internship|junior|entry.level|graduate)\b|\bassociate\s+(?:technical\s+)?product\s+(?:manager|mgr)\b|\bproduct\s+(?:manager|mgr|management)\s+(?:intern|internship|i|1)\b')
+FAMILY_KEYS = ('name', 'direct_patterns', 'possible_patterns', 'other_function_patterns', 'junior_patterns', 'ignore_patterns')
 
 
-def title_screen(title):
+def role_family(config):
+    """Compile the user's private role-family definition (Settings `role_family`).
+
+    The repository ships no role family: each user defines the work they target
+    (for example templates/role-family.example.json). A missing or malformed
+    definition stops screening instead of falling back to someone else's defaults.
+    """
+    if isinstance(config, dict) and config.get('_compiled'):
+        return config
+    if not isinstance(config, dict) or not config.get('name') or not config.get('direct_patterns'):
+        raise ValueError('Settings role_family needs a name and at least one direct pattern')
+    unknown = set(config) - set(FAMILY_KEYS) - {'note', 'examples'}
+    if unknown:
+        raise ValueError('Unknown role_family keys: ' + ', '.join(sorted(unknown)))
+    compiled = {'_compiled': True, 'name': config['name']}
+    for key in FAMILY_KEYS[1:]:
+        patterns = config.get(key) or []
+        if not isinstance(patterns, list) or not all(isinstance(p, str) and p for p in patterns):
+            raise ValueError('role_family.%s must be a list of regular expressions' % key)
+        compiled[key] = [re.compile(p) for p in patterns]
+    return compiled
+
+
+def _any(patterns, text):
+    return any(p.search(text) for p in patterns)
+
+
+def title_screen(title, family):
+    family = role_family(family)
+    name = family['name']
     text = normalize(title)
     if not text or text in {'.', '-', 'n/a', 'unknown'}:
         return {'decision': 'pending_metadata', 'reason': 'No usable title; verify official posting'}
-    # A shift time ending in PM is not a product-role abbreviation.
-    text = re.sub(r'\b\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)\b', '', text)
-    role_abbrev = re.search(r'^(?:(?:senior|sr\.?|staff|principal|lead|group|technical|platform)\s+)*(?:pm|gpm)\b', text)
-    direct = bool(DIRECT_PM.search(text) or FLAT_PM.search(text) or OWNER_LEAD.search(text) or LOCALIZED_PM.search(text) or role_abbrev)
-    possible = direct or bool(LEADERSHIP.search(text) or ABBREVIATION.search(text))
+    for pattern in family['ignore_patterns']:
+        text = pattern.sub('', text)
+    direct = _any(family['direct_patterns'], text)
+    possible = direct or _any(family['possible_patterns'], text)
     if not possible:
-        return {'decision': 'reject', 'reason': 'No PM role-family signal'}
-    if not direct and CLEAR_OTHER.search(text):
-        return {'decision': 'reject', 'reason': 'Explicit other function without a PM role signal'}
-    if JUNIOR.search(text):
-        return {'decision': 'reject', 'reason': 'Explicit junior/entry PM title'}
-    return {'decision': 'verify_jd', 'reason': 'Perform basic contextual PM check; final scope/eligibility belongs to Review'}
+        return {'decision': 'reject', 'reason': 'No %s role-family signal' % name}
+    if not direct and _any(family['other_function_patterns'], text):
+        return {'decision': 'reject', 'reason': 'Explicit other function without a %s signal' % name}
+    if _any(family['junior_patterns'], text):
+        return {'decision': 'reject', 'reason': 'Explicit junior/entry %s title' % name}
+    return {'decision': 'verify_jd', 'reason': 'Perform basic contextual %s check; final scope/eligibility belongs to Review' % name}
 
 
-def inventory_candidate(assessment):
+def inventory_candidate(assessment, family):
     """Broad screen; no career inputs or exhaustive scope decision.
 
     A reader supplies basic semantic evidence or an explicit ambiguity reason.
@@ -49,7 +70,7 @@ def inventory_candidate(assessment):
     """
     if assessment.get('identity_verified') is not True:
         return 'pending'
-    screen = title_screen(assessment.get('title'))
+    screen = title_screen(assessment.get('title'), family)
     role_hint = assessment.get('role_hint')
     evidence = assessment.get('basic_evidence')
     if role_hint == 'other' and evidence:
@@ -57,16 +78,16 @@ def inventory_candidate(assessment):
     if assessment.get('clearly_junior') is True and evidence:
         return 'reject'
     # Verified context can rescue missing/nonstandard titles, not fabricated IDs.
-    if screen['decision'] == 'reject' and not (role_hint == 'plausible_pm' and evidence):
+    if screen['decision'] == 'reject' and not (role_hint == 'plausible' and evidence):
         return 'reject'
-    if role_hint not in {'plausible_pm', 'ambiguous_pm'} or not evidence:
+    if role_hint not in {'plausible', 'ambiguous'} or not evidence:
         return 'pending'
-    if screen['decision'] == 'pending_metadata' and role_hint != 'plausible_pm':
+    if screen['decision'] == 'pending_metadata' and role_hint != 'plausible':
         return 'pending'
     return 'pass'
 
 
-def review_eligibility(assessment, *, years_threshold):
+def review_eligibility(assessment, *, years_threshold, role_family_name):
     """Return pass/reject/pending. Never infer company-grade equivalence.
 
     years_threshold is exclusive. Low posted minimums alone do not prove scope
@@ -76,9 +97,11 @@ def review_eligibility(assessment, *, years_threshold):
         raise ValueError('Explicit numeric experience threshold required')
     if assessment.get('identity_verified') is not True or assessment.get('description_verified') is not True:
         return 'pending'
-    if assessment.get('role_family', 'unknown') not in {'product_management', 'unknown', None}:
+    if not role_family_name:
+        raise ValueError('Explicit role family name required (Settings role_family.name)')
+    if assessment.get('role_family', 'unknown') not in {role_family_name, 'unknown', None}:
         return 'reject'
-    if assessment.get('role_family') != 'product_management' or not assessment.get('role_evidence'):
+    if assessment.get('role_family') != role_family_name or not assessment.get('role_evidence'):
         return 'pending'
     years = assessment.get('experience_years_target')
     experience_pass = isinstance(years, (int, float)) and not isinstance(years, bool) and years > years_threshold and bool(assessment.get('experience_evidence'))

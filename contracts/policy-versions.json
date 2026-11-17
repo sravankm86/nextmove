@@ -1,7 +1,7 @@
 {
   "schema_version": 13,
-  "scan": "de42e872-basic-PM-v3",
-  "eligibility": "pay-and-PM-ownership-v4",
+  "scan": "role-family-from-settings-v4",
+  "eligibility": "pay-and-ownership-v5",
   "rules": [
     "Career Goals supplies personal criteria and exceptions; the master supplies candidate facts. Public Review defines only extraction, ratings and score routing.",
     "Run owns objective duplicate discovery; IDs or verified posting-specific links confirm identity, names/dates corroborate. Preserve actual application history.",

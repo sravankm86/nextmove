@@ -5,7 +5,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Command | Scope |
 |---|---|
 | Run / Run Nextmove | Default single agent: Curate → Scan → Review → Prepare → Apply → Track (ends at Interviewing) |
-| Curate / Companies | Recompute every company application hold; research employer limits/cooldowns; on cadence propose Series C+ funded companies as Proposed. Never sets Allow/Exclude |
+| Curate / Companies | Recompute every company application hold; research employer limits/cooldowns; on cadence propose newly funded companies that meet the Career Goals funding minimum as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
@@ -44,7 +44,7 @@ Use Duplicate evidence to improve reader identity/canonicalization and prevent r
 
 Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified time-based freshness assumption, hidden page/item/time cap or false completion after one batch.
 
-Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Follow the numeric routing in stages/review.md, including Unresolved at zero; only a current qualifying score can advance to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
+Scan inventories plausible candidates for the user's role family (Settings `role_family`) after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Follow the numeric routing in stages/review.md, including Unresolved at zero; only a current qualifying score can advance to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
 
 Preserve human outcomes. At every invocation capture new Manual notes under DATA.md "Feedback inbox and Review eval" before stage decisions, and checkpoint capture again at completion. Once the eval case, snapshot and History are verified, clear only the unchanged captured note. Feedback updates evals; it does not silently change Career Goals, stage rules or the role status. Do not reopen submitted/terminal roles when fit inputs change.
 

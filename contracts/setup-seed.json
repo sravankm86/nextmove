@@ -120,7 +120,7 @@
     {
       "key": "role_policy",
       "value": {
-        "role_family": "product_management",
+        "role_family": null,
         "experience_years_threshold": null,
         "comparison": ">",
         "scope_benchmark": null,
@@ -144,29 +144,25 @@
         "review_scoring_contract": "stages/review.md",
         "duplicate_discovery_owner": "Run",
         "review_policy_identity": "automatic Review file SHA-256",
-        "candidate_evidence_source": "master_resume and registered confirmed candidate facts"
+        "candidate_evidence_source": "master_resume and registered confirmed candidate facts",
+        "role_family_source": "Settings role_family, defined by the user from Career Goals (example: templates/role-family.example.json)"
       },
       "verification": "Needs verification"
     },
     {
       "key": "company_policy",
       "value": {
-        "personal_application_limit": {
-          "max_applications": 3,
-          "window_days": 30,
-          "window_type": "Rolling",
-          "scope": "Company",
-          "timezone": null
-        },
-        "personal_limit_source": "user default; Career Goals may override with an explicit value",
+        "personal_application_limit": null,
+        "personal_limit_source": "none by default; set from Career Goals or the user's explicit instruction",
         "discovery": {
-          "min_funding_stage": "Series C",
+          "min_funding_stage": null,
           "admission": "Proposed",
           "auto_allow": false,
           "cadence_days": 7,
           "first_run_lookback_days": 90,
           "feeds": [],
-          "feeds_note": "Each feed is a Settings-registered official/news/filing source with its own checkpoint; blank feeds mean discovery is blocked, not complete."
+          "feeds_note": "Each feed is a Settings-registered official/news/filing source with its own checkpoint; blank feeds mean discovery is blocked, not complete.",
+          "min_funding_stage_source": "Career Goals company-stage preference; discovery is blocked until set"
         },
         "policy_research": {
           "enforceable_confidence": [
@@ -182,7 +178,10 @@
           "stops_scan": true
         },
         "holds_change_fit": false,
-        "apply_blocking_hold_statuses": ["Held", "Blocked (permanent)"]
+        "apply_blocking_hold_statuses": [
+          "Held",
+          "Blocked (permanent)"
+        ]
       },
       "verification": "Needs verification"
     },
@@ -215,6 +214,20 @@
         "automatic_purge": false
       },
       "verification": "Verified"
+    },
+    {
+      "key": "preparation_notes",
+      "value": {
+        "shortlist_estimate": false
+      },
+      "verification": "Needs verification",
+      "note": "Optional Prepare note content. shortlist_estimate true adds an estimated 1-10 shortlist chance to Ready notes."
+    },
+    {
+      "key": "role_family",
+      "value": null,
+      "verification": "Needs verification",
+      "note": "The user's target role family: name plus title patterns (see templates/role-family.example.json). Scan and Review stop until it is set."
     }
   ],
   "controls": [

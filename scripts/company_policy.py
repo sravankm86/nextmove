@@ -18,10 +18,14 @@ _STAGE_RANK = {s: i for i, s in enumerate(FUNDING_STAGES[:-1])}
 # Latest instant of a calendar date anywhere on Earth: conservative for date-only events.
 _LATEST_ZONE = timezone(timedelta(hours=-12))
 
-DEFAULT_PERSONAL_LIMIT = {'max_applications': 3, 'window_days': 30, 'window_type': 'Rolling', 'scope': 'Company'}
+# No built-in personal limit or funding minimum: both come from the user's private
+# Settings company_policy (or Career Goals). Unset means no personal limit is applied.
+DEFAULT_PERSONAL_LIMIT = None
 
 
-def funding_qualifies(stage, minimum='Series C'):
+def funding_qualifies(stage, minimum):
+    if minimum not in FUNDING_STAGES:
+        raise ValueError('Set company_policy.discovery.min_funding_stage in private Settings or Career Goals')
     """True only for a known stage at or after the configured minimum."""
     if stage not in _STAGE_RANK or minimum not in _STAGE_RANK:
         return False
@@ -109,7 +113,7 @@ def compute_hold(company, events, now, personal_limit=None, personal_timezone=No
         return [_instant(e['at'], tz) for e in events if e.get('kind') in kinds]
 
     submissions = ('submission', 'uncertain_attempt')
-    limit = DEFAULT_PERSONAL_LIMIT if personal_limit is None else personal_limit
+    limit = personal_limit
     if limit:
         until = quota_reopens_at(times(submissions, _zone(personal_timezone)),
                                  limit['max_applications'], limit['window_days'], now)
