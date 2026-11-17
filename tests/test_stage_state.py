@@ -14,6 +14,35 @@ class StateTests(unittest.TestCase):
         self.state['review'].update(assessment_method='three_step_v1',scoring=scored_review('High','Medium'),evidence='Verified indexed qualification evidence',assessment_complete=True)
         self.state['run_checks']={'duplicate':{'status':'unique','checked_in_run':'run-example','evidence':'Verified official role ID'}}
 
+    def reuse(self, digest):
+        return {'path':'base_reuse','base':'base-ainative','base_version':digest,'base_master':'master-v1','coverage':'complete','company_consistency':'not_applicable'}
+
+    def prepared(self, pdf, preparation):
+        digest=hashlib.sha256(pdf).hexdigest()
+        app={**self.app,'Lifecycle status':'Ready','Resume link':'file-example','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
+        state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example'
+        state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1',**preparation}
+        return app,state
+
+    def test_prepare_reuses_a_current_base_only_with_complete_coverage(self):
+        pdf=b'base pdf';digest=hashlib.sha256(pdf).hexdigest()
+        app,state=self.prepared(pdf,self.reuse(digest))
+        self.assertTrue(s.resume_ready(app,state,[self.run],self.inputs,pdf,companies=self.companies))
+        for change in [{'coverage':'partial'},{'base_master':'master-v0'},{'base_version':'other-file'},{'path':None},{'company_consistency':'conflict'}]:
+            bad=copy.deepcopy(state);bad['preparation'].update(change)
+            self.assertFalse(s.resume_ready(app,bad,[self.run],self.inputs,pdf,companies=self.companies))
+
+    def test_prepare_tailored_version_needs_grounding_and_guideline_check(self):
+        pdf=b'tailored pdf'
+        tailored={'path':'tailored','base':'base-bigtech-a','base_version':'base-hash','grounding':'pass','guideline_check':'pass','guidelines':'guidelines-v2','company_consistency':'pass'}
+        app,state=self.prepared(pdf,tailored)
+        inputs={**self.inputs,'resume_guidelines':'guidelines-v2'}
+        self.assertTrue(s.resume_ready(app,state,[self.run],inputs,pdf,companies=self.companies))
+        self.assertFalse(s.resume_ready(app,state,[self.run],{**inputs,'resume_guidelines':'guidelines-v3'},pdf,companies=self.companies))
+        for change in [{'grounding':'fail'},{'guideline_check':None},{'base':None}]:
+            bad=copy.deepcopy(state);bad['preparation'].update(change)
+            self.assertFalse(s.resume_ready(app,bad,[self.run],inputs,pdf,companies=self.companies))
+
     def test_manual_queue_cannot_create_acceptance(self):
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs, companies=self.companies))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
@@ -43,7 +72,7 @@ class StateTests(unittest.TestCase):
         self.assertEqual(s.resolve(self.app,history)['review']['decision'],'Not aligned')
     def test_changed_pdf_bytes_and_unknown_verification_block(self):
         pdf=b'original verified pdf';digest=hashlib.sha256(pdf).hexdigest();app={**self.app,'Lifecycle status':'Ready','Resume link':'verified-file','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
-        state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1'}
+        state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1',**self.reuse(digest)}
         self.assertTrue(s.resume_ready(app,state,[self.run],self.inputs,pdf, companies=self.companies))
         self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,b'edited pdf', companies=self.companies))
         app['Resume verified at']=None;self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,pdf, companies=self.companies))
@@ -83,7 +112,7 @@ class StateTests(unittest.TestCase):
     def test_apply_requires_ready_even_when_a_verified_pdf_is_retained(self):
         data=b'verified-pdf';digest=hashlib.sha256(data).hexdigest()
         app={**self.app,'Lifecycle status':'Ready','Resume link':'file-example','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
-        state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1'}
+        state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1',**self.reuse(digest)}
         self.assertTrue(s.apply_ready(app,state,[self.run],self.inputs,data, companies=self.companies))
         self.assertFalse(s.apply_ready({**app,'Lifecycle status':'Queued'},state,[self.run],self.inputs,data, companies=self.companies))
 

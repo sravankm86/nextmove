@@ -8,7 +8,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Curate / Companies | Recompute every company application hold; research employer limits/cooldowns; on cadence propose Series C+ funded companies as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
-| Prepare | Current review-approved Queued roles |
+| Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
 | Apply | Ready roles without unresolved attempts; preflight unless separately authorized |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
 
@@ -52,7 +52,7 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Schema-only releases retain decision-policy versions; changed decision inputs still require revalidation. A vanished local reader is a recovery gap, not evidence of incremental support.
 
-Review owns final eligibility/hard career checks and approves Queued; Prepare requires its current acceptance evidence. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, an accessible actual application form, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
+Review owns final eligibility/hard career checks and approves Queued; Prepare requires its current acceptance evidence. Prepare reuses a base only with complete coverage and a current master; otherwise it tailors under the registered resume guidelines. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, an accessible actual application form, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
 
 ## Stage boundaries and exit
 

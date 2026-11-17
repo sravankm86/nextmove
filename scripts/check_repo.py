@@ -132,6 +132,8 @@ def check(root):
         aliases += cmd["aliases"]
     require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
     require(command["application_submission_default"] is False, "Unsafe submission default")
+    prepare = next(c for c in command["commands"] if c["command"] == "Prepare")
+    require({"master_resume", "resume_guidelines", "base_resumes"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
     require(next(c for c in command["commands"] if c["command"] == "Apply")["mode"] == "review", "Apply must default to preflight")
     controls = {x["key"]: x["value"] for x in seed["controls"]}
     require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")

@@ -8,7 +8,8 @@
     "Review scores and routing live only in stages/review.md. Use its ordered decisions, preserve unknown evidence, and pin its automatic content fingerprint.",
     "Freeze source/policy/JD/PDF identities; revalidate affected decisions when they change. Historical approvals do not manufacture current scored acceptance.",
     "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores.",
-    "Curate owns company targeting proposals, employer-policy research and computed holds. Holds never change role fit; Apply recomputes the hold with scripts/company_policy.py:apply_allowed before Submit."
+    "Curate owns company targeting proposals, employer-policy research and computed holds. Holds never change role fit; Apply recomputes the hold with scripts/company_policy.py:apply_allowed before Submit.",
+    "Prepare reuses an approved base only with complete coverage and a current master; otherwise it tailors from the closest base under the registered resume guidelines. Base creation is offline. resume_ready checks the recorded path evidence."
   ],
   "posting_availability": "apply-form-only-v1",
   "lifecycle": "nine-states-review-duplicate-v2",
@@ -16,5 +17,6 @@
   "review_source": "stages/review.md",
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",
   "company_curation": "curate-holds-v1",
-  "company_policy_source": "stages/curate.md and scripts/company_policy.py"
+  "company_policy_source": "stages/curate.md and scripts/company_policy.py",
+  "preparation": "base-reuse-or-tailor-v1"
 }

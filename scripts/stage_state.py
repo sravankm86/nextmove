@@ -185,7 +185,34 @@ def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_v
                 and digest and p.get('verified') and (p.get('resume_version') or p.get('resume_hash')) == digest == app.get('Resume version')
                 and p.get('master') == current_inputs.get('master')
                 and p.get('jd_hash') == current_inputs.get('jd_hash')
-                and p.get('goals') == current_inputs.get('goals'))
+                and p.get('goals') == current_inputs.get('goals')
+                and preparation_complete(p, current_inputs, digest))
+
+
+PREPARATION_PATHS = ('base_reuse', 'tailored')
+
+
+def preparation_complete(p, current_inputs, digest):
+    """Prepare's two paths under stages/prepare.md; each needs its own evidence.
+
+    base_reuse: an approved base built from the current master covers every critical
+    requirement and main theme; the exact base PDF is the role resume.
+    tailored: a new role version derived from the closest base, grounded claim by claim in
+    the master and checked against the registered resume guidelines.
+    """
+    path = p.get('path')
+    if path not in PREPARATION_PATHS:
+        return False
+    if current_inputs.get('resume_guidelines') and p.get('guidelines') != current_inputs['resume_guidelines']:
+        return False
+    if p.get('company_consistency') not in ('pass', 'not_applicable'):
+        return False
+    if path == 'base_reuse':
+        return bool(p.get('base') and p.get('coverage') == 'complete'
+                    and p.get('base_master') == current_inputs.get('master')
+                    and p.get('base_version') == digest)
+    return bool(p.get('base') and p.get('grounding') == 'pass' and p.get('guideline_check') == 'pass'
+                and p.get('base_version') != digest)
 
 
 def attempt_blocks_retry(app, state):

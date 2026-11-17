@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "tables": [
     "Companies",
     "Applications",
@@ -107,7 +107,7 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Review-approved Queued roles with current evidence",
+      "scope": "Review-approved Queued roles: reuse an approved base with complete coverage and current master, or tailor from the closest base under resume_guidelines; verify grounding and the rendered PDF before Ready. Never creates bases.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -115,7 +115,9 @@
         "content_output",
         "resume_output",
         "career_goals",
-        "role_policy"
+        "role_policy",
+        "resume_guidelines",
+        "base_resumes"
       ]
     },
     {
