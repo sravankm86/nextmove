@@ -1,5 +1,11 @@
 # Changelog
 
+## Apply: browser agent under a standing authorization
+
+- Apply is written for browser-use or computer-use agents: preflight every Ready role (identity check, field map, resume hash), then submit only within the user's standing authorization in Settings.submission_policy, evaluated by `scripts/submission_policy.py:submission_gate`.
+- Guardrails: policy off by default with zero caps; expiry; per-run/day/week caps counting uncertain attempts; allowed ATS list; the first submission per ATS waits for a human go-ahead, later ones run unattended; pacing; circuit breaker on failures or any uncertain submission; no credentials, account creation or CAPTCHA; answers only from the answer bank (template added); hard stops for anything unexpected.
+- Company holds, apply_ready and live controls still apply on top.
+
 ## Prepare: reuse a base or tailor under the resume guidelines
 
 - Resume guidelines use one standard frame (`contracts/resume-guidelines-schema.json`): 15 sections with stable IDs, typed fields (select, multi-select, boolean, number, range, date, list, table) and a natural-language Instructions field per section, ready to become a configurable form. `scripts/resume_guidelines.py` validates values and renders the blank template (`templates/resume-guidelines.md`) or a filled document. Prepare reads values by `section.field` ID; only an Approved version governs.

@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -102,13 +102,16 @@
       "key": "answer_bank",
       "reference_url": null,
       "verification": "Missing",
-      "value": null
+      "value": null,
+      "template": "templates/answer-bank.md"
     },
     {
       "key": "submission_policy",
       "reference_url": null,
       "verification": "Missing",
-      "value": null
+      "value": null,
+      "defaults": "submission_defaults.policy",
+      "edited_by": "user only"
     }
   ],
   "policies": [
@@ -234,7 +237,32 @@
     "enabled": false,
     "daily_submission_cap": 0,
     "supported_domains": [],
-    "authorization_evidence": null
+    "authorization_evidence": null,
+    "policy": {
+      "enabled": false,
+      "mode": "preflight",
+      "authorized_by": null,
+      "authorized_at": null,
+      "expires_at": null,
+      "caps": {
+        "per_run": 0,
+        "per_day": 0,
+        "per_week": 0
+      },
+      "allowed_ats": [],
+      "supervised_first_per_ats": 1,
+      "min_minutes_between_submissions": 5,
+      "circuit_breaker": {
+        "consecutive_failures": 2,
+        "uncertain_submissions": 1
+      },
+      "allow_account_creation": false,
+      "allow_credential_entry": false,
+      "unknown_required_question": "stop",
+      "optional_question_without_answer": "leave_blank",
+      "cover_letter": "only_if_prepared"
+    },
+    "policy_code": "scripts/submission_policy.py"
   },
   "preference_contract": {
     "instruction_authority": "GitHub",

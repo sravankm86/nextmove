@@ -14,6 +14,8 @@ These cases are invented, not private data.
 - Prepare finds an approved platform base, built from the current master, that evidences every critical requirement of a queued role: it reuses that exact PDF (path base_reuse) and moves the role to Ready. No new file is created.
 - Another queued role needs regulated-workflow emphasis no base covers: Prepare tailors from the closest base, reorders bullets and adjusts the headline per the guidelines, maps every claim to the master, renders and inspects the PDF, then sets Ready. Three such roles in one Run add a new_base_recommended note; the user builds that base offline.
 - One board succeeds and another fails: source coverage is Partial even if useful candidates were saved.
+- Apply preflights a Ready role on an allowed ATS, finds a required "Expected salary" free-text field with no answer-bank entry, and stops that role as needs_answer with the exact question saved. Other roles continue.
+- The first submission on a new ATS family stops at the review screen with a screenshot; after the user writes Approve submit, it is submitted and later roles on that ATS run unattended within the caps.
 - A possible Submit followed by a crash keeps its last verified stage with a blocking saved attempt; reconcile before retry.
 - An older receipt after rejection is preserved without regressing the outcome.
 - A fresh harness recovers the same Settings/Run. A full Run continues independent work and reports blocked work honestly.

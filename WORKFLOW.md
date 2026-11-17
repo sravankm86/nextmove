@@ -9,7 +9,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
-| Apply | Ready roles without unresolved attempts; preflight unless separately authorized |
+| Apply | Ready roles without unresolved attempts → browser preflight; submit only within the standing authorization (Settings.submission_policy) |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
 
 Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, but cannot infer submission permission or launch another harness.

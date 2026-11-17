@@ -55,7 +55,7 @@ Airtable workspace creation or connector consent may require a human UI step eve
 | Scan | Enumerate every official catalog page or validated equivalent; save/recover durable content and state |
 | Review | Read full JDs, goals and latest designated master; persist independent fit evidence |
 | Prepare | Produce editable content/PDF, verify factual grounding, render/visually inspect final PDF and store it |
-| Apply | Operate the exact supported application site, respect consent/authorization and capture receipts/uncertainty |
+| Apply | Browser or computer use: open the application URL, read fields, type/select, upload a local file, screenshot and click, using sessions the user signed into; plus Airtable/Drive to read the role and download the resume. Real submission needs Settings.submission_policy and Settings.answer_bank |
 | Track | Read-only mailbox query/thread access with pagination and durable coverage checkpoints |
 
 Do not provide mail send/delete/label powers just to reconcile messages. If a connector offers broader scopes than desired, disclose the grant and use provider-level restrictions where available; runtime instructions are not a permission boundary.

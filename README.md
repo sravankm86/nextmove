@@ -12,7 +12,7 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
-| [Apply](stages/apply.md) | Check authorization, answers, real form access, exact resume and company restrictions. | Applied after an established submission; uncertainty blocks retries. Default is preflight. |
+| [Apply](stages/apply.md) | A browser agent opens the real form, fills it from your answer bank and uploads the exact verified resume, within limits you approve once (caps, allowed application sites, first submission per site supervised). | Applied with confirmation; anything unclear stops that role. Default is preflight. |
 | [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
 The nine statuses are **Inventoried, Need review, Queued, Ready, Applied, Interviewing, Not pursuing, Rejected and Duplicate**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#nine-lifecycle-states).
@@ -83,7 +83,7 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
 - Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
 - Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
-- Explicit submission scope and approved answers before real applications. Track needs read-only mailbox access.
+- A [standing submission authorization](stages/apply.md#standing-authorization-settingssubmission_policy) and an [answer bank](templates/answer-bank.md) before real applications, plus a browser-capable agent signed into the sites you allow. Track needs read-only mailbox access.
 
 No model API key is required. Connectors may use service APIs internally. A fork does not copy private data, authentication or another person's setup. Plain chat without suitable tools cannot execute these stages.
 
