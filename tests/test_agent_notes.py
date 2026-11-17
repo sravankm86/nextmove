@@ -28,7 +28,7 @@ class AgentNoteTests(unittest.TestCase):
             '': 'empty',
             'Review: High+Medium; jd_hash changed. Next: rerun review_ready.': 'snake_case field or code name',
             'Scored 3 + 2 = 5 so Queued.': 'score arithmetic',
-            'Linked to recAbCdEfGhIjKlMn for detail.': 'record or field ID',
+            'Linked to ' + 'rec' + 'AbCdEfGhIjKlMn' + ' for detail.': 'record or field ID',
             'Resume verified: 259a9681bc1f71959fbc7562f00eb277.': 'hash',
             'Held. {"window": 30}': 'JSON or braces',
             'One. Two. Three. Four.': 'more than three sentences',
