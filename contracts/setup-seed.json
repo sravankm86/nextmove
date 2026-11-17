@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 11,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -107,6 +107,13 @@
       "value": null,
       "defaults": "submission_defaults.policy",
       "edited_by": "user only"
+    },
+    {
+      "key": "eval_registry",
+      "reference_url": null,
+      "verification": "Missing",
+      "value": null,
+      "note": "Private versioned feedback catalog, receipt index, Review eval table, replay inputs and baseline/report references; procedures stay in DATA.md."
     }
   ],
   "policies": [

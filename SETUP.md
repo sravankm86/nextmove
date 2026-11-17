@@ -68,3 +68,5 @@ Before a base exists, follow SETUP.md. Bare words in an unconfigured chat cannot
 ## Verify before production
 
 Check actual schema/options/links, access from a fresh harness, goals/master/destinations, one writer, durable checkpoints, factual/PDF verification, interrupted-write recovery and live pause behavior. Use authorized fictional fixtures, not production applications. Record Passed, Blocked or Not tested in the private Run/Settings; setup success is not a completed scan or permission to submit. Apply requires live form/browser capability; Track requires read-only mailbox access. Leave submissions paused without explicit scoped authorization. For existing bases preserve fields/state before deletion under docs/MAINTENANCE.md.
+
+Register Settings.eval_registry with the current private feedback dataset, receipt index and Review eval table. Reuse existing examples and snapshots; never seed verdicts from predictions. Verify capture/retry behavior and a label-free replay before claiming eval readiness. Manual notes is a consumed inbox as defined in DATA.md.

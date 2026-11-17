@@ -116,6 +116,10 @@ def check(root):
         aliases += cmd["aliases"]
     require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
     require(command["application_submission_default"] is False, "Unsafe submission default")
+    eval_cmd = next((c for c in command["commands"] if c["command"] == "Review eval"), {})
+    capture_cmd = next((c for c in command["commands"] if c["command"] == "Capture feedback"), {})
+    require(eval_cmd.get("instructions") == "DATA.md" and capture_cmd.get("instructions") == "DATA.md", "Feedback and eval need shared instructions")
+    require(all("eval_registry" in c.get("required_resources", []) for c in (eval_cmd, capture_cmd)), "Feedback/eval commands need the private registry")
     from resume_guidelines import load_schema, render_markdown
     frame = load_schema()
     ids = [x['id'] for x in frame['sections']]

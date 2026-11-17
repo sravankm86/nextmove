@@ -10,7 +10,7 @@ Definite submission or an exact-role receipt establishes Applied. Confirmation a
 
 Uncertain submissions are reconciled, never resubmitted automatically. Missing mail does not establish non-submission. Keep the saved attempt blocking until the actual outcome is resolved, regardless of manual status edits.
 
-Record message/receipt identities, confirmation/rejection/engagement dates and evidence in History. Update current status, Confirmation reference and Agent notes (plain English, DATA.md "Writing Agent notes"); preserve human-owned Manual notes and earlier useful evidence. Runs/Settings retain exact mailbox scope, cursor, counts and unresolved identities; no separate mail-audit table is needed.
+Record message/receipt identities, confirmation/rejection/engagement dates and evidence in History. Update current status, Confirmation reference and Agent notes (plain English, DATA.md "Writing Agent notes"); consume Manual notes only through the verified feedback-inbox procedure in DATA.md and preserve earlier useful evidence. Runs/Settings retain exact mailbox scope, cursor, counts and unresolved identities; no separate mail-audit table is needed.
 
 Record every employer rejection as a History event with its actual Occurred at and exact role, so Curate's hold recompute (stages/curate.md) can apply any confirmed cooldown. When a message states an application limit or waiting period, save the quoted statement and message identity in History for Curate to record as Recruiter confidence. Track does not edit Companies policy fields and never invents a company-wide ban. Verify all saved changes and handoff. A single Track stops; a full Run reports remaining required gaps.
 

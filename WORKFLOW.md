@@ -11,7 +11,10 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
 | Apply | Ready roles without unresolved attempts → browser preflight; submit only when Pause applications is off and the daily limit allows |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
-| Review eval | Score Review against the Review eval answer key (DATA.md "Review eval"); never changes Applications |
+| Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
+| Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
+
+Match command aliases as complete phrases: Review eval / Eval Review is an Experiment, not production Review.
 
 Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, but cannot infer submission permission or launch another harness.
 
@@ -43,7 +46,7 @@ Use code for enumeration, normalization, identity, candidate filters, hashes and
 
 Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Follow the numeric routing in stages/review.md, including Unresolved at zero; only a current qualifying score can advance to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
 
-Preserve human outcomes/notes. Read Manual notes and current status under DATA.md before processing and writing a job; record newly observed feedback in the stage snapshot/History without rewriting the notes. Do not reopen submitted/terminal roles when fit inputs change.
+Preserve human outcomes. At every invocation capture new Manual notes under DATA.md "Feedback inbox and Review eval" before stage decisions, and checkpoint capture again at completion. Once the eval case, snapshot and History are verified, clear only the unchanged captured note. Feedback updates evals; it does not silently change Career Goals, stage rules or the role status. Do not reopen submitted/terminal roles when fit inputs change.
 
 Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. Never hide unverified changes.
 

@@ -1,5 +1,5 @@
 {
-  "version": 9,
+  "version": 10,
   "tables": [
     "Companies",
     "Applications",
@@ -160,6 +160,40 @@
         "instructions_repository",
         "structured_store",
         "mailbox"
+      ]
+    },
+    {
+      "command": "Review eval",
+      "aliases": [
+        "review eval",
+        "eval review"
+      ],
+      "stage": "Experiment",
+      "mode": "prepare",
+      "instructions": "DATA.md",
+      "scope": "Capture feedback, freeze inputs, run fresh blind Review and score its immutable predictions; only eval outputs and verified inbox acknowledgements change.",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "content_output",
+        "eval_registry"
+      ]
+    },
+    {
+      "command": "Capture feedback",
+      "aliases": [
+        "capture feedback",
+        "feedback"
+      ],
+      "stage": "Experiment",
+      "mode": "prepare",
+      "instructions": "DATA.md",
+      "scope": "Capture new feedback across the configured scope, deduplicate, verify eval and audit persistence, then clear only unchanged captured Manual notes.",
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "content_output",
+        "eval_registry"
       ]
     }
   ],

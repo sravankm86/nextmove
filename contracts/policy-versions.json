@@ -20,5 +20,6 @@
   "company_curation": "curate-evidence-v2",
   "company_policy_source": "stages/curate.md and scripts/company_policy.py",
   "preparation": "base-reuse-or-tailor-v1",
-  "submission": "basic-guard-rails-v2"
+  "submission": "basic-guard-rails-v2",
+  "feedback_evaluation": "verified-inbox-and-blind-replay-v1"
 }

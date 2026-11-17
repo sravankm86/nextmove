@@ -84,7 +84,7 @@ Stop the role, record the exact reason and screenshot, and move on (or stop the 
 
 ## Writes and handoff
 
-Agent notes explains each role's outcome in plain English under DATA.md "Writing Agent notes", for example `Applied on 18 Nov; the confirmation page showed reference A123.` or `Not submitted: the form needs you to sign in to a Workday account first. Sign in once in this browser and it will continue.` Never overwrite Manual notes. History keeps preflight records, intents, confirmations, screenshot locations and stop reasons; the stage snapshot keeps `submission` metadata under DATA.md. Runs records counts: eligible, preflighted, submitted, waiting for an answer, stopped by reason, unclear, pending because of the daily limit.
+Agent notes explains each role's outcome in plain English under DATA.md "Writing Agent notes", for example `Applied on 18 Nov; the confirmation page showed reference A123.` or `Not submitted: the form needs you to sign in to a Workday account first. Sign in once in this browser and it will continue.` Consume Manual notes only through the verified feedback-inbox procedure in DATA.md. History keeps preflight records, intents, confirmations, screenshot locations and stop reasons; the stage snapshot keeps `submission` metadata under DATA.md. Runs records counts: eligible, preflighted, submitted, waiting for an answer, stopped by reason, unclear, pending because of the daily limit.
 
 Before advancing, verify that the accepted review still matches the current goals, role policy, master and job description; changed inputs require re-review or re-preparation. Do not send recruiting mail. A single Apply command stops at its handoff; a full Run continues with Track.
 

@@ -1,6 +1,6 @@
 # Review: three steps
 
-Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review normally assesses Inventoried roles and retryable Need review roles; an explicit reassessment may also include Queued and Not pursuing roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
+Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review normally assesses Inventoried roles and retryable Need review roles; an explicit reassessment may also include Queued and Not pursuing roles; recheck stale unsubmitted approvals before they advance. Consume Manual notes only under DATA.md and preserve human, submitted or terminal outcomes.
 
 Use current linked Companies and saved Curate evidence in both a full Run and a standalone Review. Only human-Allow companies without a permanent block advance automatically. A role at a company the user has set to Exclude becomes Not pursuing, with Agent notes saying the company is on the user's excluded list; its fit scores are left unchanged. Skip other out-of-scope existing roles (for example at Proposed companies) without changing their scores or lifecycle, and record the reason in the Run. Temporary holds, unresearched employer policies and incomplete discovery do not delay fit assessment or queueing. They remain submission controls, not fit criteria.
 
