@@ -14,7 +14,7 @@ CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link
 RETIRED_FIELDS = ['Posted salary range','Record kind','Availability','Sources','Last seen at','Career gate','Assessment summary','Blocker','Decision category','Updated at']
 
 
-def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None):
+def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None):
     """Only current fields can be written; legacy plans cannot recreate retired data."""
     bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History'})
     if bad:
@@ -32,8 +32,11 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
             raise ValueError('New candidates require canonical identity, title and company')
         if existing_keys is None or key in existing_keys:
             raise ValueError('Canonical job key must be checked against live existing keys')
-        if allowed_companies is None or company[0] not in allowed_companies:
-            raise ValueError('New candidate company must be explicitly allowed')
+        from company_policy import company_for_application
+        if not company_for_application(values, companies):
+            raise ValueError('Current company records must confirm Allow and no permanent block')
+        if allowed_companies is not None and company[0] not in allowed_companies:
+            raise ValueError('Company is outside the frozen scan scope')
         if values.get('Lifecycle status') != 'Inventoried' or values.get('Role eligibility') != 'Pending':
             raise ValueError('Scan cannot certify eligibility or queue a new candidate')
     return values
@@ -95,7 +98,10 @@ def stage_versions(state, stage, runs):
     return {**common, **state.get(stage, {}).get('version_overrides', {})}
 
 
-def review_ready(app, state, runs, current_inputs):
+def review_ready(app, state, runs, current_inputs, *, companies=None):
+    from company_policy import company_for_application
+    if not company_for_application(app, companies):
+        return False
     if not state or app.get('Lifecycle status') != 'Queued':
         return False
     if app.get('Role eligibility') != 'Eligible':
@@ -127,12 +133,12 @@ def review_ready(app, state, runs, current_inputs):
         return False
     versions = stage_versions(state, 'review', runs)
     return bool(all(versions.get(k) and versions[k] == current_inputs.get(k)
-                    for k in ['goals', 'master', 'policy', 'eligibility_policy'])
+                    for k in ['goals', 'master', 'policy', 'eligibility_policy', 'company_evidence'])
                 and review.get('jd_hash') == current_inputs.get('jd_hash')
                 and review.get('jd_hash') and review.get('current_description'))
 
 
-def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None):
+def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
     """Submission authorization, company controls and form checks stay separate."""
     review = (state or {}).get('review', {})
     return bool(app.get('Lifecycle status') == 'Ready'
@@ -141,7 +147,7 @@ def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_ve
                 and not review.get('deferred_checks')
                 and not attempt_blocks_retry(app, state)
                 and resume_ready(app, state, runs, current_inputs, pdf_bytes,
-                                 provider_version=provider_version))
+                                 provider_version=provider_version, companies=companies))
 
 
 def canonical_job_url(value):
@@ -167,9 +173,9 @@ def exact_job_match(left, right):
     return same_id or bool(url and url == canonical_job_url(right.get('job_url')))
 
 
-def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None):
+def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
     candidate = {**app, 'Lifecycle status': 'Queued'}
-    if not review_ready(candidate, state, runs, current_inputs):
+    if not review_ready(candidate, state, runs, current_inputs, companies=companies):
         return False
     p = state.get('preparation', {})
     rid = state.get('stage_runs', {}).get('preparation')
@@ -196,6 +202,18 @@ def merge_state(previous, *, record_id, job_key, stage, run_id, values):
     result = json.loads(json.dumps(previous))
     result['stage_runs'][stage] = run_id
     result[stage] = values
+    return result
+
+
+def merge_company_state(previous, *, company_id, company_key, run_id, values):
+    """Curate history uses company identity, never an Application or Job key."""
+    previous = previous or {'record_id': company_id, 'entity': 'company',
+                            'company_key': company_key, 'stage_runs': {}}
+    if previous.get('record_id') != company_id or previous.get('entity') != 'company':
+        raise ValueError('Company identity mismatch')
+    result = json.loads(json.dumps(previous))
+    result['stage_runs']['curate'] = run_id
+    result['curate'] = values
     return result
 
 

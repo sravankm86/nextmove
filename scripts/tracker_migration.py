@@ -18,7 +18,7 @@ def agent_notes(application):
     return '\n'.join(parts) or (application.get('Decision category') or '').strip()
 
 
-def migrate(application, previous, runs):
+def migrate(application, previous, runs, *, companies=None):
     """Preserve exact prior values; never manufacture review acceptance."""
     if not previous or previous.get('record_id') != application['id']:
         raise ValueError('A complete identity-matched prior snapshot is required')
@@ -50,7 +50,7 @@ def migrate(application, previous, runs):
     elif status in {'Queued', 'Shortlisted'}:
         versions = stage_versions(state, 'review', runs)
         current = {**versions, 'jd_hash': review.get('jd_hash')}
-        if not review_ready({**application, 'Lifecycle status': 'Queued'}, state, runs, current):
+        if not review_ready({**application, 'Lifecycle status': 'Queued'}, state, runs, current, companies=companies):
             status = 'Need review'
         elif status == 'Shortlisted':
             # Legacy labels are not promoted by a storage migration.

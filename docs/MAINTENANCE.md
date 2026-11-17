@@ -27,3 +27,9 @@ WORKFLOW.md defines the nine-state mapping. Preserve exact prior status/confirma
 Run python scripts/check_repo.py, python scripts/build_schema.py and python -m unittest discover -s tests -v. Verify generated schema matches the committed file. Check internal links, command routes, field aliases, canonical document ownership, private-data patterns and the actual diff. Publish the reviewed revision and verify the branch. CI is a public-contract test, not a live scan or comprehensive security audit.
 
 Privately verify schema/types/options/links, human notes/outcomes, goals/master/output access, source coverage, one writer, durable handoff, attempt recovery, rendered PDFs, mailbox scope and live controls. Save Passed/Blocked/Not tested with evidence. A clean repository does not prove a fully migrated base or supported browser. Never call the deployment fully ready with unresolved UI, data migration or access steps.
+
+## Curate compatibility release
+
+Before the first Curate, verify the schema-11 Companies fields/choices, Curate run relationship and inverse Curate companies, Settings.company_policy and discovery feeds. Preserve existing Manual notes, targeting, source cursors and application history. Missing Curate research/discovery capabilities do not disable unaffected existing Allow-company Scan/Review. Do not create a seventh table or company task rows in Applications.
+
+Current application creation and readiness helpers require live named Companies records. Existing preserved snapshots remain readable; old approvals without the decisive company_evidence input require targeted revalidation before advancing. Capture the company evidence in a new Review segment rather than rewriting old accepted pins. Scores and routing thresholds are unchanged. A hold timestamp alone is not a changed fit input.

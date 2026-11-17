@@ -22,6 +22,14 @@ Resume one compatible released unfinished Run or create one. Pin instruction/inp
 
 One active writer. Never seize an owner solely on timeout. Missing global access, Stop all or uncertain writes block affected work; item problems need not stop independent work. Submission pause affects Apply, not useful Scan/Review/Prepare/Track work.
 
+## Company handoff and stage independence
+
+A full Run starts Curate part 1, then may continue Scan and Review while policy research or funding discovery is blocked. One writer may finish Curate first or checkpoint it and interleave independent work; unfinished required Curate parts remain visible and keep the full Run Partial. Do not erase them when a later stage completes. Apply requires the affected company's hold recompute and live pre-submit check.
+
+A standalone Scan or Review reads current Companies and saved Curate evidence; it does not launch Curate research/discovery or require a globally Complete Curate. Use the same scope in single-agent and manual operation: human Allow and no permanent block. Temporary Held, Not assessed or Needs clarification states do not remove companies from Scan/Review or alter fit. Proposed, Exclude and permanently blocked companies do not receive new inventory or automatic queue advancement. Preserve existing jobs, scores, human/submitted/terminal outcomes and evidence; report skipped scope and its reason instead of relabeling it Not pursuing.
+
+Recheck targeting at the write boundary so an intervening human Exclude or permanent block cannot be bypassed by an old scope. A new Allow after scope freeze is saved for the next segment, not silently omitted from a completion claim. No Company fit threshold can replace human targeting. Changed factual company evidence is assessed against current goals in Review; an advisory Company fit label or an application cooldown is not a job-fit score.
+
 ## Run checks: objective duplicate discovery
 
 Every invocation, including a single stage command, starts with Run checks. Build one company-scoped identity index from live role IDs, official job links, role names and posted dates. Refresh this index when Scan encounters new postings. Run owns discovery; Review and later stages consume its result rather than repeating duplicate searches.

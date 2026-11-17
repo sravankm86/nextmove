@@ -115,12 +115,12 @@
           "protect_eligible_recall": true,
           "career_rejections_are_scan_negatives": false
         },
-        "resume_fit_exclusions_source": "career_goals",
         "duplicate_identity": "company-scoped exact employer role ID or canonical job link",
         "review_assessment": "three_step_v1",
         "review_scoring_contract": "stages/review.md",
         "duplicate_discovery_owner": "Run",
-        "review_policy_identity": "automatic Review file SHA-256"
+        "review_policy_identity": "automatic Review file SHA-256",
+        "candidate_evidence_source": "master_resume and registered confirmed candidate facts"
       },
       "verification": "Needs verification"
     },

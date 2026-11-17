@@ -1,5 +1,10 @@
 # Changelog
 
+## Curate handoff compatibility
+
+- Align example configuration, company evidence, live targeting and company snapshot recovery across Curate, Scan and Review. Temporary holds remain independent of fit; human targeting is rechecked before new inventory/advancement. Preserve existing application state when a company leaves scope.
+- Current candidate/readiness writers require live named company records; old cached Allow IDs cannot bypass permanent blocks. Register decisive company evidence for targeted approval revalidation, without making hold timestamps fit inputs.
+
 ## Curate: company management upstream of Scan (schema 11)
 
 - New first stage, [Curate](stages/curate.md): recomputes every company's application hold, researches employer application limits and rejection cooldowns, and on its cadence proposes newly funded Series C+ companies that fit Career Goals. Run order is now Curate → Scan → Review → Prepare → Apply → Track.

@@ -2,13 +2,15 @@
 
 Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review assesses Inventoried roles and retryable Need review roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
 
+Use current linked Companies and saved Curate evidence in both a full Run and a standalone Review. Only human-Allow companies without a permanent block advance automatically; skip out-of-scope existing roles without changing their scores or lifecycle, and record the reason in the Run. Temporary holds, unresearched employer policies and incomplete discovery do not delay fit assessment or queueing. They remain submission controls, not fit criteria.
+
 ## Step 1. Extract the job description
 
 Read the complete exact official JD, or an integrity-verified saved copy. Extract the product space, central responsibilities, minimum and preferred qualifications, compensation and work restrictions. Preserve the employer's OR/equivalent alternatives. Distinguish requirements from examples and identify missing evidence.
 
 ## Step 2. Assess career fit
 
-Compare the role's overall product space and work with the current Career Goals: what the user wants and does not want. Apply stated compensation, location, title, seniority, work-type and company preferences. Personal preferences belong in the private goals, not this public frame. Candidate accomplishments and missing experience do not change career fit; assess those in Step 3.
+Compare the role's overall product space and work with the current Career Goals: what the user wants and does not want. Apply stated compensation, location, title, seniority, work-type and company preferences. Use current factual company evidence from Curate/Company evidence when checking funding, business and company preferences. Reassess it against current goals; Company fit is advisory, not the role Career fit score. If decisive company facts are missing or stale, explain that uncertainty under this table. Pin the decisive company-evidence identity for downstream revalidation. Personal preferences belong in the private goals, not this public frame. Candidate accomplishments and missing experience do not change career fit; assess those in Step 3.
 
 | Career fit | Meaning | Score |
 |---|---|---:|

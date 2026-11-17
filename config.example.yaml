@@ -5,11 +5,11 @@ storage:
   structured_provider: airtable
   content_provider: google_drive
   base: null
-  schema_version: 10
+  schema_version: 11
   inventory_policy: plausible-pm-candidates
 execution:
   default: single-agent
-  pipeline: [Scan, Review, Prepare, Apply, Track]
+  pipeline: [Curate, Scan, Review, Prepare, Apply, Track]
   manual_handoffs: true
   one_active_writer: true
   continue_unaffected: true

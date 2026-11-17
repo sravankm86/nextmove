@@ -36,6 +36,15 @@ def scan_enabled(company):
             and company.get('Application hold status') != 'Blocked (permanent)')
 
 
+def company_for_application(application, companies):
+    """Resolve one current named company; cached Allow IDs do not prove targeting."""
+    linked = application.get('Company') or []
+    if len(linked) != 1 or companies is None:
+        return None
+    matches = [company for company in companies if company.get('id') == linked[0]]
+    return matches[0] if len(matches) == 1 and scan_enabled(matches[0]) else None
+
+
 def _instant(value, tz=None):
     """Datetime -> aware UTC. Date-only -> end of that date in tz (or the latest zone)."""
     if isinstance(value, datetime):

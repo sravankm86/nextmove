@@ -70,7 +70,7 @@
       "stage": "Scan",
       "mode": "prepare",
       "instructions": "stages/scan.md",
-      "scope": "Every Allow source; current goals-derived broad role criteria and basic semantics to Inventoried; no broader career-fit assessment",
+      "scope": "Every current human-Allow source except permanently blocked companies; temporary holds and Company fit do not filter inventory. Broad role criteria/basic semantics to Inventoried.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -89,7 +89,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Inventoried, retryable Need review and stale unsubmitted approvals; exact JD, career score and resume score determine outcome",
+      "scope": "Current human-Allow, not permanently blocked companies: Inventoried, retryable Need review and stale unsubmitted approvals. Current company evidence plus exact JD/goals/master determine independent fit scores; temporary holds do not affect fit.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

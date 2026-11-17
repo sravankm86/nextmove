@@ -6,31 +6,32 @@ from role_gate import review_frame_contract,scored_review
 
 class StateTests(unittest.TestCase):
     def setUp(self):
-        self.inputs={'goals':'goals-v1','master':'master-v1','policy':review_frame_contract()[0],'eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
+        self.inputs={'company_evidence':'company-capture-v1','goals':'goals-v1','master':'master-v1','policy':review_frame_contract()[0],'eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
-        self.app={'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
+        self.companies=[{'id':'company-example','Search status':'Allow','Application hold status':'Held'}]
+        self.app={'Company':['company-example'],'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
         self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'base_salary_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True,'critical_minimums_pass':True,'overall_alignment_pass':True}}
         self.state['review'].update(assessment_method='three_step_v1',scoring=scored_review('High','Medium'),evidence='Verified indexed qualification evidence',assessment_complete=True)
         self.state['run_checks']={'duplicate':{'status':'unique','checked_in_run':'run-example','evidence':'Verified official role ID'}}
 
     def test_manual_queue_cannot_create_acceptance(self):
-        self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs))
+        self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs, companies=self.companies))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
-        self.assertFalse(s.review_ready(self.app,changed,[self.run],self.inputs))
+        self.assertFalse(s.review_ready(self.app,changed,[self.run],self.inputs, companies=self.companies))
     def test_legacy_preference_flags_cannot_replace_current_scored_acceptance(self):
-        self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs))
+        self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs, companies=self.companies))
         state=copy.deepcopy(self.state);state['review'].pop('scoring')
         state['review'].update(general_role_verified=True,general_preference_applied=True,seniority_pass=True)
-        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
 
     def test_schema_only_release_preserves_policy_but_changed_inputs_block(self):
-        self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs))
-        for key in ['goals','master','policy','eligibility_policy','jd_hash']:
-            self.assertFalse(s.review_ready(self.app,self.state,[self.run],{**self.inputs,key:'changed'}))
+        self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs, companies=self.companies))
+        for key in ['goals','master','policy','eligibility_policy','company_evidence','jd_hash']:
+            self.assertFalse(s.review_ready(self.app,self.state,[self.run],{**self.inputs,key:'changed'}, companies=self.companies))
     def test_queue_needs_current_scores_and_evidence_without_extra_gate_columns(self):
         for key in ['evidence','assessment_complete','assessment_method','scoring']:
             state=copy.deepcopy(self.state);state['review'].pop(key)
-            self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+            self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
         for field in s.RETIRED_FIELDS:
             with self.assertRaises(ValueError):s.application_write({field:'old value'})
         with self.assertRaises(ValueError):s.application_write({'Application ID':'invented'})
@@ -43,9 +44,9 @@ class StateTests(unittest.TestCase):
     def test_changed_pdf_bytes_and_unknown_verification_block(self):
         pdf=b'original verified pdf';digest=hashlib.sha256(pdf).hexdigest();app={**self.app,'Lifecycle status':'Ready','Resume link':'verified-file','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
         state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1'}
-        self.assertTrue(s.resume_ready(app,state,[self.run],self.inputs,pdf))
-        self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,b'edited pdf'))
-        app['Resume verified at']=None;self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,pdf))
+        self.assertTrue(s.resume_ready(app,state,[self.run],self.inputs,pdf, companies=self.companies))
+        self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,b'edited pdf', companies=self.companies))
+        app['Resume verified at']=None;self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,pdf, companies=self.companies))
     def test_pending_attempt_survives_manual_status_reset(self):
         self.assertTrue(s.attempt_blocks_retry({**self.app,'Lifecycle status':'Ready','Submission attempt key':'attempt-example'},self.state))
         self.assertTrue(s.attempt_blocks_retry(self.app,{'submission':{'attempt_key':'attempt-example'}}))
@@ -55,36 +56,36 @@ class StateTests(unittest.TestCase):
         self.assertEqual(len(s.CORE_FIELDS),29)
     def test_separate_harness_recovers_without_legacy_columns(self):
         h=[{'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(s.payload([self.state]))}]
-        self.assertTrue(s.review_ready(self.app,s.resolve(self.app,h),[self.run],self.inputs))
+        self.assertTrue(s.review_ready(self.app,s.resolve(self.app,h),[self.run],self.inputs, companies=self.companies))
     def test_new_candidate_requires_checked_identity_and_explicit_allow(self):
         candidate={'Job key':'employer:role-123','Role':'Product Manager','Company':['company-example'],'Lifecycle status':'Inventoried','Role eligibility':'Pending'}
-        self.assertEqual(s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies={'company-example'}),candidate)
-        with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'})
-        with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set())
+        self.assertEqual(s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies={'company-example'}, companies=self.companies),candidate)
+        with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'}, companies=self.companies)
+        with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set(), companies=self.companies)
 
     def test_provisional_or_unresolved_review_cannot_prepare_or_apply(self):
         state=copy.deepcopy(self.state);state['review']['decision']='approve_provisional'
-        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
-        self.assertFalse(s.apply_ready(self.app,state,[self.run],self.inputs))
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
+        self.assertFalse(s.apply_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
         state['review']['decision']='approve';state['review']['scoring']=scored_review('Unresolved','High')
-        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs))
+        self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
 
     def test_changed_ratings_cannot_reuse_a_prior_queue_score(self):
         for field in ['Career fit','Resume fit']:
             app={**self.app,field:'Low'}
-            self.assertFalse(s.review_ready(app,self.state,[self.run],self.inputs))
+            self.assertFalse(s.review_ready(app,self.state,[self.run],self.inputs, companies=self.companies))
 
     def test_old_policy_label_cannot_bypass_current_scoring(self):
         inputs={**self.inputs,'policy':'review-v3'}
         run=copy.deepcopy(self.run);run['Input versions (JSON)']=json.dumps({'stage_inputs':{'review':inputs}})
-        self.assertFalse(s.review_ready(self.app,self.state,[run],inputs))
+        self.assertFalse(s.review_ready(self.app,self.state,[run],inputs, companies=self.companies))
 
     def test_apply_requires_ready_even_when_a_verified_pdf_is_retained(self):
         data=b'verified-pdf';digest=hashlib.sha256(data).hexdigest()
         app={**self.app,'Lifecycle status':'Ready','Resume link':'file-example','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
         state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1'}
-        self.assertTrue(s.apply_ready(app,state,[self.run],self.inputs,data))
-        self.assertFalse(s.apply_ready({**app,'Lifecycle status':'Queued'},state,[self.run],self.inputs,data))
+        self.assertTrue(s.apply_ready(app,state,[self.run],self.inputs,data, companies=self.companies))
+        self.assertFalse(s.apply_ready({**app,'Lifecycle status':'Queued'},state,[self.run],self.inputs,data, companies=self.companies))
 
     def test_exact_identity_does_not_merge_regional_or_same_title_roles(self):
         a={'company_id':'employer-example','role_id':'req-a','job_url':'https://jobs.example.test/roles/a?utm_source=mail'}

@@ -116,7 +116,11 @@ def check(root):
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require([c['name'] for c in companies['Search status']['options']['choices']] == SEARCH_STATUSES and 'Proposed' in SEARCH_STATUSES, 'Companies Search status must offer Proposed/Allow/Exclude')
     require([c['name'] for c in companies['Application hold status']['options']['choices']] == HOLD_STATUSES and 'Blocked (permanent)' in HOLD_STATUSES, 'Companies hold choices must include Blocked (permanent)')
-    require(command['pipeline'][0] == 'Curate' and next(x['value'] for x in seed['policies'] if x['key'] == 'execution_policy')['pipeline'][0] == 'Curate', 'Curate must run upstream of Scan')
+    pipeline = ['Curate', 'Scan', 'Review', 'Prepare', 'Apply', 'Track']
+    require(command['pipeline'] == pipeline and next(x['value'] for x in seed['policies'] if x['key'] == 'execution_policy')['pipeline'] == pipeline, 'Command and setup pipelines must agree across every stage')
+    config = (root/'config.example.yaml').read_text()
+    require('pipeline: [' + ', '.join(pipeline) + ']' in config, 'Example configuration must use the complete current pipeline')
+    require('schema_version: ' + str(core['version']) in config and decoded['contracts/policy-versions.json']['schema_version'] == core['version'], 'Example configuration and policy manifest must match the schema release')
     require(not core.get('common_fields') and all(t.get('common_fields')==[] for t in tables), 'Do not duplicate native metadata across tables')
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
     require(len(resources) == len(set(resources)), "Duplicate Settings key")
@@ -132,6 +136,7 @@ def check(root):
     controls = {x["key"]: x["value"] for x in seed["controls"]}
     require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
+    require(not policy.get('resume_fit_exclusions_source') and policy.get('candidate_evidence_source'), 'Candidate evidence must not be sourced from Career Goals')
     require(policy["recall_first"] is True and policy["title_only_admission"] is False and policy["career_screen_before_queue"] is True, "Missing recall/basic-semantic/queue safeguards")
     scan = next(c for c in command['commands'] if c['command'] == 'Scan')
     require('career_goals' in scan['required_resources'], 'Scan must resolve current goals-derived role criteria')
@@ -151,7 +156,7 @@ def check(root):
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
     require(pref.get('freeform_supported') is True and pref.get('embedded_commands_are_instructions') is False and pref.get('derived_values_require_source_version') is True, 'Unsafe preference interpretation')
-    require(pref.get('uses') == ['scan_criteria', 'review_queue', 'company_curation'] and pref.get('source_revision_check_required') is True and pref.get('stage_readiness_required') is True, 'Missing two-stage preference readiness')
+    require(pref.get('uses') == ['scan_criteria', 'review_queue', 'company_curation'] and pref.get('source_revision_check_required') is True and pref.get('stage_readiness_required') is True, 'Missing Curate/Scan/Review preference readiness')
     require(pref.get('explicit_unrestricted_distinct_from_unspecified') is True, 'Blank preferences must not mean unrestricted')
     for key in ['template', 'instructions']:
         require((root / pref.get(key, '__missing__')).is_file(), 'Missing preference contract file')

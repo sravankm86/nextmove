@@ -8,7 +8,7 @@ Use ordinary prose or templates/career-goals.md. Useful sections are function/de
 
 ## Read and interpret
 
-At setup and Scan/Review startup, resolve the current source revision. Extract relevant values with their source passages, units, required/preferred/avoid status and any precedence or exceptions. Blank is unspecified; it does not mean unrestricted. Ask targeted questions when missing or conflicting values change a decision, and continue independent work.
+At setup and Curate/Scan/Review startup, resolve the current source revision. Extract relevant values with their source passages, units, required/preferred/avoid status and any precedence or exceptions. Blank is unspecified; it does not mean unrestricted. Ask targeted questions when missing or conflicting values change a decision, and continue independent work.
 
 Curate (stages/curate.md) uses the company sections: required/preferred/avoided company characteristics, stage and size, domains, location and any personal application limit (for example at most N applications per company in a rolling window). Scan uses function, designation and intended senior scope for broad candidate plausibility. Review uses the full goals under stages/review.md. Goals changes invalidate affected decisions; preserve human, submitted and terminal outcomes. Reuse a verified extraction only while its source revision matches. Settings stores derived values and readiness, not copied procedures or a second preference authority.
 

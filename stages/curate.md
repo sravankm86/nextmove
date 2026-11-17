@@ -32,7 +32,7 @@ For every company that is not Exclude, build its event list from saved evidence 
 
 - `submission`: each distinct Applied row (Applied on, or the exact History submission time when known), known external/manual applications recorded in History, and later-rejected or withdrawn applications. Deduplicate Duplicate rows and repeated receipts by Job key / attempt key.
 - `uncertain_attempt`: every saved unresolved Submission attempt key. It occupies capacity but is never treated as Applied.
-- `rejection`: actual employer rejection times from History (Track records them). Use Occurred at, not Recorded at.
+- `rejection`: actual employer rejection times from History (Track records them). Use Occurred at, not Recorded at. Include later Interviewing/Rejected rows and other later states when History proves submission; do not lose quota events when lifecycle status changes.
 
 The function applies the personal limit to every company, then the employer quota and rejection cooldown only when the policy is enforceable and company-scoped. Write the returned status and Apply blocked until (UTC ISO8601), and put the reasons in Agent notes, for example `Held: personal limit 3/30d reached; reopens 2026-12-01. Employer rule: Official 3/30d.` Save before/after values in History.
 
@@ -48,7 +48,7 @@ An elapsed Apply blocked until does not authorize submission. It is an estimate 
 
 ## 2. Employer policy research
 
-For each company whose Policy confidence is blank, or whose Policy verified at is older than `policy_research.reverify_after_days`, look for published limits on applications per period and waiting periods after rejection. Search in this order and stop at the first authoritative answer:
+For each company whose Policy confidence or Policy verified at is blank, whose policy is unverified, or whose Policy verified at is older than `policy_research.reverify_after_days`, look for published limits on applications per period and waiting periods after rejection. Search in this order and stop at the first authoritative answer:
 
 1. The company's official careers site, candidate FAQ, application terms or application-form text. → **Official**
 2. A recruiter's written statement for this user (from Track mail evidence or Manual notes). → **Recruiter**
@@ -68,9 +68,9 @@ For each funding event:
 
 1. Normalize the company identity (legal/brand name, official domain) and the Company key. If the company already exists in any Search status, update its funding fields and Agent notes only; never re-propose an Exclude.
 2. Admission gate: the round must satisfy `funding_qualifies(stage, min_funding_stage)`; the default minimum is Series C, and later private rounds, Late private and Public companies qualify. Unknown stage does not qualify; keep it in the Run as unresolved rather than adding a row.
-3. Score Company fit against Career Goals company preferences only (domain/product area, stage and size, location/work arrangement, stated avoids). High/Medium/Low need concrete evidence; missing decisive facts → Unresolved. A Low fit is recorded in the Run aggregate counts, not added as a row.
+3. Score Company fit against Career Goals company preferences only (domain/product area, stage and size, location/work arrangement, stated avoids). High/Medium/Low need concrete evidence; missing decisive facts → Unresolved. Company-level fit is not evidence of any role’s salary, location, seniority or qualifications. Headquarters location alone does not establish where a company hires; preserve role-level questions for Review. A Low fit is recorded in the Run aggregate counts, not added as a row.
 4. Create the row with Search status **Proposed**, Origin Discovered, Company fit, Funding stage, Latest funding (round · amount · lead, compact), Funding date, Company evidence and Application hold status Not assessed. Agent notes states why it fits and what the user must decide.
-5. Find the official careers board and supported reader (for example Greenhouse, Lever, Ashby, Workday) and draft a Sources row linked to the company with Latest coverage Unverified. Scan ignores it until the user changes Search status to Allow.
+5. Find the official careers board and supported reader (for example Greenhouse, Lever, Ashby, Workday) and draft a Sources row linked to the company with Latest coverage Unverified. Reuse an existing board/region Source key rather than creating another draft; preserve its accepted coverage and cursor instead of resetting it to Unverified. Unknown catalog/reader details remain explicit pending configuration. Scan ignores the draft until the user changes Search status to Allow; Scan then validates configuration and reports any gap.
 6. Research its employer policy (part 2) so it is ready if approved.
 
 Re-evaluation: for existing Allow companies, when a discovered event shows acquisition, shutdown, major layoffs, a change of business, or new facts that change Company fit, update Company fit and Agent notes and add a Run question proposing the change. Never change an Allow or Exclude yourself.
@@ -83,6 +83,6 @@ A permanent block (for example a lifetime application limit already reached, or 
 
 ## Writes, notes and handoff
 
-Manual notes is human-owned: read it and never overwrite it. Agent notes holds the current decision, evidence summary and next action; prior values go to History. Link touched companies to the Run with Curate run. Save meaningful field changes, policy evidence, proposals and user decisions in History.
+Manual notes is human-owned: read it and never overwrite it. Agent notes holds the current decision, evidence summary and next action; prior values go to History. Use the company snapshots and three-part checkpoints in DATA.md. Link touched companies to the Run with Curate run. Curate snapshots are company metadata, not Application snapshots. Save meaningful field changes, policy evidence, proposals and user decisions in History.
 
 Handoff reports separately: holds recomputed (counts per status and any changes), policies researched by confidence level, discovery feeds read with coverage, new Proposed companies by fit, re-evaluation proposals, Needs clarification questions and the next action. Curate is Complete only when every non-Exclude company's hold is recomputed, every due policy is researched or explicitly blocked, and every due feed is read to its verified end.

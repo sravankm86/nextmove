@@ -13,3 +13,5 @@ Preserve human history and submission gates. A single command stops; a full Run 
 Before advancing, verify that the accepted review still matches the current goals, role policy, master and job description. Changed inputs require affected review/re-preparation, not silent reuse. Preserve existing submitted/terminal history.
 
 Maintain the current concise result, unresolved material issue and next action in Agent notes, preserving previous values in History. Never overwrite Manual notes or erase unresolved company restrictions. Detailed evidence belongs in linked content and stage metadata.
+
+Before accepting a queued handoff, reread the current linked company. Pass current named companies to review_ready/resume_ready; Proposed, Exclude or permanent-block targeting prevents automatic advancement without erasing the existing assessment. A temporary hold does not prevent resume preparation. Revalidate company-evidence changes under Review, not by changing fit from a hold label.

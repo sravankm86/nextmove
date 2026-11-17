@@ -32,3 +32,5 @@ Curate (stages/curate.md) owns company policies and writes Application hold stat
 An elapsed Apply blocked until does not authorize submission, prove role eligibility or override another limit. A hold does not lower role fit or remove a role from Queued/Ready. Do not infer a company cooldown from a generic rejection; report new policy evidence to Curate through History.
 
 Before enabling auto-apply, configure a private answer bank, supported sites and submission cap, and connect an authorized browser runtime. Test one form, receipt capture, duplicate prevention, a simulated uncertain submission, and the live pause control. Use one submission worker.
+
+Pass the current named Companies records to apply_ready/resume_ready as well as running the separate live company_policy.apply_allowed hold check. A valid score/PDF cannot bypass human Exclude, Proposed or a permanent block. Temporary holds block submission only, not prior fit assessment or resume preparation.

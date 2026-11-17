@@ -19,6 +19,8 @@ The nine statuses are **Inventoried, Need review, Queued, Ready, Applied, Interv
 
 Inventory and the preparation queue are states in the same Applications table. Reasons, confirmation, missing evidence and uncertain attempts do not need separate lifecycle states. A manually selected status does not create review approval, verify a PDF or authorize submission.
 
+Curate hands human-approved companies and factual company evidence to Scan/Review. Temporary application holds do not reduce inventory or fit; permanent blocks stop new inventory and automatic advancement. A standalone Scan or Review reads that saved handoff without launching company research. Draft boards become eligible only after human Allow and still need verification. Review assesses company facts against current goals rather than copying Company fit; changed funding/business evidence revalidates affected approvals. A partial Curate does not stop independent scanning/review, but stays visible in full-Run completion.
+
 ## Architecture
 
 ~~~mermaid
