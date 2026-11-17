@@ -8,4 +8,4 @@ List the public checks and any privately tested capability. Distinguish contract
 
 ## Tradeoffs and compatibility
 
-Explain schema mapping/migration effects, fidelity changes, permissions/costs and recovery behavior where relevant. Preserve existing user data and submission/audit gates.
+Explain schema effects, fidelity changes, permissions/costs and recovery behavior where relevant. Preserve existing user data and submission/audit gates.

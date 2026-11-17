@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "tables": [
     "Companies",
     "Applications",
@@ -128,18 +128,22 @@
       "stage": "Apply",
       "mode": "review",
       "instructions": "stages/apply.md",
-      "scope": "Ready; actual submissions only in separate explicit scope",
+      "scope": "Ready roles passing apply_ready and the company hold check: browser preflight always; real submission only under an enabled, unexpired Settings.submission_policy (caps, allowed ATS, supervised first submission per ATS, circuit breaker). Answers only from the answer bank; uncertain submissions never retried.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "master_resume",
         "career_goals",
         "role_policy",
-        "company_policy"
+        "company_policy",
+        "content_output"
       ],
       "submission_resources": [
         "answer_bank",
         "submission_policy"
+      ],
+      "capabilities": [
+        "browser: open URL, read fields, type/select, upload local file, screenshot, click"
       ]
     },
     {

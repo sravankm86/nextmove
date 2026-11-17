@@ -273,8 +273,7 @@
           "name": "Restriction timezone",
           "type": "singleLineText"
         }
-      ],
-      "common_fields": []
+      ]
     },
     {
       "name": "Applications",
@@ -512,8 +511,7 @@
           "name": "Confirmation reference",
           "type": "multilineText"
         }
-      ],
-      "common_fields": []
+      ]
     },
     {
       "name": "Sources",
@@ -598,8 +596,7 @@
             "timeZone": "utc"
           }
         }
-      ],
-      "common_fields": []
+      ]
     },
     {
       "name": "Runs",
@@ -751,8 +748,7 @@
           "name": "Agent notes",
           "type": "multilineText"
         }
-      ],
-      "common_fields": []
+      ]
     },
     {
       "name": "Settings",
@@ -802,8 +798,7 @@
           "name": "Notes",
           "type": "multilineText"
         }
-      ],
-      "common_fields": []
+      ]
     },
     {
       "name": "History",
@@ -872,8 +867,7 @@
           "name": "Notes",
           "type": "multilineText"
         }
-      ],
-      "common_fields": []
+      ]
     }
   ],
   "links": [
@@ -948,27 +942,6 @@
       "inverse_field": "Submission applications"
     }
   ],
-  "common_fields": [],
-  "legacy_aliases": {
-    "Companies": [
-      "Target Companies"
-    ],
-    "Sources": [
-      "Catalog Sources"
-    ],
-    "Settings": [
-      "Controls",
-      "Context Registry"
-    ],
-    "Runs": [
-      "Stage Runs",
-      "Runs"
-    ],
-    "History": [
-      "Audit Events",
-      "Lifecycle Events"
-    ]
-  },
   "application_required_fields": [
     "Application ID",
     "Company",

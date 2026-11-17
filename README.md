@@ -12,7 +12,7 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible PM candidates become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
-| [Apply](stages/apply.md) | Check authorization, answers, real form access, exact resume and company restrictions. | Applied after an established submission; uncertainty blocks retries. Default is preflight. |
+| [Apply](stages/apply.md) | A browser agent opens the real form, fills it from your answer bank and uploads the exact verified resume, within limits you approve once (caps, allowed application sites, first submission per site supervised). | Applied with confirmation; anything unclear stops that role. Default is preflight. |
 | [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
 The nine statuses are **Inventoried, Need review, Queued, Ready, Applied, Interviewing, Not pursuing, Rejected and Duplicate**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#nine-lifecycle-states).
@@ -49,7 +49,7 @@ The private main Drive folder has two working children: **Role specific** for cu
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 
-The 107-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 107-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
@@ -71,7 +71,7 @@ There are 12 operational instruction files. Each concern has one owner; maintena
 | Company list, funding discovery, employer quotas/cooldowns and holds? | [Curate](stages/curate.md) |
 | Submission safeguards and the final pre-submit hold check? | [Apply](stages/apply.md) |
 | Receipts, recruiter engagement and mailbox checkpoints? | [Track](stages/track.md) |
-| Deliberate field retirement, deployment and release checks? | [Maintenance](docs/MAINTENANCE.md) |
+| Retiring live columns and release checks? | [Maintenance](docs/MAINTENANCE.md) |
 
 Agents read the entry point, workflow and requested stage, then relevant reference sections. They do not load the entire repository or bulk catalogs into model context. Standard public files such as SECURITY.md, CONTRIBUTING.md and LICENSE are not additional stage procedures.
 
@@ -83,7 +83,7 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
 - Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
 - Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
-- Explicit submission scope and approved answers before real applications. Track needs read-only mailbox access.
+- A [standing submission authorization](stages/apply.md#standing-authorization-settingssubmission_policy) and an [answer bank](templates/answer-bank.md) before real applications, plus a browser-capable agent signed into the sites you allow. Track needs read-only mailbox access.
 
 No model API key is required. Connectors may use service APIs internally. A fork does not copy private data, authentication or another person's setup. Plain chat without suitable tools cannot execute these stages.
 
@@ -91,17 +91,13 @@ No model API key is required. Connectors may use service APIs internally. A fork
 
 Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Then use `Run Nextmove` for the full authorized sequence or `Curate`, `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
 
-For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked. Do not run production work through an unresolved migration pause.
+For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked.
 
 ## Expectations and limits
 
 Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
-Review has three steps: extract the exact JD, score career fit against the user's Career Goals, and score resume fit against the user's master using minimum and preferred qualifications. Add the scores to route Queued, Need review or Not pursuing. Unresolved is scored zero on either axis; the Review table defines its outcomes. Career fit concerns desired work; resume fit judges demonstrated suitability for the critical asks across the whole JD. Ratings and explanations are visible; full evidence and versions are recoverable. See [the Review frame](stages/review.md) for the score tables.
-
-Run owns objective duplicate discovery before stage work and for new scan candidates. Confirmed redundant rows use Duplicate with a saved canonical reference; reobserved jobs do not create extra rows. Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
-
-Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
+Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
 
 ## Contributing and license
 

@@ -11,17 +11,16 @@ SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run', 'submission': 'Submission run'}
 CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','Submission attempt key','Applied on','Confirmation reference','History','Scan run','Review run','Preparation run','Submission run']
-RETIRED_FIELDS = ['Posted salary range','Record kind','Availability','Sources','Last seen at','Career gate','Assessment summary','Blocker','Decision category','Updated at']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None):
-    """Only current fields can be written; legacy plans cannot recreate retired data."""
+    """Only the 29 current fields can be written."""
     bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History'})
     if bad:
-        raise ValueError('Unsupported/retired Application fields: '+', '.join(sorted(bad)))
+        raise ValueError('Unsupported Application fields: '+', '.join(sorted(bad)))
     from lifecycle import STATUSES
     if 'Lifecycle status' in values and values['Lifecycle status'] not in STATUSES:
-        raise ValueError('Unsupported lifecycle status; migrate legacy labels explicitly')
+        raise ValueError('Unsupported lifecycle status')
     for label in ['Company', 'Scan run', 'Review run', 'Preparation run', 'Submission run']:
         if label in values and len(values[label] or []) > 1:
             raise ValueError('Expected at most one linked record: '+label)
@@ -40,24 +39,6 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
         if values.get('Lifecycle status') != 'Inventoried' or values.get('Role eligibility') != 'Pending':
             raise ValueError('Scan cannot certify eligibility or queue a new candidate')
     return values
-
-
-def plain(value):
-    if isinstance(value, dict) and 'name' in value:
-        return value['name']
-    if isinstance(value, list):
-        return [v.get('id') if isinstance(v, dict) and str(v.get('id', '')).startswith('rec') else plain(v) for v in value]
-    return value
-
-
-def named_records(records, fields, aliases=None):
-    labels = {f['id']: f['name'] for f in fields}
-    aliases = aliases or {}
-    result = []
-    for r in records:
-        values = {aliases.get(labels.get(k, k), labels.get(k, k)): plain(v) for k, v in r.get('cellValuesByFieldId', {}).items()}
-        result.append({'id': r['id'], 'createdTime': r.get('createdTime'), **values})
-    return result
 
 
 def payload(records):
@@ -106,8 +87,6 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
         return False
     if app.get('Role eligibility') != 'Eligible':
         return False
-    if 'High' not in [app.get('Career fit'), app.get('Resume fit')]:
-        return False
     review = state.get('review', {})
     from role_gate import review_frame_contract, scored_review
     frame_policy, contract = review_frame_contract()
@@ -117,9 +96,7 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
         return False
     saved = review.get('scoring', {})
     try:
-        expected = scored_review(app.get('Career fit'), app.get('Resume fit'),
-                                 objective_failure=review.get('objective_failure') is True,
-                                 minimum_failure=review.get('minimum_failure') is True)
+        expected = scored_review(app.get('Career fit'), app.get('Resume fit'))
     except (ValueError, KeyError, TypeError):
         return False
     if saved != expected or expected['outcome'] != 'Queued' or review.get('decision') != 'approve':
@@ -139,12 +116,8 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
 
 
 def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
-    """Submission authorization, company controls and form checks stay separate."""
-    review = (state or {}).get('review', {})
+    """Ready, no open attempt and a verified resume; submission policy and holds are separate checks."""
     return bool(app.get('Lifecycle status') == 'Ready'
-                and review.get('decision') == 'approve'
-                and review.get('career_requirements_pass') is True
-                and not review.get('deferred_checks')
                 and not attempt_blocks_retry(app, state)
                 and resume_ready(app, state, runs, current_inputs, pdf_bytes,
                                  provider_version=provider_version, companies=companies))
@@ -162,15 +135,6 @@ def canonical_job_url(value):
              if not k.lower().startswith('utm_') and k.lower() not in tracking]
     return urlunsplit(('https', parts.netloc.lower().removeprefix('www.'),
                        parts.path.rstrip('/'), urlencode(sorted(query)), parts.fragment))
-
-
-def exact_job_match(left, right):
-    """Company-scoped employer role ID OR exact canonical job link; no variants."""
-    if not left.get('company_id') or left.get('company_id') != right.get('company_id'):
-        return False
-    same_id = bool(left.get('role_id') and left.get('role_id') == right.get('role_id'))
-    url = canonical_job_url(left.get('job_url'))
-    return same_id or bool(url and url == canonical_job_url(right.get('job_url')))
 
 
 def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
@@ -244,53 +208,17 @@ def merge_company_state(previous, *, company_id, company_key, run_id, values):
     return result
 
 
-def run_progress(run, *, progress_contexts=None):
-    """Read merged current progress plus legacy separate fields without writing pins."""
-    def parsed(value):
-        if value in [None, '']:
-            return None
-        if isinstance(value, str):
-            try:
-                return json.loads(value)
-            except (ValueError, TypeError):
-                return value
-        return value
-    base = parsed(run.get('Checkpoint (JSON)'))
-    result = dict(base) if isinstance(base, dict) else ({'legacy_checkpoint_raw': base} if base is not None else {})
-    context = (progress_contexts or {}).get(run.get('id'))
-    if context and result.get('_progress_context_event') != context['event_id']:
-        raw = run.get('Checkpoint (JSON)')
-        digest = hashlib.sha256((raw or '').encode()).hexdigest() if isinstance(raw, (str, type(None))) else None
-        if digest not in context['accepted_checkpoint_hashes']:
-            raise ValueError('Run progress changed after preservation; reconcile the context')
-        result = json.loads(json.dumps(context['checkpoint']))
-        result['_progress_context_event'] = context['event_id']
-    for field, key in [('Stages (JSON)', 'stages'), ('Pending checks (JSON)', 'pending_checks'),
-                       ('Handoff (JSON)', 'handoff'), ('Next command', 'next_action'),
-                       ('Mode', 'execution_mode'), ('Backup/report URL', 'report_url')]:
-        value = parsed(run.get(field))
-        if key not in result and value is not None:
-            result[key] = value
-    return result
-
-
-def run_progress_contexts(histories):
-    """Resolve immutable progress preservation records without rewriting old Runs."""
-    matches = {}
-    for event in histories:
+def run_progress(run):
+    """Parse a Run's Checkpoint (JSON); non-JSON text is kept under raw_checkpoint."""
+    raw = run.get('Checkpoint (JSON)')
+    if raw in (None, ''):
+        return {}
+    if isinstance(raw, str):
         try:
-            data = json.loads(event.get('Field changes (JSON)', '{}'))
+            raw = json.loads(raw)
         except (ValueError, TypeError):
-            continue
-        if not isinstance(data, dict) or data.get('schema') != 'nextmove.run-progress.v1':
-            continue
-        run_id = data['original_run_id']
-        rank = (event.get('Recorded at', ''), event.get('Event key', ''))
-        if run_id not in matches or rank > matches[run_id][0]:
-            matches[run_id] = (rank, {'event_id': event['id'],
-                'accepted_checkpoint_hashes': data['accepted_checkpoint_hashes'],
-                'checkpoint': data['checkpoint']})
-    return {key: value[1] for key, value in matches.items()}
+            return {'raw_checkpoint': raw}
+    return dict(raw) if isinstance(raw, dict) else {'raw_checkpoint': raw}
 
 
 def run_duplicate_match(left, right):

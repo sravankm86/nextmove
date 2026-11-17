@@ -36,7 +36,7 @@ Record Met, Not met or Unknown with JD and candidate evidence. Distinguish a con
 
 Explain why each consequential requirement is critical or secondary. Reuse confirmed facts already supplied; do not repeatedly ask about a confirmed gap. Facts removed from Career Goals remain candidate evidence, not preferences. Store their source in private resume/candidate evidence under DATA.md; never add unsupported claims to the master.
 
-Add both scores and use this table. Assess both axes; the former early-stop and unconditional unresolved-career rules no longer apply. Unresolved is a rating with score zero, not proof of failure. Do not add a separate veto or substitute an old routing rule.
+Add both scores and use this table. Assess both axes. Unresolved is a rating with score zero, not proof of failure. Do not add a separate veto or substitute an old routing rule.
 
 | Check, in this order | Decision |
 |---|---|

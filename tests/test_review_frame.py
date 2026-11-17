@@ -55,8 +55,7 @@ class ReviewFrameTests(unittest.TestCase):
                 result=scored_review(c,r,contract=contract)
                 self.assertEqual(result['outcome'],expected[ci][ri])
                 self.assertEqual(result['total'],ci+ri)
-        self.assertEqual(scored_review('High','Low',minimum_failure=True)['outcome'],'Need review')
-        self.assertEqual(scored_review('Low','High',objective_failure=True)['outcome'],'Need review')
+        self.assertEqual(scored_review('High','Low')['outcome'],'Need review')
         self.assertEqual(scored_review('Unresolved','Low')['outcome'],'Not pursuing')
         self.assertEqual(scored_review('Unresolved','Medium')['outcome'],'Need review')
 

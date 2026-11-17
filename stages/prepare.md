@@ -12,7 +12,7 @@ Resolve and pin these registered Settings resources in the Run:
 |---|---|
 | master_resume | The designated editable master: the only source of resume facts. Never modified by Prepare. |
 | resume_guidelines | The user's private resume guidelines in the standard frame (contracts/resume-guidelines-schema.json, blank form templates/resume-guidelines.md). Governs every selection and every tailored version. |
-| base_resumes | The library of approved bases: for each, theme/variant, page length, exact PDF and editable source references, content version (hash) and the master version it was built from. A legacy single approved_base_resume counts as a one-entry library. |
+| base_resumes | The library of approved bases: for each, theme/variant, page length, exact PDF and editable source references, content version (hash) and the master version it was built from. |
 | resume_output / content_output | Role specific and Audit trail folders under RESUME-FILES.md. |
 
 A missing or inaccessible master or guidelines blocks Prepare for all roles; record the exact gap and ask.

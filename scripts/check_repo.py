@@ -1,5 +1,4 @@
 """Dependency-free checks for public contracts/docs, not a live integration test."""
-import csv
 import json
 import re
 import sys
@@ -34,8 +33,6 @@ def check(root):
 
     runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['curate','scan','review','prepare','apply','track']]
     require(len(runtime)==12 and all((root/p).is_file() for p in runtime), 'Expected twelve canonical operational instruction files')
-    for obsolete in ['COMMANDS.md','ARCHITECTURE.md','CLARIFICATIONS.md','CONNECTORS.md','DATA-GOVERNANCE.md','HARNESS-BOOTSTRAP.md','LIFECYCLE.md','ROLE-ELIGIBILITY.md','SCALING.md','SCAN-OPTIMIZATION.md','STAGE-STATE.md','STORAGE.md','TRACKER.md','stages/shortlist.md','templates/profile.md','contracts/state-schema.json']:
-        require(not (root/obsolete).exists(), 'Do not restore a duplicate/deprecated instruction authority: '+obsolete)
 
     decoded = {}
     for p in files(root):
@@ -57,9 +54,6 @@ def check(root):
             root_keys = set(re.findall(r"(?m)^([A-Za-z_+][A-Za-z0-9_+ -]*):", text))
             allowed = {"name", "on", "permissions", "concurrency", "jobs", "env", "defaults", "run-name"}
             require({"name", "on", "jobs"}.issubset(root_keys) and root_keys.issubset(allowed), "Invalid GitHub workflow root keys")
-        if p.suffix == ".csv":
-            rows = list(csv.reader(text.splitlines()))
-            require(bool(rows) and len(rows[0]) == len(set(rows[0])) and all(rows[0]), "Invalid/duplicate CSV header: " + rel)
         if p.suffix == ".md":
             # Fenced examples may deliberately contain placeholder paths.
             plain = re.sub(r"(?ms)^(```|~~~).*?^\1[^\n]*$", "", text)
@@ -91,15 +85,6 @@ def check(root):
             if f["type"] == "singleSelect":
                 choices = [c["name"] for c in f.get("options", {}).get("choices", [])]
                 require(bool(choices) and len(choices) == len(set(choices)), "Invalid enum: " + f["name"])
-    for table in tables:
-        header = next(csv.reader((root / ('templates/' + table['name'].lower() + '.csv')).open()))
-        require(header == [f['name'] for f in table['fields']], 'CSV/schema mismatch: ' + table['name'])
-    aliases = decoded.get('contracts/field-aliases.json', {}).get('aliases', {})
-    for table, mapping in aliases.items():
-        require(table in lookup, 'Unknown alias table')
-        if table in lookup:
-            labels = {f['name'] for f in lookup[table]['fields']} | {l['field'] for l in core['links'] if l['from_table'] == table} | {l['inverse_field'] for l in core['links'] if l['target_table'] == table and l.get('inverse_field')}
-            require(set(mapping).issubset(labels), 'Unknown logical field in aliases: ' + table)
     for link in core["links"]:
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
     from lifecycle import STATUSES
@@ -118,10 +103,7 @@ def check(root):
     require([c['name'] for c in companies['Application hold status']['options']['choices']] == HOLD_STATUSES and 'Blocked (permanent)' in HOLD_STATUSES, 'Companies hold choices must include Blocked (permanent)')
     pipeline = ['Curate', 'Scan', 'Review', 'Prepare', 'Apply', 'Track']
     require(command['pipeline'] == pipeline and next(x['value'] for x in seed['policies'] if x['key'] == 'execution_policy')['pipeline'] == pipeline, 'Command and setup pipelines must agree across every stage')
-    config = (root/'config.example.yaml').read_text()
-    require('pipeline: [' + ', '.join(pipeline) + ']' in config, 'Example configuration must use the complete current pipeline')
-    require('schema_version: ' + str(core['version']) in config and decoded['contracts/policy-versions.json']['schema_version'] == core['version'], 'Example configuration and policy manifest must match the schema release')
-    require(not core.get('common_fields') and all(t.get('common_fields')==[] for t in tables), 'Do not duplicate native metadata across tables')
+    require(decoded['contracts/policy-versions.json']['schema_version'] == core['version'], 'Policy manifest must match the schema release')
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
     require(len(resources) == len(set(resources)), "Duplicate Settings key")
     require(set(command["tables"]) == expected and command["default_command"] == "Run", "Wrong command/schema default")
@@ -140,6 +122,10 @@ def check(root):
     prepare = next(c for c in command["commands"] if c["command"] == "Prepare")
     require({"master_resume", "resume_guidelines", "base_resumes"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
     require(next(c for c in command["commands"] if c["command"] == "Apply")["mode"] == "review", "Apply must default to preflight")
+    from submission_policy import DEFAULT_POLICY, policy_problems
+    require(DEFAULT_POLICY['enabled'] is False and DEFAULT_POLICY['mode'] == 'preflight' and DEFAULT_POLICY['caps'] == {'per_run': 0, 'per_day': 0, 'per_week': 0}, 'Submission policy must default to preflight with zero caps')
+    require(seed['submission_defaults'].get('policy') == DEFAULT_POLICY and not policy_problems(DEFAULT_POLICY), 'Seeded submission policy must match scripts/submission_policy.py defaults')
+    require((root / 'templates/answer-bank.md').is_file(), 'Missing answer bank template')
     controls = {x["key"]: x["value"] for x in seed["controls"]}
     require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
@@ -157,8 +143,6 @@ def check(root):
     require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 29, 'Expected the 29-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
-    from stage_state import RETIRED_FIELDS
-    require(not (set(RETIRED_FIELDS) & (app_fields | linked)), 'Retired Application fields must not be recreated')
     require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
     pref = seed.get('preference_contract', {})
     require(pref.get('instruction_authority') == 'GitHub' and pref.get('source_kind') == 'end_user_preferences', 'Wrong goals authority')
@@ -174,7 +158,6 @@ def check(root):
     require(company["policy_research"]["community_reports_enforced"] is False, "Community reports cannot be enforced as confirmed rules")
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
-    require(seed["submission_defaults"]["enabled"] is False and seed["submission_defaults"]["daily_submission_cap"] == 0, "Unsafe submission setup")
     require("MIT License" in (root / "LICENSE").read_text(), "Expected MIT license")
     return errors
 

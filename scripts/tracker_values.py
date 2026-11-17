@@ -91,13 +91,6 @@ def salary_ranges(value, *, description=False):
     return unique(found)
 
 
-def compact_salary(*values):
-    ranges = unique([s for v in values for s in salary_ranges(v)])
-    # A source may repeat the same band with a symbol and an explicit currency.
-    specific = {re.sub(r'^[^\d]+', '', s) for s in ranges if re.match(CODE, s, re.I)}
-    return '; '.join(s for s in ranges if not s.startswith('$') or re.sub(r'^[^\d]+', '', s) not in specific)
-
-
 def salary_endpoints(bands, *, currency, period='year', basis='base'):
     """Select one verified advertised band, never an envelope or FX conversion.
 
@@ -175,21 +168,3 @@ def locations(value):
         if part:
             result.append(part)
     return unique(result)
-
-
-def availability(value):
-    value = text(value).lower()
-    return 'Open' if value.startswith('open') else 'Closed' if value.startswith('closed') else 'Unknown'
-
-
-def description_status(value):
-    value = text(value).lower()
-    if 'current' in value and any(x in value for x in ['verified', 'captured', 'retrieved']):
-        return 'Current'
-    if any(x in value for x in ['missing', 'not captured', 'not retrieved', 'must retrieve', 'gap']):
-        return 'Missing'
-    if value in ['retrieved', 'captured'] or 'full official description captured' in value:
-        return 'Captured'
-    if 'historical' in value or 'provenance' in value:
-        return 'Historical'
-    return 'Unavailable' if 'unavailable' in value else 'Missing'
