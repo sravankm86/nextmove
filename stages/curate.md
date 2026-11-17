@@ -34,7 +34,7 @@ For every company that is not Exclude, build its event list from saved evidence 
 - `uncertain_attempt`: every saved unresolved Submission attempt key. It occupies capacity but is never treated as Applied.
 - `rejection`: actual employer rejection times from History (Track records them). Use Occurred at, not Recorded at. Include later Interviewing/Rejected rows and other later states when History proves submission; do not lose quota events when lifecycle status changes.
 
-The function applies the personal limit to every company, then the employer quota and rejection cooldown only when the policy is enforceable and company-scoped. Write the returned status and Apply blocked until (UTC ISO8601), and put the reasons in Agent notes, for example `Held: personal limit 3/30d reached; reopens 2026-12-01. Employer rule: Official 3/30d.` Save before/after values in History.
+The function applies the personal limit to every company, then the employer quota and rejection cooldown only when the policy is enforceable and company-scoped. Write the returned status and Apply blocked until (UTC ISO8601), and explain it in Agent notes under DATA.md "Writing Agent notes", for example `Held until about 1 December: you have applied to three roles here in the last 30 days, which is both your limit and the company's published limit.` Save before/after values in History.
 
 Rules the function enforces, which agents must not bypass by hand:
 
@@ -83,6 +83,6 @@ A permanent block (for example a lifetime application limit already reached, or 
 
 ## Writes, notes and handoff
 
-Manual notes is human-owned: read it and never overwrite it. Agent notes holds the current decision, evidence summary and next action; prior values go to History. Use the company snapshots and three-part checkpoints in DATA.md. Link touched companies to the Run with Curate run. Curate snapshots are company metadata, not Application snapshots. Save meaningful field changes, policy evidence, proposals and user decisions in History.
+Manual notes is human-owned: read it and never overwrite it. Agent notes explains the company's current status in plain English (DATA.md "Writing Agent notes"); prior values go to History. Use the company snapshots and three-part checkpoints in DATA.md. Link touched companies to the Run with Curate run. Curate snapshots are company metadata, not Application snapshots. Save meaningful field changes, policy evidence, proposals and user decisions in History.
 
 Handoff reports separately: holds recomputed (counts per status and any changes), policies researched by confidence level, discovery feeds read with coverage, new Proposed companies by fit, re-evaluation proposals, Needs clarification questions and the next action. Curate is Complete only when every non-Exclude company's hold is recomputed, every due policy is researched or explicitly blocked, and every due feed is read to its verified end.

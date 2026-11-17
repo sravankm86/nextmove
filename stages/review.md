@@ -49,6 +49,6 @@ Apply the first row before total-score routing: Low on either career or resume f
 
 Consequently High + Low and Low + High are Not pursuing. Low + Low is Not pursuing. With no Low, the existing numeric treatment of Unresolved remains unchanged. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
 
-Agent notes briefly explains both ratings, the critical evidence or gap, and the resulting status. For Need review, state exactly what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
+Agent notes explains the resulting status in plain English under DATA.md "Writing Agent notes": the decisive reason (the preference or requirement that drove it, not the score arithmetic) and, for Need review, exactly what is unclear and what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
 
 This file is the only source for scores and routing. scripts/role_gate.py reads these tables and fingerprints this file automatically. Do not maintain a second scoring configuration or manual Review version. Unknown or malformed rules must stop affected work, not fall back to older defaults.

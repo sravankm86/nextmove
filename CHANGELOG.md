@@ -1,5 +1,10 @@
 # Changelog
 
+## Readable Agent notes
+
+- DATA.md "Writing Agent notes" is the single standard: one to three plain-English sentences explaining why the agent set the current status, what is unclear and what happens next, with examples for every status. Stage files point to it and use plain-English examples.
+- `scripts/stage_state.py:agent_note_problems` flags notes that are empty, too long or code-like; `tests/test_agent_notes.py` checks the documented examples against it.
+
 ## Simpler submission guard rails
 
 - New lifecycle status **Needs answer** (between Ready and Applied): Apply sets it when a required question has no answer in the answer bank, and returns the role to Ready once every waiting question is answered.
