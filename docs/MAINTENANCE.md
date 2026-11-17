@@ -1,35 +1,23 @@
-# Maintenance, migrations and releases
+# Maintenance and releases
 
-This file is for deliberate maintenance, not every stage startup. README.md maps active logic; WORKFLOW.md, DATA.md and stages/ own runtime rules. Git history preserves removed files; do not keep redirect files or a second active instruction set.
+For deliberate maintenance only, not stage startup. README.md maps the repository; WORKFLOW.md, DATA.md and stages/ own runtime rules. Git history keeps removed files; do not restore them.
 
-## Field audit and retirement
+## Retiring live columns or choices
 
-The minimal target is 107 columns across six tables: Companies 25, Applications 29, Sources 13, Runs 21, Settings 6 and History 13, including required reciprocal links. A live audit can find more fields. Audit every actual field for a current consumer, useful human action, required evidence/identity or recoverability; populated does not imply necessary, and empty does not imply dispensable. Keep configured cooldown fields even before first use. Preserve archived-source disabling and real relational links.
+The target is 107 columns: Companies 25, Applications 29, Sources 13, Runs 21, Settings 6, History 13, including reciprocal links (contracts/core-schema.json). Before deleting a live column, preserve its values (with record IDs and field IDs) in Audit trail content, record the manifest in History, confirm no reader, formula, view or automation depends on it, then delete only the verified list and read back. Deleting a reciprocal link removes the relationship itself. Connectors that cannot delete fields or manage select choices get an exact UI step instead; deployment readiness stays incomplete until readback confirms it.
 
-Produce a private per-field report with live field ID/name/type, population, decision, purpose, replacement, dependency checks and deletion readiness. Check formulas, views, automations/interfaces and known integrations; disclose inaccessible view configurations/external consumers. Private identifiers/content never belong in public Git. A recommendation is not permission to delete unpreserved information.
+Current live leftovers (preserve, then delete in the Airtable UI):
 
-Use one writer. Read current values; preserve exact retired values/native actor/time metadata, original inputs, links and application outcomes in bounded indexed private content or History snapshots. Store hashes, row selectors and verified durable references. Reconcile human edits, migrate only intended deltas, verify saved replacements and replay readiness/retry guards with retired fields removed. Preserve unknowns. Never overwrite fixed input pins of old accepted Runs.
+| Table | Leftover | Note |
+|---|---|---|
+| Companies | Job Inventory, Migration key, Source record, Raw source record, Apply blocked until (legacy text) | Pre-Curate import columns; values already superseded by Applications, Sources and the dateTime Apply blocked until. |
+| Applications | Posted salary range | Replaced by Starting salary and Max salary. |
+| Runs | Mode | Replaced by Settings.submission_policy and Run type. |
 
-Companies: move optional company research/import/source exports (including pre-Curate Job Inventory, Migration key, Source record and Raw source record) to indexed content; keep current targeting/restrictions/notes. Rename Notes to Manual notes in place (field ID unchanged). Convert text Apply blocked until/Restriction timezone values only after preserving the original text in History; unparseable values stay for Curate to recompute. Last rejection/verification facts live in History. Sources: copy the real source_id into its existing primary field and rename it Source key before retiring the duplicate; merge verification/pagination/manifest details into Checkpoint, preserve reader identity/version and Archived at. Runs: consolidate separate stage/pending/handoff/mode/report/next-action state into Checkpoint, and reuse Blockers as Agent notes; keep fixed Input versions unchanged. History: preserve Operation/Phase/Entity key/read scope/error details and populate any missing event classification from actual evidence before retiring duplicate columns; never fabricate actor/time or rewrite past business outcomes. Settings: remove repeated metadata and Required by only after preserving useful historical details; required resources come from contracts/commands.json. Do not automatically delete settings rows.
+Select choices still to add in the UI: Companies Search status `Proposed`, Application hold status `Blocked (permanent)`, Runs Run type `Curate`.
 
-Update aliases, every reader/writer, generated contracts/templates and private mappings together. Mark per-table retirement_ready only after exact readback/dependency/recovery checks. Delete only the verified list. Some tools cannot delete/retype fields or manage select choices; provide precise UI actions and keep final deployment readiness incomplete until readback proves them. Native reciprocal fields cannot be dropped independently of the relationship they represent.
+## Release checks
 
-## Applications and lifecycle migration
+Run `python scripts/check_repo.py`, `python scripts/build_schema.py` (the committed schema must not change) and `python -m unittest discover -s tests -v`. Review links, command routes, private-data patterns and the actual diff. CI checks public contracts only, not a live scan, browser or account.
 
-Applications targets 29 columns after replacing Posted salary range with numeric Starting salary and Max salary under DATA.md. Preserve and verify the old salary text before retiring it. Reuse Assessment summary as Agent notes after consolidating Blocker and preserving Decision category in review.reason_category. Primary Application becomes Application ID, formula RECORD_ID(); rename alone is insufficient. Preserve former Record kind/Availability/Sources/Last seen at/Career gate/Updated at values and source provenance in History. Legacy pending candidates use operational state; preserve historical unmatched keys and submitted outcomes.
-
-Complete review snapshots require explicit review.role_eligible and review.career_requirements_pass booleans, accepted full-JD decision/hash/provenance and fixed inputs. Migrate only explicit Eligible/Excluded and Pass/Fail values to true/false; unknown stays null. Migration never approves a job. Verify original legitimate approvals, current PDF verification and pending-attempt blocking after retirement. Prior snapshot versions remain readable for recovery; only explicit current checks establish acceptance.
-
-WORKFLOW.md defines the nine-state mapping. Preserve exact prior status/confirmation/uncertainty/duplicate references and outcomes in History. Populate any missing submission attempt evidence before collapsing an uncertain-submit status; otherwise leave the item blocked. Configure the nine select choices, apply/verify mappings, then remove unused old choices. Confirmed maps to Applied without discarding confirmations. Interviewing is the final tracked recruiting stage; offers/acceptance and later recruiting outcomes are outside automatic scope.
-
-## Release and deployment checks
-
-Run python scripts/check_repo.py, python scripts/build_schema.py and python -m unittest discover -s tests -v. Verify generated schema matches the committed file. Check internal links, command routes, field aliases, canonical document ownership, private-data patterns and the actual diff. Publish the reviewed revision and verify the branch. CI is a public-contract test, not a live scan or comprehensive security audit.
-
-Privately verify schema/types/options/links, human notes/outcomes, goals/master/output access, source coverage, one writer, durable handoff, attempt recovery, rendered PDFs, mailbox scope and live controls. Save Passed/Blocked/Not tested with evidence. A clean repository does not prove a fully migrated base or supported browser. Never call the deployment fully ready with unresolved UI, data migration or access steps.
-
-## Curate compatibility release
-
-Before the first Curate, verify the schema-11 Companies fields/choices, Curate run relationship and inverse Curate companies, Settings.company_policy and discovery feeds. Preserve existing Manual notes, targeting, source cursors and application history. Missing Curate research/discovery capabilities do not disable unaffected existing Allow-company Scan/Review. Do not create a seventh table or company task rows in Applications.
-
-Current application creation and readiness helpers require live named Companies records. Existing preserved snapshots remain readable; old approvals without the decisive company_evidence input require targeted revalidation before advancing. Capture the company evidence in a new Review segment rather than rewriting old accepted pins. Scores and routing thresholds are unchanged. A hold timestamp alone is not a changed fit input.
+Privately verify schema, options and links, human notes and outcomes, goals/master/output access, source coverage, one writer, durable handoff, attempt recovery, rendered PDFs, mailbox scope and live controls. Record Passed, Blocked or Not tested with evidence. Never call a deployment ready while UI, data or access steps remain.

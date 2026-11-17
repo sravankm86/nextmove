@@ -24,11 +24,7 @@ One active writer. Never seize an owner solely on timeout. Missing global access
 
 ## Company handoff and stage independence
 
-A full Run starts Curate part 1, then may continue Scan and Review while policy research or funding discovery is blocked. One writer may finish Curate first or checkpoint it and interleave independent work; unfinished required Curate parts remain visible and keep the full Run Partial. Do not erase them when a later stage completes. Apply requires the affected company's hold recompute and live pre-submit check.
-
-A standalone Scan or Review reads current Companies and saved Curate evidence; it does not launch Curate research/discovery or require a globally Complete Curate. Use the same scope in single-agent and manual operation: human Allow and no permanent block. Temporary Held, Not assessed or Needs clarification states do not remove companies from Scan/Review or alter fit. Proposed, Exclude and permanently blocked companies do not receive new inventory or automatic queue advancement. Preserve existing jobs, scores, human/submitted/terminal outcomes and evidence; report skipped scope and its reason instead of relabeling it Not pursuing.
-
-Recheck targeting at the write boundary so an intervening human Exclude or permanent block cannot be bypassed by an old scope. A new Allow after scope freeze is saved for the next segment, not silently omitted from a completion claim. No Company fit threshold can replace human targeting. Changed factual company evidence is assessed against current goals in Review; an advisory Company fit label or an application cooldown is not a job-fit score.
+A full Run starts with Curate's hold recompute and may continue Scan and Review while Curate's research or discovery is blocked; unfinished Curate parts keep the Run Partial. A standalone Scan or Review reads current Companies and saved Curate evidence without running Curate. Only human-Allow companies without a permanent block get new inventory or automatic advancement; temporary holds never change scope or fit. Recheck targeting at each write boundary so a later Exclude or permanent block is never bypassed. Apply needs the affected company's hold recompute and its own live pre-submit check.
 
 ## Run checks: objective duplicate discovery
 
@@ -46,21 +42,19 @@ Use code for enumeration, normalization, identity, candidate filters, hashes and
 
 Scan inventories plausible PM candidates after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Follow the numeric routing in stages/review.md, including Unresolved at zero; only a current qualifying score can advance to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
 
-Preserve human outcomes/notes. Read Manual notes and current status under DATA.md before processing and writing a job; record newly observed feedback in the stage snapshot/History without rewriting the notes. Legacy Queued rows require explicit current review evidence, not automatic certification. Do not reopen submitted/terminal roles when fit inputs change.
+Preserve human outcomes/notes. Read Manual notes and current status under DATA.md before processing and writing a job; record newly observed feedback in the stage snapshot/History without rewriting the notes. Do not reopen submitted/terminal roles when fit inputs change.
 
-Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. For bounded migration batches, exact per-record private delta artifacts can be indexed by a verified History manifest; never hide unverified changes.
+Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. Never hide unverified changes.
 
-Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Schema-only releases retain decision-policy versions; changed decision inputs still require revalidation. A vanished local reader is a recovery gap, not evidence of incremental support.
+Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Changed decision inputs require revalidation.
 
-Review owns final eligibility/hard career checks and approves Queued; Prepare requires its current acceptance evidence. Prepare reuses a base only with complete coverage and a current master; otherwise it tailors under the registered resume guidelines. A base PDF requires factual/current/visual verification; a URL does not mean Ready. Before Submit persist unique attempt identity and exact resume version. Require explicit scope, answers, an accessible actual application form, restrictions and live controls; capture receipt or uncertainty. Never blind-retry, and never infer non-submission from missing mail.
+Review alone approves Queued (stages/review.md). Prepare produces the verified resume (stages/prepare.md). Apply submits only under the standing authorization and persists the attempt before Submit (stages/apply.md). Never blind-retry, and never infer non-submission from missing mail.
 
 ## Stage boundaries and exit
 
 Save accepted stage outputs before advancing. Continue independent useful work safely, but blocked required stages/items mean Partial/Blocked. Verify every planned item and count before Complete. No work means verified empty eligible scope, not invented coverage.
 
 Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report Curate results (holds by status, policies researched by confidence, discovery feed coverage, Proposed companies awaiting the user), source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
-
-Use the 29-column tracker under DATA.md. Write concise current context and next action in Agent notes; never overwrite Manual notes. Resolve explicit review checks and structured feedback from History. Sources remains board-level scanner state, not an Applications field. Do not require posting availability during Scan/Review or maintain Last seen at; check the real form during Apply.
 
 ## Clarification rules
 
@@ -74,7 +68,7 @@ When the answer arrives, save the authorized preference/control change in its pr
 
 If a tool or automatic approval review blocks an action, identify the exact action and stated reason. Finish independent work and present the concrete remaining approval or access requirement. Never call an incomplete stage Complete.
 
-A stage handoff reports completed work, counts, unresolved questions, affected identities, next action and whether ownership was released. Missing global access/Stop all blocks affected work. A company-specific issue need not stop all companies. See WORKFLOW.md and DATA.md.
+A stage handoff reports completed work, counts, unresolved questions, affected identities, next action and whether ownership was released. Missing global access/Stop all blocks affected work. A company-specific issue need not stop all companies.
 
 ## Nine lifecycle states
 
@@ -94,10 +88,4 @@ The successful path is Inventoried → Queued → Ready → Applied → Intervie
 
 An uncertain Submit stays at its last verified pre-submission stage, normally Ready, with a prominent uncertainty note and saved attempt identity/outcome. Never label an unverified resume Ready or claim Applied without evidence. The outstanding attempt blocks another Submit regardless of manual status resets; reconcile it first. Hold other work that could obscure the outstanding attempt and its exact submitted PDF.
 
-Keep confirmations in Confirmation reference, ratings in Career fit/Resume fit, and exact scores, reasons and duplicate references in History. Agent notes explains both scores and the outcome. A status label alone is not acceptance, PDF verification or submission permission. The three-step score supersedes older OR-fit, preferred-majority and provisional-salary queue rules.
-
-## Existing status migration
-
-Preserve exact prior status, notes, timestamps, evidence and outcomes before changing a label. Existing reviewed-but-unresolved Inventoried records become Need review; genuinely unreviewed records remain Inventoried. Needs review/Needs eligibility and historical Needs attention labels normalize to the existing Need review state. Keep the existing Airtable choice and its identity; no UI rename or extra pending state is needed. Existing Duplicate records retain Duplicate. Confirmed becomes Applied; In process becomes Interviewing. Other obsolete decline labels map to Not pursuing with their original reasons retained. Do not infer a duplicate from an old reason alone: Run verifies objective identity.
-
-Old Queued/Ready approvals need current scored Review evidence before advancing. Do not manufacture new scores from old High/Medium labels whose definitions differed. Preserve old acceptance and submitted/terminal history. Add the two new select choices, verify mappings, and retire obsolete choices only when unused. If the connector cannot manage choices, save the exact remaining UI action and keep the migration Partial.
+Keep confirmations in Confirmation reference, ratings in Career fit/Resume fit, and exact scores, reasons and duplicate references in History. Agent notes explains both scores and the outcome. A status label alone is not acceptance, PDF verification or submission permission.

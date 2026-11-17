@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from role_gate import admission, base_maximum_gate, inventory_candidate, queue_allowed, title_screen, qualification_gate, general_pm_gate
+from role_gate import inventory_candidate, review_eligibility, title_screen
 
 
 class AdmissionTests(unittest.TestCase):
@@ -38,35 +38,29 @@ class AdmissionTests(unittest.TestCase):
             with self.subTest(availability=value):
                 candidate = {**row, 'availability_verified': value}
                 self.assertEqual(inventory_candidate(candidate), 'pass')
-                self.assertEqual(admission(candidate, years_threshold=8), 'pass')
+                self.assertEqual(review_eligibility(candidate, years_threshold=8), 'pass')
         self.assertEqual(inventory_candidate({**row, 'identity_verified': False}), 'pending')
-        self.assertEqual(admission({**row, 'description_verified': False}, years_threshold=8), 'pending')
+        self.assertEqual(review_eligibility({**row, 'description_verified': False}, years_threshold=8), 'pending')
 
     def test_title_alone_cannot_admit(self):
-        self.assertEqual(admission({'title': 'Principal Product Manager'}, years_threshold=8), 'pending')
+        self.assertEqual(review_eligibility({'title': 'Principal Product Manager'}, years_threshold=8), 'pending')
 
     def test_evidence_and_scope_boundary(self):
         row = {'identity_verified': True, 'description_verified': True, 'availability_verified': True, 'role_family': 'product_management', 'role_evidence': 'Own product strategy and roadmap', 'experience_years_target': 10, 'experience_evidence': 'Ten-plus years required'}
-        self.assertEqual(admission(row, years_threshold=8), 'pass')
+        self.assertEqual(review_eligibility(row, years_threshold=8), 'pass')
         row['experience_years_target'] = 8
-        self.assertEqual(admission(row, years_threshold=8), 'pending')
+        self.assertEqual(review_eligibility(row, years_threshold=8), 'pending')
         row.update(equivalent_senior_scope=True, scope_evidence='Verified multi-product strategy ownership and PM-team leadership')
-        self.assertEqual(admission(row, years_threshold=8), 'pass')
+        self.assertEqual(review_eligibility(row, years_threshold=8), 'pass')
         row['equivalent_senior_scope'] = 'true'
-        self.assertEqual(admission(row, years_threshold=8), 'pending')
-
-    def test_goal_gate_is_separate(self):
-        self.assertFalse(queue_allowed(role_decision='pass', career_decision='pending', career_evidence='', versions_current=True))
-        self.assertFalse(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=False))
-        self.assertFalse(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=True))
-        self.assertTrue(queue_allowed(role_decision='pass', career_decision='pass', career_evidence='Aligned domain', versions_current=True, review_decision='approve', qualifications_decision='pass', resume_exclusions_pass=True, essential_fit_pass=True))
+        self.assertEqual(review_eligibility(row, years_threshold=8), 'pending')
 
     def test_plausible_ambiguity_is_inventory_not_review_approval(self):
         row = {'title': 'Product Manager', 'identity_verified': True,
                'availability_verified': True, 'role_hint': 'ambiguous_pm',
                'basic_evidence': 'Official team owns platform roadmap; level unspecified'}
         self.assertEqual(inventory_candidate(row), 'pass')
-        self.assertEqual(admission(row, years_threshold=8), 'pending')
+        self.assertEqual(review_eligibility(row, years_threshold=8), 'pending')
         row['career_decision'] = 'fail'
         self.assertEqual(inventory_candidate(row), 'pass')
         row['basic_evidence'] = ''
@@ -89,83 +83,14 @@ class AdmissionTests(unittest.TestCase):
                'basic_evidence': 'Official function: product management; owns roadmap'}
         self.assertEqual(inventory_candidate(row), 'pass')
 
-    def test_base_maximum_is_strict_and_not_band_minimum(self):
-        row = {'minimum': 80000, 'maximum': 120000, 'currency': 'USD',
-               'period': 'year', 'component': 'base',
-               'base_upper_bound_verified': True, 'applicable_scope_verified': True,
-               'source_evidence': 'Official annual base band for applicable location'}
-        check = lambda: base_maximum_gate(row, threshold=100000, currency='USD', period='year')
-        self.assertEqual(check(), 'pass')
-        row['maximum'] = 100000
-        self.assertEqual(check(), 'reject')
-        row['maximum'] = 99000
-        self.assertEqual(check(), 'reject')
-
-    def test_salary_ambiguity_is_pending_not_negative(self):
-        row = {'maximum': 120000, 'currency': 'USD', 'period': 'year',
-               'component': 'base', 'base_upper_bound_verified': True,
-               'applicable_scope_verified': True, 'source_evidence': 'Official band'}
-        for key, value in [('maximum', None), ('maximum', float('nan')),
-                           ('maximum', True), ('component', 'total'),
-                           ('currency', 'EUR'), ('period', 'month'),
-                           ('applicable_scope_verified', False),
-                           ('base_upper_bound_verified', False), ('source_evidence', '')]:
-            with self.subTest(key=key, value=value):
-                changed = dict(row, **{key: value})
-                self.assertEqual(base_maximum_gate(changed, threshold=100000,
-                                                 currency='USD', period='year'), 'pending')
-
-
 class QualificationTests(unittest.TestCase):
     def q(self,status):
         return {'status':status,'evidence':'Exact source or confirmed candidate evidence' if status!='unknown' else None}
-    def test_missing_minimum_fails_even_with_all_preferred(self):
-        self.assertEqual(qualification_gate([self.q('not_met')],[self.q('met')]),'reject')
-    def test_unknown_minimum_is_pending(self):
-        self.assertEqual(qualification_gate([self.q('unknown')],[self.q('met')]),'pending')
-    def test_preferred_majority_is_strict_and_unknown_is_not_absence(self):
-        self.assertEqual(qualification_gate([], [self.q('met'),self.q('not_met')]),'reject')
-        self.assertEqual(qualification_gate([], [self.q('met'),self.q('unknown')]),'pending')
-        self.assertEqual(qualification_gate([], [self.q('met'),self.q('met'),self.q('unknown')]),'pass')
-        self.assertEqual(qualification_gate([], [],preferred_listed=False),'pass')
     def test_pay_with_meaningful_ownership_can_support_scope(self):
         evidence={'identity_verified':True,'description_verified':True,'role_family':'product_management','role_evidence':'Own end-to-end roadmap','pay_supported_scope':True,'meaningful_pm_ownership':True,'role_specific_pay_evidence':'Applicable senior band','scope_evidence':'Strategy and multi-team product accountability'}
-        self.assertEqual(admission(evidence,years_threshold=8),'pass')
+        self.assertEqual(review_eligibility(evidence,years_threshold=8),'pass')
         evidence['meaningful_pm_ownership']=False
-        self.assertEqual(admission(evidence,years_threshold=8),'pending')
-
-class GeneralPMTests(unittest.TestCase):
-    def evidence(self):
-        return dict(preference_enabled=True, description_complete=True,
-                    general_role_verified=True, no_required_specialist_expertise=True,
-                    seniority_pass=True, remaining_hard_restrictions_pass=True,
-                    critical_minimums_pass=True, overall_alignment_pass=True,
-                    base_salary_pass=True, allow_salary_provisional=True)
-    def test_requires_explicit_preference_and_complete_general_posting(self):
-        a=self.evidence();a['preference_enabled']=False
-        self.assertEqual(general_pm_gate(a),'not_applicable')
-        a=self.evidence();a['description_complete']=False
-        self.assertEqual(general_pm_gate(a),'pending')
-        a=self.evidence();a['no_required_specialist_expertise']=False
-        self.assertEqual(general_pm_gate(a),'not_applicable')
-    def test_general_role_cannot_waive_engineering_background_or_overall_mismatch(self):
-        for key in ["critical_minimums_pass", "overall_alignment_pass"]:
-            for value, expected in [(False, "reject"), (None, "pending")]:
-                a=self.evidence();a[key]=value
-                self.assertEqual(general_pm_gate(a), expected)
-            a=self.evidence();del a[key]
-            self.assertEqual(general_pm_gate(a), "pending")
-
-    def test_salary_and_seniority_still_control(self):
-        self.assertEqual(general_pm_gate(self.evidence()),'approve')
-        for key in ['seniority_pass','base_salary_pass','remaining_hard_restrictions_pass']:
-            a=self.evidence();a[key]=False
-            self.assertEqual(general_pm_gate(a),'reject')
-    def test_only_unknown_salary_can_be_provisional(self):
-        a=self.evidence();a['base_salary_pass']=None
-        self.assertEqual(general_pm_gate(a),'approve_provisional')
-        a['seniority_pass']=None
-        self.assertEqual(general_pm_gate(a),'pending')
+        self.assertEqual(review_eligibility(evidence,years_threshold=8),'pending')
 
 if __name__ == '__main__':
     unittest.main()

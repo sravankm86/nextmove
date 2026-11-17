@@ -1,101 +1,54 @@
 # Scan: plausible PM inventory with recall first
 
-Follow WORKFLOW.md. Read the Companies list after Curate (stages/curate.md): scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow and hold not Blocked (permanent)). Proposed and Exclude companies are not scanned; a temporary Held company is still scanned. Read every configured official board/region and the versioned scan/role policy. Resolve the current Career Goals source revision and extract/verify its role-family, designation examples, desired seniority/experience/scope and explicit function/level exclusions under CAREER-GOALS.md. These determine broad scan criteria; Scan does not assess broader career fit or resume fit and cannot set Queued. Role-policy values are source-versioned extracted preferences, not an independent preference authority or user-authored procedures. At startup verify the source revision, refresh affected role-policy values and save criteria/readiness plus unresolved inputs before applying a screen. A current verified extraction may be reused; stale or untraceable Settings values may not silently override the document.
+Follow WORKFLOW.md and DATA.md. Scan enumerates every official board of every in-scope company and stores plausible senior product-management candidates as Inventoried. It does not judge career fit or resume fit, certify eligibility or set Queued; Review owns those.
 
-A standalone Scan uses current Companies and saved Curate output; it does not run funding discovery or wait for employer-policy research. Snapshot current eligible company/source IDs and exclusions in Run scope, then reread company targeting before each inventory write. Pass current named company records to application_write; cached Allow IDs alone are insufficient. Company fit, temporary holds and employer-policy confidence are not scan filters. Preserve existing rows when a company leaves scope.
+## Scope and criteria
+
+Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow and hold not Blocked (permanent)). Proposed and Exclude companies are skipped and reported as such; temporary holds, Company fit and policy confidence are not filters. A standalone Scan uses current Companies and saved Curate output; it does not run Curate research or discovery.
+
+Snapshot in-scope company and source IDs in the Run scope, then reread company targeting before each inventory write and pass current Companies records to `application_write`. A company that leaves scope keeps its existing rows.
+
+Derive the role family, designation examples, seniority/experience/scope and explicit function or level exclusions from the current Career Goals revision under CAREER-GOALS.md. Save the extracted criteria, source revision and readiness in Settings and the Run; reuse a verified extraction only while its revision matches. Missing title synonyms can be derived from the function; missing or conflicting essential role intent needs a question, not an invented exclusion.
 
 ## Complete source coverage
 
-After human approval, validate Curate draft Sources and resolve missing official boards, regions or reader configuration. Proposed-company drafts and permanently blocked/Excluded companies are outside planned coverage and must be reported as skipped. An Allow company without usable Sources is a coverage gap, not Complete with zero jobs. Enumerate every official catalog page/cursor without storing unrelated rows to verified end. Validate counts, unique identities, repeated cursors, malformed/empty pages, caps and source-manifest gaps. Zero requires verified empty coverage. Search snippets or unchanged page-one counts do not establish completeness. Reuse unchanged complete resources/change feeds only with validated equivalent evidence and durable checkpoints.
+Validate Curate's draft Sources once the user allows a company, and resolve missing boards, regions or reader configuration. An Allow company without usable Sources is a coverage gap, not zero jobs.
 
-Use repeatable official feeds/readers and code for parsing, identities, broad title screening, hashes and verification of saved values. Preserve meaningful URL parameters and genuine source memberships. Title equality is not deduplication.
+Enumerate every catalog page or cursor to its verified end with repeatable readers and code. Validate counts, unique identities, repeated cursors, malformed or empty pages and caps. Zero jobs needs verified empty coverage; search snippets or page-one counts never prove completeness. Reuse unchanged resources only with equivalent evidence and durable checkpoints. Preserve meaningful URL parameters; title equality is not deduplication.
+
+Source status: Complete when every planned source is verified, Partial when usable observations have gaps, Failed when no source is usable.
 
 ## Basic candidate screen
 
-Use the Run identity index and Run checks in WORKFLOW.md for duplicate discovery before inserting candidates. Return newly encountered identity evidence to Run for resolution; do not create redundant rows. Review performs no duplicate discovery.
+Run checks (WORKFLOW.md) own duplicate discovery: check the identity index before inserting and hand new identity evidence back to Run.
 
-Use broad PM keywords, aliases, localized and unlevelled titles. Check official title, team/function, summary or readily available description for plausible product-management work and senior scope. Exclude clear unrelated functions and clearly junior roles. Do not infer company grade from title, demand Senior in every title, or treat low minimum years alone as proof of insufficient scope.
+Use broad PM signals: Product Manager/Management/Mgr and technical, inbound, outbound, platform or group variants; Product Lead/Owner; Head/Director/VP of Product; Chief Product Officer; Member of Product Staff; localized equivalents. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` separates `title_screen`, `inventory_candidate` and Review's `review_eligibility`; a title alone never admits a role.
 
-Basic semantics must have recorded evidence or an explicit ambiguity reason; a keyword hit is not final eligibility. Plausible candidates with uncertain PM boundaries or level enter Inventoried with Role eligibility Pending for Review. Do not perform full career/domain/industry/vertical/geography alignment, resume scoring or exhaustive seniority adjudication here. Capture geographic/work restrictions as data, not career-fit exclusions. Explicit company Exclude remains binding.
-
-If identity cannot be established, keep a minimal Run pending check with URL, reason and next action rather than inventing a role. Missing title can be resolved from official summary; insufficient evidence for even plausibility stays pending, not silently rejected.
+- Exclude clearly unrelated functions and clearly junior roles, with recorded evidence.
+- Keep direct PM roles whose domain says finance, design or security, unlevelled or flat titles, and roles with uncertain level: they enter Inventoried with Role eligibility Pending for Review.
+- Do not require a seniority word, infer company grade from a title, treat a low minimum-years figure as proof of insufficient scope, or turn career preferences into scan exclusions.
+- Missing identity stays a Run pending check (URL, reason, next action). Insufficient evidence of plausibility stays pending, not rejected. A missing full JD does not block inventory but blocks Review approval.
 
 ## Inventory and handoff
 
-Follow DATA.md for compact display fields: numeric Starting salary and Max salary from one verified band under the configured salary_display units, explicit additional-compensation labels, short place values and the permitted work-arrangement values. Keep location-specific salary conditions and exact source text in evidence; no raw JSON or explanatory paragraphs in display columns. Preserve Manual notes and any manual disposition on reobservation.
+Create or update candidates as Inventoried with stable identity, official posting URL, Scan run and the source snapshot under DATA.md. Save Job evidence: an exact capture with the full description, posting aliases, salary basis, currency, location and level conditions, work restrictions and the true posting date. Display columns follow DATA.md compact job facts; never estimate values or borrow another posting's band.
 
-Create or update candidates as Inventoried, recording stable identity, official posting URL and source provenance in History plus a verified Scan run and basic-semantic metadata snapshot under DATA.md. Save Job evidence and an exact indexed source capture containing full description/provenance, employer posting aliases, salary basis/currency/location/level, work restrictions and true posting date. Keep compact display values on Applications; save explicit gaps in Agent notes/Run. Never estimate metadata or borrow another posting's band. Missing full description does not discard an otherwise plausible candidate; Review must obtain it before approval.
+Reobserving a role updates only source metadata; it preserves human outcomes, Manual notes, review evidence and later states. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
 
-Role eligibility starts Pending; Scan does not certify final eligibility or hard career checks. Reobserving a role updates only permitted source/metadata deltas; preserve human outcomes, existing review evidence, notes and later states. Changed evidence flags targeted re-review without reopening submitted/terminal roles. Unchanged rejected roles are not requeued every scan.
+Clear rejects become aggregate reason counts, not stored rows; unrelated feed bodies stay transient. Report observed, clear-rejected, plausible, newly inventoried, reobserved, identity-pending and capture-gap counts, plus source coverage and skipped companies. A single Scan stops here; a full Run hands Inventoried roles to Review.
 
-Clear rejects produce aggregate reason counts, not a raw shadow catalog. Capture candidate descriptions in registered Drive content; unrelated feed bodies remain transient. Sources holds cursor/coverage; Runs holds scope, counts, gaps and handoff; Applications holds candidate/review/application state.
+## Improving Scan from Review outcomes
 
-Verify writes and all planned sources. Company/source Complete requires every planned source verified; Partial means usable observations with coverage gaps; Failed means no usable verified source. Report source coverage separately from capture gaps and unresolved candidates. Review pending does not by itself make completed Scan coverage incomplete. A full Run remains Partial if required later work is blocked.
+Eligible-PM recall comes first; a smaller inventory is not success. Review records a structured `review.reason_category` with evidence; use it to find Scan mistakes:
 
-Report observed, clear-rejected, plausible, newly inventoried, existing/reobserved, identity-pending and capture-gap counts separately. A single Scan stops; a full Run hands Inventoried roles to Review.
-
-Do not maintain availability or close old inventory based on source absence. A currently returned official feed record or an existing exact official capture can establish provenance without a separately accessible landing page. Missing identity/basic-semantic evidence still blocks admission. Keep real source IDs, observation times and content fingerprints in source History metadata; no Applications.Sources or Last seen at column is used. Changed content triggers affected re-review; a fresh observation alone is not a content update. Maintain Agent notes without erasing still-relevant unresolved actions or human feedback.
-
-## Role signals and recall
-
-Goals supply preference values only; Git defines all interpretation and stage logic under CAREER-GOALS.md. Natural prose and incomplete preferences are supported.
-
-Eligible-role recall is primary. Scan stores plausible PM candidates; Review establishes final eligibility and career fit. A smaller inventory is not itself success, and Inventoried does not mean eligible or approved.
-
-## Scan: basic plausibility
-
-Derive role family, designation examples, seniority/role-experience/scope and explicit function/level exclusions from current Career Goals. Pin source revision and extraction version. Validate scan readiness under CAREER-GOALS.md; missing title synonyms may be derived broadly from the function, not demanded from the user. Missing or conflicting essential role intent requires clarification, not arbitrary exclusions.
-
-Enumerate every official page. Broad signals include Product Manager/Management/Mgr, technical/inbound/outbound/platform variants, Group PM, Product Lead/Owner, Head/Director/VP Product, Chief Product Officer, Member of Product Staff and localized equivalents. Abbreviations and mixed functions need basic contextual checks.
-
-Use official title, function/team, summary or available description for basic semantics. Exclude clearly unrelated functions and clearly junior roles. Do not require a seniority word or reject direct PM roles because their domain says finance, design or security. Do not turn career preferences into scan exclusions. Clear other functions without plausible PM ownership remain excluded.
-
-A plausible candidate becomes Inventoried with scan evidence/policy version and final Role eligibility Pending. Ambiguous level or mixed function belongs in Review if plausible. Unknown identity or insufficient evidence of plausibility stays a minimal Run pending check. Missing full JD alone need not prevent inventory, but blocks final review acceptance.
-
-scripts/role_gate.py separates title_screen, inventory_candidate and review_eligibility. Titles alone establish neither a full semantic screen nor final approval.
-
-## Improve Scan from Review outcomes
-
-Use existing Applications, Runs, Settings and History; no new feedback table, general task engine or model API is required. This is an agent-run improvement loop, not an installed background trainer.
-
-## Capture the right signal
-
-Review keeps the concise current handoff in Agent notes on Applications and a structured review.reason_category with exact checks/evidence/version metadata in History and indexed Drive content under DATA.md. Scan run/Review run identify the fixed context; never recreate retired reason/version columns. Include scan/review policy versions, JD hash/reference, goals/master versions where relevant, and actual outcomes. Keep scan evidence separate from final eligibility evidence.
-
-Manual notes is the inline human-feedback input. Observe changed note/status fingerprints and preserve the original wording under DATA.md; never clear the field after processing it. Classify human dispositions as human_choice unless independent JD evidence establishes a different category. Feedback does not itself activate a new exclusion rule.
-
-| Category | Interpretation for Scan |
+| Category | Meaning for Scan |
 |---|---|
-| role_function, seniority_scope | Potential basic-screen false positive; inspect transferable evidence |
-| career_domain, career_industry, career_vertical, career_stage, career_geography, career_compensation, career_other | Review-owned preferences; do not automatically add scan exclusions |
-| fit | Review assessment, not proof of wrong PM family/level |
-| missing_evidence | Unresolved, not a negative training label |
-| availability, duplicate | Historical access/form or identity problem, not semantic relevance; no closure monitoring |
-| human_choice | Human disposition, not an inferred role exclusion |
-| approved | Review-approved positive to protect in regression checks |
+| role_function, seniority_scope | Possible basic-screen false positive; inspect the evidence |
+| career_domain, career_industry, career_vertical, career_stage, career_geography, career_compensation, career_other, fit | Review-owned; never a scan exclusion |
+| missing_evidence, availability, duplicate | Not a relevance signal |
+| human_choice | The user's disposition, not a role exclusion |
+| approved | A positive to protect in regression checks |
 
-Not queued is not a single negative class. Preserve uncertainty, human outcomes and changes to criteria. Do not delete rejected candidates to hide false positives or lower counts; apply only an explicit retention policy with recoverability.
+For recurring role or scope mistakes, propose the smallest explainable change, preferring better positive aliases and disambiguation over broad negative keywords. Before activating it, replay it against reviewed eligible positives (including eligible Not pursuing roles), known false positives, ambiguous, flat and localized titles, and a sample of source rejects, labelled independently of the rule. Every known eligible regression must be fixed or accepted by the user; without enough evidence keep the current screen and save the proposal. Moving Review-owned reasons (specialization, pay, funding, geography, qualifications) into Scan changes the stage boundary and needs the user's decision.
 
-## Evaluate a proposed change
-
-At a Review handoff, summarize counts/reasons by company/source and scan version; small samples are qualitative evidence, not statistical certainty. Store compact findings/proposed changes in the Run checkpoint and a meaningful History event. Local execution is an accelerator; durable evidence stays in Airtable/registered Drive.
-
-For recurring clear role/scope mistakes, propose the smallest explainable keyword or semantic adjustment. Prefer positive alias coverage and evidence-based disambiguation over broad negative keywords. Career screening remains in Review unless the user explicitly changes the stage boundary.
-
-Before activation, replay against reviewed eligible positives (including eligible Not pursuing roles), known false positives, ambiguous/flat/localized titles and a stratified independent sample of source rejects/near-misses. Compare baseline/proposed candidate counts, PM/scope recall, false positives, queue yield and unresolved cases. Label independently of the rule under test; do not treat old scan decisions as gold. Separate a held-out check from examples used to tune the rule. If rejected examples were not retained, re-enumerate official sources and disclose closed-posting gaps; do not silently create a raw shadow inventory.
-
-Primary target is eligible-PM recall, not queue yield. Every known eligible regression must be fixed or explicitly accepted by the user; unknown cases cannot be counted as safe exclusions. Without adequate evidence keep the current screen and save the proposal. A low queue rate caused by career preferences does not justify narrowing Scan.
-
-## Conservative precision improvements
-
-Reduce repeated work through exact posting identity and content fingerprints. Reobserving an unchanged declined posting preserves its outcome; it does not create another record or reset it to Inventoried. New decision inputs or changed job content trigger targeted Review under the requested scope.
-
-For apparent function mistakes, check the actual accountability: ownership of product decisions, customer problems and roadmap/outcomes. Clear marketing-only, sales-only or strategy-advisory work without plausible PM ownership can fail the existing basic-semantic screen. Mixed, outbound, platform and unlevelled PM titles remain candidates when ownership is plausible or uncertain. Do not use those words as blanket negatives.
-
-Report the attainable reduction honestly. Infra/security specialization, pay, funding, geography and candidate qualifications are Review-owned reasons, not mislabeled function errors. Moving those exclusions ahead of inventory changes the stage boundary and needs an explicit user decision plus held-out recall evaluation. An inventory-only replay cannot measure false negatives among rejected source jobs. Keep proposals unactivated when that evidence is missing; protect positive aliases and uncertain cases.
-
-## Activate and monitor
-
-A validated behavior change needs an authorized instruction/Settings update, a version identifier and a History event linking evaluation evidence. Do not self-modify hidden prompts. Version references must be durable and recoverable by another harness. Git updates require repository write capability; otherwise hand off the concrete proposal.
-
-Apply active criteria on the next scan, recheck affected catalog slices and preserve prior row provenance. Changed evidence permits targeted re-review; unchanged rejections do not churn through the queue. Sample rejects after changes. A discovered eligible false negative requires widening/reverting the rule and rechecking the affected scope. Do not claim true precision/recall without suitable independent labels and disclosed uncertainty.
+A validated change needs an authorized Git or Settings update with a version identifier and a History event linking the evaluation. After activation, recheck affected catalog slices, sample rejects, and widen or revert on any eligible false negative.

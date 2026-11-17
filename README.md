@@ -49,7 +49,7 @@ The private main Drive folder has two working children: **Role specific** for cu
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 
-The 107-column target includes required reciprocal relationships. An older live base may need verified migration before fields can retire. No common metadata bundle is added to every table. [DATA.md](DATA.md) explains storage/recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 107-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
@@ -71,7 +71,7 @@ There are 12 operational instruction files. Each concern has one owner; maintena
 | Company list, funding discovery, employer quotas/cooldowns and holds? | [Curate](stages/curate.md) |
 | Submission safeguards and the final pre-submit hold check? | [Apply](stages/apply.md) |
 | Receipts, recruiter engagement and mailbox checkpoints? | [Track](stages/track.md) |
-| Deliberate field retirement, deployment and release checks? | [Maintenance](docs/MAINTENANCE.md) |
+| Retiring live columns and release checks? | [Maintenance](docs/MAINTENANCE.md) |
 
 Agents read the entry point, workflow and requested stage, then relevant reference sections. They do not load the entire repository or bulk catalogs into model context. Standard public files such as SECURITY.md, CONTRIBUTING.md and LICENSE are not additional stage procedures.
 
@@ -91,17 +91,13 @@ No model API key is required. Connectors may use service APIs internally. A fork
 
 Follow [SETUP.md](SETUP.md) once, including its saved harness prompt. Then use `Run Nextmove` for the full authorized sequence or `Curate`, `Scan`, `Review`, `Prepare`, `Apply`, `Track` for a single stage. Fresh setup leaves submissions paused; a Run or bare Apply command does not authorize submissions.
 
-For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked. Do not run production work through an unresolved migration pause.
+For manual switching, release the previous owner and open the next configured harness. It recovers from Airtable/Drive, not a chat summary. One agent writes at a time. Save and verify every handoff; continue independent work while reporting required gaps as Partial/Blocked.
 
 ## Expectations and limits
 
 Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Availability monitoring and post-interview outcome tracking are outside scope.
 
-Review has three steps: extract the exact JD, score career fit against the user's Career Goals, and score resume fit against the user's master using minimum and preferred qualifications. Add the scores to route Queued, Need review or Not pursuing. Unresolved is scored zero on either axis; the Review table defines its outcomes. Career fit concerns desired work; resume fit judges demonstrated suitability for the critical asks across the whole JD. Ratings and explanations are visible; full evidence and versions are recoverable. See [the Review frame](stages/review.md) for the score tables.
-
-Run owns objective duplicate discovery before stage work and for new scan candidates. Confirmed redundant rows use Duplicate with a saved canonical reference; reobserved jobs do not create extra rows. Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
-
-Airtable display fields are not SQL uniqueness constraints, ownership labels are not locks, and editable logs do not provide immutable all-access auditing. History records meaningful changes/events and run-level read scope rather than a row for every read. Direct human/API edits may bypass the agent journal. Missing evidence, tool limits and uncertain writes must remain visible; no hidden page caps, invented completion or automatic paid upgrades.
+Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
 
 ## Contributing and license
 

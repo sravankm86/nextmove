@@ -1,5 +1,11 @@
 # Changelog
 
+## Cleanup
+
+- Removed finished-migration code and docs: tracker_migration.py, table_retirement.py, legacy run-progress readers, lifecycle label mapping, field-aliases.json, config.example.yaml, table CSV templates, the unreferenced examples file and the old Review gates (general PM, qualification majority, base-maximum, queue_allowed) superseded by the three-step score.
+- `apply_ready` now means Ready, no open attempt and a verified resume; `scored_review` takes only the two ratings. `approved_base_resume` folds into `base_resumes`; submission defaults live only in the policy.
+- DATA.md, scan.md, SETUP.md, WORKFLOW.md and docs/MAINTENANCE.md rewritten without legacy sections. MAINTENANCE lists the remaining live columns to retire in the UI.
+
 ## Apply: browser agent under a standing authorization
 
 - Apply is written for browser-use or computer-use agents: preflight every Ready role (identity check, field map, resume hash), then submit only within the user's standing authorization in Settings.submission_policy, evaluated by `scripts/submission_policy.py:submission_gate`.

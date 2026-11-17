@@ -13,10 +13,6 @@ class TrackerValuesTests(unittest.TestCase):
             {'compensationType': 'Salary', 'currencyCode': 'USD', 'minValue': 260000, 'maxValue': 340000, 'interval': '1 YEAR'}]}
         self.assertEqual(v.salary_ranges(comp), ['USD 260,000–340,000'])
 
-    def test_location_bands_keep_currency_and_do_not_make_envelope(self):
-        result = v.compact_salary('Base $260,000 USD - $340,000 USD; Canada $180,000 CAD and $230,000 CAD')
-        self.assertEqual(result, 'USD 260,000–340,000; CAD 180,000–230,000')
-
     def test_yearly_rates_and_and_separator(self):
         self.assertEqual(v.salary_ranges('USD $190,000 per year - USD $211,000 per year'), ['USD 190,000–211,000'])
         self.assertEqual(v.salary_ranges('between £150K and £315K'), ['£150,000–315,000'])

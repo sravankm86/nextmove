@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -62,12 +62,6 @@
       }
     },
     {
-      "key": "approved_base_resume",
-      "reference_url": null,
-      "verification": "Missing",
-      "value": null
-    },
-    {
       "key": "resume_guidelines",
       "reference_url": null,
       "verification": "Missing",
@@ -84,7 +78,7 @@
       "verification": "Missing",
       "value": null,
       "value_shape": "list of {theme, variant, pages, pdf_ref, editable_ref, version, master_version}",
-      "note": "Bases are built offline by the user; approved_base_resume is read as a one-entry library."
+      "note": "Bases are built offline by the user and registered here."
     },
     {
       "key": "reader_artifacts",
@@ -225,19 +219,11 @@
       "value": false
     },
     {
-      "key": "Inventory policy",
-      "value": "plausible-pm-candidates"
-    },
-    {
       "key": "Setup readiness",
       "value": "Needs verification"
     }
   ],
   "submission_defaults": {
-    "enabled": false,
-    "daily_submission_cap": 0,
-    "supported_domains": [],
-    "authorization_evidence": null,
     "policy": {
       "enabled": false,
       "mode": "preflight",

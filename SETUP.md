@@ -1,13 +1,13 @@
 # Set up the six-table instance
 
-Read AGENTS.md, README.md and SETUP.md. A setup request authorizes missing private destinations/configuration, not paid upgrades, real submissions or an unrequested tracker migration.
+Read AGENTS.md, README.md and SETUP.md. A setup request authorizes missing private destinations/configuration, not paid upgrades or real submissions.
 
 1. Confirm the user's Google/Airtable accounts, goals, PM admission threshold/equivalent-scope benchmark, geography/domain preferences and designated editable master. Use CAREER-GOALS.md and offer templates/career-goals.md for preference capture and templates/resume-guidelines.md for resume guidelines; do not ask the user to author agent instructions. Keep master/answer references and workflow configuration outside that document. Unknown inputs remain unresolved. Human login/consent/workspace selection may be necessary; do not invent account access.
 2. Reuse identified resources. Otherwise create/select a private workspace and Nextmove base; create a private Drive root with two children: Role specific and Audit trail. Reuse equivalent user-created folders rather than creating duplicates. Register resume_output for Role specific and content_output for Audit trail, retaining the root folder ID in both values. Verify IDs, actual parents and privacy. Keep source documents in their verified locations; preserve sharing and existing links. RESUME-FILES.md defines file placement.
-3. Provision only Companies, Applications, Sources, Runs, Settings and History from contracts/core-schema.json. Respect per-table common-field overrides: Applications has 29 fields including relationships and its computed Application ID. Reuse the History.Application inverse link named History and the four Run inverse links; never create duplicate relationships. Resolve actual IDs, create links in a second pass, add computed metadata through supported tools and read back fields/types/options/links. Never send values into computed fields. Do not create execution/attempt/artifact tables from older deployments.
+3. Provision only Companies, Applications, Sources, Runs, Settings and History from contracts/core-schema.json. Applications has 29 fields including relationships and its computed Application ID. Reuse the History.Application inverse link named History and the four Run inverse links; never create duplicate relationships. Resolve actual IDs, create links in a second pass, add computed metadata through supported tools and read back fields/types/options/links. Never send values into computed fields.
 
    Configure the Review grid and separate All fields maintenance view under DATA.md. Put Manual notes immediately after Lifecycle status. Use the compact salary/compensation/location formats. If view management is unavailable, finish supported setup and save/report the exact remaining UI action; do not claim columns were hidden or reordered.
-4. Extract the Curate-company, Scan-criteria and Review-queue preference sets from the current goals revision using CAREER-GOALS.md. Record readiness, evidence and missing/conflicting values; clarify only decision-critical gaps. Populate Settings using contracts/setup-seed.json: repository, goals/master/destinations, resume_guidelines and base_resumes, role policy, current criteria, optional reader/base/mail/answer resources, execution policy and safe controls. Preserve existing user values. Pause applications=true; no submission scope/cap implied.
+4. Extract the Curate-company, Scan-criteria and Review-queue preference sets from the current goals revision using CAREER-GOALS.md. Record readiness, evidence and missing/conflicting values; clarify only decision-critical gaps. Populate Settings using contracts/setup-seed.json: repository, goals/master/destinations, resume_guidelines, base_resumes, role policy, current criteria, optional reader/mail/answer resources, company_policy, submission_policy (disabled) and safe controls. Preserve existing user values. Pause applications=true.
 5. Register one Sources row per official board/region for explicit Allow companies. Missing configuration is a coverage gap, not permission to omit a company. Seed Settings `company_policy` from contracts/setup-seed.json (personal limit, Series C+ discovery minimum, cadence) and register any discovery feeds the user names; existing companies start with Origin Seed and Application hold status Not assessed until Curate researches them.
 6. Save SETUP.md in each intended harness with private references outside Git. Verify actual source/tool capabilities there. Default is one agent running the full plan; manual stages share the same state.
 7. Test authorized fixture create/read/update/archive with meaningful History, Drive verification of saved values and fresh-session recovery. Fixtures are not production jobs, scan coverage or Ready resumes. Check interrupted writes, stale inputs and submission uncertainty safely without submitting a form.
@@ -15,19 +15,9 @@ Read AGENTS.md, README.md and SETUP.md. A setup request authorizes missing priva
 
 The base/journal cannot audit creation before they exist. Record the bootstrap boundary honestly once History is available. Routine reads use Run scope rather than per-read logs. DATA.md explains limitations.
 
-## Migration
+## After setup
 
-An authorized migration needs a complete durable verified backup, dependency/identity map, exact per-record delta evidence and final verification of saved values. Retain human application outcomes/notes and old references. Retire generic task/config/artifact tables only after their useful state is merged. A one-off old raw archive is not new inventory.
-
-Legacy unreviewed Queued roles need eligibility/career revalidation. They do not automatically pass the new gate, and new criteria do not erase submitted/terminal history. Physical cleanup and backup destinations require authorization; never bypass automatic approval rejection. A local file alone is not a durable recovery plan.
-
-## Operation
-
-Curate runs first: it recomputes company holds, researches employer limits/cooldowns and proposes Series C+ funded companies as Proposed for the user to Allow or Exclude (stages/curate.md). Scan uses keywords/basic semantics and stores plausible PM candidates, including uncertain level, without career filtering. Review owns full eligibility/career/resume checks and Queued approval. stages/review.md and stages/scan.md define boundaries and feedback. Do not claim title-only company-grade equivalence or introduce hidden caps.
-
-Keep one writer, current input versions, verified changes and recoverable handoffs. Apply remains scoped, paused by default and gated by answers/resume/actual form access/restrictions. Mail stays read-only. See stages/apply.md and docs/MAINTENANCE.md.
-
-Applications primary field must be Application ID, formula RECORD_ID(). Do not write values into it. Reuse/convert the existing primary field rather than creating a second ID column. Existing installations follow docs/MAINTENANCE.md before retiring fields; unsupported deletion/retyping requires an exact UI handoff. Save the verified 29-field mapping in Settings.
+Day-to-day behaviour lives in WORKFLOW.md and the stage files. The Applications primary field stays Application ID (formula RECORD_ID()); never write to it. Retiring live columns follows docs/MAINTENANCE.md.
 
 # Connect a harness
 

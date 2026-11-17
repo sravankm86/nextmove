@@ -10,7 +10,7 @@ class StateTests(unittest.TestCase):
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.companies=[{'id':'company-example','Search status':'Allow','Application hold status':'Held'}]
         self.app={'Company':['company-example'],'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
-        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True,'role_eligible':True,'career_requirements_pass':True,'base_salary_pass':True,'qualifications_pass':True,'resume_exclusions_pass':True,'essential_fit_pass':True,'non_compensation_requirements_pass':True,'critical_minimums_pass':True,'overall_alignment_pass':True}}
+        self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True}}
         self.state['review'].update(assessment_method='three_step_v1',scoring=scored_review('High','Medium'),evidence='Verified indexed qualification evidence',assessment_complete=True)
         self.state['run_checks']={'duplicate':{'status':'unique','checked_in_run':'run-example','evidence':'Verified official role ID'}}
 
@@ -61,7 +61,7 @@ class StateTests(unittest.TestCase):
         for key in ['evidence','assessment_complete','assessment_method','scoring']:
             state=copy.deepcopy(self.state);state['review'].pop(key)
             self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
-        for field in s.RETIRED_FIELDS:
+        for field in ['Posted salary range','Career gate','Assessment summary']:
             with self.assertRaises(ValueError):s.application_write({field:'old value'})
         with self.assertRaises(ValueError):s.application_write({'Application ID':'invented'})
 
@@ -117,10 +117,7 @@ class StateTests(unittest.TestCase):
         self.assertFalse(s.apply_ready({**app,'Lifecycle status':'Queued'},state,[self.run],self.inputs,data, companies=self.companies))
 
     def test_exact_identity_does_not_merge_regional_or_same_title_roles(self):
-        a={'company_id':'employer-example','role_id':'req-a','job_url':'https://jobs.example.test/roles/a?utm_source=mail'}
-        self.assertTrue(s.exact_job_match(a,{**a,'job_url':'https://jobs.example.test/roles/a'}))
-        self.assertFalse(s.exact_job_match(a,{**a,'role_id':'req-b','job_url':'https://jobs.example.test/roles/b'}))
-        self.assertFalse(s.exact_job_match(a,{**a,'company_id':'other-employer'}))
+        self.assertEqual(s.canonical_job_url('https://jobs.example.test/roles/a?utm_source=mail'),s.canonical_job_url('https://jobs.example.test/roles/a'))
         self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/?jobId=1'),s.canonical_job_url('https://jobs.example.test/?jobId=2'))
         self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/?ref=role-a'),s.canonical_job_url('https://jobs.example.test/?ref=role-b'))
         self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/#/job/one'),s.canonical_job_url('https://jobs.example.test/#/job/two'))
