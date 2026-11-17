@@ -6,7 +6,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 |---|---|
 | Run / Run Nextmove | Default single agent: Scan → Review → Prepare → Apply → Track (ends at Interviewing) |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
-| Review / Assess / Shortlist | Inventoried/Needs attention → JD extraction, career fit and resume fit scores → Queued, Needs attention or Not pursuing |
+| Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles |
 | Apply | Ready roles without unresolved attempts; preflight unless separately authorized |
 | Track | Exact-role mail/receipt reconciliation from checkpoint |
@@ -72,7 +72,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | State | Meaning |
 |---|---|
 | Inventoried | Newly admitted candidate awaiting its first review. |
-| Needs attention | Review is unresolved, the score is in the middle band, or current evidence needs reassessment. Agent notes identifies why. |
+| Need review | Review is unresolved, the score is in the middle band, or current evidence needs reassessment. Agent notes identifies why. |
 | Queued | A current, evidence-backed Review score reaches the queue threshold. |
 | Ready | The grounded resume/PDF is verified; submission needs separate authorization. |
 | Applied | Submission is established; confirmation is additional evidence. |
@@ -81,7 +81,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Rejected | Actual employer rejection. |
 | Duplicate | Run confirmed a redundant record and saved its canonical record and objective evidence. |
 
-The successful path is Inventoried → Queued → Ready → Applied → Interviewing, with Needs attention available before approval. Needs attention is retried when its missing facts change or the user requests it. A company cooldown does not change fit. Preserve human declines and submitted/terminal outcomes. Offers and post-interview outcomes remain outside automatic tracking scope.
+The successful path is Inventoried → Queued → Ready → Applied → Interviewing, with Need review available before approval. Need review is retried when its missing facts change or the user requests it. A company cooldown does not change fit. Preserve human declines and submitted/terminal outcomes. Offers and post-interview outcomes remain outside automatic tracking scope.
 
 An uncertain Submit stays at its last verified pre-submission stage, normally Ready, with a prominent uncertainty note and saved attempt identity/outcome. Never label an unverified resume Ready or claim Applied without evidence. The outstanding attempt blocks another Submit regardless of manual status resets; reconcile it first. Hold other work that could obscure the outstanding attempt and its exact submitted PDF.
 
@@ -89,6 +89,6 @@ Keep confirmations in Confirmation reference, ratings in Career fit/Resume fit, 
 
 ## Existing status migration
 
-Preserve exact prior status, notes, timestamps, evidence and outcomes before changing a label. Existing reviewed-but-unresolved Inventoried records become Needs attention; genuinely unreviewed records remain Inventoried. Need review/Needs review/Needs eligibility are legacy aliases for Needs attention. Rename the existing select choice in place when authorized, preserving its identity and existing view filters; record and verify the schema change. Until then, map Needs attention to the verified existing Need review choice at the writer boundary and report the alias. Do not create a second pending state. Existing Duplicate records retain Duplicate. Confirmed becomes Applied; In process becomes Interviewing. Other obsolete decline labels map to Not pursuing with their original reasons retained. Do not infer a duplicate from an old reason alone: Run verifies objective identity.
+Preserve exact prior status, notes, timestamps, evidence and outcomes before changing a label. Existing reviewed-but-unresolved Inventoried records become Need review; genuinely unreviewed records remain Inventoried. Needs review/Needs eligibility and historical Needs attention labels normalize to the existing Need review state. Keep the existing Airtable choice and its identity; no UI rename or extra pending state is needed. Existing Duplicate records retain Duplicate. Confirmed becomes Applied; In process becomes Interviewing. Other obsolete decline labels map to Not pursuing with their original reasons retained. Do not infer a duplicate from an old reason alone: Run verifies objective identity.
 
 Old Queued/Ready approvals need current scored Review evidence before advancing. Do not manufacture new scores from old High/Medium labels whose definitions differed. Preserve old acceptance and submitted/terminal history. Add the two new select choices, verify mappings, and retire obsolete choices only when unused. If the connector cannot manage choices, save the exact remaining UI action and keep the migration Partial.

@@ -1,6 +1,6 @@
 # Review: three steps
 
-Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review assesses Inventoried roles and retryable Needs attention roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
+Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review assesses Inventoried roles and retryable Need review roles; recheck stale unsubmitted approvals before they advance. Preserve Manual notes and human, submitted or terminal outcomes.
 
 ## Step 1. Extract the job description
 
@@ -38,14 +38,14 @@ Add both scores and use this table. Assess both axes; the former early-stop and 
 
 | Check, in this order | Decision |
 |---|---|
-| Total 2 with Unresolved | Needs attention |
+| Total 2 with Unresolved | Need review |
 | Total 5–6 | Queued |
-| Total 3–4 | Needs attention |
+| Total 3–4 | Need review |
 | Total 2 without Unresolved | Not pursuing |
 | Total 0–1 | Not pursuing |
 
-Consequently High + Low is Needs attention, Low + Low is Not pursuing, and Unresolved + Unresolved or Unresolved + Low is Not pursuing. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
+Consequently High + Low is Need review, Low + Low is Not pursuing, and Unresolved + Unresolved or Unresolved + Low is Not pursuing. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
 
-Agent notes briefly explains both ratings, the critical evidence or gap, and the resulting status. For Needs attention, state exactly what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
+Agent notes briefly explains both ratings, the critical evidence or gap, and the resulting status. For Need review, state exactly what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
 
 This file is the only source for scores and routing. scripts/role_gate.py reads these tables and fingerprints this file automatically. Do not maintain a second scoring configuration or manual Review version. Unknown or malformed rules must stop affected work, not fall back to older defaults.

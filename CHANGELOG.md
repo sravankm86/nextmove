@@ -1,5 +1,9 @@
 # Changelog
 
+## Keep the existing pending label
+
+- Retain Need review as the canonical pending state and existing Airtable option. Remove the proposed choice rename. Scores and routing thresholds are unchanged; historical Needs attention outputs refer to the same pending state.
+
 ## Career preferences and resume suitability
 
 - Career fit evaluates desired product space and explicit preferences; resume fit evaluates critical asks across the whole JD against demonstrated candidate evidence. Keep experience and capability facts outside Career Goals.

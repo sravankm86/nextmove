@@ -216,7 +216,7 @@ def review_frame_contract(review_path=None):
     decisions, totals, specials = [], {}, {}
     for line in text.splitlines():
         cells = [x.strip() for x in line.strip().strip('|').split('|')]
-        if len(cells) != 2 or cells[1] not in {'Queued', 'Needs attention', 'Not pursuing'}:
+        if len(cells) != 2 or cells[1] not in {'Queued', 'Need review', 'Not pursuing'}:
             continue
         check, outcome = cells
         match = re.fullmatch(r'Total (\d+)(?:[–-](\d+))?(?: (with|without) Unresolved)?', check)
@@ -240,7 +240,7 @@ def review_frame_contract(review_path=None):
             matched = [d for d in decisions if d['minimum'] <= c + r <= d['maximum'] and (d['unresolved'] is None or d['unresolved'] == qualifier)]
             if len(matched) != 1:
                 raise ValueError('Review routing must cover each rating pair exactly once')
-    if {d['outcome'] for d in decisions} != {'Queued', 'Needs attention', 'Not pursuing'}:
+    if {d['outcome'] for d in decisions} != {'Queued', 'Need review', 'Not pursuing'}:
         raise ValueError('Review requires all three outcomes')
     return 'review-sha256:' + hashlib.sha256(raw).hexdigest(), {
         'assessment_method': 'three_step_v1', 'career': mappings[0], 'resume': mappings[1],

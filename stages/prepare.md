@@ -1,6 +1,6 @@
 # Prepare
 
-Use WORKFLOW.md. Process review-approved Queued roles with current accepted full-JD eligibility, qualifications, resume exclusions, career and fit evidence. Require current scored approval. Inventoried, Needs attention and Duplicate are not preparation-ready; older approvals require revalidation under the current score frame. The designated editable master is the sole factual source; never modify it, invent claims or copy requirements as experience.
+Use WORKFLOW.md. Process review-approved Queued roles with current accepted full-JD eligibility, qualifications, resume exclusions, career and fit evidence. Require current scored approval. Inventoried, Need review and Duplicate are not preparation-ready; older approvals require revalidation under the current score frame. The designated editable master is the sole factual source; never modify it, invent claims or copy requirements as experience.
 
 Reuse a suitable approved base PDF or tailor by selecting/reordering/shortening grounded evidence. Preserve meaning, qualifications, dates, metrics and uncertainty. Record current master/JD versions, claim grounding and exact change notes, including base reuse with no tailoring.
 

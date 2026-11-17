@@ -68,7 +68,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Inventoried, retryable Needs attention and stale unsubmitted approvals; exact JD, career score and resume score determine outcome",
+      "scope": "Inventoried, retryable Need review and stale unsubmitted approvals; exact JD, career score and resume score determine outcome",
       "required_resources": [
         "instructions_repository",
         "structured_store",

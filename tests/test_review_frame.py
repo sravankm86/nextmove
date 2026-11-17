@@ -46,19 +46,19 @@ class ReviewFrameTests(unittest.TestCase):
         ratings=['Unresolved','Low','Medium','High']
         self.assertEqual(contract['career'],dict(zip(ratings,range(4))))
         self.assertEqual(contract['resume'],dict(zip(ratings,range(4))))
-        expected=[['Not pursuing','Not pursuing','Needs attention','Needs attention'],
-                  ['Not pursuing','Not pursuing','Needs attention','Needs attention'],
-                  ['Needs attention','Needs attention','Needs attention','Queued'],
-                  ['Needs attention','Needs attention','Queued','Queued']]
+        expected=[['Not pursuing','Not pursuing','Need review','Need review'],
+                  ['Not pursuing','Not pursuing','Need review','Need review'],
+                  ['Need review','Need review','Need review','Queued'],
+                  ['Need review','Need review','Queued','Queued']]
         for ci,c in enumerate(ratings):
             for ri,r in enumerate(ratings):
                 result=scored_review(c,r,contract=contract)
                 self.assertEqual(result['outcome'],expected[ci][ri])
                 self.assertEqual(result['total'],ci+ri)
-        self.assertEqual(scored_review('High','Low',minimum_failure=True)['outcome'],'Needs attention')
-        self.assertEqual(scored_review('Low','High',objective_failure=True)['outcome'],'Needs attention')
+        self.assertEqual(scored_review('High','Low',minimum_failure=True)['outcome'],'Need review')
+        self.assertEqual(scored_review('Low','High',objective_failure=True)['outcome'],'Need review')
         self.assertEqual(scored_review('Unresolved','Low')['outcome'],'Not pursuing')
-        self.assertEqual(scored_review('Unresolved','Medium')['outcome'],'Needs attention')
+        self.assertEqual(scored_review('Unresolved','Medium')['outcome'],'Need review')
 
     def test_review_file_alone_changes_scores_and_automatic_identity(self):
         source=Path(__file__).resolve().parents[1]/'stages/review.md'

@@ -30,7 +30,7 @@ class MigrationTests(unittest.TestCase):
         original = copy.deepcopy(self.app)
         state, notes, status = migrate(self.app, self.state, [self.run])
         self.assertEqual(self.app, original)
-        self.assertEqual(status, 'Needs attention')  # Preserve old evidence; current rules require revalidation.
+        self.assertEqual(status, 'Need review')  # Preserve old evidence; current rules require revalidation.
         self.assertEqual(notes, 'Strong fit\nNext: Confirm salary')
         self.assertEqual(state['source']['memberships'], ['source-example'])
         self.assertEqual(state['review']['reason_category'], 'missing_evidence')
@@ -44,7 +44,7 @@ class MigrationTests(unittest.TestCase):
         for value in [None, 'Pending', 'Fail']:
             state, _, status = migrate({**self.app, 'Career gate': value}, self.state, [self.run])
             self.assertIsNot(state['review']['career_requirements_pass'], True)
-            self.assertEqual(status, 'Needs attention')
+            self.assertEqual(status, 'Need review')
 
     def test_historical_outcome_and_unknown_identity_are_preserved(self):
         state, _, status = migrate({**self.app, 'Lifecycle status': 'Applied', 'Job key': None,
