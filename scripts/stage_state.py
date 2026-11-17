@@ -4,6 +4,7 @@ Pure readers/guards: no credentials, network access, orchestration or submission
 Fetch linked History/Run records through the harness and map field IDs first.
 """
 import hashlib
+import re
 import json
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
@@ -242,3 +243,32 @@ def run_duplicate_match(left, right):
             and left.get('posted_date') and left.get('posted_date') == right.get('posted_date')):
         return {'decision': 'unresolved', 'basis': 'same title/date only; exact identity needs verification'}
     return {'decision': 'distinct', 'basis': 'no confirmed shared posting identity'}
+
+
+_CODE_LIKE = [
+    (re.compile(r'`'), 'backticks'),
+    (re.compile(r'[{}]'), 'JSON or braces'),
+    (re.compile(r'\b[a-z]+(?:_[a-z0-9]+)+\b'), 'snake_case field or code name'),
+    (re.compile(r'\b(?:rec|tbl|fld|app)[A-Za-z0-9]{14}\b'), 'record or field ID'),
+    (re.compile(r'\b[0-9a-f]{16,}\b'), 'hash'),
+    (re.compile(r'\b(?:sha-?256|jd_hash|review_ready|resume_ready)\b', re.I), 'internal term'),
+    (re.compile(r'\b\d\s*\+\s*\d\s*=\s*\d\b'), 'score arithmetic'),
+]
+
+
+def agent_note_problems(note):
+    """Mechanical checks for DATA.md "Writing Agent notes"; empty list means it passes.
+
+    Readability itself is judged by the writer; this catches what code can: empty notes,
+    notes over three sentences or about 60 words, and code-like text.
+    """
+    text = (note or '').strip()
+    if not text:
+        return ['empty']
+    problems = []
+    if len(re.findall(r'[.!?]["”]?\s+(?=[A-Z])', text)) + 1 > 3:
+        problems.append('more than three sentences')
+    if len(text.split()) > 65:
+        problems.append('longer than about 60 words')
+    problems += [label for pattern, label in _CODE_LIKE if pattern.search(text)]
+    return problems

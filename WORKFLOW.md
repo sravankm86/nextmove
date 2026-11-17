@@ -81,7 +81,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Needs answer | Apply met a required application question the answer bank cannot answer. The question is in the answer bank's Specific questions table; the role returns to Ready once it is answered. |
 | Applied | Submission is established; confirmation is additional evidence. |
 | Interviewing | Active recruiter engagement, screening, assessment or interview. Recruiting endpoint. |
-| Not pursuing | Review score is below the threshold, or the human chose to stop. |
+| Not pursuing | Review score is below the threshold, the posting expired, or the human chose to stop. |
 | Rejected | Actual employer rejection. |
 | Duplicate | Run confirmed a redundant record and saved its canonical record and objective evidence. |
 
@@ -89,4 +89,4 @@ The successful path is Inventoried → Queued → Ready → Applied → Intervie
 
 An uncertain Submit stays at its last verified pre-submission stage, normally Ready, with a prominent uncertainty note and saved attempt identity/outcome. Never label an unverified resume Ready or claim Applied without evidence. The outstanding attempt blocks another Submit regardless of manual status resets; reconcile it first. Hold other work that could obscure the outstanding attempt and its exact submitted PDF.
 
-Keep confirmations in Confirmation reference, ratings in Career fit/Resume fit, and exact scores, reasons and duplicate references in History. Agent notes explains both scores and the outcome. A status label alone is not acceptance, PDF verification or submission permission.
+Keep confirmations in Confirmation reference, ratings in Career fit/Resume fit, and exact scores, reasons and duplicate references in History. Agent notes explains the status in plain English under DATA.md "Writing Agent notes". A status label alone is not acceptance, PDF verification or submission permission.

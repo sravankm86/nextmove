@@ -1,5 +1,18 @@
 # Changelog
 
+## Review: pay, expired roles and resume-fit judgment
+
+- Review opens the live posting first; an empty, missing or closed posting is set to Not pursuing with a plain "Role expired" note. A technical block falls back to the saved JD.
+- Pay is taken from anywhere in the posting (including pay-transparency footers); the highest band in the user's currency is used even when the applicable band is uncertain, and an ambiguous base-or-total figure at or below the bar fails either way.
+- Resume fit: unprovable traits count as met; missing specialist domains, customer segments or personas, engineering backgrounds, languages or citizenship requirements in the minimum or preferred qualifications mean Low; concept-level matches score Medium; user-confirmed gaps are not re-asked. Scores and routing are unchanged.
+- Roles at a company the user has set to Exclude become Not pursuing with a plain note (fit scores unchanged); Proposed-company roles are still skipped until the user decides.
+- Missing pay follows the user's Career Goals rule when one exists (for example the company's other pay bands or the title's seniority) instead of always staying unresolved.
+
+## Readable Agent notes
+
+- DATA.md "Writing Agent notes" is the single standard: one to three plain-English sentences explaining why the agent set the current status, what is unclear and what happens next, with examples for every status. Stage files point to it and use plain-English examples.
+- `scripts/stage_state.py:agent_note_problems` flags notes that are empty, too long or code-like; `tests/test_agent_notes.py` checks the documented examples against it.
+
 ## Simpler submission guard rails
 
 - New lifecycle status **Needs answer** (between Ready and Applied): Apply sets it when a required question has no answer in the answer bank, and returns the role to Ready once every waiting question is answered.

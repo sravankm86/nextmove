@@ -1,6 +1,6 @@
 # Apply: submit verified applications with a browser agent
 
-Use WORKFLOW.md, DATA.md and RESUME-FILES.md. Apply opens the real application page for a Ready role, fills it from the user's answer bank, uploads the exact verified resume linked to that role and submits, within the user's on/off switch and daily limit. It never never guesses an answer and never retries an uncertain submission.
+Use WORKFLOW.md, DATA.md and RESUME-FILES.md. Apply opens the real application page for a Ready role, fills it from the user's answer bank, uploads the exact verified resume linked to that role and submits, within the user's on/off switch and daily limit. It never guesses an answer and never retries an uncertain submission.
 
 Default is preflight: everything except pressing Submit. A full Run, a Ready label or a bare Apply command does not authorize submissions; only `Pause applications` set to `false` with a daily limit above zero does.
 
@@ -32,7 +32,7 @@ The answer bank is the user's Google Doc in their Drive, linked from Settings.an
 
 1. Stop before pressing Submit and set the role's Lifecycle status to **Needs answer** (no attempt key is written).
 2. Add the question to the Doc's **Specific questions** table: exact question text, the company (or "any" if it is generic), an empty Answer, the waiting role, today's date, and for a dropdown the options in brackets after the question. If the same question is already there, add this role to its Waiting roles instead of a new row.
-3. Write the role's Agent notes: `Apply: waiting for your answer to "<question>" in the answer bank.`
+3. Write the role's Agent notes in plain English, for example `Waiting for your answer: the form asks "<question>" and the answer bank has no answer. Add it in the answer bank and this role will continue.`
 4. List every new question in the run summary.
 
 If this harness cannot edit the Doc, skip step 2, put the questions in the run summary and ask the user to add them.
@@ -84,7 +84,7 @@ Stop the role, record the exact reason and screenshot, and move on (or stop the 
 
 ## Writes and handoff
 
-Agent notes gives the one-line outcome per role, for example `Apply: submitted, confirmation #A123.` or `Apply: waiting for your answer to "Expected salary" in the answer bank.` Never overwrite Manual notes. History keeps preflight records, intents, confirmations, screenshot locations and stop reasons; the stage snapshot keeps `submission` metadata under DATA.md. Runs records counts: eligible, preflighted, submitted, waiting for an answer, stopped by reason, unclear, pending because of the daily limit.
+Agent notes explains each role's outcome in plain English under DATA.md "Writing Agent notes", for example `Applied on 18 Nov; the confirmation page showed reference A123.` or `Not submitted: the form needs you to sign in to a Workday account first. Sign in once in this browser and it will continue.` Never overwrite Manual notes. History keeps preflight records, intents, confirmations, screenshot locations and stop reasons; the stage snapshot keeps `submission` metadata under DATA.md. Runs records counts: eligible, preflighted, submitted, waiting for an answer, stopped by reason, unclear, pending because of the daily limit.
 
 Before advancing, verify that the accepted review still matches the current goals, role policy, master and job description; changed inputs require re-review or re-preparation. Do not send recruiting mail. A single Apply command stops at its handoff; a full Run continues with Track.
 
