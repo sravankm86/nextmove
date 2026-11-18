@@ -1,5 +1,11 @@
 # Changelog
 
+## Source registration and selective readers
+
+- Keep documents and evidence in Drive; repair source identity, authority and version tracking in existing Settings. No new tables or job fields.
+- Add pure exact-ID artifact readers and source/cache freshness guards. Preserve historical spreadsheet references without a global fallback.
+- Distinguish source readability, factual confirmation and mailbox/Track coverage.
+
 ## Separate Form answers from Narrative drafting
 
 - Answer bank contains user-approved Form facts, preferences and consent only. Narrative prompts, examples, drafts and approved finals live in Application questions.

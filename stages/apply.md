@@ -21,7 +21,7 @@ Two settings, both edited only by the user:
 
 ## Form questions and Narrative questions
 
-Settings.answer_bank registers Answer bank and Application questions. DATA.md defines fields, scope, audit and migration; scripts/answer_bank.py contains shared guards. Read current applicable records with complete pagination. A legacy Doc is archive evidence, never a fallback. Classify every field by meaning rather than input widget: a free-text salary or location is Form, while an experience example, motivation or explanatory essay is Narrative. A factual declaration, eligibility/history question or consent remains Form even when it uses a text box or asks for an explanation. Save Question type explicitly.
+Settings.answer_bank registers Answer bank and Application questions. Resolve registered contextual sources and individual evidence records under DATA.md "Registered sources and small artifact reads"; preserve their authority and freshness. DATA.md defines fields, scope, audit and migration; scripts/answer_bank.py contains shared guards. Read current applicable records with complete pagination. A legacy Doc is archive evidence, never a fallback. Classify every field by meaning rather than input widget: a free-text salary or location is Form, while an experience example, motivation or explanatory essay is Narrative. A factual declaration, eligibility/history question or consent remains Form even when it uses a text box or asks for an explanation. Save Question type explicitly.
 
 ### Form: select the user's approved answer
 
