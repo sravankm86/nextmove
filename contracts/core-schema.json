@@ -1,5 +1,5 @@
 {
-  "version": 14,
+  "version": 15,
   "description": "Nine-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -950,7 +950,7 @@
     {
       "name": "Answer bank",
       "business_key": "Topic plus one scope (general, company or application)",
-      "description": "Private reusable facts, guidance, consent and narrative material. Approved answers only; Source field references current registered content instead of copying it.",
+      "description": "Private user-approved form facts, preferences and consent; narrative material belongs in Application questions. Approved answers only; Source field references current registered content instead of copying it.",
       "fields": [
         {
           "name": "Answer ID",
@@ -1019,8 +1019,8 @@
     },
     {
       "name": "Application questions",
-      "business_key": "Application plus Field key",
-      "description": "Only unresolved questions and application-specific answers. Routine resolved fields stay in preflight evidence. Human one-off approval is recorded in History.",
+      "business_key": "Application plus Field key; reusable narrative examples use Company or general scope plus Field key",
+      "description": "Form gaps and narrative questions/drafts/finals. Reusable approved narrative examples may omit Application; Company then limits reuse. No invented placeholder applications.",
       "fields": [
         {
           "name": "Question ID",
@@ -1032,6 +1032,28 @@
         },
         {
           "name": "Question",
+          "type": "multilineText"
+        },
+        {
+          "name": "Question type",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Form"
+              },
+              {
+                "name": "Narrative"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Draft answer",
+          "type": "multilineText"
+        },
+        {
+          "name": "Sources",
           "type": "multilineText"
         },
         {
@@ -1078,8 +1100,15 @@
       "from_table": "Application questions",
       "field": "Application",
       "target_table": "Applications",
-      "cardinality": "1",
+      "cardinality": "0..1",
       "inverse_field": "Application questions"
+    },
+    {
+      "from_table": "Application questions",
+      "field": "Company",
+      "target_table": "Companies",
+      "cardinality": "0..1",
+      "inverse_field": "Narrative examples"
     },
     {
       "from_table": "Application questions",

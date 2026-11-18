@@ -1,5 +1,5 @@
 {
-  "schema_version": 14,
+  "schema_version": 15,
   "scan": "role-family-from-settings-v4",
   "eligibility": "pay-and-ownership-v5",
   "rules": [
@@ -10,7 +10,7 @@
     "Run identity, truthful PDF, actual submission authorization and uncertain-attempt safeguards remain independent of fit scores.",
     "Curate owns company targeting proposals, employer-policy research and computed holds. Holds never change role fit; Apply recomputes the hold with scripts/company_policy.py:apply_allowed before Submit.",
     "Prepare reuses an approved base only with complete coverage and a current master; otherwise it tailors from the closest base under the registered resume guidelines. Base creation is offline. resume_ready checks the recorded path evidence.",
-    "Apply submits only when Pause applications is off and Settings.submission_policy.max_per_day allows (scripts/submission_policy.py:submission_gate), plus apply_ready, the company hold check and the fixed safety rules. Answers come only from the answer bank."
+    "Apply submits only when Pause applications is off and Settings.submission_policy.max_per_day allows (scripts/submission_policy.py:submission_gate), plus apply_ready, the company hold check and the fixed safety rules. Form answers come from approved Answer bank records; Narrative drafts and user-approved finals live in Application questions with source evidence."
   ],
   "posting_availability": "apply-form-only-v1",
   "lifecycle": "ten-states-needs-answer-v3",
@@ -22,5 +22,5 @@
   "preparation": "base-reuse-or-tailor-v1",
   "submission": "basic-guard-rails-v2",
   "feedback_evaluation": "verified-inbox-and-blind-replay-v1",
-  "answer_resolution": "scoped-approved-airtable-v1"
+  "answer_resolution": "form-bank-and-narrative-questions-v2"
 }

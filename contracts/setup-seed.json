@@ -102,7 +102,7 @@
         "questions_table_id": null
       },
       "template": "templates/answer-bank.md",
-      "note": "Private Airtable tables. Approved reusable answers and an application-linked clarification inbox; no copied personal defaults. See DATA.md and stages/apply.md."
+      "note": "Private Airtable tables. Approved Form answers and a Form-gap/Narrative-drafting inbox; no copied personal defaults. See DATA.md and stages/apply.md."
     },
     {
       "key": "submission_policy",
@@ -118,6 +118,15 @@
       "verification": "Missing",
       "value": null,
       "note": "Private versioned feedback catalog, receipt index, Review eval table, replay inputs and baseline/report references; procedures stay in DATA.md."
+    },
+    {
+      "key": "narrative_context",
+      "reference_url": null,
+      "verification": "Missing",
+      "value": {
+        "sources": []
+      },
+      "note": "Optional user-confirmed private contextual documents for Narrative drafting. Prior approved answers and the registered master remain available without extra context. Each source needs a verified private reference, authority and revision/content hash."
     }
   ],
   "policies": [

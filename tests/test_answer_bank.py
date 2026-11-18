@@ -89,7 +89,7 @@ class AnswerBankTests(unittest.TestCase):
         self.assertEqual(self.run_rule(policy_read=True)['status'], 'Resolved')
 
     def test_resolved_question_cannot_self_approve(self):
-        row = {'Application': ['role-one'], 'Field key': 'key', 'Question': 'Question?',
+        row = {'Question type': 'Form', 'Application': ['role-one'], 'Field key': 'key', 'Question': 'Question?',
                'Status': 'Resolved', 'Final answer': 'No', 'Answer rule': ['answer-one']}
         with self.assertRaises(ValueError):
             a.validate_question(row)
@@ -97,6 +97,43 @@ class AnswerBankTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             a.validate_question(row | {'Final answer': 'Yes'}, resolution=self.run_rule())
         a.validate_question(row, user_approved=True)
+
+    def test_narratives_cannot_enter_the_form_bank(self):
+        with self.assertRaises(ValueError):
+            a.validate_rules([self.rule | {'Topic': 'narrative.example'}])
+
+    def test_grounded_draft_preserves_the_approved_final(self):
+        row = {'id': 'question-one', 'Question type': 'Narrative', 'Application': ['role-one'],
+               'Question': 'Describe a launch', 'Field key': 'key', 'Final answer': 'Previously approved text',
+               'Status': 'Resolved'}
+        sources = [{'kind': 'previous_question', 'reference': 'question-two', 'revision': 'sha256-of-text'}]
+        with self.assertRaises(ValueError):
+            a.narrative_draft(row, 'New draft', sources)
+        draft = a.narrative_draft(row, 'New draft', sources, claims_verified=True,
+                                 context_verified=True, policy_allows_drafting=True)
+        self.assertEqual(draft['Status'], 'Needs answer')
+        self.assertEqual(draft['Final answer'], 'Previously approved text')
+        self.assertEqual(draft['Draft answer'], 'New draft')
+        with self.assertRaises(ValueError):
+            a.validate_question(draft | {'Status': 'Resolved'})
+        with self.assertRaises(ValueError):
+            a.narrative_draft(row, 'Unsupported draft', [], claims_verified=True,
+                              context_verified=True, policy_allows_drafting=True)
+
+    def test_form_answers_are_not_essays(self):
+        row = {'Question type': 'Form', 'Application': ['role-one'], 'Question': 'Eligible?',
+               'Field key': 'key', 'Status': 'Needs answer'}
+        with self.assertRaises(ValueError):
+            a.narrative_draft(row, 'Invented rationale', [], claims_verified=True,
+                              context_verified=True, policy_allows_drafting=True)
+
+    def test_reusable_narratives_do_not_require_a_fake_application(self):
+        row = {'id': 'example-one', 'Question type': 'Narrative', 'Question': 'A launch example',
+               'Field key': 'example-key', 'Status': 'Resolved', 'Final answer': 'Approved example'}
+        a.validate_question(row, user_approved=True)
+        self.assertEqual(a.question_action([row], None, 'example-key')['action'], 'reuse')
+        with self.assertRaises(ValueError):
+            a.validate_question(row | {'Question type': 'Form'}, user_approved=True)
 
 
 if __name__ == '__main__':

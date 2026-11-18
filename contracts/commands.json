@@ -131,7 +131,7 @@
       "stage": "Apply",
       "mode": "review",
       "instructions": "stages/apply.md",
-      "scope": "Ready roles passing apply_ready and the company hold check: browser preflight always; real submission only when Pause applications is off and the daily limit (Settings.submission_policy.max_per_day) allows. Answers only from the answer bank; unclear submissions never retried.",
+      "scope": "Ready roles passing apply_ready and the company hold check: browser preflight always; real submission only when Pause applications is off and the daily limit (Settings.submission_policy.max_per_day) allows. Form answers from approved Answer bank records; Narrative responses drafted from verified sources in Application questions and approved before use; unclear submissions never retried.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

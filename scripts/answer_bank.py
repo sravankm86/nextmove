@@ -12,6 +12,8 @@ from decimal import Decimal, InvalidOperation
 HANDLING = ('Exact', 'Adapt', 'From source')
 APPROVALS = ('Draft', 'Approved', 'Retired')
 QUESTION_STATUSES = ('Needs answer', 'Resolved')
+QUESTION_TYPES = ('Form', 'Narrative')
+NARRATIVE_SOURCES = ('previous_question', 'form_answer', 'master_resume', 'candidate_context', 'company_page', 'job_posting', 'history')
 SOURCES = ('career_goals.minimum_base_salary', 'career_goals.ideal_base_salary',
            'career_goals.target_total_compensation')
 INVERSE_FIELDS = ('Application answers', 'Application questions')
@@ -51,6 +53,8 @@ def validate_rules(rows):
         ids.add(row['id'])
         if not isinstance(row.get('Topic'), str) or not row['Topic'].strip():
             raise ValueError('Answer needs a semantic Topic')
+        if row['Topic'].startswith('narrative.'):
+            raise ValueError('Narrative content belongs in Application questions')
         company, application = _links(row, 'Company'), _links(row, 'Application')
         if company and application:
             raise ValueError('Use either company or application scope, not both')
@@ -91,9 +95,14 @@ def form_value_matches(topic, expected, actual):
     return expected == actual
 
 
-def question_action(existing, application_id, key):
+def question_action(existing, application_id, key, *, company_id=None):
+    if application_id and company_id:
+        raise ValueError('Company scope is only for reusable questions without an application')
     found = [r for r in existing if r.get('Application') == [application_id]
-             and r.get('Field key') == key]
+             and r.get('Field key') == key] if application_id else [
+                 r for r in existing if not r.get('Application') and r.get('Question type') == 'Narrative'
+                 and (r.get('Company') or []) == ([company_id] if company_id else [])
+                 and r.get('Field key') == key]
     if len(found) > 1:
         raise ValueError('Duplicate application question identities; reconcile before writing')
     return {'action': 'reuse', 'id': found[0]['id']} if found else {'action': 'create'}
@@ -176,13 +185,25 @@ def resolve(rows, topic, *, company_id, application_id, today, mapping_verified=
 
 
 def validate_question(row, *, user_approved=False, resolution=None):
-    if len(row.get('Application') or []) != 1 or not row.get('Field key') or not row.get('Question'):
-        raise ValueError('Question needs one application, a field key and exact wording')
+    kind = row.get('Question type')
+    if kind not in QUESTION_TYPES:
+        raise ValueError('Question type must be Form or Narrative')
+    application, company = _links(row, 'Application'), _links(row, 'Company')
+    if not row.get('Field key') or not row.get('Question'):
+        raise ValueError('Question needs a field key and exact wording')
+    if application and company:
+        raise ValueError('Company scope is only for reusable narrative examples')
+    if kind == 'Form' and (not application or company or row.get('Draft answer')):
+        raise ValueError('Form questions need one application and user-supplied answers')
+    if kind == 'Narrative' and row.get('Answer rule'):
+        raise ValueError('Narrative questions cannot link to form answer rules')
+    if row.get('Draft answer'):
+        validate_narrative_sources(row.get('Sources'))
     _links(row, 'Answer rule')
     if row.get('Status') not in QUESTION_STATUSES:
         raise ValueError('Unknown question status')
     if row['Status'] == 'Resolved':
-        valid_resolution = (resolution or {}).get('status') == 'Resolved'
+        valid_resolution = kind == 'Form' and (resolution or {}).get('status') == 'Resolved'
         if not row.get('Final answer') or not (user_approved or valid_resolution):
             raise ValueError('Resolved requires explicit user approval or a verified resolution')
         if valid_resolution:
@@ -191,3 +212,36 @@ def validate_question(row, *, user_approved=False, resolution=None):
             if row['Final answer'] != expected or row.get('Answer rule') != [resolution['answer_id']]:
                 raise ValueError('Final answer or rule differs from the validated resolution')
     return row
+
+
+def validate_narrative_sources(value):
+    sources = json.loads(value) if isinstance(value, str) else value
+    if not isinstance(sources, list) or not sources:
+        raise ValueError('A narrative draft needs verified source references')
+    for source in sources:
+        if not isinstance(source, dict) or source.get('kind') not in NARRATIVE_SOURCES:
+            raise ValueError('Unsupported narrative source')
+        if not source.get('reference') or not source.get('revision'):
+            raise ValueError('Narrative source needs identity and a frozen revision or content hash')
+    return sources
+
+
+def narrative_draft(row, text, sources, *, claims_verified=False, context_verified=False,
+                    policy_allows_drafting=False):
+    """Save a grounded proposal, never an approved final answer.
+
+    The harness checks every personal claim and the actual prompt, job/company context,
+    word limit and any candidate AI policy. Boolean flags record those checks; this
+    function cannot independently prove prose accuracy or retrieve evidence.
+    """
+    if row.get('Question type') != 'Narrative':
+        raise ValueError('Form answers are selected from user-provided facts, not drafted')
+    if not text or not text.strip():
+        raise ValueError('Empty narrative draft')
+    if not claims_verified or not context_verified or not policy_allows_drafting:
+        raise ValueError('Draft requires grounding, current context and permitted AI use')
+    sources = validate_narrative_sources(sources)
+    proposed = dict(row, **{'Draft answer': text, 'Sources': json.dumps(sources, ensure_ascii=False),
+                            'Status': 'Needs answer'})
+    validate_question(proposed)
+    return proposed

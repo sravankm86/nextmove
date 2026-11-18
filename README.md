@@ -12,7 +12,7 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible candidates for your target roles become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
-| [Apply](stages/apply.md) | A browser agent opens the real form, fills it from your answer bank and uploads the exact verified resume, within your on/off switch and daily limit. | Applied with confirmation; anything unclear stops that role. Default is preflight. |
+| [Apply](stages/apply.md) | A browser agent opens the real form, selects approved Form answers and drafts grounded Narrative responses in Application questions and uploads the exact verified resume, within your on/off switch and daily limit. | Applied with confirmation; anything unclear stops that role. Default is preflight. |
 | [Track](stages/track.md) | Read exact-role recruiting messages and reconcile receipts/engagement. | Confirmation evidence under Applied; active engagement reaches Interviewing. |
 
 The ten statuses are **Inventoried, Need review, Queued, Ready, Needs answer, Applied, Interviewing, Not pursuing, Rejected and Duplicate**. The successful path ends at Interviewing, including recruiter screening, assessments and interviews. Offers, negotiation, acceptance and later recruiting outcomes are outside automatic tracking scope. See [the lifecycle rules](WORKFLOW.md#ten-lifecycle-states). Needs answer means Apply is waiting for you to answer an application question in your answer bank.
@@ -36,23 +36,23 @@ flowchart LR
     Drive --> Next
 ~~~
 
-Git owns all procedures. Drive owns Career Goals, the factual master, resumes, job captures and reports. Airtable owns reusable application answers and the question inbox; the legacy answer Doc is an archive after migration. Airtable owns targeting, candidate/application state, source progress, fixed inputs, checkpoints and history. The active harness executes through its own authenticated connections; connections do not transfer between providers.
+Git owns all procedures. Drive owns Career Goals, the factual master, resumes, job captures and reports. Airtable Answer bank holds approved Form facts/preferences; Application questions holds Form gaps and Narrative drafts/finals with sources; the legacy answer Doc is an archive after migration. Airtable owns targeting, candidate/application state, source progress, fixed inputs, checkpoints and history. The active harness executes through its own authenticated connections; connections do not transfer between providers.
 
 The private main Drive folder has two working children: **Role specific** for customized resumes and application materials, and **Audit trail** for captures, assessments, run reports and process metadata. Setup creates or reuses them and registers their IDs in Airtable. Source documents keep their verified locations; existing links remain valid.
 
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
-| Companies | Proposed/Allow/Exclude targeting, funding stage, company evidence, employer policies and holds | 22 |
+| Companies | Proposed/Allow/Exclude targeting, funding stage, company evidence, employer policies and holds | 23 |
 | Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 31 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
 | Runs | Frozen inputs, ownership, progress and handoff | 21 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 | Review eval | Golden answer key from your graded notes, and each eval's prediction and match | 13 |
-| Answer bank | Approved reusable answers, boundaries, sources and scope | 11 |
-| Application questions | Unanswered fields and application-specific answers | 8 |
+| Answer bank | Approved form answers, preferences, consent and scope | 11 |
+| Application questions | Form gaps, narrative drafts, approved answers and sources | 12 |
 
-The 138-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 143-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 

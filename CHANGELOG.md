@@ -1,5 +1,11 @@
 # Changelog
 
+## Separate Form answers from Narrative drafting
+
+- Answer bank contains user-approved Form facts, preferences and consent only. Narrative prompts, examples, drafts and approved finals live in Application questions.
+- Added Question type, Draft answer, Sources and optional Company scope for reusable Narrative examples; no new table or lifecycle state.
+- Agents draft from verified prior answers, the master and user-confirmed context, respect candidate AI policies, and preserve human approval of final responses. Schema, onboarding, guards and regression tests updated together.
+
 ## Structured private answer bank
 
 - Answer bank and Application questions replace the active answer Doc; nine tables with existing History, Runs and Settings reused. Source-based compensation stays in Career Goals.

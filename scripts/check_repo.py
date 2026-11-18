@@ -96,7 +96,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':22,'Applications':31,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':8}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':23,'Applications':31,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':12}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES, HOLD_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
@@ -132,6 +132,11 @@ def check(root):
     require(DEFAULT_POLICY == {'max_per_day': 0}, 'Submission policy must default to a zero daily limit')
     require(seed['submission_defaults'].get('policy') == DEFAULT_POLICY and not policy_problems(DEFAULT_POLICY), 'Seeded submission policy must match scripts/submission_policy.py defaults')
     require((root / 'templates/answer-bank.md').is_file(), 'Missing answer bank template')
+    require('narrative_context' in resources, 'Missing optional Narrative context registry')
+    from answer_bank import QUESTION_TYPES
+    qfields = {f['name']: f for f in lookup['Application questions']['fields']}
+    require([c['name'] for c in qfields['Question type']['options']['choices']] == list(QUESTION_TYPES), 'Expected Form/Narrative question types')
+    require({'Draft answer', 'Sources', 'Final answer'}.issubset(qfields), 'Narrative drafts need separate source and final fields')
     controls = {x["key"]: x["value"] for x in seed["controls"]}
     require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
