@@ -21,7 +21,7 @@ Two settings, both edited only by the user:
 
 ## Form questions and Narrative questions
 
-Settings.answer_bank registers Answer bank and Application questions. DATA.md defines fields, scope, audit and migration; scripts/answer_bank.py contains shared guards. Read current applicable records with complete pagination. A legacy Doc is archive evidence, never a fallback. Classify every field by meaning rather than input widget: a free-text salary or location is Form, while an experience example, motivation or explanatory essay is Narrative. Save Question type explicitly.
+Settings.answer_bank registers Answer bank and Application questions. DATA.md defines fields, scope, audit and migration; scripts/answer_bank.py contains shared guards. Read current applicable records with complete pagination. A legacy Doc is archive evidence, never a fallback. Classify every field by meaning rather than input widget: a free-text salary or location is Form, while an experience example, motivation or explanatory essay is Narrative. A factual declaration, eligibility/history question or consent remains Form even when it uses a text box or asks for an explanation. Save Question type explicitly.
 
 ### Form: select the user's approved answer
 
@@ -41,6 +41,8 @@ Settings.answer_bank registers Answer bank and Application questions. DATA.md de
 Verify displayed values after filling, including masked phone fields and custom dropdowns. form_value_matches accepts phone punctuation changes only when every digit stays identical. Save exact answers, rule/question IDs and hashes, source revisions and actual options in preflight evidence. Before intent, reread affected rows and sources; changes require refreshed checks. Preserve immutable submission evidence rather than reconstructing it from current answers. Application Agent notes explains the short blocker/outcome; content and provenance stay in their fields and History.
 
 ## Which rows are picked up
+
+At startup, also service current Needs answer roles that remain in scope, have no unresolved submission attempt and pass the existing non-answer readiness checks. Resolve Form gaps from updated bank entries and draft missing/stale Narrative responses from verified sources. Reuse unchanged drafts; regenerate only when the prompt, sources, job/company context, limits or user feedback changes, preserving prior text in History. Do not wait for the user to write an essay before drafting it. Keep the role Needs answer until every required final is approved and a fresh preflight passes. Do not draft for Applied, Not pursuing, Rejected or Duplicate roles unless explicitly requested.
 
 A role is eligible only when all of these hold:
 
