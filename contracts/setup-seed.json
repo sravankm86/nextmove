@@ -1,5 +1,5 @@
 {
-  "version": 11,
+  "version": 12,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -87,46 +87,11 @@
       "value": null
     },
     {
-      "key": "mailbox",
-      "reference_url": null,
-      "verification": "Missing",
-      "value": null
-    },
-    {
-      "key": "answer_bank",
-      "reference_url": null,
-      "verification": "Missing",
-      "value": {
-        "kind": "airtable",
-        "answer_bank_table_id": null,
-        "questions_table_id": null
-      },
-      "template": "templates/answer-bank.md",
-      "note": "Private Airtable tables. Approved Form answers and a Form-gap/Narrative-drafting inbox; no copied personal defaults. See DATA.md and stages/apply.md."
-    },
-    {
-      "key": "submission_policy",
-      "reference_url": null,
-      "verification": "Missing",
-      "value": null,
-      "defaults": "submission_defaults.policy",
-      "edited_by": "user only"
-    },
-    {
       "key": "eval_registry",
       "reference_url": null,
       "verification": "Missing",
       "value": null,
       "note": "Private versioned feedback catalog, receipt index, Review eval table, replay inputs and baseline/report references; procedures stay in DATA.md."
-    },
-    {
-      "key": "narrative_context",
-      "reference_url": null,
-      "verification": "Missing",
-      "value": {
-        "sources": []
-      },
-      "note": "Optional user-confirmed private contextual documents for Narrative drafting. Prior approved answers and the registered master remain available without extra context. Each source needs a verified private reference, authority and revision/content hash."
     }
   ],
   "policies": [
@@ -165,8 +130,6 @@
     {
       "key": "company_policy",
       "value": {
-        "personal_application_limit": null,
-        "personal_limit_source": "none by default; set from Career Goals or the user's explicit instruction",
         "discovery": {
           "min_funding_stage": null,
           "admission": "Proposed",
@@ -176,25 +139,7 @@
           "feeds": [],
           "feeds_note": "Each feed is a Settings-registered official/news/filing source with its own checkpoint; blank feeds mean discovery is blocked, not complete.",
           "min_funding_stage_source": "Career Goals company-stage preference; discovery is blocked until set"
-        },
-        "policy_research": {
-          "enforceable_confidence": [
-            "Official",
-            "Recruiter",
-            "User"
-          ],
-          "community_reports_enforced": false,
-          "reverify_after_days": 180
-        },
-        "permanent_block": {
-          "requires_user_confirmation": true,
-          "stops_scan": true
-        },
-        "holds_change_fit": false,
-        "apply_blocking_hold_statuses": [
-          "Held",
-          "Blocked (permanent)"
-        ]
+        }
       },
       "verification": "Needs verification"
     },
@@ -206,14 +151,13 @@
           "Curate",
           "Scan",
           "Review",
-          "Prepare",
-          "Apply",
-          "Track"
+          "Prepare"
         ],
         "manual_handoffs": true,
         "one_active_writer": true,
         "on_item_blocker": "continue_unaffected",
-        "on_global_stop": "checkpoint_and_stop"
+        "on_global_stop": "checkpoint_and_stop",
+        "endpoint": "Ready"
       },
       "verification": "Verified"
     },
@@ -245,10 +189,6 @@
   ],
   "controls": [
     {
-      "key": "Pause applications",
-      "value": true
-    },
-    {
       "key": "Stop all",
       "value": false
     },
@@ -257,12 +197,6 @@
       "value": "Needs verification"
     }
   ],
-  "submission_defaults": {
-    "policy": {
-      "max_per_day": 0
-    },
-    "policy_code": "scripts/submission_policy.py"
-  },
   "preference_contract": {
     "instruction_authority": "GitHub",
     "source_kind": "end_user_preferences",
@@ -301,8 +235,7 @@
       "company_preferences",
       "company_stage_size",
       "domains_industries_verticals",
-      "location_work_arrangement",
-      "personal_application_limit"
+      "location_work_arrangement"
     ]
   }
 }

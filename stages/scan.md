@@ -4,7 +4,7 @@ Follow WORKFLOW.md and DATA.md. Scan enumerates every official board of every in
 
 ## Scope and criteria
 
-Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow and hold not Blocked (permanent)). Proposed and Exclude companies are skipped and reported as such; temporary holds, funding stage, Curate’s advisory assessment and policy confidence are not filters. A standalone Scan uses current Companies and saved Curate output; it does not run Curate research or discovery.
+Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow; also honor any legacy permanent block). Proposed and Exclude companies are skipped and reported as such; funding stage and Curate’s advisory assessment are not inventory filters; legacy temporary holds/policy fields are not required. A standalone Scan uses current Companies and saved Curate output; it does not run Curate research or discovery.
 
 Snapshot in-scope company and source IDs in the Run scope, then reread company targeting before each inventory write and pass current Companies records to `application_write`. A company that leaves scope keeps its existing rows.
 
@@ -33,7 +33,7 @@ Use broad signals from Settings `role_family`: direct title patterns (including 
 
 Create or update candidates as Inventoried with stable identity, official posting URL, Scan run and the source snapshot under DATA.md. Save Job evidence: an exact capture with the full description, posting aliases, salary basis, currency, location and level conditions, work restrictions and the true posting date. Display columns follow DATA.md compact job facts; never estimate values or borrow another posting's band.
 
-Reobserving a role updates only source metadata; it preserves human outcomes, review evidence and later states; consume Manual notes only through DATA.md’s verified feedback-inbox procedure. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
+Reobserving an active role updates only source metadata; skip protected historical rows under WORKFLOW.md and preserve human outcomes, review evidence and later states; consume Manual notes only through DATA.md’s verified feedback-inbox procedure. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
 
 Clear rejects become aggregate reason counts, not stored rows; unrelated feed bodies stay transient. Report observed, clear-rejected, plausible, newly inventoried, reobserved, identity-pending and capture-gap counts, plus source coverage and skipped companies. A single Scan stops here; a full Run hands Inventoried roles to Review.
 

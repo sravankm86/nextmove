@@ -1,5 +1,14 @@
 # Changelog
 
+## Resume-ready endpoint
+
+- End Run after Curate → Scan → Review → Prepare, with the verified resume as Ready.
+- Remove Apply/Track, form answers, application-question/submission helpers, mailbox work and application-limit/cooldown management.
+- Use seven active tables and six lifecycle states; preserve existing later-stage data and protect historical outcomes.
+- Retain Review scoring, objective duplicate checks, feedback/blind replay, source recovery and grounded PDF verification.
+
+Earlier entries below describe historical releases, not the current supported workflow.
+
 ## Form answers hold only the submitted value
 
 - `validate_question` rejects a resolved Form final answer that is not one of the recorded options (single or multi-select); free-text fields with no recorded options are unaffected. Explanations belong in Answer bank Guidance.

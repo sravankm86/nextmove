@@ -1,12 +1,12 @@
 # Resume files and versions
 
-Drive stores content. Airtable stores the exact file reference, version and verification. A filename alone never identifies the submitted resume.
+Drive stores content. Airtable stores the exact file reference, version and verification. A filename alone never proves the exact Ready artifact.
 
 ## Folder placement
 
 Setup creates or reuses two folders directly inside the designated private main folder:
 
-- Role specific: customized resume PDFs, editable counterparts and role-specific change notes, cover letters or other application materials. Use the registered resume_output folder.
+- Role specific: customized resume PDFs, editable counterparts and role-specific change notes. Use the registered resume_output folder.
 - Audit trail: run reports, job captures, assessment evidence, process metadata, manifests, verification results and preserved column archives. Use the registered content_output folder.
 
 Keep Career Goals, the factual master and approved reusable base at their registered locations; moving them is unnecessary. Reuse equivalent existing names, including longer user labels. An existing Archived resumes folder is optional user organization, not another mandatory setup destination. Do not automatically archive or alter submitted files.
@@ -35,8 +35,8 @@ Bases are created and reworked offline by the user as a one-off workflow, follow
 
 Prepare (stages/prepare.md) either reuses an approved base PDF that fully covers the role, recording its exact reference/version and base reuse with no tailoring (a duplicate role-named copy is optional, not proof of readiness), or creates a tailored role version from the closest base under the registered resume guidelines. For a tailored version, create a new file, retain prior files and record its parent base, master and guidelines versions, job identity, changes and verification. Do not overwrite a file that has been submitted.
 
-Before Ready verify claims against the master, check the full relevant JD, inspect the rendered PDF for layout/readability and store Resume link, Resume version, Resume verified at and Preparation run on Applications. The preparation snapshot/result records the real filename, grounded changes/base reuse, master/goals/JD/policy versions and PDF verification under DATA.md. Resume version is a SHA-256 of the exact PDF bytes or a durable provider version tied to verified content; name/date alone is insufficient. If bytes cannot be hashed, record the supported provider version and how content was verified; unresolved version identity blocks submission.
+Before Ready verify claims against the master, check the full relevant JD, inspect the rendered PDF for layout/readability and store Resume link, Resume version, Resume verified at and Preparation run on Applications. The preparation snapshot/result records the real filename, grounded changes/base reuse, master/goals/JD/policy versions and PDF verification under DATA.md. Resume version is a SHA-256 of the exact PDF bytes or a durable provider version tied to verified content; name/date alone is insufficient. If bytes cannot be hashed, record the supported provider version and how content was verified; unresolved version identity blocks Ready.
 
 Use the user's requested page count, then the length rules in the registered resume guidelines. If neither specifies, preserve the approved base length or ask when length materially changes the result; do not silently force every resume to one page. Keep the editable source when created. A factual or visual verification failure blocks Ready.
 
-Apply downloads/uses the exact accepted PDF, verifies the reference/version and records the exact submitted version in the immutable History intent/Submission run checkpoint before submission. Current resume edits cannot alter that submitted fact. Later edits require a new version and do not change prior submission history. A mismatch pauses that application. Follow stages/prepare.md and stages/apply.md.
+The Ready handoff contains the exact verified PDF link/version, an editable source when created, grounded changes or base reuse, and any honest gaps. The workflow stops there. The user handles all later steps. Preserve previously used versions and historical evidence; later resume edits create a new version without changing those facts.

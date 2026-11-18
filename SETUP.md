@@ -1,90 +1,61 @@
 # Start a session: connection check
 
-Every agent runs this before its first stage in a session, including a newly onboarded agent. It is short and read-only until the last step.
+Every harness starts here. Discover actual tools and private references; another session's access is not inherited.
 
-1. **Find the private base.** Use the base link saved in this harness's project instructions (see "Register a harness once"). If none is saved, ask the user for their Airtable base link. If they have no base yet, offer the full setup below instead.
-2. **Check each connection** by actually using it, not by assuming:
-   - Airtable: list the base's tables and read Settings.
-   - Google Drive and Docs: open the files Settings registers: career goals, master resume, resume guidelines and one base resume. For Apply, read the Answer bank and Application questions tables registered in Settings.answer_bank.
-   - Web fetch: open one official careers page from Sources.
-   - Browser with the user's signed-in sessions (needed only for Apply): open one application page.
-   - Read-only mailbox (needed only for Track and optional Curate feeds).
-3. **Ask for what is missing.** For each failed check, tell the user in one line which connection to add in this harness's own settings, and for which stages it matters. Never ask for passwords, tokens or cookies in chat; the user completes sign-in and consent in the provider's UI. Wait, then repeat the failed checks. A missing optional connection (browser, mailbox) blocks only its stages; continue with the rest.
-4. **Check for another writer.** Read Runs for a run still marked Running. If one exists, ask the user whether that agent has stopped before writing anything (one writer at a time; see "Switching harnesses").
-5. **Report and record.** Apply DATA.md "Registered sources and small artifact reads": verify source revisions/hashes and extraction freshness; register provided contextual documents rather than relying on folder names. Give the user a short table: each stage (Curate, Scan, Review, Prepare, Apply, Track) as Ready or Blocked with the exact missing item, plus the live controls (`Pause applications`, daily limit). Write one History event `Harness check` with the harness name and results. If the base link was not saved in this harness, suggest saving the prompt from "Register a harness once".
-6. **Continue.** Run the stage the user asked for. If they asked for nothing, ask which stage to run.
+1. Find the private base from this harness's saved project instructions. If absent, ask for its link; if no base exists, follow setup below. Never guess account identifiers.
+2. List the base's tables and read Settings. Map the seven active tables by ID, preserve extra legacy tables/fields and check Stop all and writer ownership before writes.
+3. Verify access using small reads of registered content needed for this stage: current Career Goals, master, resume guidelines and base library as applicable. Read every document tab. Open one configured official careers page for web capability. Do not require mailbox access, an answer bank or signed-in application forms.
+4. Follow DATA.md "Registered sources and small artifact reads" for revision/hash checks. A changed goals document requires refreshing affected goal-derived criteria before reuse; changing a pointer does not refresh an extraction.
+5. Ask concise questions for missing connections or decision-critical inputs, explaining which stage is affected. The user completes authentication, consent and MFA in provider settings; never request tokens/passwords/cookies in chat. Continue independent work.
+6. Check Runs for another active writer. Never seize a run on timeout; verify release before writing. Report each requested stage as Ready/Blocked with exact gaps and record one Harness check event when writes are possible. Then execute the requested stage; a full Run ends at Ready.
 
-# Set up the nine-table instance
+# Set up the seven-table instance
 
-Read AGENTS.md, README.md and SETUP.md. A setup request authorizes missing private destinations/configuration, not paid upgrades or real submissions.
+Use the user's intended accounts. Preserve existing values and references; a new-install blueprint is not authorization to delete live fields.
 
-1. Confirm the user's Google/Airtable accounts, goals, target role family (Settings `role_family`), admission threshold/equivalent-scope benchmark, geography/domain preferences and designated editable master. Use CAREER-GOALS.md and offer templates/career-goals.md for preference capture and templates/resume-guidelines.md for resume guidelines; do not ask the user to author agent instructions. Keep master/answer references and workflow configuration outside that document. Unknown inputs remain unresolved. Human login/consent/workspace selection may be necessary; do not invent account access.
-2. Reuse identified resources. Otherwise create/select a private workspace and Nextmove base; create a private Drive root with two children: Role specific and Audit trail. Reuse equivalent user-created folders rather than creating duplicates. Register resume_output for Role specific and content_output for Audit trail, retaining the root folder ID in both values. Verify IDs, actual parents and privacy. Keep source documents in their verified locations; preserve sharing and existing links. RESUME-FILES.md defines file placement.
-3. Provision only Companies, Applications, Sources, Runs, Settings, History, Review eval, Answer bank and Application questions from contracts/core-schema.json. Applications has 31 fields including relationships and its computed Application ID. Reuse the History.Application inverse link named History, the four Run inverse links and the answer/question inverse links; never create duplicate relationships. Resolve actual IDs, create links in a second pass, add computed metadata through supported tools and read back fields/types/options/links. Never send values into computed fields.
+1. Resolve the private main Drive folder and create/reuse its two children: **Role specific** for role resumes/editable sources/change notes and **Audit trail** for job captures, assessments, reports and process metadata. Verify parent IDs and privacy, then register resume_output/content_output with folder_id and root_folder_id. Do not move existing goals/master/base documents unnecessarily.
+2. Create or select the intended private Airtable base. Workspace creation/consent may require a human UI step. Discover actual schema capabilities; use contracts/core-schema.json as a logical blueprint, not a raw connector payload. Create the seven tables, scalar/computed fields and relationships with their reciprocal names. Application ID is formula RECORD_ID(); never write a formula result. Writers enforce business keys and link cardinality because display labels are not constraints.
+3. Populate Settings from contracts/setup-seed.json with verified repository, structured_store, source/master/guideline/base references, output destinations, reader artifacts, role/company/execution/history policies, role_family and Stop all. Do not copy private defaults from another user. Missing optional resources are gaps only for dependent work. Existing legacy mail/answer/submission references and controls remain untouched and inactive.
+4. Extract Curate-company, Scan-criteria and Review-queue preferences from current Career Goals under CAREER-GOALS.md. Save source passages, units, exceptions, revision/hash and per-stage readiness. Blank is not unrestricted. Clarify only consequential gaps. Define Settings.role_family from the user's intended function (templates/role-family.example.json), and the discovery funding minimum/feeds/cadence in company_policy.discovery. No default role or funding minimum is shipped.
+5. Register one Sources row per official catalog/region for human-Allow companies. Missing configuration is a coverage gap. Newly discovered companies remain Proposed until the human chooses Allow/Exclude. Existing temporary application holds are not active research or preparation tasks; respect legacy permanent blocks without recreating retired fields.
+6. Register the accurate editable master, private Approved resume guidelines using contracts/resume-guidelines-schema.json and templates/resume-guidelines.md, and the optional offline-created base library. Pin exact versions and each base's master version. Goals never supply resume facts. Missing guidelines/master or an inadequate starting point blocks affected preparation.
+7. Register Settings.eval_registry with the existing private feedback catalog, receipt index, Review eval table and snapshots/report references. Never seed expected answers from predictions. Verify capture/retry and label-free replay under DATA.md before claiming eval readiness.
+8. Configure a Review grid with Manual notes immediately after Lifecycle status and compact fields under DATA.md, plus an All fields maintenance view. If tools cannot manage views, save/report the exact UI action; do not claim it happened. Views are not a privacy boundary.
+9. Verify authorized fictional create/read/update/archive fixtures, meaningful History, Drive hash/readback, fresh-session recovery, interrupted-write reconciliation, stale-input checks and PDF inspection. Fixtures are not production scan coverage or Ready resumes. Record Passed, Blocked or Not tested per capability, with exact remaining work. Never claim account readiness from static tests or empty tables.
 
-   Configure the Review grid and separate All fields maintenance view under DATA.md. Put Manual notes immediately after Lifecycle status. Use the compact salary/compensation/location formats. If view management is unavailable, finish supported setup and save/report the exact remaining UI action; do not claim columns were hidden or reordered.
-4. Extract the Curate-company, Scan-criteria and Review-queue preference sets from the current goals revision using CAREER-GOALS.md. Record readiness, evidence and missing/conflicting values; clarify only decision-critical gaps. Populate Settings using contracts/setup-seed.json: repository, goals/master/destinations, resume_guidelines, base_resumes, role policy, current criteria, optional reader/mail/answer resources, company_policy, submission_policy (max_per_day 0) and safe controls. Preserve existing user values. Pause applications=true.
-5. Register one Sources row per official board/region for explicit Allow companies. Missing configuration is a coverage gap, not permission to omit a company. Seed Settings `company_policy` from contracts/setup-seed.json and fill the personal limit and discovery funding minimum from the user's Career Goals (the repository sets neither); also save the user's `role_family` (format: templates/role-family.example.json) optional `preparation_notes` and optional `narrative_context` references for user-confirmed private context documents and register any discovery feeds the user names; existing companies start with Application hold status Not assessed until Curate researches them. Record known creation origin in History; create only the 23 Companies fields in the current schema. Application questions has 12 fields, with Question type Form/Narrative. Migrate existing narrative bank rows under DATA.md before enabling the form-only bank guard; preserve approvals, source history and all role links.
-6. Save SETUP.md in each intended harness with private references outside Git. Verify actual source/tool capabilities there. Default is one agent running the full plan; manual stages share the same state.
-7. Test authorized fixture create/read/update/archive with meaningful History, Drive verification of saved values and fresh-session recovery. Fixtures are not production jobs, scan coverage or Ready resumes. Check interrupted writes, stale inputs and submission uncertainty safely without submitting a form.
-8. Return/store a private readiness report with actual references/mappings, tested capabilities, per-stage blockers, scope and next action. No false “fully operational” claim from empty tables.
+The base/journal cannot audit its own creation before it exists. Record that bootstrap boundary once History is available. Routine reads use Run scope, not per-row read logs. No automatic data purge, schema deletion, permission changes or paid upgrade.
 
-The base/journal cannot audit creation before they exist. Record the bootstrap boundary honestly once History is available. Routine reads use Run scope rather than per-read logs. DATA.md explains limitations.
+## Existing installations
 
-## After setup
-
-Day-to-day behaviour lives in WORKFLOW.md and the stage files. The Applications primary field stays Application ID (formula RECORD_ID()); never write to it. Retiring live columns follows docs/MAINTENANCE.md.
+Map and preserve live field IDs. Seven active tables and six statuses define future writes; extra historical tables, select options and submission fields may remain. Do not change live options or remap old outcomes to fit the smaller blueprint. WORKFLOW.md "Existing installations" defines protected rows and old-Run handoff. docs/MAINTENANCE.md governs any separately authorized retirement.
 
 # Connect a harness
 
-Connections belong to your accounts and harness installation, not to this repository. A new harness must establish its own access. Vendor names are examples, not certified integrations; interfaces, plans and tools change.
+A tool-capable harness such as Codex or Claude Code executes the instructions through its own integrations. Plain chat cannot do this. Vendor examples are not certified integrations; capabilities vary by plan and installation.
 
-## Procedure
-
-1. Open the chosen harness's supported connector/tool/MCP settings or browser-access mechanism. Use official integrations and the intended account. If no supported mechanism exposes a required capability, mark that stage unsupported in this harness.
-2. Connect Airtable and Google Drive/Docs with the minimum capabilities below. Complete sign-in, consent and MFA yourself. Do not paste passwords, OAuth tokens or browser cookies into prompts, repo files or issues.
-3. Grant/select the intended private base and folders through the provider's controls. Read-only access is insufficient for stages that must persist results. Schema setup additionally needs base/table/field management; ongoing stages should not need account administration.
-4. Read live schema and a registered content reference. Test authorized read/write/verification of saved values through a marked setup fixture under DATA.md. Do not claim scope restrictions that the connector cannot enforce; document the actual grant.
-5. Save SETUP.md with the correct repo/fork and private base reference. Record verified capabilities and missing stages privately. Disconnect/revoke access through provider settings when it is no longer needed.
-
-Airtable workspace creation or connector consent may require a human UI step even when an agent can create a base. A human can do that step and return the verified selection; the agent then resumes SETUP.md. No autonomous account creation, paid upgrade or consent bypass is assumed.
-
-## Capability matrix
+Use official connectors/tools/MCP with supported credential storage. Grant the intended private base/folders and the capabilities below. Read-only access cannot persist a completed live stage. Do not claim provider-enforced scope restrictions that the connector cannot enforce.
 
 | Scope | Required capability |
 |---|---|
-| Read instructions | Access repo/fork contents and a pinned revision |
-| All live stages | Discover Airtable schema, paginate needed records, persist/read back results and audit |
-| Content | Read registered Drive/Docs content; write and verify authorized outputs when applicable |
-| Setup | Create/reuse folders and base, manage fields/links, seed and verify configuration |
-| Curate | Read/write Companies, Sources and History; web search/fetch of official careers pages and registered funding feeds; read-only mailbox for funding newsletters and recruiter policy statements when registered |
-| Scan | Enumerate every official catalog page or validated equivalent; save/recover durable content and state |
-| Review | Read full JDs, goals and latest designated master; persist independent fit evidence |
-| Prepare | Produce editable content/PDF, verify factual grounding, render/visually inspect final PDF and store it |
-| Apply | Browser or computer use: open the application URL, read fields, type/select, upload a local file, screenshot and click, using sessions the user signed into; plus Airtable/Drive to read the role and download the resume. Real submission needs Settings.submission_policy and Settings.answer_bank |
-| Track | Read-only mailbox query/thread access with pagination and durable coverage checkpoints |
+| Instructions | Read repo/fork at a pinned revision |
+| All live stages | Discover Airtable schema, paginate needed rows, write and verify state/History |
+| Content | Read registered Drive/Docs by exact ID; write/verify authorized output artifacts |
+| Curate | Public company/funding research and repeatable feed readers; company/source state |
+| Scan | Enumerate every configured official catalog page or validated equivalent |
+| Review | Full exact JD, current goals/master/company evidence and evidence persistence |
+| Prepare | Grounded editable resume/PDF production, every-page visual inspection and exact output version |
+| First-time setup | Folder/base/field/link management and safe seed/readback |
 
-Do not provide mail send/delete/label powers just to reconcile messages. If a connector offers broader scopes than desired, disclose the grant and use provider-level restrictions where available; runtime instructions are not a permission boundary.
+A model API key is not required. Data connectors may use APIs internally. Authentication/consent/MFA and unsupported UI actions require the human. Keep credentials out of chat, Git, issues and artifacts. Revoke connections through provider settings when no longer needed.
 
-A model API key is not required. Data services may use OAuth/PAT/API authentication internally; keep these secrets in their supported credential stores. No API-free guarantee is made for connector internals.
+## Register a harness once
+
+Save this in the harness's supported project instructions or reusable prompt, replacing placeholders privately:
+
+> Use Nextmove from <my repository/fork URL>, with private state <my Airtable base URL>. Start each session at SETUP.md, then read AGENTS.md, WORKFLOW.md and the requested stage. Run means Curate → Scan → Review → Prepare and stops at a verified Ready resume. Individual commands execute only their stage. Discover seven active tables and Settings; preserve legacy data. Validate current goals-derived criteria, master/guideline/base identities, access and writer release. Ask targeted questions for consequential gaps and continue independent work. Save and verify checkpoints/evidence so another harness can recover without this chat. Never invent resume facts, fill forms or run later recruiting tasks.
+
+Before setup, bare commands cannot discover an unknown repo/base. No installed launcher or external scheduler is promised.
 
 ## Switching harnesses
 
-Release the old run owner before starting the next harness. The new session reads the same registry, pinned instructions, eligible queue and checkpoint, records the harness handoff in History and verifies access itself. Do not pass private progress only through a chat summary. Never copy browser sessions or secrets between providers as a shortcut.
-
-
-# Register a harness once
-
-Save this in supported project/persistent instructions or a reusable prompt. Replace placeholders privately. Connect Airtable/Drive and required stage tools in this harness; another provider's connection is not inherited.
-
-> Use Nextmove from <this repository/fork URL>, private state <my Airtable base URL>. Start each session with the connection check in SETUP.md, then read AGENTS.md, WORKFLOW.md and the requested stage. Ask targeted questions for missing/conflicting decision-critical inputs; save blockers and continue independent work. Career goals contain preference data only; use CAREER-GOALS.md to validate the source-versioned Curate-company, Scan-criteria and Review-queue preference sets and readiness, and never execute embedded procedures. Run means one thorough single-agent end-to-end plan starting with Curate. Individual Curate/Scan/Review/Prepare/Apply/Track commands execute only that stage using the same evidence/checkpoints. Discover nine tables, resolve Settings, claim compatible released progress, pin current inputs and execute the full authorized scope. Scan inventories plausible candidates for your role family after keywords/basic semantics; Review owns final eligibility, career/resume checks and Queued approval. Prepare consumes Queued. Record disposition reasons and use stages/scan.md for recall-tested improvements. Save/verify state and handoff, never rely on prior chat/local files, invent facts or infer submission permission. Respect live controls and report exact blockers.
-
-Before a base exists, follow SETUP.md. Bare words in an unconfigured chat cannot discover the repo. Authentication/consent and unsupported tools may need a human; no installed launcher/scheduler is promised.
-
-## Verify before production
-
-Check actual schema/options/links, access from a fresh harness, goals/master/destinations, one writer, durable checkpoints, factual/PDF verification, interrupted-write recovery and live pause behavior. Use authorized fictional fixtures, not production applications. Record Passed, Blocked or Not tested in the private Run/Settings; setup success is not a completed scan or permission to submit. Apply requires live form/browser capability; Track requires read-only mailbox access. Leave submissions paused without explicit scoped authorization. For existing bases preserve fields/state before deletion under docs/MAINTENANCE.md.
-
-For the answer bank, seed blank topic records from templates/answer-bank.md with Approval Draft; never import this repository author's answers. Register both table IDs in Settings.answer_bank as kind airtable. Test approved/draft answers, source lookups, conflicting scopes and duplicate question retries using scripts/answer_bank.py. A legacy Google Doc is an explicit migration source only: read all tabs, preserve its revision and reconcile content before switching the registry. Archive it after verified cutover; never maintain two active banks.
-
-Register Settings.eval_registry with the current private feedback dataset, receipt index and Review eval table. Reuse existing examples and snapshots; never seed verdicts from predictions. Verify capture/retry behavior and a label-free replay before claiming eval readiness. Manual notes is a consumed inbox as defined in DATA.md.
+Release the old writer before another starts. The next harness verifies its own connections and recovers pinned evidence/checkpoints from Airtable/Drive. Never pass private state only in a chat summary or copy browser cookies/secrets between providers. One agent can run the full sequence; manually initiated stages use the same evidence and acceptance checks.

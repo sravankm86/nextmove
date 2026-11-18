@@ -14,13 +14,13 @@ def documented_examples():
 class AgentNoteTests(unittest.TestCase):
     def test_documented_examples_pass(self):
         examples = documented_examples()
-        self.assertGreaterEqual(len(examples), 8)
+        self.assertGreaterEqual(len(examples), 5)
         for note in examples:
             with self.subTest(note=note):
                 self.assertEqual(agent_note_problems(note), [])
 
     def test_quoted_question_does_not_count_as_a_sentence_break(self):
-        note = 'Waiting for your answer: the form asks "Are you willing to relocate?" and the answer bank has no answer. Add it and this role will continue.'
+        note = 'Needs review: the posting asks "Are you willing to relocate?" and your location preference is unclear. Please clarify it before this role continues.'
         self.assertEqual(agent_note_problems(note), [])
 
     def test_old_terse_or_code_like_notes_are_flagged(self):

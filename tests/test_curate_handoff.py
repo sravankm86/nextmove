@@ -40,7 +40,7 @@ class CurateHandoffTests(unittest.TestCase):
         self.assertIsNone(company_for_application({'Company': ['other']}, [self.company]))
 
     def test_curate_snapshot_recovers_without_an_application_or_job_key(self):
-        values = {'holds': {'status': 'Complete'}, 'policy_research': {'status': 'Partial'},
+        values = {'company_research': {'status': 'Partial'},
                   'discovery': {'status': 'Blocked', 'pending_feeds': ['feed-example']},
                   'funding': {'stage': 'Series C', 'amount': '$100M', 'event_date': '2025-12-01',
                               'source': 'official-announcement', 'retrieved_at': '2026-01-01'},

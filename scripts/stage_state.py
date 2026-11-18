@@ -10,19 +10,21 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
-RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run', 'submission': 'Submission run'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','Submission attempt key','Applied on','Confirmation reference','History','Scan run','Review run','Preparation run','Submission run','Application answers','Application questions']
+RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run']
 
 
-def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None):
-    """Only current writable fields; reciprocal answer/question links are managed at their source."""
-    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History', 'Application answers', 'Application questions'})
+def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None):
+    """Validate active fields and preserve historical outcomes before any stage update."""
+    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History'})
     if bad:
         raise ValueError('Unsupported Application fields: '+', '.join(sorted(bad)))
+    if protected_history(existing_application or {}, existing_state) and set(values) - {'Manual notes'}:
+        raise ValueError('Historical outcome or unresolved legacy attempt is read-only')
     from lifecycle import STATUSES
     if 'Lifecycle status' in values and values['Lifecycle status'] not in STATUSES:
         raise ValueError('Unsupported lifecycle status')
-    for label in ['Company', 'Scan run', 'Review run', 'Preparation run', 'Submission run']:
+    for label in ['Company', 'Scan run', 'Review run', 'Preparation run']:
         if label in values and len(values[label] or []) > 1:
             raise ValueError('Expected at most one linked record: '+label)
     if creating:
@@ -84,7 +86,7 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
     from company_policy import company_for_application
     if not company_for_application(app, companies):
         return False
-    if not state or app.get('Lifecycle status') != 'Queued':
+    if protected_history(app, state) or not state or app.get('Lifecycle status') != 'Queued':
         return False
     if app.get('Role eligibility') != 'Eligible':
         return False
@@ -116,14 +118,6 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
                 and review.get('jd_hash') and review.get('current_description'))
 
 
-def apply_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
-    """Ready, no open attempt and a verified resume; submission policy and holds are separate checks."""
-    return bool(app.get('Lifecycle status') == 'Ready'
-                and not attempt_blocks_retry(app, state)
-                and resume_ready(app, state, runs, current_inputs, pdf_bytes,
-                                 provider_version=provider_version, companies=companies))
-
-
 def canonical_job_url(value):
     """Normalize an exact posting link; retain job-identifying query values."""
     if not value:
@@ -139,6 +133,8 @@ def canonical_job_url(value):
 
 
 def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
+    if protected_history(app, state) or app.get('Lifecycle status') not in {'Queued', 'Ready'}:
+        return False
     candidate = {**app, 'Lifecycle status': 'Queued'}
     if not review_ready(candidate, state, runs, current_inputs, companies=companies):
         return False
@@ -180,9 +176,12 @@ def preparation_complete(p, current_inputs, digest):
                 and p.get('base_version') != digest)
 
 
-def attempt_blocks_retry(app, state):
-    """An existing attempt is reconciled before any new submit, regardless of UI state."""
-    return bool(app.get('Submission attempt key') or (state or {}).get('submission', {}).get('attempt_key'))
+def protected_history(app, state=None):
+    """Legacy outcomes/attempts are retained evidence, never new workflow work."""
+    from lifecycle import LEGACY_READ_ONLY
+    return bool(app.get('Lifecycle status') in LEGACY_READ_ONLY
+                or app.get('Submission attempt key')
+                or (state or {}).get('submission', {}).get('attempt_key'))
 
 
 def merge_state(previous, *, record_id, job_key, stage, run_id, values):

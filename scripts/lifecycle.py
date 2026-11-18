@@ -1,3 +1,4 @@
-"""Ten workflow states; confirmations and submission attempts remain evidence."""
-STATUSES = ['Inventoried', 'Need review', 'Queued', 'Ready', 'Needs answer', 'Applied', 'Interviewing', 'Not pursuing', 'Rejected', 'Duplicate']
-END_STATES = {'Interviewing', 'Not pursuing', 'Rejected', 'Duplicate'}
+"""Active lifecycle ends at a verified resume; later legacy outcomes are read-only."""
+STATUSES = ['Inventoried', 'Need review', 'Queued', 'Ready', 'Not pursuing', 'Duplicate']
+END_STATES = {'Ready', 'Not pursuing', 'Duplicate'}
+LEGACY_READ_ONLY = {'Needs answer', 'Applied', 'Interviewing', 'Rejected'}

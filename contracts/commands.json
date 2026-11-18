@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 11,
   "tables": [
     "Companies",
     "Applications",
@@ -7,9 +7,7 @@
     "Runs",
     "Settings",
     "History",
-    "Review eval",
-    "Answer bank",
-    "Application questions"
+    "Review eval"
   ],
   "default_command": "Run",
   "execution_modes": [
@@ -20,11 +18,8 @@
     "Curate",
     "Scan",
     "Review",
-    "Prepare",
-    "Apply",
-    "Track"
+    "Prepare"
   ],
-  "application_submission_default": false,
   "commands": [
     {
       "command": "Run",
@@ -36,7 +31,7 @@
       "stage": "Full run",
       "mode": "prepare",
       "instructions": "WORKFLOW.md",
-      "scope": "Whole authorized end-to-end plan (Curate \u2192 Scan \u2192 Review \u2192 Prepare \u2192 Apply \u2192 Track); continue unaffected work, checkpoint blockers",
+      "scope": "Curate \u2192 Scan \u2192 Review \u2192 Prepare; save verified resume links/change notes and stop at Ready. Continue independent work and checkpoint blockers.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -56,7 +51,7 @@
       "stage": "Curate",
       "mode": "prepare",
       "instructions": "stages/curate.md",
-      "scope": "Recompute every company hold; research unassessed/stale employer policies; on its configured cadence discover newly funded companies meeting the configured funding minimum as Proposed. Never sets Allow/Exclude or submits.",
+      "scope": "Refresh company/funding evidence and propose newly funded matching companies on cadence. Only humans set Allow/Exclude.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -73,7 +68,7 @@
       "stage": "Scan",
       "mode": "prepare",
       "instructions": "stages/scan.md",
-      "scope": "Every current human-Allow source except permanently blocked companies; temporary holds, funding stage and saved company assessments do not filter inventory. Broad role criteria/basic semantics to Inventoried.",
+      "scope": "Every current human-Allow source, respecting legacy permanent blocks; broad role criteria/basic semantics to Inventoried. Funding/career fit belongs to Review.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -92,7 +87,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Current human-Allow, not permanently blocked companies: Inventoried, retryable Need review and stale unsubmitted approvals. Current company evidence plus exact JD/goals/master determine independent fit scores; temporary holds do not affect fit.",
+      "scope": "Inventoried, retryable Need review and explicitly requested reassessments: exact JD/goals/master plus company facts determine independent fit scores. Preserve historical outcomes.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -121,47 +116,6 @@
         "role_policy",
         "resume_guidelines",
         "base_resumes"
-      ]
-    },
-    {
-      "command": "Apply",
-      "aliases": [
-        "apply"
-      ],
-      "stage": "Apply",
-      "mode": "review",
-      "instructions": "stages/apply.md",
-      "scope": "Ready roles passing apply_ready and the company hold check: browser preflight always; real submission only when Pause applications is off and the daily limit (Settings.submission_policy.max_per_day) allows. Form answers from approved Answer bank records; Narrative responses drafted from verified sources in Application questions and approved before use; unclear submissions never retried.",
-      "required_resources": [
-        "instructions_repository",
-        "structured_store",
-        "master_resume",
-        "career_goals",
-        "role_policy",
-        "company_policy",
-        "content_output"
-      ],
-      "submission_resources": [
-        "answer_bank",
-        "submission_policy"
-      ],
-      "capabilities": [
-        "browser: open URL, read fields, type/select, upload local file, screenshot, click"
-      ]
-    },
-    {
-      "command": "Track",
-      "aliases": [
-        "track"
-      ],
-      "stage": "Track",
-      "mode": "prepare",
-      "instructions": "stages/track.md",
-      "scope": "Read-only exact-role mailbox checkpoint",
-      "required_resources": [
-        "instructions_repository",
-        "structured_store",
-        "mailbox"
       ]
     },
     {
@@ -204,5 +158,6 @@
     "instructions": "WORKFLOW.md#run-checks-objective-duplicate-discovery",
     "duplicate_owner": "Run",
     "refresh_for_new_scan_postings": true
-  }
+  },
+  "endpoint": "Ready"
 }

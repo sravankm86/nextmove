@@ -31,8 +31,8 @@ def check(root):
     for name in ["README.md", "LICENSE", "AGENTS.md", "WORKFLOW.md", "SETUP.md", "DATA.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "CAREER-GOALS.md", "RESUME-FILES.md", "docs/MAINTENANCE.md", "templates/career-goals.md"]:
         require((root / name).is_file(), "Missing required public file: " + name)
 
-    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['curate','scan','review','prepare','apply','track']]
-    require(len(runtime)==12 and all((root/p).is_file() for p in runtime), 'Expected twelve canonical operational instruction files')
+    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['curate','scan','review','prepare']]
+    require(len(runtime)==10 and all((root/p).is_file() for p in runtime), 'Expected ten canonical operational instruction files')
 
     decoded = {}
     for p in files(root):
@@ -74,8 +74,8 @@ def check(root):
         return errors
     tables = core["tables"]
     names = [t["name"] for t in tables]
-    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval", "Answer bank", "Application questions"}
-    require(len(names) == 9 and set(names) == expected, "Expected exactly nine active logical tables")
+    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval"}
+    require(len(names) == 7 and set(names) == expected, "Expected exactly seven active logical tables")
     lookup = {t["name"]:t for t in tables}
     for table in tables:
         fields = table["fields"]
@@ -89,21 +89,20 @@ def check(root):
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
     from lifecycle import STATUSES
     lifecycle = next(f for f in lookup['Applications']['fields'] if f['name']=='Lifecycle status')
-    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==10, 'Expected ten lifecycle states with Need review and Duplicate')
+    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==6, 'Expected six lifecycle states ending at Ready')
     counts = {}
     for table in tables:
         fields = {f['name'] for f in table['fields']}
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':23,'Applications':31,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':12}, 'Unexpected minimal table profile')
-    from company_policy import SEARCH_STATUSES, HOLD_STATUSES
+    require(counts=={'Companies':10,'Applications':25,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13}, 'Unexpected minimal table profile')
+    from company_policy import SEARCH_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
             'Retired company columns must stay outside the active schema')
     require([c['name'] for c in companies['Search status']['options']['choices']] == SEARCH_STATUSES and 'Proposed' in SEARCH_STATUSES, 'Companies Search status must offer Proposed/Allow/Exclude')
-    require([c['name'] for c in companies['Application hold status']['options']['choices']] == HOLD_STATUSES and 'Blocked (permanent)' in HOLD_STATUSES, 'Companies hold choices must include Blocked (permanent)')
-    pipeline = ['Curate', 'Scan', 'Review', 'Prepare', 'Apply', 'Track']
+    pipeline = ['Curate', 'Scan', 'Review', 'Prepare']
     require(command['pipeline'] == pipeline and next(x['value'] for x in seed['policies'] if x['key'] == 'execution_policy')['pipeline'] == pipeline, 'Command and setup pipelines must agree across every stage')
     require(decoded['contracts/policy-versions.json']['schema_version'] == core['version'], 'Policy manifest must match the schema release')
     resources = [x["key"] for x in seed["resources"]] + [x["key"] for x in seed["policies"]]
@@ -115,7 +114,11 @@ def check(root):
         require(set(cmd["required_resources"]).issubset(resources), "Unseeded command resource")
         aliases += cmd["aliases"]
     require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
-    require(command["application_submission_default"] is False, "Unsafe submission default")
+    require(command.get('endpoint') == 'Ready', 'Run must end at Ready')
+    require(not {'Apply', 'Track'} & {c['command'] for c in command['commands']}, 'Removed commands cannot dispatch')
+    removed = ['stages/apply.md','stages/track.md','scripts/answer_bank.py','scripts/submission_policy.py','templates/answer-bank.md']
+    require(all(not (root/p).exists() for p in removed), 'Retired tasks must stay absent')
+    require(not {'answer_bank','submission_policy','mailbox','narrative_context'} & set(resources), 'Retired resources cannot be setup dependencies')
     eval_cmd = next((c for c in command["commands"] if c["command"] == "Review eval"), {})
     capture_cmd = next((c for c in command["commands"] if c["command"] == "Capture feedback"), {})
     require(eval_cmd.get("instructions") == "DATA.md" and capture_cmd.get("instructions") == "DATA.md", "Feedback and eval need shared instructions")
@@ -127,18 +130,8 @@ def check(root):
     require((root / 'templates/resume-guidelines.md').read_text() == render_markdown(schema=frame), 'templates/resume-guidelines.md is stale; run python scripts/resume_guidelines.py template')
     prepare = next(c for c in command["commands"] if c["command"] == "Prepare")
     require({"master_resume", "resume_guidelines", "base_resumes"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
-    require(next(c for c in command["commands"] if c["command"] == "Apply")["mode"] == "review", "Apply must default to preflight")
-    from submission_policy import DEFAULT_POLICY, policy_problems
-    require(DEFAULT_POLICY == {'max_per_day': 0}, 'Submission policy must default to a zero daily limit')
-    require(seed['submission_defaults'].get('policy') == DEFAULT_POLICY and not policy_problems(DEFAULT_POLICY), 'Seeded submission policy must match scripts/submission_policy.py defaults')
-    require((root / 'templates/answer-bank.md').is_file(), 'Missing answer bank template')
-    require('narrative_context' in resources, 'Missing optional Narrative context registry')
-    from answer_bank import QUESTION_TYPES
-    qfields = {f['name']: f for f in lookup['Application questions']['fields']}
-    require([c['name'] for c in qfields['Question type']['options']['choices']] == list(QUESTION_TYPES), 'Expected Form/Narrative question types')
-    require({'Draft answer', 'Sources', 'Final answer'}.issubset(qfields), 'Narrative drafts need separate source and final fields')
-    controls = {x["key"]: x["value"] for x in seed["controls"]}
-    require(controls["Pause applications"] is True and controls["Stop all"] is False, "Unsafe controls")
+    controls = {x['key']: x['value'] for x in seed['controls']}
+    require(controls.get('Stop all') is False and controls.get('Setup readiness') == 'Needs verification', 'Unsafe or unverified setup controls')
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
     require(not policy.get('resume_fit_exclusions_source') and policy.get('candidate_evidence_source'), 'Candidate evidence must not be sourced from Career Goals')
     require(policy["recall_first"] is True and policy["title_only_admission"] is False and policy["career_screen_before_queue"] is True, "Missing recall/basic-semantic/queue safeguards")
@@ -151,7 +144,7 @@ def check(root):
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
     from stage_state import CORE_FIELDS
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 31, 'Expected the 31-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 25, 'Expected the 25-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
@@ -165,8 +158,6 @@ def check(root):
     company = next(x["value"] for x in seed["policies"] if x["key"] == "company_policy")
     discovery = company["discovery"]
     require(discovery["admission"] == "Proposed" and discovery["auto_allow"] is False, "Discovered companies must stay Proposed")
-    require(company["permanent_block"]["requires_user_confirmation"] is True and company["holds_change_fit"] is False and set(company.get("apply_blocking_hold_statuses", [])) == {"Held", "Blocked (permanent)"}, "Unsafe company hold policy")
-    require(company["policy_research"]["community_reports_enforced"] is False, "Community reports cannot be enforced as confirmed rules")
     history = next(x["value"] for x in seed["policies"] if x["key"] == "history_policy")
     require(history["meaningful_changes"] is True and history["per_read_rows"] is False, "Unexpected history policy")
     require("MIT License" in (root / "LICENSE").read_text(), "Expected MIT license")
@@ -199,16 +190,14 @@ def personal_content_issues(root):
                 found.append('%s contains a private %s' % (p.relative_to(root), label))
     sys.path.insert(0, str(root / 'scripts'))
     import company_policy, inspect
-    if company_policy.DEFAULT_PERSONAL_LIMIT is not None:
-        found.append('company_policy.DEFAULT_PERSONAL_LIMIT must be None (the user sets any personal limit)')
     if inspect.signature(company_policy.funding_qualifies).parameters['minimum'].default is not inspect.Parameter.empty:
         found.append('funding_qualifies must not default a funding minimum')
     seed = json.loads((root / 'contracts/setup-seed.json').read_text())
     pol = {x['key']: x['value'] for x in seed['policies']}
     if pol.get('role_family') is not None or pol['role_policy'].get('role_family') is not None:
         found.append('Seeded role family must be empty; each user defines Settings role_family')
-    if pol['company_policy'].get('personal_application_limit') is not None or pol['company_policy']['discovery'].get('min_funding_stage') is not None:
-        found.append('Seeded personal limit and funding minimum must be empty')
+    if pol['company_policy']['discovery'].get('min_funding_stage') is not None:
+        found.append('Seeded funding minimum must be empty')
     if (pol.get('preparation_notes') or {}).get('shortlist_estimate') is not False:
         found.append('Seeded shortlist estimate must default to off')
     return found

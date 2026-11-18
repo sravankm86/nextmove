@@ -4,31 +4,29 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 
 | Command | Scope |
 |---|---|
-| Run / Run Nextmove | Default single agent: Curate → Scan → Review → Prepare → Apply → Track (ends at Interviewing) |
-| Curate / Companies | Recompute every company application hold; research employer limits/cooldowns; on cadence propose newly funded companies that meet the Career Goals funding minimum as Proposed. Never sets Allow/Exclude |
+| Run / Run Nextmove | Default single agent: Curate → Scan → Review → Prepare (ends at Ready) |
+| Curate / Companies | Refresh company/funding evidence; on cadence propose newly funded matching companies as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
-| Apply | Ready roles without unresolved attempts → browser preflight; submit only when Pause applications is off and the daily limit allows |
-| Track | Exact-role mail/receipt reconciliation from checkpoint |
 | Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
 | Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
 
 Match command aliases as complete phrases: Review eval / Eval Review is an Experiment, not production Review.
 
-Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, but cannot infer submission permission or launch another harness.
+Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, and stops at the verified resume handoff. It cannot launch another harness.
 
 ## Startup and ownership
 
-Discover/map the nine tables, Settings and live controls. Curate runs first in a Run so Scan reads the current Allow list and Apply sees current holds; a Partial Curate does not block Scan/Review/Prepare, but Apply needs its hold recompute. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the seven active tables, Settings and Stop all. Curate runs first in a Run so later stages read current company evidence; a Partial Curate does not block independent Scan/Review/Prepare work. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 
-One active writer. Never seize an owner solely on timeout. Missing global access, Stop all or uncertain writes block affected work; item problems need not stop independent work. Submission pause affects Apply, not useful Scan/Review/Prepare/Track work.
+One active writer. Never seize an owner solely on timeout. Missing global access, Stop all or uncertain writes block affected work; item problems need not stop independent work. Legacy application controls are preserved but do not govern the retained stages.
 
 ## Company handoff and stage independence
 
-A full Run starts with Curate's hold recompute and may continue Scan and Review while Curate's research or discovery is blocked; unfinished Curate parts keep the Run Partial. A standalone Scan or Review reads current Companies and saved Curate evidence without running Curate. Only human-Allow companies without a permanent block get new inventory or automatic advancement; temporary holds never change scope or fit. Recheck targeting at each write boundary so a later Exclude or permanent block is never bypassed. Apply needs the affected company's hold recompute and its own live pre-submit check.
+A full Run starts with Curate's company/funding work; continue Scan and Review while independent research or discovery is blocked, keeping unfinished parts visible as Partial. Standalone stages read current Companies and saved Curate evidence without automatically launching Curate. Only human-Allow companies receive new inventory or automatic advancement. Recheck targeting at every write boundary. Respect any permanent block retained in a legacy base; new setups use Exclude for company exclusions. Employer application limits and cooldowns are outside the active workflow.
 
 ## Run checks: objective duplicate discovery
 
@@ -36,7 +34,7 @@ Every invocation, including a single stage command, starts with Run checks. Buil
 
 An exact verified employer role ID or verified posting-specific canonical link confirms identity. Role name and posted date corroborate it; they cannot alone prove identity. Preserve meaningful URL parameters. Different verified role IDs, regional postings or conflicting evidence need reconciliation rather than a title-based merge. Use scripts/stage_state.py:run_duplicate_match.
 
-Reobserving an existing posting does not create another row or turn the canonical record into Duplicate. For confirmed redundant rows, retain the record with actual application history or authoritative human state as canonical; preserve submitted/rejected/interview outcomes. Mark only the verified redundant record Duplicate, save duplicate_of, objective evidence and original values in History, and retain all notes and artifacts. Historical mirror copies require evidence that they describe the same application. An unresolved identity stays a Run question and cannot advance automatically. Do not delete or merge distinct submissions.
+Reobserving an existing posting does not create another row or turn the canonical record into Duplicate. For confirmed redundant rows, retain the record with actual application history or authoritative human state as canonical; preserve submitted/rejected/interview outcomes. Do not modify protected historical records even if redundant; report the pair instead. Mark only an unprotected verified redundant record Duplicate, save duplicate_of, objective evidence and original values in History, and retain all notes and artifacts. Historical mirror copies require evidence that they describe the same application. An unresolved identity stays a Run question and cannot advance automatically. Do not delete or merge distinct submissions.
 
 Use Duplicate evidence to improve reader identity/canonicalization and prevent repeated inserts. Do not learn career exclusions or title blacklists from it. Record checked counts, confirmed pairs, canonical IDs and unresolved cases in the Run checkpoint. DATA.md defines preservation and verification.
 
@@ -52,19 +50,19 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Changed decision inputs require revalidation.
 
-Review alone approves Queued (stages/review.md). Prepare produces the verified resume (stages/prepare.md). Apply submits only when Pause applications is off and the daily limit allows, and persists the attempt before Submit (stages/apply.md). Never blind-retry, and never infer non-submission from missing mail.
+Review alone approves Queued (stages/review.md). Prepare produces the verified resume (stages/prepare.md), saves its exact reference/version and changes, and stops. No command dispatches application forms or mailbox work.
 
 ## Stage boundaries and exit
 
 Save accepted stage outputs before advancing. Continue independent useful work safely, but blocked required stages/items mean Partial/Blocked. Verify every planned item and count before Complete. No work means verified empty eligible scope, not invented coverage.
 
-Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report Curate results (holds by status, policies researched by confidence, discovery feed coverage, Proposed companies awaiting the user), source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and later outcomes separately. A new harness must recover this without prior chat/local state.
+Persist versions, outputs, pending identities/reasons, errors, next action and ownership release. Report Curate results (company/funding evidence, discovery feed coverage, Proposed companies awaiting the user), source coverage, transient rejects, plausible inventory, review-pending, verified eligible, approved queue and verified resumes separately. A new harness must recover this without prior chat/local state.
 
 ## Clarification rules
 
 Every harness must ask concise, targeted questions when essential information is missing or contradictory. Users do not need to write agent instructions.
 
-Before each stage check the requested scope, required tools, current source references and relevant preferences. Ask when ambiguity changes which roles are eligible, a hard career requirement, the resume's factual content, application answers, submission authorization or a company restriction. State the uncertain fact, why it matters and which work can continue. Group related questions and do not ask again for an answer already provided.
+Before each stage check the requested scope, required tools, current source references and relevant preferences. Ask when ambiguity changes which roles are eligible, a hard career requirement, the resume's factual content or company targeting. State the uncertain fact, why it matters and which work can continue. Group related questions and do not ask again for an answer already provided.
 
 Save the question, affected records, reason and next action in the Run. Wait for an answer before dependent work. Continue independent useful work. Do not treat elapsed time, silence, a missing salary or a blank preference as an answer. Unknown soft preferences can remain disclosed without blocking unrelated work. Use reasonable implementation choices for reversible details already within scope; do not ask permission for every step.
 
@@ -74,23 +72,21 @@ If a tool or automatic approval review blocks an action, identify the exact acti
 
 A stage handoff reports completed work, counts, unresolved questions, affected identities, next action and whether ownership was released. Missing global access/Stop all blocks affected work. A company-specific issue need not stop all companies.
 
-## Ten lifecycle states
+## Six lifecycle states
 
 | State | Meaning |
 |---|---|
-| Inventoried | Newly admitted candidate awaiting its first review. |
-| Need review | Review is unresolved, the score is in the middle band, or current evidence needs reassessment. Agent notes identifies why. |
-| Queued | A current, evidence-backed Review score reaches the queue threshold. |
-| Ready | The grounded resume/PDF is verified; submission needs separate authorization. |
-| Needs answer | Apply met a required application question the answer bank cannot answer. The question is in Application questions; the role returns to Ready after all required answers pass a fresh preflight. |
-| Applied | Submission is established; confirmation is additional evidence. |
-| Interviewing | Active recruiter engagement, screening, assessment or interview. Recruiting endpoint. |
-| Not pursuing | Review score is below the threshold, the posting expired, or the human chose to stop. |
-| Rejected | Actual employer rejection. |
-| Duplicate | Run confirmed a redundant record and saved its canonical record and objective evidence. |
+| Inventoried | Plausible role awaiting its first Review. |
+| Need review | Review cannot confidently approve or reject it; Agent notes identifies the gap. |
+| Queued | Current evidence-backed Review approval; eligible for Prepare. |
+| Ready | Exact resume verified, saved and handed to the user. Successful endpoint. |
+| Not pursuing | Review declined the role or it is outside current targeting. |
+| Duplicate | Confirmed redundant unprotected row; canonical identity and prior values remain in History. |
 
-The successful path is Inventoried → Queued → Ready → Applied → Interviewing, with Need review available before approval and Needs answer as a detour from Ready while an application question waits for the user. Need review is retried when its missing facts change or the user requests it. A company cooldown or hold does not change fit; Curate owns holds under stages/curate.md. Preserve human declines and submitted/terminal outcomes. Offers and post-interview outcomes remain outside automatic tracking scope.
+Manual status changes are not acceptance evidence. Follow stages/review.md for the score routing. Revalidate only affected unprotected decisions when their inputs change; preserve human edits and do not redo valid Ready work without a relevant input change or an explicit request.
 
-An uncertain Submit stays at its last verified pre-submission stage, normally Ready, with a prominent uncertainty note and saved attempt identity/outcome. Never label an unverified resume Ready or claim Applied without evidence. The outstanding attempt blocks another Submit regardless of manual status resets; reconcile it first. Hold other work that could obscure the outstanding attempt and its exact submitted PDF.
+## Existing installations
 
-Keep confirmations in Confirmation reference, ratings in Career fit/Resume fit, and exact scores, reasons and duplicate references in History. Agent notes explains the status in plain English under DATA.md "Writing Agent notes". A status label alone is not acceptance, PDF verification or submission permission.
+Read seven active tables; do not require the retired Answer bank or Application questions tables. Preserve them and any extra columns, options, old controls and artifacts as inactive history. Setup never deletes or remaps them automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Manual notes by the verified DATA.md procedure without changing the outcome.
+
+An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/Prepare evidence without fabricating completion or launching later work. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.

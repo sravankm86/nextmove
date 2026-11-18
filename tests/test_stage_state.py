@@ -77,12 +77,12 @@ class StateTests(unittest.TestCase):
         self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,b'edited pdf', companies=self.companies))
         app['Resume verified at']=None;self.assertFalse(s.resume_ready(app,state,[self.run],self.inputs,pdf, companies=self.companies))
     def test_pending_attempt_survives_manual_status_reset(self):
-        self.assertTrue(s.attempt_blocks_retry({**self.app,'Lifecycle status':'Ready','Submission attempt key':'attempt-example'},self.state))
-        self.assertTrue(s.attempt_blocks_retry(self.app,{'submission':{'attempt_key':'attempt-example'}}))
+        self.assertTrue(s.protected_history({**self.app,'Lifecycle status':'Ready','Submission attempt key':'attempt-example'},self.state))
+        self.assertTrue(s.protected_history(self.app,{'submission':{'attempt_key':'attempt-example'}}))
     def test_legacy_columns_and_multiple_context_links_are_rejected(self):
         with self.assertRaises(ValueError):s.application_write({'Evidence versions (JSON)':'old plan'})
         with self.assertRaises(ValueError):s.application_write({'Company':['one','two']})
-        self.assertEqual(len(s.CORE_FIELDS),31)
+        self.assertEqual(len(s.CORE_FIELDS),25)
     def test_separate_harness_recovers_without_legacy_columns(self):
         h=[{'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(s.payload([self.state]))}]
         self.assertTrue(s.review_ready(self.app,s.resolve(self.app,h),[self.run],self.inputs, companies=self.companies))
@@ -92,10 +92,9 @@ class StateTests(unittest.TestCase):
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'}, companies=self.companies)
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set(), companies=self.companies)
 
-    def test_provisional_or_unresolved_review_cannot_prepare_or_apply(self):
+    def test_provisional_or_unresolved_review_cannot_prepare(self):
         state=copy.deepcopy(self.state);state['review']['decision']='approve_provisional'
         self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
-        self.assertFalse(s.apply_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
         state['review']['decision']='approve';state['review']['scoring']=scored_review('Unresolved','High')
         self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
 
@@ -109,12 +108,16 @@ class StateTests(unittest.TestCase):
         run=copy.deepcopy(self.run);run['Input versions (JSON)']=json.dumps({'stage_inputs':{'review':inputs}})
         self.assertFalse(s.review_ready(self.app,self.state,[run],inputs, companies=self.companies))
 
-    def test_apply_requires_ready_even_when_a_verified_pdf_is_retained(self):
+    def test_ready_endpoint_rejects_protected_outcomes_even_with_a_verified_pdf(self):
         data=b'verified-pdf';digest=hashlib.sha256(data).hexdigest()
         app={**self.app,'Lifecycle status':'Ready','Resume link':'file-example','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
         state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1',**self.reuse(digest)}
-        self.assertTrue(s.apply_ready(app,state,[self.run],self.inputs,data, companies=self.companies))
-        self.assertFalse(s.apply_ready({**app,'Lifecycle status':'Queued'},state,[self.run],self.inputs,data, companies=self.companies))
+        self.assertTrue(s.resume_ready(app,state,[self.run],self.inputs,data, companies=self.companies))
+        for status in ['Needs answer','Applied','Interviewing','Rejected','Not pursuing','Duplicate']:
+            self.assertFalse(s.resume_ready({**app,'Lifecycle status':status},state,[self.run],self.inputs,data,companies=self.companies))
+        self.assertFalse(s.resume_ready({**app,'Submission attempt key':'legacy'},state,[self.run],self.inputs,data,companies=self.companies))
+        old=copy.deepcopy(state);old['submission']={'attempt_key':'legacy'}
+        self.assertFalse(s.resume_ready(app,old,[self.run],self.inputs,data,companies=self.companies))
 
     def test_exact_identity_does_not_merge_regional_or_same_title_roles(self):
         self.assertEqual(s.canonical_job_url('https://jobs.example.test/roles/a?utm_source=mail'),s.canonical_job_url('https://jobs.example.test/roles/a'))

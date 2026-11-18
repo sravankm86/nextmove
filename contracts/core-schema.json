@@ -1,11 +1,11 @@
 {
-  "version": 15,
-  "description": "Nine-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
+  "version": 16,
+  "description": "Seven-table logical blueprint; preserve legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
       "business_key": "Company key",
-      "description": "Curate owns this table: human Allow/Exclude targeting, agent-discovered Proposed companies, funding stage and company evidence, researched employer policies and computed application holds. No automatic Allow.",
+      "description": "Human targeting, agent-discovered Proposed companies, funding and company evidence. No automatic Allow.",
       "fields": [
         {
           "name": "Company",
@@ -78,157 +78,13 @@
         {
           "name": "Company evidence",
           "type": "url"
-        },
-        {
-          "name": "Policy confidence",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Official"
-              },
-              {
-                "name": "Recruiter"
-              },
-              {
-                "name": "User"
-              },
-              {
-                "name": "Community"
-              },
-              {
-                "name": "Not found"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Policy verified at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Max applications",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "Application window (days)",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "Application window type",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Rolling"
-              },
-              {
-                "name": "Calendar"
-              },
-              {
-                "name": "Fixed"
-              },
-              {
-                "name": "Unconfirmed"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Rejection cooldown (days)",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "Restriction scope",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Company"
-              },
-              {
-                "name": "Role family"
-              },
-              {
-                "name": "Exact role"
-              },
-              {
-                "name": "Mixed"
-              },
-              {
-                "name": "Unconfirmed"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Apply blocked until",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Application hold status",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Not assessed"
-              },
-              {
-                "name": "No known hold"
-              },
-              {
-                "name": "Held"
-              },
-              {
-                "name": "Blocked (permanent)"
-              },
-              {
-                "name": "Needs clarification"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Restriction details / source",
-          "type": "multilineText"
-        },
-        {
-          "name": "Restriction timezone",
-          "type": "singleLineText"
         }
       ]
     },
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "31 physical fields including relationships. Current job facts, ten-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "25 physical fields including relationships. Current job facts, six-state lifecycle, human/agent notes and resume readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -267,19 +123,7 @@
                 "name": "Ready"
               },
               {
-                "name": "Needs answer"
-              },
-              {
-                "name": "Applied"
-              },
-              {
-                "name": "Interviewing"
-              },
-              {
                 "name": "Not pursuing"
-              },
-              {
-                "name": "Rejected"
               },
               {
                 "name": "Duplicate"
@@ -446,23 +290,6 @@
             },
             "timeZone": "utc"
           }
-        },
-        {
-          "name": "Submission attempt key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Applied on",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        },
-        {
-          "name": "Confirmation reference",
-          "type": "multilineText"
         }
       ]
     },
@@ -579,12 +406,6 @@
               },
               {
                 "name": "Prepare"
-              },
-              {
-                "name": "Apply"
-              },
-              {
-                "name": "Track"
               },
               {
                 "name": "Migration"
@@ -946,177 +767,9 @@
           "type": "formula"
         }
       ]
-    },
-    {
-      "name": "Answer bank",
-      "business_key": "Topic plus one scope (general, company or application)",
-      "description": "Private user-approved form facts, preferences and consent; narrative material belongs in Application questions. Approved answers only; Source field references current registered content instead of copying it.",
-      "fields": [
-        {
-          "name": "Answer ID",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Topic",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Handling",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Exact"
-              },
-              {
-                "name": "Adapt"
-              },
-              {
-                "name": "From source"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Answer",
-          "type": "multilineText"
-        },
-        {
-          "name": "Source field",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Guidance",
-          "type": "multilineText"
-        },
-        {
-          "name": "Approval",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Draft"
-              },
-              {
-                "name": "Approved"
-              },
-              {
-                "name": "Retired"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Valid until",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Application questions",
-      "business_key": "Application plus Field key; reusable narrative examples use Company or general scope plus Field key",
-      "description": "Form gaps and narrative questions/drafts/finals. Reusable approved narrative examples may omit Application; Company then limits reuse. No invented placeholder applications.",
-      "fields": [
-        {
-          "name": "Question ID",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Field key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Question",
-          "type": "multilineText"
-        },
-        {
-          "name": "Question type",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Form"
-              },
-              {
-                "name": "Narrative"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Draft answer",
-          "type": "multilineText"
-        },
-        {
-          "name": "Sources",
-          "type": "multilineText"
-        },
-        {
-          "name": "Options",
-          "type": "multilineText"
-        },
-        {
-          "name": "Final answer",
-          "type": "multilineText"
-        },
-        {
-          "name": "Status",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Needs answer"
-              },
-              {
-                "name": "Resolved"
-              }
-            ]
-          }
-        }
-      ]
     }
   ],
   "links": [
-    {
-      "from_table": "Answer bank",
-      "field": "Company",
-      "target_table": "Companies",
-      "cardinality": "0..1",
-      "inverse_field": "Answer bank"
-    },
-    {
-      "from_table": "Answer bank",
-      "field": "Application",
-      "target_table": "Applications",
-      "cardinality": "0..1",
-      "inverse_field": "Application answers"
-    },
-    {
-      "from_table": "Application questions",
-      "field": "Application",
-      "target_table": "Applications",
-      "cardinality": "0..1",
-      "inverse_field": "Application questions"
-    },
-    {
-      "from_table": "Application questions",
-      "field": "Company",
-      "target_table": "Companies",
-      "cardinality": "0..1",
-      "inverse_field": "Narrative examples"
-    },
-    {
-      "from_table": "Application questions",
-      "field": "Answer rule",
-      "target_table": "Answer bank",
-      "cardinality": "0..1",
-      "inverse_field": "Application questions"
-    },
     {
       "from_table": "Applications",
       "field": "Company",
@@ -1179,13 +832,6 @@
       "target_table": "Runs",
       "cardinality": "0..1",
       "inverse_field": "Preparation applications"
-    },
-    {
-      "from_table": "Applications",
-      "field": "Submission run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "Submission applications"
     }
   ],
   "application_required_fields": [
@@ -1210,15 +856,9 @@
     "Resume link",
     "Resume version",
     "Resume verified at",
-    "Submission attempt key",
-    "Applied on",
-    "Confirmation reference",
     "History",
     "Scan run",
     "Review run",
-    "Preparation run",
-    "Submission run",
-    "Application answers",
-    "Application questions"
+    "Preparation run"
   ]
 }
