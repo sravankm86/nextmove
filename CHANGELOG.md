@@ -1,5 +1,11 @@
 # Changelog
 
+## Structured private answer bank
+
+- Answer bank and Application questions replace the active answer Doc; nine tables with existing History, Runs and Settings reused. Source-based compensation stays in Career Goals.
+- Shared answer guards validate approval, scope, conflicts, source units, expiration, options and question retry identity. Narrative adaptations remain harness judgments with saved evidence.
+- Setup/migration, application preflight, audit, schema counts and private onboarding updated together. Submission defaults remain paused with daily limit zero.
+
 ## Every session starts with a connection check
 
 - SETUP.md "Start a session": the agent finds the private base, tests Airtable, Google Drive/Docs, web, browser and mailbox access, asks the user for any missing connection, checks for another active writer, reports each stage as Ready or Blocked and records a `Harness check` History event before running the requested stage.

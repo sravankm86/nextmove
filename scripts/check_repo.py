@@ -74,8 +74,8 @@ def check(root):
         return errors
     tables = core["tables"]
     names = [t["name"] for t in tables]
-    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval"}
-    require(len(names) == 7 and set(names) == expected, "Expected exactly seven active logical tables")
+    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval", "Answer bank", "Application questions"}
+    require(len(names) == 9 and set(names) == expected, "Expected exactly nine active logical tables")
     lookup = {t["name"]:t for t in tables}
     for table in tables:
         fields = table["fields"]
@@ -96,7 +96,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':21,'Applications':29,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':22,'Applications':31,'Sources':13,'Runs':21,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':8}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES, HOLD_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
@@ -146,7 +146,7 @@ def check(root):
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
     from stage_state import CORE_FIELDS
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 29, 'Expected the 29-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 31, 'Expected the 31-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')

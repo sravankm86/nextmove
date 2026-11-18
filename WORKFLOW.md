@@ -20,7 +20,7 @@ Quoted examples/setup discussions do not dispatch production work. A single stag
 
 ## Startup and ownership
 
-Discover/map the seven tables, Settings and live controls. Curate runs first in a Run so Scan reads the current Allow list and Apply sees current holds; a Partial Curate does not block Scan/Review/Prepare, but Apply needs its hold recompute. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the nine tables, Settings and live controls. Curate runs first in a Run so Scan reads the current Allow list and Apply sees current holds; a Partial Curate does not block Scan/Review/Prepare, but Apply needs its hold recompute. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 
@@ -82,7 +82,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Need review | Review is unresolved, the score is in the middle band, or current evidence needs reassessment. Agent notes identifies why. |
 | Queued | A current, evidence-backed Review score reaches the queue threshold. |
 | Ready | The grounded resume/PDF is verified; submission needs separate authorization. |
-| Needs answer | Apply met a required application question the answer bank cannot answer. The question is in the answer bank's Specific questions table; the role returns to Ready once it is answered. |
+| Needs answer | Apply met a required application question the answer bank cannot answer. The question is in Application questions; the role returns to Ready after all required answers pass a fresh preflight. |
 | Applied | Submission is established; confirmation is additional evidence. |
 | Interviewing | Active recruiter engagement, screening, assessment or interview. Recruiting endpoint. |
 | Not pursuing | Review score is below the threshold, the posting expired, or the human chose to stop. |

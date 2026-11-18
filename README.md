@@ -27,7 +27,7 @@ Curate hands human-approved companies and factual company evidence to Scan/Revie
 flowchart LR
     User[Human preferences and authorization] --> Agent[One active AI harness]
     Git[GitHub instructions] --> Agent
-    Agent <--> Airtable[Seven Airtable tables: saved state]
+    Agent <--> Airtable[Nine Airtable tables: saved state]
     Agent <--> Drive[Google Drive: content and evidence]
     Agent --> Boards[Official catalogs and application sites]
     Funding[Funding news and employer policy pages] --> Agent
@@ -36,21 +36,23 @@ flowchart LR
     Drive --> Next
 ~~~
 
-Git owns all procedures. Drive owns Career Goals, the factual master, resumes, job captures and reports. Airtable owns targeting, candidate/application state, source progress, fixed inputs, checkpoints and history. The active harness executes through its own authenticated connections; connections do not transfer between providers.
+Git owns all procedures. Drive owns Career Goals, the factual master, resumes, job captures and reports. Airtable owns reusable application answers and the question inbox; the legacy answer Doc is an archive after migration. Airtable owns targeting, candidate/application state, source progress, fixed inputs, checkpoints and history. The active harness executes through its own authenticated connections; connections do not transfer between providers.
 
 The private main Drive folder has two working children: **Role specific** for customized resumes and application materials, and **Audit trail** for captures, assessments, run reports and process metadata. Setup creates or reuses them and registers their IDs in Airtable. Source documents keep their verified locations; existing links remain valid.
 
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
-| Companies | Proposed/Allow/Exclude targeting, funding stage, company evidence, employer policies and holds | 21 |
-| Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 29 |
+| Companies | Proposed/Allow/Exclude targeting, funding stage, company evidence, employer policies and holds | 22 |
+| Applications | Job facts, review/resume/application state, Manual notes and Agent notes | 31 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
 | Runs | Frozen inputs, ownership, progress and handoff | 21 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 | Review eval | Golden answer key from your graded notes, and each eval's prediction and match | 13 |
+| Answer bank | Approved reusable answers, boundaries, sources and scope | 11 |
+| Application questions | Unanswered fields and application-specific answers | 8 |
 
-The 116-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 138-column target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
@@ -83,9 +85,9 @@ Agents read the entry point, workflow and requested stage, then relevant referen
 - Your target role family in private Settings `role_family`: a name and title patterns ([example](templates/role-family.example.json)). Nextmove ships no default role, funding minimum or application limit; each user sets their own.
 - [Career preferences](templates/career-goals.md), in ordinary prose or the optional template: desired function, designation, seniority/scope, compensation, domains, responsibilities, geography and priorities. This document contains preferences, not agent instructions.
 - One accurate designated editable master resume, your private resume guidelines in the [standard frame](templates/resume-guidelines.md) (base themes, company grouping, length, layout, language), and optionally a library of approved base resumes you build offline. Goals are not evidence of experience.
-- Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. A default personal limit of 3 applications per company in any rolling 30 days applies unless your Career Goals set another.
+- Explicit company choices: approve or decline Curate's Proposed companies (Allow/Exclude), confirm any permanent block, and share known application limits or recruiter-stated cooldowns. Register the funding-news feeds Curate should read. Your personal application limit comes from Career Goals and private Settings; the repository supplies no personal limit.
 - Answers to decision-critical questions. Agents must ask when a missing answer changes the work.
-- A [daily submission limit and the Pause applications switch](stages/apply.md#guard-rails-you-control) and an answer bank Google Doc in your Drive ([blank template](templates/answer-bank.md)) before real applications, plus a browser-capable agent signed into the sites you allow. Track needs read-only mailbox access.
+- A [daily submission limit and the Pause applications switch](stages/apply.md#guard-rails-you-control) and the private Answer bank and Application questions tables ([blank setup guide](templates/answer-bank.md)) before real applications, plus a browser-capable agent signed into the sites you allow. Track needs read-only mailbox access.
 
 No model API key is required. Connectors may use service APIs internally. A fork does not copy private data, authentication or another person's setup. Plain chat without suitable tools cannot execute these stages.
 

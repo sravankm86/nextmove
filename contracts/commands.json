@@ -7,7 +7,9 @@
     "Runs",
     "Settings",
     "History",
-    "Review eval"
+    "Review eval",
+    "Answer bank",
+    "Application questions"
   ],
   "default_command": "Run",
   "execution_modes": [

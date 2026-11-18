@@ -2,17 +2,19 @@
 
 The single reference for Airtable, evidence, history and stage handoff. contracts/core-schema.json is the machine-readable blueprint. Read only the section you need; keep bulk records and verification out of model context.
 
-## Seven tables
+## Nine tables
 
 | Table | Purpose | Columns, including reciprocal links |
 |---|---|---:|
-| Companies | Curate-owned targeting, funding stage, company evidence, employer policies and holds | 21 |
-| Applications | Candidate, review, resume and application state | 29 |
+| Companies | Curate-owned targeting, funding stage, company evidence, employer policies and holds | 22 |
+| Applications | Candidate, review, resume and application state | 31 |
 | Sources | Official catalog/region, reader and pagination checkpoint | 13 |
 | Runs | Frozen inputs, progress, ownership and handoff | 21 |
 | Settings | Private references, policies, controls and verification | 6 |
 | History | Field-level changes, decisions, business events and failures | 13 |
 | Review eval | Golden answer key for Review from graded Manual notes | 13 |
+| Answer bank | Approved reusable answers, boundaries, sources and scope | 11 |
+| Application questions | Unanswered fields and application-specific answers | 8 |
 
 Native record IDs and createdTime replace metadata columns. Primary display fields are not uniqueness constraints: writers validate business keys, link cardinality and intended deltas. Columns outside this blueprint are not written; docs/MAINTENANCE.md covers retiring them.
 
@@ -24,9 +26,9 @@ Native record IDs and createdTime replace metadata columns. Primary display fiel
 - Origin, Company fit, Latest funding and Funding date are retired columns. Do not request them as live fields, recreate them during setup or write them. Historical snapshots may retain these keys as evidence.
 - Policy confidence: Official, Recruiter, User (enforced); Community (recorded, not enforced); Not found (researched, no rule). Blank means Not assessed.
 - Application hold status: Not assessed, No known hold, Held, Blocked (permanent), Needs clarification. Only Held and Blocked (permanent) block Apply. Apply blocked until is Curate's UTC estimate; Apply recomputes before Submit and records restrictions the careers site shows.
-- The personal limit in Settings `company_policy` (default 3 per company per rolling 30 days; Career Goals may override) applies on top of employer rules.
+- The personal limit in Settings `company_policy` (set privately from Career Goals; no repository default) applies on top of employer rules.
 
-**Applications.** The 29 fields in scripts/stage_state.py:CORE_FIELDS, including Company, four stage Run links and History. The primary field Application ID is the formula RECORD_ID(); never write to it. Job key is the canonical employer posting identity for deduplication.
+**Applications.** The 31 fields in scripts/stage_state.py:CORE_FIELDS, including Company, four stage Run links and History. The primary field Application ID is the formula RECORD_ID(); never write to it. Job key is the canonical employer posting identity for deduplication.
 
 **Sources.** Source key (stable board identity), Company, Official careers URL, Catalog URL, Region, Reader, Reader version, Latest coverage, Checkpoint (JSON), Last error, Last scanned at, Last run, Archived at. The checkpoint holds cursor/end proof, counts, manifest identity and pagination details. Archived at disables a retired source; every other configured board/region stays in scope.
 
@@ -146,3 +148,19 @@ Airtable writes are not atomic: reconcile persisted state before any retry, and 
 ## Preferences and candidate facts
 
 Career Goals holds desired work and tradeoffs only (CAREER-GOALS.md). The editable master, plus any confirmed-facts artifact indexed by Settings.master_resume, is the only source of candidate facts. Record the goals revision and candidate-evidence identity in each Review Run. Goals never authorize submissions or supply qualifications.
+
+## Answer bank and application questions
+
+Settings.answer_bank is `{"kind":"airtable","answer_bank_table_id":null,"questions_table_id":null}` with actual private IDs supplied by setup. No populated answers or private IDs belong in Git. Apply owns the procedure in stages/apply.md; scripts/answer_bank.py contains shared pure guards.
+
+Answer bank has eight scalar fields (Answer ID (stable UUID assigned once at creation), Topic, Handling, Answer, Source field, Guidance, Approval, Valid until), Company/Application scope links and the Application questions inverse (11 fields). Empty scope means general; only one Company or Application may be set. Company is the employer receiving the application, not another firm named in the question. One Approved record per Topic and exact scope; duplicates or conflicting evidence require reconciliation. Draft and Retired never supply answers. Exact preserves the value, Adapt permits supported rewording, From source reads an allowed registered source. Only From source sets Source field and its Answer stays empty. Source selectors are career_goals.minimum_base_salary, career_goals.ideal_base_salary and career_goals.target_total_compensation. Read the current Career Goals document, extract these end-user values and verify their revision, annual units, base/total kind and currency; absent or conflicting values stay unresolved. These application-answer values are not the posting's Starting/Max salary. Unknown fields or arbitrary source selectors are not executed.
+
+Application questions has six scalar fields (Question ID (stable UUID assigned once at creation), Field key, Question, Options, Final answer, Status) plus Application and Answer rule links (8). Application is exactly one row. Options is a JSON array of the exact option strings, or [] when none; Final answer is text, or a JSON array for multiple selection. Field key is scripts/answer_bank.py:field_key over observed form URL, native field identity, exact question/options, type and occurrence; changed options or wording require a fresh mapping. Before creating, question_action checks Application plus Field key. Do not merge merely similar questions, different companies or named subjects. Raw observed fields and historical changes remain in the saved preflight evidence.
+
+Persist only required gaps and application-specific answers here, not every routine resolved field. Needs answer is the default. Resolved requires a verified approved-rule resolution or an explicit user-approved one-off answer recorded in History; populated text alone is not approval. Linked Draft answers do not unblock anything. Preserve the human answer and all other columns when updating a row. A user can enter Final answer and set Resolved; the next invocation captures that edit and approval in History before use. Scope expansions, new facts and promotion of a one-off answer to a general answer need user approval. Retire withdrawn answers rather than deleting evidence.
+
+Every agent mutation records before/after, row ID, actor, source provenance and operation identity in existing History, then verifies readback. Routine reads use Run scope. Direct UI edits are not automatically intercepted: each Apply compares the captured bank/question fingerprints against live records, records observed deltas with observation time (not an invented edit time), and revalidates affected answers. First-run migration records the audit boundary. A saved submission field map contains final answers, rule IDs/hashes, source revisions, question/options and form identity; historical submissions must never be reconstructed from mutable live answers. Reread applicable answers and sources before saving final intent; a changed fingerprint invalidates the prior field map. Do not copy sensitive values into Agent notes.
+
+Use compact views: Answers (Topic, Answer, Guidance, Approval, Company/Application when scoped), Needs answer (Application, Question, Options, Final answer, Status), and All fields for maintenance. Group waiting questions by Answer rule where appropriate. View hiding is convenience, not a security boundary. Private base per person; no multi-user tenant table. Keep long source documents, preflight maps and eval artifacts in Drive Audit trail, not new per-field history tables. Answer-resolution evals use the existing private eval catalog with a stage tag; never force them into Review verdicts or create another eval table. Source facts, approved examples and test labels are separate; preserve human labels and run held-out tests on unseen wording.
+
+Answer ID and Question ID are primary single-line UUID values, never company/title combinations. The native Airtable record ID is used for relationships. Generate each UUID before writing and preserve it in the operation manifest; retries reconcile that UUID before creating. Never regenerate an ID after an uncertain write. This avoids requiring formula-primary-field provisioning unsupported by some connectors.

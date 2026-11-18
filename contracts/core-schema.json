@@ -1,6 +1,6 @@
 {
-  "version": 13,
-  "description": "Seven-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
+  "version": 14,
+  "description": "Nine-table logical blueprint, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
@@ -228,7 +228,7 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "29 physical fields including relationships. Current job facts, ten-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "31 physical fields including relationships. Current job facts, ten-state lifecycle, human/agent notes and readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -946,9 +946,148 @@
           "type": "formula"
         }
       ]
+    },
+    {
+      "name": "Answer bank",
+      "business_key": "Topic plus one scope (general, company or application)",
+      "description": "Private reusable facts, guidance, consent and narrative material. Approved answers only; Source field references current registered content instead of copying it.",
+      "fields": [
+        {
+          "name": "Answer ID",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Topic",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Handling",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Exact"
+              },
+              {
+                "name": "Adapt"
+              },
+              {
+                "name": "From source"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Answer",
+          "type": "multilineText"
+        },
+        {
+          "name": "Source field",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Guidance",
+          "type": "multilineText"
+        },
+        {
+          "name": "Approval",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Draft"
+              },
+              {
+                "name": "Approved"
+              },
+              {
+                "name": "Retired"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Valid until",
+          "type": "date",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Application questions",
+      "business_key": "Application plus Field key",
+      "description": "Only unresolved questions and application-specific answers. Routine resolved fields stay in preflight evidence. Human one-off approval is recorded in History.",
+      "fields": [
+        {
+          "name": "Question ID",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Field key",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Question",
+          "type": "multilineText"
+        },
+        {
+          "name": "Options",
+          "type": "multilineText"
+        },
+        {
+          "name": "Final answer",
+          "type": "multilineText"
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Needs answer"
+              },
+              {
+                "name": "Resolved"
+              }
+            ]
+          }
+        }
+      ]
     }
   ],
   "links": [
+    {
+      "from_table": "Answer bank",
+      "field": "Company",
+      "target_table": "Companies",
+      "cardinality": "0..1",
+      "inverse_field": "Answer bank"
+    },
+    {
+      "from_table": "Answer bank",
+      "field": "Application",
+      "target_table": "Applications",
+      "cardinality": "0..1",
+      "inverse_field": "Application answers"
+    },
+    {
+      "from_table": "Application questions",
+      "field": "Application",
+      "target_table": "Applications",
+      "cardinality": "1",
+      "inverse_field": "Application questions"
+    },
+    {
+      "from_table": "Application questions",
+      "field": "Answer rule",
+      "target_table": "Answer bank",
+      "cardinality": "0..1",
+      "inverse_field": "Application questions"
+    },
     {
       "from_table": "Applications",
       "field": "Company",
@@ -1049,6 +1188,8 @@
     "Scan run",
     "Review run",
     "Preparation run",
-    "Submission run"
+    "Submission run",
+    "Application answers",
+    "Application questions"
   ]
 }

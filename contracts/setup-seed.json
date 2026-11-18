@@ -96,9 +96,13 @@
       "key": "answer_bank",
       "reference_url": null,
       "verification": "Missing",
-      "value": null,
+      "value": {
+        "kind": "airtable",
+        "answer_bank_table_id": null,
+        "questions_table_id": null
+      },
       "template": "templates/answer-bank.md",
-      "note": "Private Google Doc in the user's Drive; Apply adds unanswered required questions to its Specific questions table."
+      "note": "Private Airtable tables. Approved reusable answers and an application-linked clarification inbox; no copied personal defaults. See DATA.md and stages/apply.md."
     },
     {
       "key": "submission_policy",

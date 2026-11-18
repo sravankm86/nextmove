@@ -1,63 +1,11 @@
-# Answer bank
+# Set up a private Airtable answer bank
 
-Blank template only. Your filled answer bank is a private Google Doc in your Drive, linked from Settings.answer_bank; never put answers in this repository. Apply uses an answer only when it is written in that Doc, leaves optional questions blank, and adds any required question it cannot answer to Specific questions below. Values here are placeholders.
+Use SETUP.md and contracts/core-schema.json to provision Answer bank and Application questions. DATA.md owns the schema; stages/apply.md owns matching, approval, clarification and usage. This file is a blank onboarding guide, not a second set of procedures or a filled answer bank.
 
-## Identity and contact
+Start personal records as Draft. Common topics include identity.name, identity.email, identity.phone, location.current, location.payroll, location.offices, work.authorization, work.sponsorship, work.arrangement, availability.start_date, history.interviewed_here, history.employed_here, background.education, demographics.preferences and narrative.work_example. Topics identify meaning, not exact wording. Setup can propose additional topics; resolve ambiguity before use.
 
-| Question | Answer |
-|---|---|
-| Legal name / preferred name | |
-| Email for applications | |
-| Phone | |
-| Current city, state/region, country | |
-| LinkedIn URL | |
-| Portfolio or personal site | |
+For compensation, create three From source rows with Source field career_goals.minimum_base_salary, career_goals.ideal_base_salary and career_goals.target_total_compensation. Leave Answer empty. The user approves using those values; current values remain in Career Goals rather than being copied here. Blank source information stays unresolved.
 
-## Work eligibility
+Users fill Answer and Guidance, choose Exact or Adapt as appropriate, restrict Company or Application only when needed, and set Approval Approved when ready. Consent entries use a consent.* Topic and state the exact permitted scope. Answer bank approvals never authorize pressing Submit. Narrative source material does not authorize inventing examples or facts.
 
-| Question | Answer |
-|---|---|
-| Authorized to work in (countries) | |
-| Require visa sponsorship now or in future? | |
-| Willing to relocate? Where? | |
-| Work arrangement preferences (remote, hybrid, on-site) | |
-
-## Availability and compensation
-
-| Question | Answer |
-|---|---|
-| Earliest start date / notice period | |
-| Salary expectation when a field is required (number or range, currency) | |
-| Salary expectation free-text fields | Fixed answer, or leave blank to be asked each time: |
-
-## Background confirmations
-
-| Question | Answer |
-|---|---|
-| Previously employed by this company? (per company, if any) | |
-| Non-compete or restrictive covenants | |
-| Willing to undergo background check | |
-| Highest education | |
-
-## Voluntary self-identification
-
-| Question | Answer |
-|---|---|
-| Gender, race/ethnicity, veteran, disability questions | Decline to self-identify / specific answers: |
-| Pronouns (if asked) | |
-
-## Common questions
-
-| Question | Answer |
-|---|---|
-| How did you hear about us? | |
-| Referral name (per role, if any) | |
-| Why this company? / custom essays | Added to Specific questions unless an answer for that exact question exists |
-
-## Specific questions
-
-Apply adds a row here whenever a required question has no answer, then skips that role. Fill in the Answer and the next Apply run uses it. A row with an empty Answer is still waiting; a row with an Answer is approved. Delete a row to retract it.
-
-| Question (exact text) | Company or "any" | Answer | Waiting roles | Added |
-|---|---|---|---|---|
-| | | | | |
+Questions that cannot be answered appear in Application questions. Enter Final answer and set Status Resolved to approve a one-off response. Leave unresolved questions as Needs answer. To make a response reusable, separately approve its scope and guidance in Answer bank. Retire withdrawn answers. Do not add personal data to this repository.

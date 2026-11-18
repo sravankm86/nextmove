@@ -97,7 +97,7 @@ def compute_hold(company, events, now, personal_limit=None, personal_timezone=No
     events: dicts with kind 'submission' | 'uncertain_attempt' | 'rejection', at (datetime,
     date or ISO text) and optional key. Uncertain attempts occupy quota. Returns
     {'status', 'blocked_until', 'reasons'}; Curate writes status/blocked_until and Apply
-    refuses unless status is 'No known hold'.
+    blocks only Held and Blocked (permanent).
     """
     if now.tzinfo is None:
         raise ValueError('now must be timezone-aware')
