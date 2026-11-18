@@ -1,5 +1,10 @@
 # Changelog
 
+## Form answers hold only the submitted value
+
+- `validate_question` rejects a resolved Form final answer that is not one of the recorded options (single or multi-select); free-text fields with no recorded options are unaffected. Explanations belong in Answer bank Guidance.
+- README: Needs answer points to the Answer bank and Application questions tables.
+
 ## Source registration and selective readers
 
 - Keep documents and evidence in Drive; repair source identity, authority and version tracking in existing Settings. No new tables or job fields.
