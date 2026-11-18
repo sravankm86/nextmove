@@ -7,6 +7,12 @@ import answer_bank as a
 
 
 class AnswerBankTests(unittest.TestCase):
+    def test_phone_widget_formatting_preserves_every_digit(self):
+        self.assertTrue(a.form_value_matches('identity.phone', '+15551234567', '+1 555-123-4567'))
+        self.assertFalse(a.form_value_matches('identity.phone', '+15551234567', '5551234567'))
+        self.assertFalse(a.form_value_matches('identity.phone', '+15551234567', '+15551234568'))
+        self.assertFalse(a.form_value_matches('identity.email', 'a@example.com', 'b@example.com'))
+
     def test_connector_link_objects_use_ids(self):
         fields = [{'id': 'link-field', 'name': 'Company', 'type': 'multipleRecordLinks'},
                   {'id': 'select-field', 'name': 'Approval', 'type': 'singleSelect'}]

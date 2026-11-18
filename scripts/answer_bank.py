@@ -5,6 +5,7 @@ semantic topics in the harness; this module does not pretend regex can prove mea
 """
 import hashlib
 import json
+import re
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
@@ -75,9 +76,19 @@ def field_key(form_url, native_key, question, options, field_type, occurrence=0)
     """A changed question/options produces a new identity; old answers remain historical.
 
     Use the observed canonical form URL, excluding tracking only when verified.
-    Unknown fields must not share an invented selector or occurrence number.
+    native_key must be a stable logical field identity verified across loads, not a
+    runtime-generated widget ID. If unavailable use an empty native_key and the
+    observed wording/options/type/occurrence, never an invented selector.
     """
     return digest([form_url, native_key, question, options, field_type, occurrence])
+
+
+def form_value_matches(topic, expected, actual):
+    """Accept harmless phone formatting only when every digit remains identical."""
+    if topic == 'identity.phone' and isinstance(expected, str) and isinstance(actual, str):
+        clean = lambda value: re.sub(r'[ +().-]', '', value)
+        return bool(clean(expected)) and clean(expected) == clean(actual)
+    return expected == actual
 
 
 def question_action(existing, application_id, key):
