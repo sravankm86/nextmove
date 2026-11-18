@@ -206,12 +206,30 @@ def validate_question(row, *, user_approved=False, resolution=None):
         valid_resolution = kind == 'Form' and (resolution or {}).get('status') == 'Resolved'
         if not row.get('Final answer') or not (user_approved or valid_resolution):
             raise ValueError('Resolved requires explicit user approval or a verified resolution')
+        if kind == 'Form':
+            _check_form_final(row['Final answer'], row.get('Options'))
         if valid_resolution:
             value = resolution['answer']
             expected = json.dumps(value, ensure_ascii=False) if isinstance(value, list) else str(value)
             if row['Final answer'] != expected or row.get('Answer rule') != [resolution['answer_id']]:
                 raise ValueError('Final answer or rule differs from the validated resolution')
     return row
+
+
+def _check_form_final(final, options):
+    """A Form final is the exact value typed or selected on the form, never notes about it."""
+    choices = json.loads(options) if isinstance(options, str) and options else (options or [])
+    if not isinstance(choices, list):
+        raise ValueError('Options must be a JSON array of exact option strings')
+    if not choices:
+        return
+    try:
+        picked = json.loads(final)
+    except (TypeError, ValueError):
+        picked = final
+    picked = picked if isinstance(picked, list) else [final]
+    if not picked or any(value not in choices for value in picked):
+        raise ValueError('Form final answer must be one of the recorded options')
 
 
 def validate_narrative_sources(value):

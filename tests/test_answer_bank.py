@@ -1,3 +1,4 @@
+import json
 import copy
 import sys
 import unittest
@@ -97,6 +98,18 @@ class AnswerBankTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             a.validate_question(row | {'Final answer': 'Yes'}, resolution=self.run_rule())
         a.validate_question(row, user_approved=True)
+
+    def test_form_final_must_be_an_offered_option(self):
+        row = {'Question type': 'Form', 'Application': ['role-one'], 'Field key': 'key', 'Question': 'Team size?',
+               'Status': 'Resolved', 'Options': json.dumps(['1-4 engineers', '10+ engineers'])}
+        a.validate_question(row | {'Final answer': '10+ engineers'}, user_approved=True)
+        with self.assertRaises(ValueError):
+            a.validate_question(row | {'Final answer': '10+ engineers.'}, user_approved=True)
+        multi = row | {'Options': json.dumps(['New York', 'Toronto', 'Austin'])}
+        a.validate_question(multi | {'Final answer': json.dumps(['New York', 'Austin'])}, user_approved=True)
+        with self.assertRaises(ValueError):
+            a.validate_question(multi | {'Final answer': json.dumps(['New York', 'Boston'])}, user_approved=True)
+        a.validate_question(row | {'Options': '[]', 'Final answer': 'Free text'}, user_approved=True)
 
     def test_narratives_cannot_enter_the_form_bank(self):
         with self.assertRaises(ValueError):
