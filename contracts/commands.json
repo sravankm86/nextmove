@@ -1,5 +1,5 @@
 {
-  "version": 11,
+  "version": 12,
   "tables": [
     "Companies",
     "Applications",
@@ -51,7 +51,7 @@
       "stage": "Curate",
       "mode": "prepare",
       "instructions": "stages/curate.md",
-      "scope": "Refresh company/funding evidence and propose newly funded matching companies on cadence. Only humans set Allow/Exclude.",
+      "scope": "Discover relevant companies new to the list, verify company/funding facts and propose them. Funding recency is not an admission requirement. Only humans set Allow/Exclude.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -87,7 +87,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Inventoried, retryable Need review and explicitly requested reassessments: exact JD/goals/master plus company facts determine independent fit scores. Preserve historical outcomes.",
+      "scope": "Inventoried, retryable Need review, and affected stale unsubmitted approvals; exact JD/goals/master/company evidence determine fit. Preserve historical outcomes.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -144,7 +144,7 @@
       "stage": "Experiment",
       "mode": "prepare",
       "instructions": "DATA.md",
-      "scope": "Capture new feedback across the configured scope, deduplicate, verify eval and audit persistence, then clear only unchanged captured Manual notes.",
+      "scope": "Capture new feedback across the configured scope, deduplicate, verify eval and audit persistence, then clear only unchanged captured Feedback.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

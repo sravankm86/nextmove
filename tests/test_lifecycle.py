@@ -20,7 +20,7 @@ class LifecycleTests(unittest.TestCase):
         for old in histories:
             self.assertTrue(protected_history(old))
             with self.assertRaises(ValueError):application_write({'Lifecycle status':'Queued'},existing_application=old)
-            self.assertEqual(application_write({'Manual notes':None},existing_application=old),{'Manual notes':None})
+            self.assertEqual(application_write({'Feedback':None},existing_application=old),{'Feedback':None})
         with self.assertRaises(ValueError):
             application_write({'Agent notes':'Reopening'},existing_application={'Lifecycle status':'Queued'},existing_state={'submission':{'attempt_key':'legacy'}})
         for old in ['Confirmed','Needs review','Offer','Submission uncertain',*LEGACY_READ_ONLY]:

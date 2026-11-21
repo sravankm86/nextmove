@@ -1,5 +1,5 @@
 {
-  "version": 12,
+  "version": 13,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -135,10 +135,12 @@
           "admission": "Proposed",
           "auto_allow": false,
           "cadence_days": 7,
-          "first_run_lookback_days": 90,
-          "feeds": [],
-          "feeds_note": "Each feed is a Settings-registered official/news/filing source with its own checkpoint; blank feeds mean discovery is blocked, not complete.",
-          "min_funding_stage_source": "Career Goals company-stage preference; discovery is blocked until set"
+          "first_run_lookback_days": null,
+          "min_funding_stage_source": "Career Goals company-stage preference; discovery is blocked until set",
+          "scope": "new_to_list",
+          "funding_recency_required": false,
+          "sources": [],
+          "sources_note": "Register verified public directories, official investor/company catalogs and explicit web-search plans; report pagination coverage separately from exploratory search."
         }
       },
       "verification": "Needs verification"

@@ -11,15 +11,15 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run']
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None):
     """Validate active fields and preserve historical outcomes before any stage update."""
-    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History'})
+    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History', 'Manual notes'})
     if bad:
         raise ValueError('Unsupported Application fields: '+', '.join(sorted(bad)))
-    if protected_history(existing_application or {}, existing_state) and set(values) - {'Manual notes'}:
+    if protected_history(existing_application or {}, existing_state) and set(values) - {'Feedback'}:
         raise ValueError('Historical outcome or unresolved legacy attempt is read-only')
     from lifecycle import STATUSES
     if 'Lifecycle status' in values and values['Lifecycle status'] not in STATUSES:
@@ -62,8 +62,14 @@ def resolve(application, histories):
             continue
         if not isinstance(data, dict) or data.get('schema') not in READ_SCHEMAS:
             continue
-        for state in data.get('records', []):
-            if state.get('record_id') == application['id']:
+        records = data.get('records')
+        # Legacy audit maps contain lists of field changes, not complete stage states.
+        # Preserve those events; do not reinterpret them as acceptance evidence.
+        if not isinstance(records, list):
+            continue
+        for state in records:
+            if (isinstance(state, dict) and isinstance(state.get('stage_runs'), dict)
+                    and state.get('record_id') == application['id']):
                 matches.append((event.get('Recorded at', ''), event.get('Event key', ''), state))
     if not matches:
         return None
@@ -166,7 +172,7 @@ def preparation_complete(p, current_inputs, digest):
         return False
     if current_inputs.get('resume_guidelines') and p.get('guidelines') != current_inputs['resume_guidelines']:
         return False
-    if p.get('company_consistency') not in ('pass', 'not_applicable'):
+    if not company_history_ready(p):
         return False
     if path == 'base_reuse':
         return bool(p.get('base') and p.get('coverage') == 'complete'
@@ -174,6 +180,19 @@ def preparation_complete(p, current_inputs, digest):
                     and p.get('base_version') == digest)
     return bool(p.get('base') and p.get('grounding') == 'pass' and p.get('guideline_check') == 'pass'
                 and p.get('base_version') != digest)
+
+
+def company_history_ready(preparation):
+    """A label alone cannot prove same-company consistency or an empty history."""
+    history = preparation.get('company_history') or {}
+    matches = history.get('matches')
+    if (history.get('status') != 'complete' or not history.get('evidence')
+            or type(matches) is not int or matches < 0 or history.get('missing_details')):
+        return False
+    if matches == 0:
+        return preparation.get('company_consistency') == 'not_applicable'
+    return bool(preparation.get('company_consistency') == 'pass'
+                and history.get('compared_versions'))
 
 
 def protected_history(app, state=None):

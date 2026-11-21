@@ -14,6 +14,8 @@ Derive the role family, designation examples, seniority/experience/scope and exp
 
 Validate Curate's draft Sources once the user allows a company, and resolve missing boards, regions or reader configuration. An Allow company without usable Sources is a coverage gap, not zero jobs.
 
+Use scripts/catalog_reader.py for verified Greenhouse, Ashby and Lever boards; retain raw feed artifacts transiently and expose only plausible candidates to the model. Board slugs must come from official links/configuration. Other providers need a validated reader; this helper does not claim support for them.
+
 Enumerate every catalog page or cursor to its verified end with repeatable readers and code. Validate counts, unique identities, repeated cursors, malformed or empty pages and caps. Zero jobs needs verified empty coverage; search snippets or page-one counts never prove completeness. Reuse unchanged resources only with equivalent evidence and durable checkpoints. Preserve meaningful URL parameters; title equality is not deduplication.
 
 Source status: Complete when every planned source is verified, Partial when usable observations have gaps, Failed when no source is usable.
@@ -33,7 +35,7 @@ Use broad signals from Settings `role_family`: direct title patterns (including 
 
 Create or update candidates as Inventoried with stable identity, official posting URL, Scan run and the source snapshot under DATA.md. Save Job evidence: an exact capture with the full description, posting aliases, salary basis, currency, location and level conditions, work restrictions and the true posting date. Display columns follow DATA.md compact job facts; never estimate values or borrow another posting's band.
 
-Reobserving an active role updates only source metadata; skip protected historical rows under WORKFLOW.md and preserve human outcomes, review evidence and later states; consume Manual notes only through DATA.md’s verified feedback-inbox procedure. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
+Reobserving an active role updates only source metadata; skip protected historical rows under WORKFLOW.md and preserve human outcomes, review evidence and later states; consume Feedback only through DATA.md’s verified feedback-inbox procedure. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
 
 Clear rejects become aggregate reason counts, not stored rows; unrelated feed bodies stay transient. Report observed, clear-rejected, plausible, newly inventoried, reobserved, identity-pending and capture-gap counts, plus source coverage and skipped companies. A single Scan stops here; a full Run hands Inventoried roles to Review.
 

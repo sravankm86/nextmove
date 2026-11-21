@@ -1,5 +1,13 @@
 # Changelog
 
+## First-run readiness
+
+- Separate permanent Manual notes from the verified Feedback inbox, preserving existing notes and receipt identities.
+- Preserve incompatible legacy audit maps without crashing recovery or treating them as approval.
+- Discover companies new to the list without a recent-funding gate; current user preferences determine company types and applicable maturity rules.
+- Checkpoint new-company Allow choices and affected prior approvals; keep missing submission history local to affected resume work.
+
+
 ## Resume-ready endpoint
 
 - End Run after Curate → Scan → Review → Prepare, with the verified resume as Ready.

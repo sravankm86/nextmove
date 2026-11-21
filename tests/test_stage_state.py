@@ -15,7 +15,7 @@ class StateTests(unittest.TestCase):
         self.state['run_checks']={'duplicate':{'status':'unique','checked_in_run':'run-example','evidence':'Verified official role ID'}}
 
     def reuse(self, digest):
-        return {'path':'base_reuse','base':'base-ainative','base_version':digest,'base_master':'master-v1','coverage':'complete','company_consistency':'not_applicable'}
+        return {'path':'base_reuse','base':'base-ainative','base_version':digest,'base_master':'master-v1','coverage':'complete','company_consistency':'not_applicable','company_history':{'status':'complete','matches':0,'evidence':'Checked live application and registered historical records'}}
 
     def prepared(self, pdf, preparation):
         digest=hashlib.sha256(pdf).hexdigest()
@@ -34,7 +34,7 @@ class StateTests(unittest.TestCase):
 
     def test_prepare_tailored_version_needs_grounding_and_guideline_check(self):
         pdf=b'tailored pdf'
-        tailored={'path':'tailored','base':'base-bigtech-a','base_version':'base-hash','grounding':'pass','guideline_check':'pass','guidelines':'guidelines-v2','company_consistency':'pass'}
+        tailored={'path':'tailored','base':'base-bigtech-a','base_version':'base-hash','grounding':'pass','guideline_check':'pass','guidelines':'guidelines-v2','company_consistency':'pass','company_history':{'status':'complete','matches':1,'evidence':'Historical submission and PDF comparison','compared_versions':['prior-pdf']}}
         app,state=self.prepared(pdf,tailored)
         inputs={**self.inputs,'resume_guidelines':'guidelines-v2'}
         self.assertTrue(s.resume_ready(app,state,[self.run],inputs,pdf,companies=self.companies))
@@ -82,7 +82,7 @@ class StateTests(unittest.TestCase):
     def test_legacy_columns_and_multiple_context_links_are_rejected(self):
         with self.assertRaises(ValueError):s.application_write({'Evidence versions (JSON)':'old plan'})
         with self.assertRaises(ValueError):s.application_write({'Company':['one','two']})
-        self.assertEqual(len(s.CORE_FIELDS),25)
+        self.assertEqual(len(s.CORE_FIELDS),26)
     def test_separate_harness_recovers_without_legacy_columns(self):
         h=[{'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(s.payload([self.state]))}]
         self.assertTrue(s.review_ready(self.app,s.resolve(self.app,h),[self.run],self.inputs, companies=self.companies))

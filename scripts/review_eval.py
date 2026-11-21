@@ -46,6 +46,14 @@ def may_clear(stage, entity, captured_note, current_note, receipt):
                 and all(receipt.get(k) is True for k in ('eval_verified', 'snapshot_verified', 'history_verified')))
 
 
+def feedback_clear(stage, entity, captured_text, current_row, receipt):
+    """Return only a verified Feedback acknowledgement; Manual notes is permanent."""
+    current = current_row.get('Feedback')
+    if current and may_clear(stage, entity, captured_text, current, receipt):
+        return {'Feedback': None}
+    return {}
+
+
 def outcome(verdict, prediction):
     if verdict not in VERDICTS or prediction not in PREDICTIONS:
         raise ValueError('Unknown verdict or prediction')

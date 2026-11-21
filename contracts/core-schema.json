@@ -1,5 +1,5 @@
 {
-  "version": 16,
+  "version": 17,
   "description": "Seven-table logical blueprint; preserve legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -34,6 +34,10 @@
         },
         {
           "name": "Manual notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Feedback",
           "type": "multilineText"
         },
         {
@@ -84,7 +88,7 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "25 physical fields including relationships. Current job facts, six-state lifecycle, human/agent notes and resume readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "26 physical fields including relationships. Current job facts, six-state lifecycle, human/agent notes and resume readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -133,6 +137,10 @@
         },
         {
           "name": "Manual notes",
+          "type": "multilineText"
+        },
+        {
+          "name": "Feedback",
           "type": "multilineText"
         },
         {
@@ -646,7 +654,7 @@
     {
       "name": "Review eval",
       "business_key": "Application record",
-      "description": "Golden answer key for Review built from the user's graded Manual notes: frozen verdict and reason, holdout split, the latest eval prediction and its match. Self-contained (no links) so Applications and Runs gain no columns. DATA.md \"Review eval\".",
+      "description": "Golden answer key for Review built from the user's graded Feedback: frozen verdict and reason, holdout split, the latest eval prediction and its match. Self-contained (no links) so Applications and Runs gain no columns. DATA.md \"Review eval\".",
       "fields": [
         {
           "name": "Example",
@@ -842,6 +850,7 @@
     "Job description link",
     "Lifecycle status",
     "Manual notes",
+    "Feedback",
     "Agent notes",
     "Starting salary",
     "Max salary",

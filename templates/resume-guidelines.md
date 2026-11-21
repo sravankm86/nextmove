@@ -150,7 +150,7 @@ Formatting that keeps resumes readable and ATS-safe.
 | Columns | `columns` | select | Single column / Two columns |  |
 | Standard headings | `headings` | multi select | Summary / Experience / Education / Skills / Certifications / Projects |  |
 | Disallowed elements | `disallowed_elements` | multi select | Tables / Text boxes / Icons / Photos / Key content in headers or footers |  |
-| Allowed fonts | `fonts` | multi select | Calibri / Arial / Helvetica / Garamond / Georgia |  |
+| Allowed fonts | `fonts` | multi select | Calibri / Arial / Helvetica / Garamond / Georgia / Liberation Sans |  |
 | Font size (pt) | `font_size_pt` | range |  |  |
 | Date format | `date_format` | text |  |  |
 | Outputs | `outputs` | multi select | Text-based PDF / Editable Google Doc / Word document |  |

@@ -5,7 +5,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Command | Scope |
 |---|---|
 | Run / Run Nextmove | Default single agent: Curate → Scan → Review → Prepare (ends at Ready) |
-| Curate / Companies | Refresh company/funding evidence; on cadence propose newly funded matching companies as Proposed. Never sets Allow/Exclude |
+| Curate / Companies | Refresh company/funding evidence; on cadence propose matching companies new to the list as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
@@ -44,7 +44,7 @@ Use code for enumeration, normalization, identity, candidate filters, hashes and
 
 Scan inventories plausible candidates for the user's role family (Settings `role_family`) after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Follow the numeric routing in stages/review.md, including Unresolved at zero; only a current qualifying score can advance to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
 
-Preserve human outcomes. At every invocation capture new Manual notes under DATA.md "Feedback inbox and Review eval" before stage decisions, and checkpoint capture again at completion. Once the eval case, snapshot and History are verified, clear only the unchanged captured note. Feedback updates evals; it does not silently change Career Goals, stage rules or the role status. Do not reopen submitted/terminal roles when fit inputs change.
+Preserve human outcomes. At every invocation capture new Feedback under DATA.md "Feedback inbox and Review eval" before stage decisions, and checkpoint capture again at completion. Once the eval case, snapshot and History are verified, clear only the unchanged captured Feedback. Feedback updates evals; it does not silently change Career Goals, stage rules or the role status. Do not reopen submitted/terminal roles when fit inputs change.
 
 Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. Never hide unverified changes.
 
@@ -87,6 +87,12 @@ Manual status changes are not acceptance evidence. Follow stages/review.md for t
 
 ## Existing installations
 
-Read seven active tables; do not require the retired Answer bank or Application questions tables. Preserve them and any extra columns, options, old controls and artifacts as inactive history. Setup never deletes or remaps them automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Manual notes by the verified DATA.md procedure without changing the outcome.
+Read seven active tables; do not require the retired Answer bank or Application questions tables. Preserve them and any extra columns, options, old controls and artifacts as inactive history. Setup never deletes or remaps them automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
 
 An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/Prepare evidence without fabricating completion or launching later work. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
+
+## First full run after an input change
+
+Refresh affected goal-derived criteria before Run checks. Read Settings.role_policy.revalidation_pending and the Run checkpoint; include affected unprotected Ready/Queued approvals in Review before reusing them. Preserve their PDFs and prior decisions. Re-review only affected declined roles, not every historical Not pursuing row. A settings refresh schedules revalidation; it does not manufacture a current approval or change lifecycle by itself.
+
+Curate reports Proposed companies for one human Allow/Exclude checkpoint. Existing Allow companies can continue independently. Newly discovered companies enter Scan only after the human's choices are saved and verified. Checkpoint if the user is absent; never auto-Allow. Missing earlier submission dates/PDFs block only the affected company's resume consistency check; retain exact questions in the Run and continue independent roles.

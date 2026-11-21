@@ -8,7 +8,7 @@ One agent can run the whole sequence. You can also start each stage manually in 
 
 | Stage | Work | Result |
 |---|---|---|
-| [Curate](stages/curate.md) | Refresh company/funding evidence and propose newly funded companies that meet your preferences. | Current evidence; Proposed companies await your Allow/Exclude. |
+| [Curate](stages/curate.md) | Refresh company/funding evidence and propose matching companies new to your list that meet your preferences. | Current evidence; Proposed companies await your Allow/Exclude. |
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible candidates for your target roles become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
 | [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
@@ -37,15 +37,15 @@ The private main Drive folder has two working children: **Role specific** for cu
 
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
-| Companies | Proposed/Allow/Exclude targeting, funding stage and company evidence | 10 |
-| Applications | Job facts, review/resume state, Manual notes and Agent notes | 25 |
+| Companies | Proposed/Allow/Exclude targeting, funding stage and company evidence | 11 |
+| Applications | Job facts, review/resume state, Manual notes, Feedback and Agent notes | 26 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
 | Runs | Frozen inputs, ownership, progress and handoff | 20 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 | Review eval | Golden answer key from your graded notes, and each eval's prediction and match | 13 |
 
-The 100-column new-install target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 102-column new-install target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
@@ -109,8 +109,10 @@ These validate public contracts/helpers, not live scan completion or account rea
 
 ## Feedback that improves the workflow
 
-Manual notes is an inbox. Write what the agent should have done and why; partial feedback is useful too. On the next invocation the coordinator saves it as an eval case with evidence and audit history, verifies the capture, then clears the unchanged note. Your feedback survives in Review eval/Drive even after the inbox is empty. Unclear feedback stays pending instead of becoming a guessed answer key.
+Manual notes is permanent human context and is never automatically cleared. Feedback is the separate inbox for correcting an agent's output. On the next invocation, the coordinator captures Feedback with evidence and history, verifies it, then clears only that unchanged Feedback. Ambiguous feedback remains pending; previous evals/receipts remain preserved.
 
 Use **Capture feedback** to consume the inbox, and **Review eval** (or **Eval Review**) to test frozen cases with a fresh reviewer. Reports distinguish blind performance from a comparison of existing statuses. Normal stage runs capture feedback and propose tested improvements; they do not run unattended between invocations. DATA.md "Feedback inbox and Review eval" defines the shared process, including duplicate handling, holdout protection and rule-change review. No new table or per-stage instruction file is required.
 
 Source files remain in Drive. Settings registers their identity, authority and current revision/hash; DATA.md "Registered sources and small artifact reads" defines freshness checks and exact-ID evidence selection. Use scripts/artifact_reader.py for stored job/company/coverage artifacts, and the dedicated Review eval workflow for label-free eval inputs. No extra preference/fact table is required.
+
+For manually submitted application answers, the existing Application questions table can be used as an optional human-maintained interview reference. Record the linked application, exact question, exact Final answer and Answered on date. It is not a pipeline dependency.

@@ -4,7 +4,7 @@ For deliberate maintenance only, not stage startup. README.md maps the repositor
 
 ## Retiring live columns or choices
 
-The active new-install target is 100 fields: Companies 10, Applications 25, Sources 13, Runs 20, Settings 6, History 13 and Review eval 13, including reciprocal links (contracts/core-schema.json). Existing retired-stage tables, fields, status choices and controls remain inactive history; reducing scope does not authorize deleting them. Before deleting a live column, preserve its values (with record IDs and field IDs) in Audit trail content, record the manifest in History, confirm no reader, formula, view or automation depends on it, then delete only the verified list and read back. Deleting a reciprocal link removes the relationship itself. Connectors that cannot delete fields or manage select choices get an exact UI step instead; deployment readiness stays incomplete until readback confirms it.
+The active new-install target is 102 fields: Companies 11, Applications 26, Sources 13, Runs 20, Settings 6, History 13 and Review eval 13, including reciprocal links (contracts/core-schema.json). Existing retired-stage tables, fields, status choices and controls remain inactive history; reducing scope does not authorize deleting them. Before deleting a live column, preserve its values (with record IDs and field IDs) in Audit trail content, record the manifest in History, confirm no reader, formula, view or automation depends on it, then delete only the verified list and read back. Deleting a reciprocal link removes the relationship itself. Connectors that cannot delete fields or manage select choices get an exact UI step instead; deployment readiness stays incomplete until readback confirms it.
 
 ## Release checks
 
