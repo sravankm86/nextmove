@@ -1,3 +1,3 @@
 # Nextmove in Codex
 
-Start every session with the connection check in SETUP.md ("Start a session"), then AGENTS.md, WORKFLOW.md and the requested stage. A Run begins with Curate (stages/curate.md), which maintains company targeting, funding evidence and discovery. Register the private base and this repository once using SETUP.md; every harness needs its own authenticated connections. A Run executes Curate → Scan → Review → Prepare and ends at the verified Ready resume, while named stages stop at handoff. Recover from Airtable/Drive, preserve human notes and factual resumes, and leave all later recruiting work to the user.
+Use AGENTS.md as the entry point and SETUP.md for private connections. WORKFLOW.md owns command routing and handoffs; stages/ owns each stage. Recover current state from Airtable/Drive rather than prior chat. Sanitize is explicit-only under docs/MAINTENANCE.md and never part of Run.

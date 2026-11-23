@@ -91,7 +91,7 @@ class ReviewFrameTests(unittest.TestCase):
         inputs={'company_evidence':'company-capture','goals':'g','master':'m','policy':policy,'eligibility_policy':'e','jd_hash':'jd'}
         run={'id':'run','Input versions (JSON)':{'stage_inputs':{'review':inputs}}}
         companies=[{'id':'company','Search status':'Allow'}]
-        app={'Company':['company'],'id':'job','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':c,'Resume fit':r,'Review run':['run']}
+        app={'Company':['company'],'id':'job','Lifecycle status':'Queued','Career fit':c,'Resume fit':r,'Review run':['run']}
         state={'record_id':'job','stage_runs':{'review':'run'},'run_checks':{'duplicate':{'status':'unique','checked_in_run':'run','evidence':'Verified posting identity'}},'review':{'assessment_method':contract['assessment_method'],'scoring':scored_review(c,r),'decision':'approve','assessment_complete':True,'jd_hash':'jd','current_description':True,'evidence':'Verified indexed assessment'}}
         self.assertTrue(review_ready(app,state,[run],inputs, companies=companies))
         for key in ['scoring','evidence','assessment_method']:

@@ -27,7 +27,7 @@ Run checks (WORKFLOW.md) own duplicate discovery: check the identity index befor
 Use broad signals from Settings `role_family`: direct title patterns (including level variants and localized equivalents), broader patterns that need a context check, clearly different functions and clearly junior titles. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` separates `title_screen`, `inventory_candidate` and Review's `review_eligibility`, all driven by that definition; a title alone never admits a role.
 
 - Exclude clearly unrelated functions and clearly junior roles, with recorded evidence.
-- Keep direct role-family matches whose domain names another field (for example finance, design or security), unlevelled or flat titles, and roles with uncertain level: they enter Inventoried with Role eligibility Pending for Review.
+- Keep direct role-family matches whose domain names another field (for example finance, design or security), unlevelled or flat titles, and roles with uncertain level: they enter Inventoried for Review.
 - Do not require a seniority word, infer company grade from a title, treat a low minimum-years figure as proof of insufficient scope, or turn career preferences into scan exclusions.
 - Missing identity stays a Run pending check (URL, reason, next action). Insufficient evidence of plausibility stays pending, not rejected. A missing full JD does not block inventory but blocks Review approval.
 

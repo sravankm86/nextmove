@@ -9,7 +9,7 @@ class StateTests(unittest.TestCase):
         self.inputs={'company_evidence':'company-capture-v1','goals':'goals-v1','master':'master-v1','policy':review_frame_contract()[0],'eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.companies=[{'id':'company-example','Search status':'Allow','Application hold status':'Held'}]
-        self.app={'Company':['company-example'],'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Role eligibility':'Eligible','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
+        self.app={'Company':['company-example'],'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
         self.state={'record_id':'role-example','job_key':self.app['Job key'],'stage_runs':{'review':'run-example'},'review':{'decision':'approve','jd_hash':'jd-v1','current_description':True}}
         self.state['review'].update(assessment_method='three_step_v1',scoring=scored_review('High','Medium'),evidence='Verified indexed qualification evidence',assessment_complete=True)
         self.state['run_checks']={'duplicate':{'status':'unique','checked_in_run':'run-example','evidence':'Verified official role ID'}}
@@ -82,12 +82,12 @@ class StateTests(unittest.TestCase):
     def test_legacy_columns_and_multiple_context_links_are_rejected(self):
         with self.assertRaises(ValueError):s.application_write({'Evidence versions (JSON)':'old plan'})
         with self.assertRaises(ValueError):s.application_write({'Company':['one','two']})
-        self.assertEqual(len(s.CORE_FIELDS),28)
+        self.assertEqual(len(s.CORE_FIELDS),27)
     def test_separate_harness_recovers_without_legacy_columns(self):
         h=[{'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(s.payload([self.state]))}]
         self.assertTrue(s.review_ready(self.app,s.resolve(self.app,h),[self.run],self.inputs, companies=self.companies))
     def test_new_candidate_requires_checked_identity_and_explicit_allow(self):
-        candidate={'Job key':'employer:role-123','Role':'Product Manager','Company':['company-example'],'Lifecycle status':'Inventoried','Role eligibility':'Pending'}
+        candidate={'Job key':'employer:role-123','Role':'Product Manager','Company':['company-example'],'Lifecycle status':'Inventoried'}
         self.assertEqual(s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies={'company-example'}, companies=self.companies),candidate)
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'}, companies=self.companies)
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set(), companies=self.companies)

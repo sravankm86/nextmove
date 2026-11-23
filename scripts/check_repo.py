@@ -1,4 +1,5 @@
 """Dependency-free checks for public contracts/docs, not a live integration test."""
+import ast
 import json
 import re
 import sys
@@ -55,6 +56,16 @@ def check(root):
             allowed = {"name", "on", "permissions", "concurrency", "jobs", "env", "defaults", "run-name"}
             require({"name", "on", "jobs"}.issubset(root_keys) and root_keys.issubset(allowed), "Invalid GitHub workflow root keys")
         if p.suffix == ".md":
+            for script, symbol in ([] if rel == 'CHANGELOG.md' else re.findall(r'\b(scripts/[A-Za-z0-9_./-]+\.py):([A-Za-z_]\w*)', text)):
+                target = root / script
+                if not target.is_file():
+                    errors.append(rel + ': missing documented helper: ' + script)
+                    continue
+                module = ast.parse(target.read_text())
+                symbols = {node.name for node in module.body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+                symbols |= {name.id for node in module.body if isinstance(node, ast.Assign)
+                            for name in node.targets if isinstance(name, ast.Name)}
+                require(symbol in symbols, rel + ': missing documented symbol: ' + script + ':' + symbol)
             # Fenced examples may deliberately contain placeholder paths.
             plain = re.sub(r"(?ms)^(```|~~~).*?^\1[^\n]*$", "", text)
             for dest in re.findall(r"\[[^\]\n]*\]\(([^)]+)\)", plain):
@@ -96,7 +107,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':12,'Applications':28,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':12}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':12,'Applications':27,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':12}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
@@ -115,6 +126,12 @@ def check(root):
         aliases += cmd["aliases"]
     require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
     require(command.get('endpoint') == 'Ready', 'Run must end at Ready')
+    sanitize = next((c for c in command['commands'] if c['command'] == 'Sanitize'), {})
+    require(sanitize.get('explicit_only') is True and sanitize.get('included_in_run') is False
+            and 'Sanitize' not in command['pipeline'], 'Sanitize must be explicit-only and outside Run')
+    require(sanitize.get('instructions') == 'docs/MAINTENANCE.md'
+            and sanitize.get('required_resources') == ['instructions_repository'],
+            'Sanitize must reuse maintenance and allow repo-only work without private accounts')
     require(not {'Apply', 'Track'} & {c['command'] for c in command['commands']}, 'Removed commands cannot dispatch')
     removed = ['stages/apply.md','stages/track.md','scripts/submission_policy.py']
     require(all(not (root/p).exists() for p in removed), 'Retired tasks must stay absent')
@@ -142,10 +159,11 @@ def check(root):
     feedback = policy.get('feedback', {})
     require(feedback.get('protect_eligible_recall') is True and feedback.get('career_rejections_are_scan_negatives') is False, 'Unsafe feedback learning')
     app_fields = {f['name'] for f in lookup['Applications']['fields']}
+    require('Role eligibility' not in app_fields, 'Eligibility is proven by current scored Review approval, not a duplicate flag')
     from stage_state import CORE_FIELDS
     require('Feedback' in companies and {'Manual notes','Feedback'}.issubset(app_fields), 'Separate lasting notes and Feedback are required')
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 28, 'Expected the 28-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 27, 'Expected the 27-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')

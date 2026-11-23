@@ -1,5 +1,5 @@
 {
-  "version": 18,
+  "version": 19,
   "description": "Nine-table logical blueprint; reactivate answer tables without deleting existing data; preserve other legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -88,7 +88,7 @@
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "28 physical fields including relationships. Current job facts, six-state lifecycle, human/agent notes and resume readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "Current physical fields including relationships. Current job facts, six-state lifecycle, human/agent notes and resume readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
       "fields": [
         {
           "name": "Application ID",
@@ -211,23 +211,6 @@
             "dateFormat": {
               "name": "iso"
             }
-          }
-        },
-        {
-          "name": "Role eligibility",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Pending"
-              },
-              {
-                "name": "Eligible"
-              },
-              {
-                "name": "Excluded"
-              }
-            ]
           }
         },
         {
@@ -1028,7 +1011,6 @@
     "Location",
     "Work arrangement",
     "Job posted date",
-    "Role eligibility",
     "Career fit",
     "Resume fit",
     "Job evidence",

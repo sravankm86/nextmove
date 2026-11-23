@@ -14,8 +14,7 @@ class CurateHandoffTests(unittest.TestCase):
         self.company = {'id': 'company-example', 'Search status': 'Allow',
                         'Application hold status': 'Held', 'Funding stage': 'Series B'}
         self.candidate = {'Company': ['company-example'], 'Job key': 'employer:role',
-                          'Role': 'Senior Product Manager', 'Lifecycle status': 'Inventoried',
-                          'Role eligibility': 'Pending'}
+                          'Role': 'Senior Product Manager', 'Lifecycle status': 'Inventoried'}
 
     def test_temporary_hold_and_below_preference_funding_do_not_filter_inventory(self):
         for status in ['Held', 'Not assessed', 'Needs clarification', 'No known hold']:
@@ -67,8 +66,7 @@ class CurateHandoffTests(unittest.TestCase):
         inputs = {'goals': 'g', 'master': 'm', 'policy': policy, 'eligibility_policy': 'e',
                   'company_evidence': 'funding-capture-v1', 'jd_hash': 'jd'}
         run = {'id': 'review-run', 'Input versions (JSON)': {'stage_inputs': {'review': inputs}}}
-        app = {'id': 'role', 'Company': [self.company['id']], 'Lifecycle status': 'Queued',
-               'Role eligibility': 'Eligible', 'Career fit': 'High', 'Resume fit': 'Medium',
+        app = {'id': 'role', 'Company': [self.company['id']], 'Lifecycle status': 'Queued', 'Career fit': 'High', 'Resume fit': 'Medium',
                'Review run': ['review-run']}
         state = {'stage_runs': {'review': 'review-run'},
                  'run_checks': {'duplicate': {'status': 'unique', 'checked_in_run': 'review-run', 'evidence': 'official ID'}},

@@ -1,5 +1,14 @@
 # Changelog
 
+Release history only; README.md and the current stage files define supported behavior. Older entries are not executable instructions.
+
+## Explicit-only sanitization
+
+- Add Sanitize under the existing maintenance procedure; it never runs with the pipeline, setup or schedules.
+- Align form-inspection, harness entry and security instructions with the current Ready handoff.
+- Remove copied field counts from prose and retire the redundant Role eligibility flag from active writes; scored Review approval remains mandatory. Live fields and historical values are preserved.
+- Add serialized end-to-end handoff regressions for both one-agent and manually separated stages.
+
 ## Required answers in Prepare
 
 - Expand Prepare to inspect application questions after resume verification; no external form filling or submission.
@@ -21,8 +30,6 @@
 - Remove Apply/Track, form answers, application-question/submission helpers, mailbox work and application-limit/cooldown management.
 - Use seven active tables and six lifecycle states; preserve existing later-stage data and protect historical outcomes.
 - Retain Review scoring, objective duplicate checks, feedback/blind replay, source recovery and grounded PDF verification.
-
-Earlier entries below describe historical releases, not the current supported workflow.
 
 ## Form answers hold only the submitted value
 

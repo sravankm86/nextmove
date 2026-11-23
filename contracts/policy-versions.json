@@ -1,5 +1,5 @@
 {
-  "schema_version": 18,
+  "schema_version": 19,
   "scan": "role-family-from-settings-v4",
   "eligibility": "pay-and-ownership-v5",
   "rules": [
