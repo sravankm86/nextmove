@@ -1,5 +1,12 @@
 # Changelog
 
+## Required answers in Prepare
+
+- Expand Prepare to inspect application questions after resume verification; no external form filling or submission.
+- Reactivate Answer bank and Application questions, preserving existing answers and approval states.
+- Ready now requires a verified resume, complete form coverage and current Approved/Resolved required answers. Keep Queued and preserve the PDF when answers or inspection are blocked.
+- Add live-answer fingerprints, duplicate-question reuse and fail-closed readiness checks.
+
 ## First-run readiness
 
 - Separate permanent Manual notes from the verified Feedback inbox, preserving existing notes and receipt identities.

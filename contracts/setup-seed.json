@@ -1,5 +1,5 @@
 {
-  "version": 13,
+  "version": 14,
   "table": "Settings",
   "description": "Resolve actual private references. Preserve existing values and mappings. No fabricated facts or credential storage.",
   "resources": [
@@ -92,6 +92,14 @@
       "verification": "Missing",
       "value": null,
       "note": "Private versioned feedback catalog, receipt index, Review eval table, replay inputs and baseline/report references; procedures stay in DATA.md."
+    },
+    {
+      "key": "answer_bank",
+      "reference_url": null,
+      "verification": "Missing",
+      "value": null,
+      "value_shape": "{kind: airtable, answer_bank_table_id, questions_table_id}",
+      "note": "Active Prepare dependency. Preserve existing user answers and status choices. No private default answers are shipped."
     }
   ],
   "policies": [

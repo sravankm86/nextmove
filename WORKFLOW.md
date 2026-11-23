@@ -8,17 +8,17 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Curate / Companies | Refresh company/funding evidence; on cadence propose matching companies new to the list as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
-| Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified Ready |
+| Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready |
 | Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
 | Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
 
 Match command aliases as complete phrases: Review eval / Eval Review is an Experiment, not production Review.
 
-Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, and stops at the verified resume handoff. It cannot launch another harness.
+Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, and stops at the verified resume-and-answer handoff. It cannot launch another harness.
 
 ## Startup and ownership
 
-Discover/map the seven active tables, Settings and Stop all. Curate runs first in a Run so later stages read current company evidence; a Partial Curate does not block independent Scan/Review/Prepare work. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
+Discover/map the nine active tables, Settings and Stop all. Curate runs first in a Run so later stages read current company evidence; a Partial Curate does not block independent Scan/Review/Prepare work. For Scan/Review resolve the current Career Goals revision and validate the corresponding preference set of extracted preferences/readiness under CAREER-GOALS.md; reuse one verified extraction within a full Run and refresh affected values if it changes. Record run-level read scope, not routine per-read events. Resolve goals/master/content as required and verify this harness's access/capabilities. Connections and local files are not inherited.
 
 Resume one compatible released unfinished Run or create one. Pin instruction/input versions, owner and frozen scope. A full run uses one row with stage checkpoints; manual invocations use the same checkpoint format. Sources hold board cursors and Applications hold job state. Bounded Run segments handle oversized pending lists without truncation.
 
@@ -50,7 +50,7 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Changed decision inputs require revalidation.
 
-Review alone approves Queued (stages/review.md). Prepare produces the verified resume (stages/prepare.md), saves its exact reference/version and changes, and stops. No command dispatches application forms or mailbox work.
+Review alone approves Queued (stages/review.md). Prepare produces the verified resume, inspects the official application questions and prepares approved/resolved answers under stages/prepare.md. It saves the evidence and stops at Ready; it does not fill forms, submit or monitor mail.
 
 ## Stage boundaries and exit
 
@@ -79,7 +79,7 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Inventoried | Plausible role awaiting its first Review. |
 | Need review | Review cannot confidently approve or reject it; Agent notes identifies the gap. |
 | Queued | Current evidence-backed Review approval; eligible for Prepare. |
-| Ready | Exact resume verified, saved and handed to the user. Successful endpoint. |
+| Ready | Verified resume available; complete form inspection; every required answer Approved in Answer bank or Resolved in Application questions. Successful preparation endpoint. |
 | Not pursuing | Review declined the role or it is outside current targeting. |
 | Duplicate | Confirmed redundant unprotected row; canonical identity and prior values remain in History. |
 
@@ -87,9 +87,9 @@ Manual status changes are not acceptance evidence. Follow stages/review.md for t
 
 ## Existing installations
 
-Read seven active tables; do not require the retired Answer bank or Application questions tables. Preserve them and any extra columns, options, old controls and artifacts as inactive history. Setup never deletes or remaps them automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
+Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. Setup never deletes or remaps them automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
 
-An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/Prepare evidence without fabricating completion or launching later work. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
+An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/resume evidence without fabricating completion or launching later work. Older Ready resumes do not establish answer readiness: inspect the form and verify current answers before reusing an unsubmitted Ready handoff, while preserving the resume. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
 
 ## First full run after an input change
 

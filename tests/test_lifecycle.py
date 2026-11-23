@@ -25,8 +25,11 @@ class LifecycleTests(unittest.TestCase):
             application_write({'Agent notes':'Reopening'},existing_application={'Lifecycle status':'Queued'},existing_state={'submission':{'attempt_key':'legacy'}})
         for old in ['Confirmed','Needs review','Offer','Submission uncertain',*LEGACY_READ_ONLY]:
             with self.assertRaises(ValueError):application_write({'Lifecycle status':old})
-        for field in ['Submission run','Submission attempt key','Applied on','Confirmation reference','Application answers','Application questions']:
+        for field in ['Submission run','Submission attempt key','Applied on','Confirmation reference']:
             with self.assertRaises(ValueError):application_write({field:'old'})
+
+    def test_active_answer_links_are_permitted(self):
+        self.assertEqual(application_write({'Application questions':['question-one']}), {'Application questions':['question-one']})
 
     def test_active_state_merge_preserves_opaque_legacy_history(self):
         old={'record_id':'role','stage_runs':{'submission':'old-run'},'submission':{'attempt_key':'legacy'}}

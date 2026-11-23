@@ -11,7 +11,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run']
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application answers','Application questions']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None):
@@ -138,7 +138,7 @@ def canonical_job_url(value):
                        parts.path.rstrip('/'), urlencode(sorted(query)), parts.fragment))
 
 
-def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
+def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
     if protected_history(app, state) or app.get('Lifecycle status') not in {'Queued', 'Ready'}:
         return False
     candidate = {**app, 'Lifecycle status': 'Queued'}
@@ -154,6 +154,19 @@ def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_v
                 and p.get('jd_hash') == current_inputs.get('jd_hash')
                 and p.get('goals') == current_inputs.get('goals')
                 and preparation_complete(p, current_inputs, digest))
+
+
+def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None,
+                 companies=None, answer_bank=None, application_questions=None):
+    """Ready needs both the verified resume and current required-answer evidence."""
+    if not resume_verified(app, state, runs, current_inputs, pdf_bytes,
+                           provider_version=provider_version, companies=companies):
+        return False
+    from application_answers import application_answers_ready
+    return application_answers_ready(app, state.get('preparation', {}).get('application_questions'),
+                                     answer_bank, application_questions,
+                                     as_of=current_inputs.get('answer_check_date'),
+                                     current_form_hash=current_inputs.get('form_hash'))
 
 
 PREPARATION_PATHS = ('base_reuse', 'tailored')

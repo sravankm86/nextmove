@@ -1,6 +1,6 @@
 # Resume files and versions
 
-Drive stores content. Airtable stores the exact file reference, version and verification. A filename alone never proves the exact Ready artifact.
+Drive stores content. Airtable stores the exact file reference, version and verification. A filename alone never proves the exact Ready artifact. Resume verification is one part of Ready; stages/prepare.md also requires complete application-question coverage and approved/resolved answers.
 
 ## Folder placement
 
@@ -35,7 +35,7 @@ Bases are created and reworked offline by the user as a one-off workflow, follow
 
 Prepare (stages/prepare.md) either reuses an approved base PDF that fully covers the role, recording its exact reference/version and base reuse with no tailoring (a duplicate role-named copy is optional, not proof of readiness), or creates a tailored role version from the closest base under the registered resume guidelines. For a tailored version, create a new file, retain prior files and record its parent base, master and guidelines versions, job identity, changes and verification. Do not overwrite a file that has been submitted.
 
-Before Ready verify claims against the master, check the full relevant JD, inspect the rendered PDF for layout/readability and store Resume link, Resume version, Resume verified at and Preparation run on Applications. The preparation snapshot/result records the real filename, grounded changes/base reuse, master/goals/JD/policy versions and PDF verification under DATA.md. Resume version is a SHA-256 of the exact PDF bytes or a durable provider version tied to verified content; name/date alone is insufficient. If bytes cannot be hashed, record the supported provider version and how content was verified; unresolved version identity blocks Ready.
+Before recording resume verification, verify claims against the master, check the full relevant JD, inspect the rendered PDF for layout/readability and store Resume link, Resume version, Resume verified at and Preparation run on Applications. The preparation snapshot/result records the real filename, grounded changes/base reuse, master/goals/JD/policy versions and PDF verification under DATA.md. Resume version is a SHA-256 of the exact PDF bytes or a durable provider version tied to verified content; name/date alone is insufficient. If bytes cannot be hashed, record the supported provider version and how content was verified; unresolved version identity blocks Ready.
 
 Use the user's requested page count, then the length rules in the registered resume guidelines. If neither specifies, preserve the approved base length or ask when length materially changes the result; do not silently force every resume to one page. Keep the editable source when created. A factual or visual verification failure blocks Ready.
 

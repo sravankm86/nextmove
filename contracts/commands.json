@@ -1,5 +1,5 @@
 {
-  "version": 12,
+  "version": 13,
   "tables": [
     "Companies",
     "Applications",
@@ -7,7 +7,9 @@
     "Runs",
     "Settings",
     "History",
-    "Review eval"
+    "Review eval",
+    "Answer bank",
+    "Application questions"
   ],
   "default_command": "Run",
   "execution_modes": [
@@ -31,7 +33,7 @@
       "stage": "Full run",
       "mode": "prepare",
       "instructions": "WORKFLOW.md",
-      "scope": "Curate \u2192 Scan \u2192 Review \u2192 Prepare; save verified resume links/change notes and stop at Ready. Continue independent work and checkpoint blockers.",
+      "scope": "Curate \u2192 Scan \u2192 Review \u2192 Prepare; Ready requires a verified resume and approved/resolved required answers. Continue independent work and checkpoint blockers.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -105,7 +107,7 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Review-approved Queued roles: reuse an approved base with complete coverage and current master, or tailor from the closest base under resume_guidelines; verify grounding and the rendered PDF before Ready. Never creates bases.",
+      "scope": "Review-approved Queued roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as Draft and Narrative questions as Needs answer, and require Approved/Resolved required answers before Ready. Never fills or submits.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -115,7 +117,8 @@
         "career_goals",
         "role_policy",
         "resume_guidelines",
-        "base_resumes"
+        "base_resumes",
+        "answer_bank"
       ]
     },
     {

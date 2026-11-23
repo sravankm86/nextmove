@@ -1,6 +1,6 @@
 # Nextmove
 
-Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It maintains company/funding evidence, finds plausible roles in the function you target, reviews their fit and prepares truthful, verified resumes. The workflow ends at Ready; you handle applications and everything afterward.
+Nextmove is a set of instructions for tool-capable AI harnesses such as Codex and Claude Code. It maintains company/funding evidence, finds plausible roles in the function you target, reviews their fit and prepares truthful, verified resumes and required application answers. The workflow ends at Ready; you handle applications and everything afterward.
 
 One agent can run the whole sequence. You can also start each stage manually in a different harness. Both use the same saved state, evidence and safeguards. This repository is not a hosted app, scheduler or automatic launcher for other harnesses.
 
@@ -11,9 +11,9 @@ One agent can run the whole sequence. You can also start each stage manually in 
 | [Curate](stages/curate.md) | Refresh company/funding evidence and propose matching companies new to your list that meet your preferences. | Current evidence; Proposed companies await your Allow/Exclude. |
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Use broad role keywords and basic semantics. | Plausible candidates for your target roles become Inventoried. |
 | [Review](stages/review.md) | Extract the JD, score career fit against Career Goals, then score resume fit against the master. | Total score routes Queued, Need review or Not pursuing, with explained ratings. |
-| [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF. | Ready with an exact resume file/version. |
+| [Prepare](stages/prepare.md) | Reuse an approved base resume that fully covers the role, or tailor a role version from the closest base under your resume guidelines. Verify every claim against the master and inspect the rendered PDF; inspect application questions and prepare approved/resolved required answers. | Ready with an exact resume file/version and all required answers ready. |
 
-The six active statuses are **Inventoried, Need review, Queued, Ready, Not pursuing and Duplicate**. Ready means a verified resume is available at an exact link/version. [WORKFLOW.md](WORKFLOW.md#six-lifecycle-states) defines the lifecycle. Inventory and the preparation queue are states in the same Applications table. A manually selected status does not create review approval or verify a PDF.
+The six active statuses are **Inventoried, Need review, Queued, Ready, Not pursuing and Duplicate**. Ready means a verified resume is available at an exact link/version, the official form has been fully inspected, and every required answer is Approved in Answer bank or Resolved in Application questions. [WORKFLOW.md](WORKFLOW.md#six-lifecycle-states) defines the lifecycle. Inventory and the preparation queue are states in the same Applications table. A manually selected status does not create review approval or verify a PDF.
 
 Curate hands human-approved companies and factual company evidence to Scan/Review. Only human-Allow companies receive new inventory or automatic advancement; any legacy permanent block is respected. A standalone Scan or Review reads that saved handoff without launching company research. Draft boards become eligible only after human Allow and still need verification. Review assesses company facts against current goals rather than copying Curate’s saved advisory assessment; changed funding/business evidence revalidates affected approvals. A partial Curate does not stop independent scanning/review, but stays visible in full-Run completion.
 
@@ -23,7 +23,7 @@ Curate hands human-approved companies and factual company evidence to Scan/Revie
 flowchart LR
     User[Human preferences and company choices] --> Agent[One active AI harness]
     Git[GitHub instructions] --> Agent
-    Agent <--> Airtable[Seven Airtable tables: saved state]
+    Agent <--> Airtable[Nine Airtable tables: saved state]
     Agent <--> Drive[Google Drive: content and evidence]
     Agent --> Boards[Official careers catalogs]
     Funding[Company and funding evidence] --> Agent
@@ -31,21 +31,23 @@ flowchart LR
     Drive --> Next
 ~~~
 
-Git owns procedures. Drive owns Career Goals, the factual master, resume guidelines, base/role resumes, job captures and reports. Airtable owns company targeting, candidate state, source coverage, fixed inputs, checkpoints, feedback and history. Each harness uses its own authenticated connections; connections do not transfer between providers. No mailbox connection, application-site login or answer bank is required.
+Git owns procedures. Drive owns Career Goals, the factual master, resume guidelines, base/role resumes, job captures and reports. Airtable owns company targeting, candidate state, source coverage, fixed inputs, checkpoints, feedback and history. Each harness uses its own authenticated connections; connections do not transfer between providers. Prepare also reads the official application form and the two answer tables. A site may require the user to sign in before questions are visible. No mailbox or submission connection is required.
 
 The private main Drive folder has two working children: **Role specific** for customized resumes and change notes, and **Audit trail** for captures, assessments, run reports and process metadata. Setup creates or reuses them and registers their IDs in Airtable. Source documents keep their verified locations; existing links remain valid.
 
 | Airtable table | Responsibility | Minimal target columns |
 |---|---|---:|
-| Companies | Proposed/Allow/Exclude targeting, funding stage and company evidence | 11 |
-| Applications | Job facts, review/resume state, Manual notes, Feedback and Agent notes | 26 |
+| Companies | Proposed/Allow/Exclude targeting, funding stage and company evidence | 12 |
+| Applications | Job facts, review/resume state, Manual notes, Feedback and Agent notes | 28 |
 | Sources | Official board/region, reviewed reader and pagination/coverage checkpoint | 13 |
 | Runs | Frozen inputs, ownership, progress and handoff | 20 |
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 | Review eval | Golden answer key from your graded notes, and each eval's prediction and match | 13 |
+| Answer bank | Reusable user-provided Form answers, guidance, scope and approval | 11 |
+| Application questions | Role-specific questions, grounded drafts and resolved final answers | 12 |
 
-The 102-column new-install target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
+The 128-column new-install target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
 
 Review scores and decisions are maintained only in [stages/review.md](stages/review.md). The code reads its tables and automatically records a fingerprint of the exact instructions used. Users do not synchronize a second scoring file or bump a Review version.
 
@@ -89,13 +91,13 @@ For manual switching, release the previous owner and open the next configured ha
 
 ## Expectations and limits
 
-Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Form filling, application answers/submissions, application-limit/cooldown management, mailbox monitoring and all later recruiting work are outside scope.
+Expect thorough configured source coverage, recall-oriented candidate capture, explained review decisions, factual resumes, compact tracker values and recoverable verified progress. Do not expect guaranteed interviews/compensation, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgment or unlimited free storage. Application-question inspection and answer preparation are included. External form filling, submission, application-limit/cooldown management, mailbox monitoring and later recruiting work remain outside scope.
 
 Career preferences, domain rules and personal exceptions belong in each user's private goals, so a friend can use the same public frame.
 
 ## Existing installations
 
-The simplified schema is for new setup and active writes. Existing answer/question tables, submission columns, later statuses, old controls and historical files are preserved as inactive history. They are not automatically deleted or required by the four stages. Historical outcomes and unresolved legacy attempts are protected from automatic reopening. Valid Review/Prepare evidence remains usable when its actual inputs are unchanged; the Review scoring instructions are unchanged by this scope reduction. See [maintenance](docs/MAINTENANCE.md) before any separate physical cleanup.
+The simplified schema is for new setup and active writes. Existing Answer bank and Application questions tables become active Prepare dependencies, preserving their current rows and approvals. Other submission columns, later statuses, old controls and historical files remain inactive history. Nothing is automatically deleted. Historical outcomes and unresolved legacy attempts are protected from automatic reopening. Valid Review/Prepare evidence remains usable when its actual inputs are unchanged; the Review scoring instructions are unchanged by this scope reduction. See [maintenance](docs/MAINTENANCE.md) before any separate physical cleanup.
 
 ## Contributing and license
 
@@ -115,4 +117,4 @@ Use **Capture feedback** to consume the inbox, and **Review eval** (or **Eval Re
 
 Source files remain in Drive. Settings registers their identity, authority and current revision/hash; DATA.md "Registered sources and small artifact reads" defines freshness checks and exact-ID evidence selection. Use scripts/artifact_reader.py for stored job/company/coverage artifacts, and the dedicated Review eval workflow for label-free eval inputs. No extra preference/fact table is required.
 
-For manually submitted application answers, the existing Application questions table can be used as an optional human-maintained interview reference. Record the linked application, exact question, exact Final answer and Answered on date. It is not a pipeline dependency.
+Answer bank stores reusable Form answers; only nonempty Answer with Approval = Approved counts. Application questions stores role-specific Narrative drafts/final answers; only nonempty Final answer with Status = Resolved counts. Missing items are Draft or Needs answer. You review and approve/resolve them; the agent does not approve its own drafts. Keep the exact submitted answer and Answered on date afterward for interview reference; preparation never claims a submission occurred.

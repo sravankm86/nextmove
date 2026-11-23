@@ -1,0 +1,113 @@
+"""Pure checks for a complete form inspection and current approved/resolved answers.
+
+The harness discovers questions and maps meaning/options; this reader never browses,
+drafts, approves, resolves, fills, uploads or submits anything.
+"""
+import hashlib
+import json
+from datetime import date
+
+SCHEMA = 'nextmove.application-questions.v1'
+BANK_FIELDS = ('Answer', 'Approval', 'Handling', 'Source field', 'Guidance',
+               'Valid until', 'Company', 'Application')
+QUESTION_FIELDS = ('Question', 'Options', 'Field key', 'Question type',
+                   'Final answer', 'Status', 'Application')
+
+
+def answer_fingerprint(table, record):
+    fields = BANK_FIELDS if table == 'Answer bank' else QUESTION_FIELDS if table == 'Application questions' else None
+    if fields is None:
+        raise ValueError('Unknown answer table')
+    value = {k: record.get(k) for k in fields}
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+
+
+def form_fingerprint(questions):
+    fields = ('field_key', 'question', 'options', 'type', 'required')
+    definitions = [{k: q.get(k) for k in fields} for q in questions]
+    return hashlib.sha256(json.dumps(definitions, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+
+
+def has_answer(value):
+    return isinstance(value, str) and bool(value.strip())
+
+
+def question_key(company_id, application_id, field_key):
+    """Stable per-application discovery key; semantic cross-role reuse is separate."""
+    if not all(isinstance(v, str) and v.strip() for v in (company_id, application_id, field_key)):
+        raise ValueError('Company, application and exact employer field identity required')
+    return hashlib.sha256(json.dumps([company_id, application_id, field_key], separators=(',', ':')).encode()).hexdigest()
+
+
+def answer_ready(table, record, application, *, as_of):
+    """Named, normalized live records, never select objects or cached statuses."""
+    if table == 'Answer bank':
+        if record.get('Approval') != 'Approved' or not has_answer(record.get('Answer')):
+            return False
+        expiry = record.get('Valid until')
+        if expiry:
+            try:
+                if date.fromisoformat(str(expiry)[:10]) < date.fromisoformat(as_of):
+                    return False
+            except (ValueError, TypeError):
+                return False
+        for key, allowed in [('Company', application.get('Company') or []),
+                             ('Application', [application.get('id')])]:
+            scope = record.get(key) or []
+            if not isinstance(scope, list) or (scope and not set(scope).intersection(allowed)):
+                return False
+        return True
+    return bool(table == 'Application questions'
+                and record.get('Status') == 'Resolved'
+                and has_answer(record.get('Final answer'))
+                and record.get('Application') == [application.get('id')])
+
+
+def application_answers_ready(application, inspection, answer_bank, application_questions, *, as_of, current_form_hash=None):
+    """Fail closed on unknown form coverage, missing rows or changed approvals."""
+    if not isinstance(inspection, dict) or answer_bank is None or application_questions is None:
+        return False
+    from stage_state import canonical_job_url
+    if (inspection.get('schema') != SCHEMA or inspection.get('application_id') != application.get('id')
+            or not application.get('id') or not application.get('Job key')
+            or inspection.get('job_key') != application['Job key']
+            or not inspection.get('job_url') or not application.get('Job description link')
+            or canonical_job_url(inspection['job_url']) != canonical_job_url(application['Job description link'])
+            or inspection.get('coverage') != 'complete' or not inspection.get('inspected_at')
+            or not inspection.get('form_url') or not inspection.get('evidence')
+            or inspection.get('blockers') != []):
+        return False
+    try:
+        date.fromisoformat(as_of)
+    except (ValueError, TypeError):
+        return False
+    questions = inspection.get('questions')
+    if not isinstance(questions, list) or any(not isinstance(q, dict) for q in questions):
+        return False
+    if (not current_form_hash or inspection.get('form_hash') != current_form_hash
+            or inspection.get('form_hash') != form_fingerprint(questions)):
+        return False
+    keys = [q.get('field_key') for q in questions if isinstance(q, dict)]
+    if len(keys) != len(questions) or any(not k for k in keys) or len(set(keys)) != len(keys):
+        return False
+    tables = {'Answer bank': answer_bank, 'Application questions': application_questions}
+    for q in questions:
+        if (not has_answer(q.get('question')) or q.get('type') not in {'Form', 'Narrative'}
+                or type(q.get('required')) is not bool):
+            return False
+        if not q['required']:
+            continue
+        ref = q.get('answer') or {}
+        if not isinstance(ref, dict):
+            return False
+        table = ref.get('table')
+        if table not in tables or not ref.get('record_id'):
+            return False
+        rows = [r for r in tables[table] if r.get('id') == ref['record_id']]
+        if len(rows) != 1 or not answer_ready(table, rows[0], application, as_of=as_of):
+            return False
+        if (ref.get('fingerprint') != answer_fingerprint(table, rows[0])
+                or not has_answer(ref.get('mapped_answer')) or ref.get('mapping_verified') is not True
+                or not ref.get('match_evidence')):
+            return False
+    return True

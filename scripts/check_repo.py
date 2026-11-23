@@ -74,8 +74,8 @@ def check(root):
         return errors
     tables = core["tables"]
     names = [t["name"] for t in tables]
-    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval"}
-    require(len(names) == 7 and set(names) == expected, "Expected exactly seven active logical tables")
+    expected = {"Companies", "Applications", "Sources", "Runs", "Settings", "History", "Review eval", "Answer bank", "Application questions"}
+    require(len(names) == 9 and set(names) == expected, "Expected exactly nine active logical tables")
     lookup = {t["name"]:t for t in tables}
     for table in tables:
         fields = table["fields"]
@@ -96,7 +96,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':11,'Applications':26,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':12,'Applications':28,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':12}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
@@ -116,9 +116,9 @@ def check(root):
     require(len(aliases) == len(set(aliases)), "Ambiguous aliases")
     require(command.get('endpoint') == 'Ready', 'Run must end at Ready')
     require(not {'Apply', 'Track'} & {c['command'] for c in command['commands']}, 'Removed commands cannot dispatch')
-    removed = ['stages/apply.md','stages/track.md','scripts/answer_bank.py','scripts/submission_policy.py','templates/answer-bank.md']
+    removed = ['stages/apply.md','stages/track.md','scripts/submission_policy.py']
     require(all(not (root/p).exists() for p in removed), 'Retired tasks must stay absent')
-    require(not {'answer_bank','submission_policy','mailbox','narrative_context'} & set(resources), 'Retired resources cannot be setup dependencies')
+    require(not {'submission_policy','mailbox','narrative_context'} & set(resources), 'Retired resources cannot be setup dependencies')
     eval_cmd = next((c for c in command["commands"] if c["command"] == "Review eval"), {})
     capture_cmd = next((c for c in command["commands"] if c["command"] == "Capture feedback"), {})
     require(eval_cmd.get("instructions") == "DATA.md" and capture_cmd.get("instructions") == "DATA.md", "Feedback and eval need shared instructions")
@@ -129,7 +129,7 @@ def check(root):
     require(len(ids) == len(set(ids)) and all(len({f['id'] for f in x['fields']}) == len(x['fields']) and x['fields'][-1]['id'] == 'instructions' for x in frame['sections']), 'Resume guidelines frame needs unique IDs and an Instructions field per section')
     require((root / 'templates/resume-guidelines.md').read_text() == render_markdown(schema=frame), 'templates/resume-guidelines.md is stale; run python scripts/resume_guidelines.py template')
     prepare = next(c for c in command["commands"] if c["command"] == "Prepare")
-    require({"master_resume", "resume_guidelines", "base_resumes"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
+    require({"master_resume", "resume_guidelines", "base_resumes", "answer_bank"}.issubset(prepare["required_resources"]), "Prepare must resolve the master, resume guidelines and base library")
     controls = {x['key']: x['value'] for x in seed['controls']}
     require(controls.get('Stop all') is False and controls.get('Setup readiness') == 'Needs verification', 'Unsafe or unverified setup controls')
     policy = next(x["value"] for x in seed["policies"] if x["key"] == "role_policy")
@@ -145,7 +145,7 @@ def check(root):
     from stage_state import CORE_FIELDS
     require('Feedback' in companies and {'Manual notes','Feedback'}.issubset(app_fields), 'Separate lasting notes and Feedback are required')
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 26, 'Expected the 26-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 28, 'Expected the 28-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')
