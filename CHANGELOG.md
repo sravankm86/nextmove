@@ -6,6 +6,7 @@ Release history only; README.md and the current stage files define supported beh
 
 - Add Sanitize under the existing maintenance procedure; it never runs with the pipeline, setup or schedules.
 - Align form-inspection, harness entry and security instructions with the current Ready handoff.
+- Use the standard AGENTS.md entry for Codex; remove the redundant CODEX.md pointer. Keep CLAUDE.md as Claude Code's recognized entry.
 - Remove copied field counts from prose and retire the redundant Role eligibility flag from active writes; scored Review approval remains mandatory. Live fields and historical values are preserved.
 - Add serialized end-to-end handoff regressions for both one-agent and manually separated stages.
 
