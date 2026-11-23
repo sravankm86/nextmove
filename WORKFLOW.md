@@ -31,7 +31,7 @@ A full Run starts with Curate's company/funding work; continue Scan and Review w
 
 ## Run checks: objective duplicate discovery
 
-Every invocation, including a single stage command, starts with Run checks. Build one company-scoped identity index from live role IDs, official job links, role names and posted dates. Refresh this index when Scan encounters new postings. Run owns discovery; Review and later stages consume its result rather than repeating duplicate searches.
+Every production, feedback or eval invocation, including a single stage command, starts with Run checks. Sanitize is exempt: its maintenance procedure can run without a private base. Build one company-scoped identity index from live role IDs, official job links, role names and posted dates. Refresh this index when Scan encounters new postings. Run owns discovery; Review and later stages consume its result rather than repeating duplicate searches.
 
 An exact verified employer role ID or verified posting-specific canonical link confirms identity. Role name and posted date corroborate it; they cannot alone prove identity. Preserve meaningful URL parameters. Different verified role IDs, regional postings or conflicting evidence need reconciliation rather than a title-based merge. Use scripts/stage_state.py:run_duplicate_match.
 

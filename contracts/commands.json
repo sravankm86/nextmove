@@ -176,7 +176,10 @@
     "for_every_command": true,
     "instructions": "WORKFLOW.md#run-checks-objective-duplicate-discovery",
     "duplicate_owner": "Run",
-    "refresh_for_new_scan_postings": true
+    "refresh_for_new_scan_postings": true,
+    "excluded_commands": [
+      "Sanitize"
+    ]
   },
   "endpoint": "Ready"
 }

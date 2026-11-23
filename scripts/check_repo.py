@@ -128,7 +128,9 @@ def check(root):
     require(command.get('endpoint') == 'Ready', 'Run must end at Ready')
     sanitize = next((c for c in command['commands'] if c['command'] == 'Sanitize'), {})
     require(sanitize.get('explicit_only') is True and sanitize.get('included_in_run') is False
-            and 'Sanitize' not in command['pipeline'], 'Sanitize must be explicit-only and outside Run')
+            and 'Sanitize' not in command['pipeline']
+            and command.get('run_preflight', {}).get('excluded_commands') == ['Sanitize'],
+            'Sanitize must be explicit-only, outside Run and exempt from production preflight')
     require(sanitize.get('instructions') == 'docs/MAINTENANCE.md'
             and sanitize.get('required_resources') == ['instructions_repository'],
             'Sanitize must reuse maintenance and allow repo-only work without private accounts')
