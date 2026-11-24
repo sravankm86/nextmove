@@ -107,7 +107,7 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Review-approved Queued roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as Draft and Narrative questions as Needs answer, and require Approved/Resolved required answers before Ready. Never fills or submits.",
+      "scope": "Review-approved Queued roles plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. Never fills or submits.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

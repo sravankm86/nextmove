@@ -92,7 +92,8 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
     from company_policy import company_for_application
     if not company_for_application(app, companies):
         return False
-    if protected_history(app, state) or not state or app.get('Lifecycle status') != 'Queued':
+    from lifecycle import PREPARE_INPUTS
+    if protected_history(app, state) or not state or app.get('Lifecycle status') not in PREPARE_INPUTS:
         return False
     review = state.get('review', {})
     from role_gate import review_frame_contract, scored_review
@@ -137,7 +138,7 @@ def canonical_job_url(value):
 
 
 def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
-    if protected_history(app, state) or app.get('Lifecycle status') not in {'Queued', 'Ready'}:
+    if protected_history(app, state) or app.get('Lifecycle status') not in {'Queued', 'Needs answer', 'Ready', 'Apply manually'}:
         return False
     candidate = {**app, 'Lifecycle status': 'Queued'}
     if not review_ready(candidate, state, runs, current_inputs, companies=companies):
@@ -165,6 +166,30 @@ def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_v
                                      answer_bank, application_questions,
                                      as_of=current_inputs.get('answer_check_date'),
                                      current_form_hash=current_inputs.get('form_hash'))
+
+
+# Access blockers mean no agent could open or fully read the official application.
+ACCESS_BLOCKERS = ('sign_in_required', 'account_creation', 'bot_check', 'host_blocked',
+                   'apply_link_unavailable', 'assessment_required', 'technical_error')
+
+
+def preparation_outcome(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None,
+                        companies=None, answer_bank=None, application_questions=None):
+    """Prepare's three exits: Ready, Needs answer (resume or an answer missing/unapproved)
+    or Apply manually (verified resume, but the application itself could not be accessed)."""
+    if not resume_verified(app, state, runs, current_inputs, pdf_bytes,
+                           provider_version=provider_version, companies=companies):
+        return 'Needs answer'
+    inspection = (state or {}).get('preparation', {}).get('application_questions') or {}
+    blockers = inspection.get('blockers') if isinstance(inspection, dict) else None
+    if (inspection.get('access') == 'blocked' and isinstance(blockers, list) and blockers
+            and all(isinstance(b, dict) and b.get('kind') in ACCESS_BLOCKERS and b.get('detail') for b in blockers)
+            and inspection.get('evidence')):
+        return 'Apply manually'
+    if resume_ready(app, state, runs, current_inputs, pdf_bytes, provider_version=provider_version,
+                    companies=companies, answer_bank=answer_bank, application_questions=application_questions):
+        return 'Ready'
+    return 'Needs answer'
 
 
 PREPARATION_PATHS = ('base_reuse', 'tailored')

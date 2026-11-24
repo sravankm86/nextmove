@@ -27,7 +27,7 @@ The base/journal cannot audit its own creation before it exists. Record that boo
 
 ## Existing installations
 
-Map and preserve live field IDs. Nine active tables and six statuses define future writes; extra historical tables, select options and submission fields may remain. Do not change live options or remap old outcomes to fit the smaller blueprint. WORKFLOW.md "Existing installations" defines protected rows and old-Run handoff. docs/MAINTENANCE.md governs any separately authorized retirement.
+Map and preserve live field IDs. Nine active tables and eight statuses define future writes; add the Needs answer and Apply manually Lifecycle options if the live field lacks them; extra historical tables, select options and submission fields may remain. Do not change live options or remap old outcomes to fit the smaller blueprint. WORKFLOW.md "Existing installations" defines protected rows and old-Run handoff. docs/MAINTENANCE.md governs any separately authorized retirement.
 
 # Connect a harness
 

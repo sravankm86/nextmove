@@ -8,6 +8,12 @@
 
 Release history only; README.md and the current stage files define supported behavior. Older entries are not executable instructions.
 
+## Needs answer and Apply manually
+
+- Prepare now ends each role at Ready, Needs answer (resume not verified, or a required answer missing or unapproved) or Apply manually (verified resume, but no agent could open or fully read the application).
+- Needs answer is active again and every Prepare run rechecks it; Applied, Interviewing and Rejected stay read-only history.
+- `stage_state.preparation_outcome` chooses the status; eight lifecycle states.
+
 ## Five-field Answer bank
 
 - Answer bank keeps Question (readable primary label), Answer, Guidance, Source field and an Approved checkbox. Answer ID, Topic, Handling, Approval, Valid until and the Company/Application scope links are retired; any restriction is written in Guidance.

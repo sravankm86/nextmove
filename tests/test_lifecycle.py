@@ -2,13 +2,16 @@ import json,sys,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from lifecycle import STATUSES, END_STATES, LEGACY_READ_ONLY
+from lifecycle import STATUSES, END_STATES, LEGACY_READ_ONLY, PREPARE_INPUTS
 from stage_state import application_write, run_progress, protected_history, merge_state
 
 class LifecycleTests(unittest.TestCase):
-    def test_six_active_states_and_ready_endpoint(self):
-        self.assertEqual(STATUSES,['Inventoried','Need review','Queued','Ready','Not pursuing','Duplicate'])
-        self.assertEqual(END_STATES,{'Ready','Not pursuing','Duplicate'})
+    def test_eight_active_states_and_prepare_exits(self):
+        self.assertEqual(STATUSES,['Inventoried','Need review','Queued','Ready','Needs answer','Apply manually','Not pursuing','Duplicate'])
+        self.assertEqual(END_STATES,{'Ready','Apply manually','Not pursuing','Duplicate'})
+        self.assertEqual(PREPARE_INPUTS,{'Queued','Needs answer'})
+        self.assertNotIn('Needs answer',LEGACY_READ_ONLY)
+        self.assertEqual(application_write({'Lifecycle status':'Ready'},existing_application={'Lifecycle status':'Needs answer'}),{'Lifecycle status':'Ready'})
         commands=json.loads((ROOT/'contracts/commands.json').read_text())
         self.assertEqual(commands['pipeline'],['Curate','Scan','Review','Prepare'])
         self.assertEqual(commands['endpoint'],'Ready')

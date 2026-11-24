@@ -114,6 +114,32 @@ class AnswerReadinessTests(unittest.TestCase):
         self.bank[0]['Approved'] = False
         self.assertFalse(stage_state.resume_ready(app, state, [fixture.run], inputs, pdf, **kwargs))
 
+    def test_prepare_outcome_is_ready_needs_answer_or_apply_manually(self):
+        fixture = test_stage_state.StateTests(); fixture.setUp()
+        pdf = b'verified resume'; digest = hashlib.sha256(pdf).hexdigest()
+        app, state = fixture.prepared(pdf, fixture.reuse(digest))
+        app.update({'Job description link': self.app['Job description link'], 'id': self.app['id'],
+                    'Job key': self.app['Job key'], 'Company': ['company-one']})
+        companies = [{'id': 'company-one', 'Search status': 'Allow'}]
+        inputs = {**fixture.inputs, 'answer_check_date': '2026-01-01', 'form_hash': self.manifest['form_hash']}
+        outcome = lambda a=app, st=state: stage_state.preparation_outcome(
+            a, st, [fixture.run], inputs, pdf, companies=companies,
+            answer_bank=self.bank, application_questions=self.narratives)
+        state['preparation']['application_questions'] = self.manifest
+        self.assertEqual(outcome(), 'Ready')
+        self.assertEqual(outcome({**app, 'Lifecycle status': 'Needs answer'}), 'Ready')
+        self.bank[0]['Approved'] = False
+        self.assertEqual(outcome(), 'Needs answer')
+        self.bank[0]['Approved'] = True
+        self.assertEqual(outcome({**app, 'Resume link': ''}), 'Needs answer')
+        blocked = copy.deepcopy(state)
+        blocked['preparation']['application_questions'] = {**self.manifest, 'access': 'blocked', 'coverage': 'blocked',
+            'blockers': [{'kind': 'sign_in_required', 'detail': 'Workday account sign-in before the form'}]}
+        self.assertEqual(outcome(app, blocked), 'Apply manually')
+        blocked['preparation']['application_questions']['blockers'] = [{'kind': 'unknown_branch', 'detail': 'Conditional page'}]
+        self.assertEqual(outcome(app, blocked), 'Needs answer')
+        self.assertEqual(outcome({**app, 'Resume link': ''}, blocked), 'Needs answer')
+
 
 if __name__ == '__main__':
     unittest.main()
