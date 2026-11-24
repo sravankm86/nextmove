@@ -1,10 +1,14 @@
 # Prepare: a verified resume and required answers for every queued role
 
-Use WORKFLOW.md, DATA.md and RESUME-FILES.md. Prepare's goal is a verified resume and ready answers to every required application question for each review-approved Queued role. It gets there by one of two paths: **reuse an approved base resume** that already fits the role, or **create a role-specific (tailored) resume** from the closest base. It never edits the master, never creates or reworks a base, and never fills or submits an application.
+Use WORKFLOW.md, DATA.md and RESUME-FILES.md. Prepare's goal is a verified resume and ready answers to every required application question for each Queued role, including a human's direct choices. It gets there by one of two paths: **reuse an approved base resume** that already fits the role, or **create a role-specific (tailored) resume** from the closest base. It never edits the master, never creates or reworks a base, and never fills or submits an application.
 
 ## Inputs and scope
 
-Process review-approved Queued roles, and recheck every earlier Needs answer role, with current accepted full-JD eligibility, qualifications, career and fit evidence (`scripts/stage_state.py:review_ready`). Inventoried, Need review and Duplicate are not preparation-ready; older approvals require revalidation under the current score frame. Before accepting a queued handoff, reread the linked company and pass current companies to review_ready/resume_ready. Proposed, Exclude or permanent-block targeting prevents automatic advancement without erasing the assessment. Revalidate company-evidence changes under Review. Legacy historical outcomes and attempts are read-only under WORKFLOW.md; exclude them from preparation even after a manual label reset.
+Process live Queued roles and recheck every earlier Needs answer role with `scripts/stage_state.py:preparation_eligible`. Queued is the authorization under WORKFLOW.md "Queue decisions": do not require a matching Review snapshot, rescore fit, or block on salary, seniority, qualifications or company preferences. Inventoried, Need review and Duplicate are outside this scope. Resolve the linked company for identity and resume consistency, not another admission check. Legacy historical outcomes and attempts remain read-only even after a manual label reset.
+
+Record the observed queue handoff and preserve any earlier Review scores and reasons. Missing or differing Review evidence does not create a preparation blocker. Operational gaps such as an unreadable JD, missing master, incomplete submission history or an unapproved answer remain explicit; no truthful claim or Ready requirement is waived by queueing.
+
+On a Needs answer retry, keep that status until the preparation outcome is saved; do not move the role through Queued or repeat agent queue admission.
 
 Resolve and pin these registered Settings resources in the Run:
 
@@ -37,7 +41,7 @@ The guidelines use one standard frame: numbered sections with stable IDs, each h
 
 ## Step 1: role requirements
 
-From the accepted Review evidence (not a fresh assessment), list the JD's critical requirements (minimum qualifications and central responsibilities) and its main themes. Note the user's requested page length for this application if one is recorded (for example a one-page variant for a referral); otherwise use the guidelines' default.
+Read the complete exact official JD, or an integrity-verified saved copy from Scan or Review. A manually Queued role does not need a prior Review: capture its JD directly when necessary. List critical requirements and main themes for resume coverage, not a new eligibility decision. Keep genuine experience gaps honest rather than rejecting the queue choice or inventing claims. Note the user's requested page length for this application if one is recorded (for example a one-page variant for a referral); otherwise use the guidelines' default.
 
 ## Step 2: same-company consistency
 
@@ -95,4 +99,4 @@ Save Resume link, Resume version (SHA-256 of the exact PDF bytes, or a verified 
 
 Agent notes explains the result in plain English under DATA.md "Writing Agent notes" and says which resume was used and why, and the main gaps a recruiter would notice. When Settings `preparation_notes.shortlist_estimate` is true, it also gives an estimated shortlist chance on a 1–10 scale: the agent's judgment of how competitive the resume is for this posting, not a measured probability, written as "shortlist chance about 7/10". Example: `Ready: your analytics base was reused because it leads with the experimentation work this role centers on. Shortlist chance about 7/10. Gaps: no direct healthcare-industry experience.` Consume Feedback only through the verified feedback-inbox procedure in DATA.md; prior values and historical restrictions stay in History. Runs records counts by path (reused, tailored, blocked), stale bases, `new_base_recommended` themes and blockers.
 
-Before advancing, verify that the accepted review still matches the current goals, role policy, master, guidelines and job description. A changed master, guidelines or JD requires re-preparation, not silent reuse. Preserve submitted and terminal history. Both a single Prepare command and a full Run stop here. Hand the user the exact verified PDF link/version, the reuse or change summary, approved/resolved required answers, honest gaps and any blockers. The user fills and submits the application.
+Before advancing, recheck the live lifecycle and the current master, guidelines, JD, PDF and required answers. Do not reopen fit checks or require current goals/Review policy as preparation authorization; read Career Goals only when needed as content, such as an answer's registered salary source. A changed master, guidelines or JD requires the relevant resume checks again, not another queue approval. Preserve submitted and terminal history. Both a single Prepare command and a full Run stop here. Hand the user the exact verified PDF link/version, the reuse or change summary, approved/resolved required answers, honest gaps and any blockers. The user fills and submits the application.

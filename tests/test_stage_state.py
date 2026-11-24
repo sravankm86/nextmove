@@ -43,10 +43,51 @@ class StateTests(unittest.TestCase):
             bad=copy.deepcopy(state);bad['preparation'].update(change)
             self.assertFalse(s.resume_verified(app,bad,[self.run],inputs,pdf,companies=self.companies))
 
-    def test_manual_queue_cannot_create_acceptance(self):
+    def test_manual_queue_authorizes_prepare_without_forging_review_approval(self):
+        self.assertTrue(s.preparation_eligible(self.app))
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs, companies=self.companies))
         changed=copy.deepcopy(self.state);changed['review']['decision']='Needs review'
+        self.assertTrue(s.preparation_eligible(self.app,changed))
         self.assertFalse(s.review_ready(self.app,changed,[self.run],self.inputs, companies=self.companies))
+
+    def test_agent_queue_admission_enforces_review_before_the_transition(self):
+        old={**self.app,'Lifecycle status':'Need review'}
+        values={'Lifecycle status':'Queued'}
+        with self.assertRaises(ValueError):
+            s.application_write(values,existing_application=old,existing_state=self.state)
+        self.assertEqual(s.application_write(values,existing_application=old,existing_state=self.state,
+            runs=[self.run],current_inputs=self.inputs,companies=self.companies),values)
+        changed=copy.deepcopy(self.state);changed['review']['scoring']=scored_review('Unresolved','Medium')
+        with self.assertRaises(ValueError):
+            s.application_write(values,existing_application=old,existing_state=changed,
+                runs=[self.run],current_inputs=self.inputs,companies=self.companies)
+        # An already Queued role does not go through admission again.
+        self.assertEqual(s.application_write(values,existing_application=self.app),values)
+
+    def test_prepare_handoff_only_uses_active_queue_and_preserves_prior_submissions(self):
+        for status in ['Queued','Needs answer']:
+            self.assertTrue(s.preparation_eligible({**self.app,'Lifecycle status':status}))
+        for status in ['Inventoried','Need review','Duplicate','Not pursuing','Applied','Interviewing','Rejected']:
+            self.assertFalse(s.preparation_eligible({**self.app,'Lifecycle status':status}))
+        self.assertFalse(s.preparation_eligible({**self.app,'Submission attempt key':'previous'}))
+        self.assertFalse(s.preparation_eligible(self.app,{'submission':{'attempt_key':'previous'}}))
+
+    def test_prepare_never_reapplies_fit_or_company_preferences(self):
+        pdf=b'base pdf';digest=hashlib.sha256(pdf).hexdigest()
+        app,state=self.prepared(pdf,self.reuse(digest))
+        app.update({'Career fit':'Unresolved','Resume fit':'Low','Review run':[]})
+        state.pop('review');state['stage_runs'].pop('review');state.pop('run_checks')
+        inputs={**self.inputs,'goals':'changed','policy':'changed','company_evidence':'changed','eligibility_policy':'changed'}
+        self.assertTrue(s.resume_verified(app,state,[],inputs,pdf,companies=[]))
+        for change in [{'master':'changed'},{'jd_hash':'changed'}]:
+            self.assertFalse(s.resume_verified(app,state,[],{**inputs,**change},pdf))
+
+    def test_manual_queue_cannot_use_another_roles_resume_snapshot(self):
+        pdf=b'base pdf';digest=hashlib.sha256(pdf).hexdigest()
+        app,state=self.prepared(pdf,self.reuse(digest))
+        for change in [{'record_id':'other-role'},{'job_key':'employer:other-role'}]:
+            changed={**state,**change}
+            self.assertFalse(s.resume_verified(app,changed,[],self.inputs,pdf))
     def test_legacy_preference_flags_cannot_replace_current_scored_acceptance(self):
         self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs, companies=self.companies))
         state=copy.deepcopy(self.state);state['review'].pop('scoring')
@@ -92,7 +133,7 @@ class StateTests(unittest.TestCase):
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys={'employer:role-123'},allowed_companies={'company-example'}, companies=self.companies)
         with self.assertRaises(ValueError):s.application_write(candidate,creating=True,existing_keys=set(),allowed_companies=set(), companies=self.companies)
 
-    def test_provisional_or_unresolved_review_cannot_prepare(self):
+    def test_provisional_or_unresolved_review_cannot_agent_queue(self):
         state=copy.deepcopy(self.state);state['review']['decision']='approve_provisional'
         self.assertFalse(s.review_ready(self.app,state,[self.run],self.inputs, companies=self.companies))
         state['review']['decision']='approve';state['review']['scoring']=scored_review('Unresolved','High')

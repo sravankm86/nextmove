@@ -1,5 +1,11 @@
 # Changelog
 
+## Queued authorizes preparation
+
+- Treat a human's Queued choice as authorization to prepare while preserving earlier fit scores and reasons.
+- Enforce agent queue admission at the Review write boundary; Prepare no longer requires a matching Review approval or reapplies career/company gates.
+- Keep resume grounding, current master/JD/guidelines, company consistency, required answers and protected historical outcomes enforced. Existing queues are reassessed only on explicit request.
+
 ## Post-retirement consistency
 
 - Keep the five-field Answer bank and checkbox approval; identify rules by native record ID rather than a globally unique Question label.

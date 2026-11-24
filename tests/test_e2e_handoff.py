@@ -50,7 +50,10 @@ class EndToEndHandoffTests(unittest.TestCase):
             values={'assessment_method': 'three_step_v1', 'decision': 'approve', 'jd_hash': jd_hash,
                     'current_description': True, 'assessment_complete': True,
                     'scoring': scored_review('High', 'Medium'), 'evidence': 'JD/goals/master qualification passages'})
-        app.update({'Career fit': 'High', 'Resume fit': 'Medium', 'Review run': [ids['review']], 'Lifecycle status': 'Queued'})
+        queue_values={'Career fit': 'High', 'Resume fit': 'Medium', 'Review run': [ids['review']], 'Lifecycle status': 'Queued'}
+        application_write(queue_values, existing_application=app, existing_state=state,
+                          runs=runs, current_inputs=inputs, companies=[company])
+        app.update(queue_values)
         state = self.recover(app, state, '02')
         pdf = b'fictional already-verified PDF bytes'; digest = hashlib.sha256(pdf).hexdigest()
         state = merge_state(state, record_id=app['id'], job_key=app['Job key'], stage='preparation', run_id=ids['preparation'],
@@ -107,13 +110,17 @@ class EndToEndHandoffTests(unittest.TestCase):
         self.assertTrue(resume_verified(app, state, runs, inputs, pdf, companies=companies))
         self.assertEqual(app['Lifecycle status'], 'Queued')
 
-    def test_retired_eligibility_flag_cannot_replace_review_evidence(self):
+    def test_manual_queue_recovers_in_another_harness_without_review_approval(self):
         app, state, runs, inputs, pdf, companies, bank, questions, manifest = self.build(False)
         state['preparation']['application_questions'] = manifest
-        app['Role eligibility'] = 'Eligible'  # Legacy retained data, never an acceptance gate.
-        state['review']['evidence'] = None
-        self.assertFalse(resume_ready(app, state, runs, inputs, pdf, companies=companies,
-                                      answer_bank=bank, application_questions=questions))
+        app.update({'Career fit':'Unresolved','Resume fit':'Low','Review run':[]})
+        state.pop('review');state['stage_runs'].pop('review')
+        state = self.recover(app, state, '04')
+        self.assertTrue(resume_ready(app, state, [], inputs, pdf, companies=[],
+                                    answer_bank=bank, application_questions=questions))
+        bank[0]['Approved']=False
+        self.assertFalse(resume_ready(app, state, [], inputs, pdf, companies=[],
+                                     answer_bank=bank, application_questions=questions))
         with self.assertRaises(ValueError):
             application_write({'Role eligibility': 'Eligible'}, existing_application=app, existing_state=state)
 

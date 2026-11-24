@@ -102,6 +102,7 @@ class AnswerReadinessTests(unittest.TestCase):
         app, state = fixture.prepared(pdf, fixture.reuse(digest))
         app['Job description link'] = self.app['Job description link']
         app['id'] = self.app['id']; app['Job key'] = self.app['Job key']
+        state.update(record_id=app['id'],job_key=app['Job key'])
         app['Company'] = ['company-one']
         companies = [{'id': 'company-one', 'Search status': 'Allow'}]
         inputs = {**fixture.inputs, 'answer_check_date': '2026-01-01', 'form_hash': self.manifest['form_hash']}
@@ -120,6 +121,7 @@ class AnswerReadinessTests(unittest.TestCase):
         app, state = fixture.prepared(pdf, fixture.reuse(digest))
         app.update({'Job description link': self.app['Job description link'], 'id': self.app['id'],
                     'Job key': self.app['Job key'], 'Company': ['company-one']})
+        state.update(record_id=app['id'],job_key=app['Job key'])
         companies = [{'id': 'company-one', 'Search status': 'Allow'}]
         inputs = {**fixture.inputs, 'answer_check_date': '2026-01-01', 'form_hash': self.manifest['form_hash']}
         outcome = lambda a=app, st=state: stage_state.preparation_outcome(

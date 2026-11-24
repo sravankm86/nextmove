@@ -8,7 +8,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Curate / Companies | Refresh company/funding evidence; on cadence propose matching companies new to the list as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
-| Prepare | Current review-approved Queued roles plus earlier Needs answer roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready, Needs answer or Apply manually |
+| Prepare | Queued roles, including human choices, plus earlier Needs answer roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready, Needs answer or Apply manually |
 | Sanitize / Sanitize Nextmove | Explicit-only repository consistency and simplification under [Maintenance](docs/MAINTENANCE.md#sanitize-explicit-only); never a production stage |
 | Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
 | Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
@@ -27,7 +27,15 @@ One active writer. Never seize an owner solely on timeout. Missing global access
 
 ## Company handoff and stage independence
 
-A full Run starts with Curate's company/funding work; continue Scan and Review while independent research or discovery is blocked, keeping unfinished parts visible as Partial. Standalone stages read current Companies and saved Curate evidence without automatically launching Curate. Only human-Allow companies receive new inventory or automatic advancement. Recheck targeting at every write boundary. Respect any permanent block retained in a legacy base; new setups use Exclude for company exclusions. Employer application limits and cooldowns are outside the active workflow.
+A full Run starts with Curate's company/funding work; continue Scan and Review while independent research or discovery is blocked, keeping unfinished parts visible as Partial. Standalone stages read current Companies and saved Curate evidence without automatically launching Curate. Only human-Allow companies receive new inventory or agent queue admission; check targeting at those write boundaries and respect legacy permanent blocks. New setups use Exclude for company exclusions. Prepare follows the queue decision below. Employer application limits and cooldowns are outside the active workflow.
+
+## Queue decisions
+
+Queued authorizes Prepare, whether set by Review or by a human. Agents apply all career-fit, resume-fit, pay, seniority and company gates before queueing under stages/review.md. A human's Queued choice overrides an earlier fit decision for that role; no extra approval field or receipt is required. Preserve the scores and earlier assessment, and record the observed queue handoff without inventing an editor or edit time.
+
+Prepare trusts Queued and rechecks Needs answer retries. It does not repeat fit or company admission checks, demand a matching Review approval, or reject unresolved salary/seniority. Goal or fit-policy changes affect future agent queue admissions; they do not automatically reopen Queued, Needs answer, Ready or Apply manually roles. To reassess one, explicitly request Review or move it back to Need review. Changing company targeting alone does not cancel an existing queue decision.
+
+Stop all, writer ownership, objective identity and protected submission history still apply. Queued authorizes the work; Ready still requires the verified resume and required answers.
 
 ## Run checks: objective duplicate discovery
 
@@ -43,15 +51,15 @@ Use Duplicate evidence to improve reader identity/canonicalization and prevent r
 
 Use code for enumeration, normalization, identity, candidate filters, hashes and verification. Reuse verified unchanged inputs, but recheck authoritative versions and live gates at relevant boundaries. No unverified time-based freshness assumption, hidden page/item/time cap or false completion after one batch.
 
-Scan inventories plausible candidates for the user's role family (Settings `role_family`) after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Follow the numeric routing in stages/review.md, including Unresolved at zero; only a current qualifying score can advance to Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
+Scan inventories plausible candidates for the user's role family (Settings `role_family`) after keywords/basic semantics, including uncertain seniority for Review. Unknown identity remains a Run checkpoint; clear unrelated/junior failures produce aggregate counts. Review uses the three-step scoring frame in stages/review.md. Personal requirements come from current Career Goals; candidate facts come from the editable master. Career fit measures desired work; resume fit measures demonstrated suitability for the whole JD. Agents queue only under the current numeric routing, including Unresolved at zero; the queue decision above governs Prepare. Record review reason categories and follow stages/scan.md for validated improvements; do not learn career exclusions into Scan.
 
 Preserve human outcomes. At every invocation capture new Feedback under DATA.md "Feedback inbox and Review eval" before stage decisions, and checkpoint capture again at completion. Once the eval case, snapshot and History are verified, clear only the unchanged captured Feedback. Feedback updates evals; it does not silently change Career Goals, stage rules or the role status. Do not reopen submitted/terminal roles when fit inputs change.
 
 Reread affected state, reconcile human edits, write permitted deltas and verify actual persisted values/artifacts. Save meaningful changes/events and failed/uncertain writes in History under the run. Never hide unverified changes.
 
-Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Changed decision inputs require revalidation.
+Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Check current fit inputs before agent queue admission; check current master, guidelines, JD, PDF and answers when preparing or reusing a Ready handoff.
 
-Review alone approves Queued (stages/review.md). Prepare produces the verified resume, inspects the official application questions and prepares approved/resolved answers under stages/prepare.md. It saves the evidence and stops at Ready; it does not fill forms, submit or monitor mail.
+Review owns agent queue admission (stages/review.md); humans may queue directly. Prepare produces the verified resume, inspects the official application questions and prepares approved/resolved answers under stages/prepare.md. It saves the evidence and stops at Ready; it does not fill forms, submit or monitor mail.
 
 ## Stage boundaries and exit
 
@@ -79,23 +87,23 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 |---|---|
 | Inventoried | Plausible role awaiting its first Review. |
 | Need review | Review cannot confidently approve or reject it; Agent notes identifies the gap. |
-| Queued | Current evidence-backed Review approval; eligible for Prepare. |
+| Queued | Authorized for Prepare by Review or a human's direct choice. |
 | Ready | Verified resume available; complete form inspection; every required answer Approved in Answer bank or Resolved in Application questions. Successful preparation endpoint. |
 | Needs answer | Prepare is waiting for the user: the resume is not yet verified, or a required answer is missing or not yet approved (an unticked Answer bank row or an Application questions row that is not Resolved). Every Prepare run rechecks these roles and moves them to Ready once everything is approved. |
 | Apply manually | The resume is verified, but no agent could open or fully read the official application (for example sign-in or account creation, a bot check, a blocked host, a broken Apply link or a required assessment). The user starts this application themselves. Prepare does not retry it unless asked. |
 | Not pursuing | Review declined the role or it is outside current targeting. |
 | Duplicate | Confirmed redundant unprotected row; canonical identity and prior values remain in History. |
 
-Manual status changes are not acceptance evidence. Follow stages/review.md for the score routing. Revalidate only affected unprotected decisions when their inputs change; preserve human edits and do not redo valid Ready work without a relevant input change or an explicit request.
+Manual Queued authorizes Prepare; manual Ready does not prove that the resume and answers were verified. Follow stages/review.md for agent score routing and Queue decisions above for reassessment. Preserve human edits and do not redo valid Ready work without a relevant resume/answer input change or an explicit request.
 
 ## Existing installations
 
-Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: current scored Review approval already proves eligibility. Setup never deletes or remaps legacy fields automatically. Legacy Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Needs answer is an active Prepare state again; existing Needs answer rows are rechecked by the next Prepare run. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
+Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: Queued is the preparation handoff. Setup never deletes or remaps legacy fields automatically. Legacy Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Needs answer is an active Prepare state again; existing Needs answer rows are rechecked by the next Prepare run. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
 
 An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/resume evidence without fabricating completion or launching later work. Older Ready resumes do not establish answer readiness: inspect the form and verify current answers before reusing an unsubmitted Ready handoff, while preserving the resume. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
 
 ## First full run after an input change
 
-Refresh affected goal-derived criteria before Run checks. Read Settings.role_policy.revalidation_pending and the Run checkpoint; include affected unprotected Ready, Apply manually, Needs answer and Queued approvals in Review before reusing them. Preserve their PDFs and prior decisions. Re-review only affected declined roles, not every historical Not pursuing row. A settings refresh schedules revalidation; it does not manufacture a current approval or change lifecycle by itself.
+Refresh affected goal-derived criteria before new Curate, Scan and Review decisions. Read Settings.role_policy.revalidation_pending and the Run checkpoint for unqueued roles; re-review only affected declined roles, not every historical Not pursuing row. Existing Queued, Needs answer, Ready and Apply manually roles follow Queue decisions above and are reassessed only on explicit request. Preserve their PDFs and prior scores. A changed master, guidelines or JD requires the relevant resume checks again, not another fit approval; a settings refresh never changes lifecycle by itself.
 
 Curate reports Proposed companies for one human Allow/Exclude checkpoint. Existing Allow companies can continue independently. Newly discovered companies enter Scan only after the human's choices are saved and verified. Checkpoint if the user is absent; never auto-Allow. Missing earlier submission dates/PDFs block only the affected company's resume consistency check; retain exact questions in the Run and continue independent roles.

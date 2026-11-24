@@ -1,5 +1,5 @@
 {
-  "version": 14,
+  "version": 15,
   "tables": [
     "Companies",
     "Applications",
@@ -89,7 +89,7 @@
       "stage": "Review",
       "mode": "prepare",
       "instructions": "stages/review.md",
-      "scope": "Inventoried, retryable Need review, and affected stale unsubmitted approvals; exact JD/goals/master/company evidence determine fit. Preserve historical outcomes.",
+      "scope": "Inventoried and retryable Need review roles; reassess other unprotected states only on explicit request. Exact JD/goals/master/company evidence governs agent queue admission. Preserve human queue choices and historical outcomes.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -107,15 +107,13 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Review-approved Queued roles plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. Never fills or submits.",
+      "scope": "Queued roles, including human choices, plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. No repeat fit gates, form filling or submission.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
         "master_resume",
         "content_output",
         "resume_output",
-        "career_goals",
-        "role_policy",
         "resume_guidelines",
         "base_resumes",
         "answer_bank"

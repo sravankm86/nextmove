@@ -6,20 +6,20 @@
     "Career Goals supplies personal criteria and exceptions; the master supplies candidate facts. Public Review defines only extraction, ratings and score routing.",
     "Run owns objective duplicate discovery; IDs or verified posting-specific links confirm identity, names/dates corroborate. Preserve actual application history.",
     "Review scores and routing live only in stages/review.md. Use its ordered decisions, preserve unknown evidence, and pin its automatic content fingerprint.",
-    "Freeze source/policy/JD/PDF identities; revalidate affected decisions when they change. Historical approvals do not manufacture current scored acceptance.",
+    "Agents validate current scored Review evidence before entering Queued. A live Queued status, including a human choice, authorizes Prepare without another fit or company gate. Reassess existing queues only on explicit request.",
     "Prepare reuses an approved base only with complete coverage and a current master; otherwise it tailors from the closest base under the registered resume guidelines. Base creation is offline. resume_ready checks the recorded path evidence.",
     "Curate maintains company targeting proposals and funding evidence; only humans set Allow/Exclude.",
     "The workflow stops at a verified Ready resume and approved/resolved required answers. Preserve legacy post-Ready outcomes, uncertain attempts and historical data; never reopen them automatically.",
     "Manual notes is permanent; only verified Feedback is cleared. Company discovery is not restricted to recent funding, and the current user defines applicable company types/stage rules.",
     "Prepare inspects all accessible required application questions; nonempty Approved bank answers and Resolved role-question Final answers are required for Ready. Drafts and incomplete form coverage block Ready; no form filling or submission."
   ],
-  "lifecycle": "eight-states-needs-answer-apply-manually-v6",
+  "lifecycle": "eight-states-authoritative-queue-v7",
   "identity": "run-objective-identity-v2",
   "review_source": "stages/review.md",
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",
   "company_curation": "new-to-list-dual-source-v4",
   "company_policy_source": "stages/curate.md and scripts/company_policy.py",
-  "preparation": "resume-and-required-answers-v3",
+  "preparation": "queued-resume-and-required-answers-v4",
   "feedback_evaluation": "separate-feedback-inbox-v2",
   "endpoint": "Ready"
 }

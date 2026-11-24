@@ -23,7 +23,7 @@ The goal is the smallest clear instruction set that preserves the current suppor
 | New harness → setup | Repo/base references are discoverable; actual tools are checked; missing authentication prompts are targeted; private values are not shipped in Git. |
 | Curate → Scan | Only human-Allow companies advance; current company evidence and every official board/region are available; Proposed/Exclude and blocked research remain explicit. |
 | Scan → Review | Complete page/end proof, stable objective identity, exact capture/selector/hash and broad semantic inventory; no career exclusions moved into Scan. |
-| Review → Prepare | Current exact JD/goals/master/company evidence, published scores/routing and saved approval; a manual Queued label cannot bypass them. |
+| Review → Prepare | Agent queue admission checks current Review evidence and routing; a human may queue directly. Prepare trusts live Queued/Needs answer and checks JD, master, guidelines and artifacts without repeating fit gates. |
 | Resume → question inspection | Grounded verified PDF and exact version are retained while unanswered or inaccessible forms keep the role Queued. |
 | Question inspection → Ready | Complete current form coverage and every required answer is nonempty Approved or Resolved; drafts, unknown branches, changed/revoked answers and missing files block Ready. |
 | Retry / next harness | Latest complete snapshot resolves; inputs and current human edits are checked; retries do not duplicate jobs/questions or overwrite notes, approvals and protected history. |

@@ -14,7 +14,7 @@ RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Prepara
 CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
 
 
-def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None):
+def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None, runs=None, current_inputs=None):
     """Validate active fields and preserve historical outcomes before any stage update."""
     bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History', 'Manual notes'})
     if bad:
@@ -41,6 +41,11 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
             raise ValueError('Company is outside the frozen scan scope')
         if values.get('Lifecycle status') != 'Inventoried':
             raise ValueError('Scan cannot certify eligibility or queue a new candidate')
+    if (values.get('Lifecycle status') == 'Queued'
+            and (existing_application or {}).get('Lifecycle status') != 'Queued'):
+        candidate = {**(existing_application or {}), **values}
+        if not review_ready(candidate, existing_state, runs or [], current_inputs or {}, companies=companies):
+            raise ValueError('Agent queue admission requires a current qualifying Review')
     return values
 
 
@@ -89,6 +94,7 @@ def stage_versions(state, stage, runs):
 
 
 def review_ready(app, state, runs, current_inputs, *, companies=None):
+    """Validate an agent's proposed queue admission, never an existing Prepare handoff."""
     from company_policy import company_for_application
     if not company_for_application(app, companies):
         return False
@@ -123,6 +129,12 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
                 and review.get('jd_hash') and review.get('current_description'))
 
 
+def preparation_eligible(app, state=None):
+    """Live Queued is authorization; Needs answer is its preparation retry state."""
+    return bool(app.get('Lifecycle status') in {'Queued', 'Needs answer'}
+                and not protected_history(app, state))
+
+
 def canonical_job_url(value):
     """Normalize an exact posting link; retain job-identifying query values."""
     if not value:
@@ -138,10 +150,14 @@ def canonical_job_url(value):
 
 
 def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
-    if protected_history(app, state) or app.get('Lifecycle status') not in {'Queued', 'Needs answer', 'Ready', 'Apply manually'}:
+    if app.get('Lifecycle status') not in {'Queued', 'Needs answer', 'Ready', 'Apply manually'}:
         return False
     candidate = {**app, 'Lifecycle status': 'Queued'}
-    if not review_ready(candidate, state, runs, current_inputs, companies=companies):
+    # Ready/Apply manually can be verified explicitly, without scheduling a retry.
+    # Company targeting and fit belong to queue admission, not PDF verification.
+    if (not preparation_eligible(candidate, state) or not state or not app.get('id')
+            or state.get('record_id') != app['id'] or not app.get('Job key')
+            or state.get('job_key') != app['Job key']):
         return False
     p = state.get('preparation', {})
     rid = state.get('stage_runs', {}).get('preparation')
@@ -151,7 +167,6 @@ def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provide
                 and digest and p.get('verified') and (p.get('resume_version') or p.get('resume_hash')) == digest == app.get('Resume version')
                 and p.get('master') == current_inputs.get('master')
                 and p.get('jd_hash') == current_inputs.get('jd_hash')
-                and p.get('goals') == current_inputs.get('goals')
                 and preparation_complete(p, current_inputs, digest))
 
 

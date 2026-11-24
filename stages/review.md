@@ -1,6 +1,6 @@
 # Review: three steps
 
-Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review normally assesses Inventoried roles and retryable Need review roles; an explicit reassessment may also include Queued and Not pursuing roles; recheck stale unsubmitted approvals before they advance. Consume Feedback only under DATA.md and preserve human, submitted or terminal outcomes.
+Read WORKFLOW.md and DATA.md. Run owns duplicate discovery and supplies the identity result. Review normally assesses Inventoried and retryable Need review roles. Reassess Queued, Needs answer, Ready, Apply manually or Not pursuing roles only on explicit request; an existing queue decision is not automatically reopened when fit inputs change. Consume Feedback only under DATA.md and preserve human, submitted or terminal outcomes.
 
 Use current linked Companies and saved Curate evidence in both a full Run and a standalone Review. Only human-Allow companies without a permanent block advance automatically. A role at a company the user has set to Exclude becomes Not pursuing, with Agent notes saying the company is on the user's excluded list; its fit scores are left unchanged. Skip other out-of-scope existing roles (for example at Proposed companies) without changing their scores or lifecycle, and record the reason in the Run. Temporary holds, unresearched employer policies and incomplete discovery do not delay fit assessment or queueing. They remain submission controls, not fit criteria.
 
@@ -57,6 +57,8 @@ Apply the first row before total-score routing: Low on either career or resume f
 | Total 0–1 | Not pursuing |
 
 Consequently High + Low and Low + High are Not pursuing. Low + Low is Not pursuing. With no Low, the existing numeric treatment of Unresolved remains unchanged. Explain uncertainty even when the total rejects the role. These are score outcomes, not an application authorization.
+
+Before an agent moves a role into Queued, save and verify the scored assessment and exact current inputs. Call `scripts/stage_state.py:application_write` with the live existing application, the accepted state, runs, current inputs and companies; its queue-admission check uses `review_ready` to enforce the rules here. A human may set Queued directly under WORKFLOW.md without changing the stored fit scores. Prepare consumes that decision rather than running this check again.
 
 Agent notes explains the resulting status in plain English under DATA.md "Writing Agent notes": the decisive reason (the preference or requirement that drove it, not the score arithmetic) and, for Need review, exactly what is unclear and what would resolve it. Keep full findings, source identities and input versions in History/Drive under DATA.md, verify writes and stop after Review. An eval saves predictions separately and does not change Applications unless requested.
 
