@@ -1,10 +1,20 @@
 # Changelog
 
+Release history only; README.md and the current stage files define supported behavior. Older entries are not executable instructions.
+
 ## Five-field Answer bank
 
 - Answer bank keeps Question (readable primary label), Answer, Guidance, Source field and an Approved checkbox. Answer ID, Topic, Handling, Approval, Valid until and the Company/Application scope links are retired; any restriction is written in Guidance.
-- Application questions drops the Answer rule link; Applications drops Application answers. Blueprint: 119 fields, schema 19.
+- Application questions drops the Answer rule link; Applications drops Application answers. Schema 20.
 - `answer_fingerprint` now covers the five bank fields, so saved preparation manifests recompute on the next Prepare check.
+
+## Explicit-only sanitization
+
+- Add Sanitize under the existing maintenance procedure; it never runs with the pipeline, setup or schedules.
+- Align form-inspection, harness entry and security instructions with the current Ready handoff.
+- Use the standard AGENTS.md entry for Codex; remove the redundant CODEX.md pointer. Keep CLAUDE.md as Claude Code's recognized entry.
+- Remove copied field counts from prose and retire the redundant Role eligibility flag from active writes; scored Review approval remains mandatory. Live fields and historical values are preserved.
+- Add serialized end-to-end handoff regressions for both one-agent and manually separated stages.
 
 ## Required answers in Prepare
 
@@ -27,8 +37,6 @@
 - Remove Apply/Track, form answers, application-question/submission helpers, mailbox work and application-limit/cooldown management.
 - Use seven active tables and six lifecycle states; preserve existing later-stage data and protect historical outcomes.
 - Retain Review scoring, objective duplicate checks, feedback/blind replay, source recovery and grounded PDF verification.
-
-Earlier entries below describe historical releases, not the current supported workflow.
 
 ## Form answers hold only the submitted value
 

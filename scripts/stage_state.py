@@ -11,7 +11,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Role eligibility','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None):
@@ -39,7 +39,7 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
             raise ValueError('Current company records must confirm Allow and no permanent block')
         if allowed_companies is not None and company[0] not in allowed_companies:
             raise ValueError('Company is outside the frozen scan scope')
-        if values.get('Lifecycle status') != 'Inventoried' or values.get('Role eligibility') != 'Pending':
+        if values.get('Lifecycle status') != 'Inventoried':
             raise ValueError('Scan cannot certify eligibility or queue a new candidate')
     return values
 
@@ -93,8 +93,6 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
     if not company_for_application(app, companies):
         return False
     if protected_history(app, state) or not state or app.get('Lifecycle status') != 'Queued':
-        return False
-    if app.get('Role eligibility') != 'Eligible':
         return False
     review = state.get('review', {})
     from role_gate import review_frame_contract, scored_review

@@ -9,12 +9,13 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready |
+| Sanitize / Sanitize Nextmove | Explicit-only repository consistency and simplification under [Maintenance](docs/MAINTENANCE.md#sanitize-explicit-only); never a production stage |
 | Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
 | Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
 
 Match command aliases as complete phrases: Review eval / Eval Review is an Experiment, not production Review.
 
-Quoted examples/setup discussions do not dispatch production work. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, and stops at the verified resume-and-answer handoff. It cannot launch another harness.
+Quoted examples/setup discussions do not dispatch work. Sanitize requires an explicit request; Run, stage commands, setup, retries, feedback and schedules never imply it. Read its maintenance procedure instead of loading production-stage prerequisites. A single stage stops after handoff. Run advances authorized useful stages without asking to continue, and stops at the verified resume-and-answer handoff. It cannot launch another harness.
 
 ## Startup and ownership
 
@@ -30,7 +31,7 @@ A full Run starts with Curate's company/funding work; continue Scan and Review w
 
 ## Run checks: objective duplicate discovery
 
-Every invocation, including a single stage command, starts with Run checks. Build one company-scoped identity index from live role IDs, official job links, role names and posted dates. Refresh this index when Scan encounters new postings. Run owns discovery; Review and later stages consume its result rather than repeating duplicate searches.
+Every production, feedback or eval invocation, including a single stage command, starts with Run checks. Sanitize is exempt: its maintenance procedure can run without a private base. Build one company-scoped identity index from live role IDs, official job links, role names and posted dates. Refresh this index when Scan encounters new postings. Run owns discovery; Review and later stages consume its result rather than repeating duplicate searches.
 
 An exact verified employer role ID or verified posting-specific canonical link confirms identity. Role name and posted date corroborate it; they cannot alone prove identity. Preserve meaningful URL parameters. Different verified role IDs, regional postings or conflicting evidence need reconciliation rather than a title-based merge. Use scripts/stage_state.py:run_duplicate_match.
 
@@ -87,7 +88,7 @@ Manual status changes are not acceptance evidence. Follow stages/review.md for t
 
 ## Existing installations
 
-Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. Setup never deletes or remaps them automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
+Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: current scored Review approval already proves eligibility. Setup never deletes or remaps legacy fields automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
 
 An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/resume evidence without fabricating completion or launching later work. Older Ready resumes do not establish answer readiness: inspect the form and verify current answers before reusing an unsubmitted Ready handoff, while preserving the resume. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
 

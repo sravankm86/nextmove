@@ -1,5 +1,5 @@
 {
-  "version": 13,
+  "version": 14,
   "tables": [
     "Companies",
     "Applications",
@@ -154,13 +154,32 @@
         "content_output",
         "eval_registry"
       ]
+    },
+    {
+      "command": "Sanitize",
+      "aliases": [
+        "sanitize",
+        "sanitize nextmove"
+      ],
+      "stage": "Migration",
+      "mode": "prepare",
+      "instructions": "docs/MAINTENANCE.md",
+      "scope": "Explicit-only full-repository consistency, field necessity and fresh-agent E2E audit; apply verified simplifications, preserve live data and report unresolved decisions. Never launches production stages.",
+      "explicit_only": true,
+      "included_in_run": false,
+      "required_resources": [
+        "instructions_repository"
+      ]
     }
   ],
   "run_preflight": {
     "for_every_command": true,
     "instructions": "WORKFLOW.md#run-checks-objective-duplicate-discovery",
     "duplicate_owner": "Run",
-    "refresh_for_new_scan_postings": true
+    "refresh_for_new_scan_postings": true,
+    "excluded_commands": [
+      "Sanitize"
+    ]
   },
   "endpoint": "Ready"
 }

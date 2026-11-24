@@ -4,23 +4,23 @@ The single reference for Airtable, evidence, history and stage handoff. contract
 
 ## Nine active tables
 
-| Table | Purpose | Columns, including reciprocal links |
-|---|---|---:|
-| Companies | Human targeting, funding, notes and Feedback | 12 |
-| Applications | Candidate facts, review, preparation readiness, notes and Feedback | 28 |
-| Sources | Official board/region, reader, pagination and coverage | 13 |
-| Runs | Frozen inputs, progress, ownership and handoff | 20 |
-| Settings | Private references, policies, controls and verification | 6 |
-| History | Meaningful field changes, decisions and failures | 13 |
-| Review eval | Frozen feedback answer key and eval results | 13 |
-| Answer bank | Reusable Form answers: question, answer, guidance and approval | 5 |
-| Application questions | Role-specific questions, drafts and resolved final answers | 11 |
+| Table | Purpose |
+|---|---|
+| Companies | Human targeting, funding, notes and Feedback |
+| Applications | Candidate facts, review, preparation readiness, notes and Feedback |
+| Sources | Official board/region, reader, pagination and coverage |
+| Runs | Frozen inputs, progress, ownership and handoff |
+| Settings | Private references, policies, controls and verification |
+| History | Meaningful field changes, decisions and failures |
+| Review eval | Frozen feedback answer key and eval results |
+| Answer bank | Reusable Form answers: question, answer, guidance and approval |
+| Application questions | Role-specific questions, drafts and resolved final answers |
 
-The new-install blueprint has 119 fields including reciprocal links. Native record IDs and createdTime replace metadata columns. Display keys are not uniqueness constraints: writers validate business keys, link cardinality and intended deltas. Existing installations may retain extra history fields/tables/options; these are not new-setup requirements. Never delete them as part of startup or write outside the active schema. See WORKFLOW.md "Existing installations" and docs/MAINTENANCE.md for non-destructive upgrades.
+The generated contract defines fields and reciprocal links. Native record IDs and createdTime replace metadata columns. Display keys are not uniqueness constraints: writers validate business keys, link cardinality and intended deltas. Existing installations may retain extra history fields/tables/options; these are not new-setup requirements. Never delete them as part of startup or write outside the active schema. See WORKFLOW.md "Existing installations" and docs/MAINTENANCE.md for non-destructive upgrades.
 
-**Companies.** Company, Company key, Search status, Manual notes, Feedback, Agent notes, Funding stage, Company evidence, Applications, Sources and Curate run. Human targeting is Proposed/Allow/Exclude; only the human sets Allow/Exclude. Funding stage is ordered from Pre-seed / Seed through Series A–D, Series E+, Late private and Public; Unknown is not a verified funding stage. Keep actual maturity separate from investment type. Full evidence, round labels/amounts/dates, parent history, advisory company-fit reasoning and creation origin belong in versioned evidence/History, not columns. Curate owns factual company writes; Review independently applies current goals.
+**Companies.** Company, Company key, Search status, Manual notes, Feedback, Agent notes, Funding stage, Company evidence, Applications, Sources, and Curate run. Human targeting is Proposed/Allow/Exclude; only the human sets Allow/Exclude. Funding stage is ordered from Pre-seed / Seed through Series A–D, Series E+, Late private and Public; Unknown is not a verified funding stage. Keep actual maturity separate from investment type. Full evidence, round labels/amounts/dates, parent history, advisory company-fit reasoning and creation origin belong in versioned evidence/History, not columns. Curate owns factual company writes; Review independently applies current goals.
 
-**Applications.** The 27 fields in scripts/stage_state.py:CORE_FIELDS, including Company, three stage Run links and History. Application ID is the formula RECORD_ID(); never write it. Job key holds the canonical employer posting identity. Resume link/version/verified time identify the exact Ready PDF. Application questions links the role-specific answer table; Answer bank rows are general and are not linked to applications. Other retired submission/confirmation fields and post-Ready outcomes remain read-only history; they are not requirements for a new run.
+**Applications.** The active fields in scripts/stage_state.py:CORE_FIELDS, including Company, three stage Run links and History. Application ID is the formula RECORD_ID(); never write it. Job key holds the canonical employer posting identity. Resume link/version/verified time identify the exact Ready PDF. Application questions links the role-specific answer table; Answer bank rows are general and are not linked to applications. Other retired submission/confirmation fields and post-Ready outcomes remain read-only history; they are not requirements for a new run.
 
 **Sources.** Source key, Company, Official careers URL, Catalog URL, Region, Reader, Reader version, Latest coverage, Checkpoint (JSON), Last error, Last scanned at, Last run, Archived at. Checkpoints hold cursor/end proof, counts, manifest identity and pagination details. Archived at disables a retired source; every other configured board/region remains in scope.
 
@@ -101,7 +101,7 @@ Company Agent notes follow the same rules, for example: `Proposed: the latest ve
 
 Starting salary and Max salary are numeric endpoints of one verified advertised base-pay band, in the single currency and period registered in Settings.applications_schema.salary_display. Pick the highest advertised maximum in that currency with its paired minimum; leave both blank when no compatible verified band exists. Never mix currencies or periods, convert implicitly, use total compensation or write zero. Additional compensation: Equity, Bonus, Commission, Bonus or commission, Not stated. Location holds short places; Work arrangement is Remote/Hybrid/On-site/Unspecified. Use scripts/tracker_values.py for parsing. Job evidence preserves the exact JD with every band, condition and location; Review checks applicability there.
 
-No availability column is kept and Scan does not monitor closures. Review opens the live posting when it can and sets an expired role to Not pursuing (stages/review.md Step 1); when the page cannot be reached, a saved exact official JD supports Review. The workflow does not check application forms. When Scan reobserves a role, record source membership, observation time and content fingerprint in History; a changed fingerprint triggers comparison and affected re-review.
+No availability column is kept and Scan does not monitor closures. Review opens the live posting when it can and sets an expired role to Not pursuing (stages/review.md Step 1); when the page cannot be reached, a saved exact official JD supports Review. Prepare inspects application questions under stages/prepare.md; Scan and Review do not. When Scan reobserves a role, record source membership, observation time and content fingerprint in History; a changed fingerprint triggers comparison and affected re-review.
 
 ## Stage metadata
 
@@ -126,7 +126,7 @@ Settings.resume_output is the Role specific folder; Settings.content_output is t
 Before any existing-row stage update, resolve the latest complete state and call application_write with existing_application and existing_state from live reads. The writer rejects Manual notes writes. protected_history is a preservation check, not a submission/retry workflow. The feedback coordinator may clear only verified captured Feedback on a protected row. Preserve archived schema keys in existing snapshots when merging; new snapshots do not create submission state.
 
 - **Curate:** company snapshots use `merge_company_state` with the company record ID and link to the Run, never to Applications. Save `funding` facts with source identity, retrieval time, event-date meaning and any uncertainty, `company_fit` with the advisory rating and evidence-based reason, and `origin` when known. Preserve prior snapshot sections when updating one part. These are History metadata, not Companies columns. Run checkpoint `stages.curate` keeps company_research and discovery parts separately; discovery feed cursors live in Settings.company_policy.discovery.checkpoints and advance only after verified complete coverage.
-- **Scan:** freeze scope from current Companies (`scan_enabled`) and active Sources; recheck targeting at the write boundary. `application_write(creating=True)` needs current Companies records, a new canonical Job key, Inventoried and Role eligibility Pending. Save source memberships, requisition IDs, aliases, capture selectors, observation times and fingerprints in `source`.
+- **Scan:** freeze scope from current Companies (`scan_enabled`) and active Sources; recheck targeting at the write boundary. `application_write(creating=True)` needs current Companies records, a new canonical Job key, and Inventoried status. Save source memberships, requisition IDs, aliases, capture selectors, observation times and fingerprints in `source`.
 - **Review:** save the three-step assessment (method, exact input identities, career and resume ratings, total, outcome, evidence, unresolved questions) before changing status, fit ratings, Review run and Agent notes. Record the decisive company evidence identity in `stage_inputs.review.company_evidence`; Curate’s saved company assessment is advisory and never copied into Career fit.
 - **Prepare:** save `path`, base, base_version, base_master, guidelines version, coverage, company_history (verified match count, evidence, compared versions and any missing details), company_consistency and, for tailored versions, change notes, `grounding`, `guideline_check`, editable source, file hash and visual verification. Save the verified resume fields after `resume_verified` passes on the downloaded bytes, while keeping Queued. Save `preparation.application_questions` with form identity/hash/time, full coverage evidence, blockers and every question's exact text/options/type/required flag plus matched table/record/fingerprint/mapped answer. `resume_ready` additionally checks current live Approved/Resolved answers before Ready.
 
