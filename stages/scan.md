@@ -24,7 +24,7 @@ Source status: Complete when every planned source is verified, Partial when usab
 
 Run checks (WORKFLOW.md) own duplicate discovery: check the identity index before inserting and hand new identity evidence back to Run.
 
-Use broad signals from Settings `role_family`: direct title patterns (including level variants and localized equivalents), broader patterns that need a context check, clearly different functions and clearly junior titles. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` separates `title_screen`, `inventory_candidate` and Review's `review_eligibility`, all driven by that definition; a title alone never admits a role.
+Use broad signals from Settings `role_family`: direct title patterns (including level variants and localized equivalents), broader patterns that need a context check, clearly different functions and clearly junior titles. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` provides `title_screen` and `inventory_candidate`, both driven by that definition; a title alone never admits a role. Review then scores the full description under stages/review.md.
 
 - Exclude clearly unrelated functions and clearly junior roles, with recorded evidence.
 - Keep direct role-family matches whose domain names another field (for example finance, design or security), unlevelled or flat titles, and roles with uncertain level: they enter Inventoried for Review.

@@ -179,5 +179,10 @@
       "Sanitize"
     ]
   },
-  "endpoint": "Ready"
+  "endpoint": "Ready",
+  "prepare_outcomes": [
+    "Ready",
+    "Needs answer",
+    "Apply manually"
+  ]
 }

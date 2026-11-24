@@ -1,5 +1,15 @@
 # Changelog
 
+
+## Consistency fixes
+
+- Prepare also runs the answer check on Ready roles that have never had one (`answer_check_due`); a failing role moves to Needs answer or Apply manually.
+- Agent queue admission no longer requires the retired eligibility-policy version; `review_eligibility` is removed.
+- Review saves `review.reason_category`, defines when Need review roles are retried, and drops stale submission-control wording.
+- An agent may queue a role on the user's explicit, recorded request (`human_request`).
+- Required non-resume attachments are tracked as Application questions rows; Needs answer notes say whether the next step is the user's or an agent retry.
+- Contracts list all three Prepare outcomes; Sanitize now includes a logical-consistency review.
+
 ## Agent notes explains each status
 
 - Require the deciding evidence for each status, including unchanged decisions, and acknowledge human queue choices without inventing Review approval.

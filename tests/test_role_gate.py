@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import json
-from role_gate import inventory_candidate, review_eligibility, role_family, title_screen
+from role_gate import inventory_candidate, role_family, title_screen
 
 _EXAMPLE = json.loads((Path(__file__).resolve().parents[1] / 'templates' / 'role-family.example.json').read_text())
 FAMILY = role_family({k: v for k, v in _EXAMPLE.items() if k != 'examples'})
@@ -43,29 +43,16 @@ class AdmissionTests(unittest.TestCase):
             with self.subTest(availability=value):
                 candidate = {**row, 'availability_verified': value}
                 self.assertEqual(inventory_candidate(candidate, FAMILY), 'pass')
-                self.assertEqual(review_eligibility(candidate, years_threshold=8, role_family_name=NAME), 'pass')
         self.assertEqual(inventory_candidate({**row, 'identity_verified': False}, FAMILY), 'pending')
-        self.assertEqual(review_eligibility({**row, 'description_verified': False}, years_threshold=8, role_family_name=NAME), 'pending')
 
     def test_title_alone_cannot_admit(self):
-        self.assertEqual(review_eligibility({'title': 'Principal Product Manager'}, years_threshold=8, role_family_name=NAME), 'pending')
-
-    def test_evidence_and_scope_boundary(self):
-        row = {'identity_verified': True, 'description_verified': True, 'availability_verified': True, 'role_family': NAME, 'role_evidence': 'Own product strategy and roadmap', 'experience_years_target': 10, 'experience_evidence': 'Ten-plus years required'}
-        self.assertEqual(review_eligibility(row, years_threshold=8, role_family_name=NAME), 'pass')
-        row['experience_years_target'] = 8
-        self.assertEqual(review_eligibility(row, years_threshold=8, role_family_name=NAME), 'pending')
-        row.update(equivalent_senior_scope=True, scope_evidence='Verified multi-product strategy ownership and PM-team leadership')
-        self.assertEqual(review_eligibility(row, years_threshold=8, role_family_name=NAME), 'pass')
-        row['equivalent_senior_scope'] = 'true'
-        self.assertEqual(review_eligibility(row, years_threshold=8, role_family_name=NAME), 'pending')
+        self.assertEqual(inventory_candidate({'title': 'Principal Product Manager'}, FAMILY), 'pending')
 
     def test_plausible_ambiguity_is_inventory_not_review_approval(self):
         row = {'title': 'Product Manager', 'identity_verified': True,
                'availability_verified': True, 'role_hint': 'ambiguous',
                'basic_evidence': 'Official team owns platform roadmap; level unspecified'}
         self.assertEqual(inventory_candidate(row, FAMILY), 'pass')
-        self.assertEqual(review_eligibility(row, years_threshold=8, role_family_name=NAME), 'pending')
         row['career_decision'] = 'fail'
         self.assertEqual(inventory_candidate(row, FAMILY), 'pass')
         row['basic_evidence'] = ''
@@ -87,15 +74,6 @@ class AdmissionTests(unittest.TestCase):
                'availability_verified': True, 'role_hint': 'plausible',
                'basic_evidence': 'Official function: product management; owns roadmap'}
         self.assertEqual(inventory_candidate(row, FAMILY), 'pass')
-
-class QualificationTests(unittest.TestCase):
-    def q(self,status):
-        return {'status':status,'evidence':'Exact source or confirmed candidate evidence' if status!='unknown' else None}
-    def test_pay_with_meaningful_ownership_can_support_scope(self):
-        evidence={'identity_verified':True,'description_verified':True,'role_family':NAME,'role_evidence':'Own end-to-end roadmap','pay_supported_scope':True,'meaningful_pm_ownership':True,'role_specific_pay_evidence':'Applicable senior band','scope_evidence':'Strategy and multi-team product accountability'}
-        self.assertEqual(review_eligibility(evidence,years_threshold=8, role_family_name=NAME),'pass')
-        evidence['meaningful_pm_ownership']=False
-        self.assertEqual(review_eligibility(evidence,years_threshold=8, role_family_name=NAME),'pending')
 
 if __name__ == '__main__':
     unittest.main()
