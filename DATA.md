@@ -76,24 +76,27 @@ Keep Manual notes beside Lifecycle status for permanent annotations; show Feedba
 
 ## Writing Agent notes
 
-Agent notes tells the user, in plain English, why the agent set the row's current status. Write it for someone who has not read the job description or these instructions. Each time an agent changes the status, it replaces the note (the previous note goes to History).
+Agent notes justifies the row's current status using the deciding evidence. Write it for someone who has not read the job description or these instructions. Refresh it whenever the agent decides or rechecks a status, even if the label stays the same; preserve the previous note in History. A notes-only repair does not imply a new Review or Prepare verification. For a human's Queued choice, acknowledge that choice rather than inventing an agent fit approval.
 
-- **Say what and why.** Start with the status, then the main reason in everyday words: what about the role or the user's background led to it.
-- **Name the confusion.** If something is unclear or missing, say exactly what it is and why it matters for the decision.
+- **Say what and why.** Start with the status and the concrete evidence that explains it. For Queued, name the work the user wants and the relevant candidate evidence; for Not pursuing, name the decisive failure. Generic claims such as "good fit" or "preparation blocked" are insufficient.
+- **Explain the current blocker.** For Need review, name the unresolved decision. For Needs answer, state whether the resume is verified, exactly which answer, approval or resume-history detail is missing, and why that prevents Ready. Include each independent blocker; distinguish an empty final answer from an unapproved answer. For Apply manually, name the access obstacle. A resume-selection summary or shortlist estimate never substitutes for the status rationale.
 - **Say what happens next.** End with the next step, or what the user needs to do, when there is one.
 - **Keep it short and plain.** One to three sentences, under about 60 words. A Ready note may give the estimated shortlist chance as "about N/10" when Settings `preparation_notes.shortlist_estimate` is on (stages/prepare.md); no other scores. Full sentences; no internal field names, codes, scores written as sums, record IDs, file hashes, JSON or Markdown; spell out abbreviations.
-- **Be concrete.** Name the actual requirement, preference, company rule or question rather than a category.
+- **Use current evidence.** Remove resolved or superseded reasons from the current note; retain them in History. If a previous check is obsolete and the remaining work has not been performed, say so without inventing a new blocker or claiming Ready. Do not present an honest experience gap as a new preparation gate after queueing.
 
 Examples (fictional):
 
 | Status | Agent notes |
 |---|---|
+| Inventoried | Inventoried: the posting describes senior product ownership, which passes the broad discovery criteria. Review still needs to assess the full description against your goals and resume. |
 | Queued | Queued: this is the AI agents platform work you want, and your experience covers every key requirement, including shipping agents at scale. Next, a resume will be prepared. |
 | Need review | Needs review: the role fits your goals, but the posting does not say whether it is based in the US or London, and you only want US roles. Once the location is confirmed, it can be decided. |
 | Not pursuing | Not pursuing: the role requires five years of hands-on payments engineering, and your background shows product leadership but no engineering track record. |
 | Not pursuing | Role expired: the posting was no longer available when checked on 17 Nov. |
 | Ready | Ready: your platform base was reused because it leads with the large-scale launches this role asks for. Gaps: no direct experience in the retail industry. |
 | Needs answer | Needs answer: the resume is ready, but the form asks why you want to join and your drafted answer is waiting for your approval in Application questions. Approve it and the next Prepare run will mark this Ready. |
+| Needs answer | Needs answer: the resume is verified, but the required answer about your use of artificial intelligence tools has no final text, despite being marked Resolved. Save your approved response in Final answer, then rerun Prepare. |
+| Needs answer | Needs answer: the resume cannot be verified until the exact file used for your recent Growth application is available. Your same-company rule requires checking that version before selecting a resume; provide its Drive link. |
 | Apply manually | Apply manually: the resume is ready, but the application needs a Workday account sign-in that agents cannot do. Start this application yourself with the linked resume. |
 | Duplicate | Duplicate: this is the same posting (same requisition number) as the existing Senior Analyst row for this company, so that row is kept. |
 

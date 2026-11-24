@@ -1,5 +1,11 @@
 # Changelog
 
+## Agent notes explains each status
+
+- Require the deciding evidence for each status, including unchanged decisions, and acknowledge human queue choices without inventing Review approval.
+- Lead Needs answer notes with the missing answer, approval or resume-history evidence and next action; keep resume quality estimates out of blocker explanations.
+- Retain prior reasons in History and remove obsolete blockers from current notes without claiming unperformed verification.
+
 ## Queued authorizes preparation
 
 - Treat a human's Queued choice as authorization to prepare while preserving earlier fit scores and reasons.
