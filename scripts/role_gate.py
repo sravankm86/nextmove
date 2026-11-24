@@ -87,37 +87,6 @@ def inventory_candidate(assessment, family):
     return 'pass'
 
 
-def review_eligibility(assessment, *, years_threshold, role_family_name):
-    """Return pass/reject/pending. Never infer company-grade equivalence.
-
-    years_threshold is exclusive. Low posted minimums alone do not prove scope
-    below the bar. Equivalent scope requires an explicit evidence-backed decision.
-    """
-    if not isinstance(years_threshold, (int, float)) or isinstance(years_threshold, bool):
-        raise ValueError('Explicit numeric experience threshold required')
-    if assessment.get('identity_verified') is not True or assessment.get('description_verified') is not True:
-        return 'pending'
-    if not role_family_name:
-        raise ValueError('Explicit role family name required (Settings role_family.name)')
-    if assessment.get('role_family', 'unknown') not in {role_family_name, 'unknown', None}:
-        return 'reject'
-    if assessment.get('role_family') != role_family_name or not assessment.get('role_evidence'):
-        return 'pending'
-    years = assessment.get('experience_years_target')
-    experience_pass = isinstance(years, (int, float)) and not isinstance(years, bool) and years > years_threshold and bool(assessment.get('experience_evidence'))
-    scope_pass = assessment.get('equivalent_senior_scope') is True and bool(assessment.get('scope_evidence'))
-    pay_scope_pass = (assessment.get('pay_supported_scope') is True
-                      and assessment.get('meaningful_pm_ownership') is True
-                      and bool(assessment.get('role_specific_pay_evidence'))
-                      and bool(assessment.get('scope_evidence'))
-                      and assessment.get('explicitly_below_scope') is not True)
-    if experience_pass or scope_pass or pay_scope_pass:
-        return 'pass'
-    if assessment.get('explicitly_below_scope') is True and assessment.get('scope_evidence'):
-        return 'reject'
-    return 'pending'
-
-
 # Current Review reads the human-facing tables directly; no copied score config.
 def review_frame_contract(review_path=None):
     import hashlib

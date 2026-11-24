@@ -88,7 +88,7 @@ class ReviewFrameTests(unittest.TestCase):
 
     def test_new_acceptance_requires_current_scoring_and_run_identity(self):
         policy,contract=review_frame_contract();c=max(contract['career'],key=contract['career'].get);r=max(contract['resume'],key=contract['resume'].get)
-        inputs={'company_evidence':'company-capture','goals':'g','master':'m','policy':policy,'eligibility_policy':'e','jd_hash':'jd'}
+        inputs={'company_evidence':'company-capture','goals':'g','master':'m','policy':policy,'jd_hash':'jd'}
         run={'id':'run','Input versions (JSON)':{'stage_inputs':{'review':inputs}}}
         companies=[{'id':'company','Search status':'Allow'}]
         app={'Company':['company'],'id':'job','Lifecycle status':'Queued','Career fit':c,'Resume fit':r,'Review run':['run']}

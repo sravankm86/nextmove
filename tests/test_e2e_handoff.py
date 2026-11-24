@@ -40,7 +40,7 @@ class EndToEndHandoffTests(unittest.TestCase):
         app['Scan run'] = [ids['scan']]
         state = self.recover(app, state, '01')
         inputs = {'goals': 'goals-one', 'master': 'master-one', 'policy': review_frame_contract()[0],
-                  'eligibility_policy': 'scope-one', 'company_evidence': company['Company evidence'],
+                  'company_evidence': company['Company evidence'],
                   'jd_hash': jd_hash, 'resume_guidelines': 'guidelines-one', 'answer_check_date': '2026-01-01'}
         runs = [{'id': rid, 'Input versions (JSON)': json.dumps({'stage_inputs': {'review': inputs}})} for rid in set(ids.values())]
         # Run preflight is refreshed for a separately invoked Review, not inherited blindly.

@@ -14,7 +14,7 @@ RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Prepara
 CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
 
 
-def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None, runs=None, current_inputs=None):
+def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None, runs=None, current_inputs=None, human_request=None):
     """Validate active fields and preserve historical outcomes before any stage update."""
     bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History', 'Manual notes'})
     if bad:
@@ -44,8 +44,11 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
     if (values.get('Lifecycle status') == 'Queued'
             and (existing_application or {}).get('Lifecycle status') != 'Queued'):
         candidate = {**(existing_application or {}), **values}
-        if not review_ready(candidate, existing_state, runs or [], current_inputs or {}, companies=companies):
-            raise ValueError('Agent queue admission requires a current qualifying Review')
+        # A user's explicit instruction to queue this role is their choice, recorded verbatim.
+        human_choice = (isinstance(human_request, dict) and isinstance(human_request.get('quote'), str)
+                        and human_request['quote'].strip() and human_request.get('observed_at'))
+        if not human_choice and not review_ready(candidate, existing_state, runs or [], current_inputs or {}, companies=companies):
+            raise ValueError('Agent queue admission requires a current qualifying Review or an explicit user request')
     return values
 
 
@@ -124,15 +127,24 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
         return False
     versions = stage_versions(state, 'review', runs)
     return bool(all(versions.get(k) and versions[k] == current_inputs.get(k)
-                    for k in ['goals', 'master', 'policy', 'eligibility_policy', 'company_evidence'])
+                    for k in ['goals', 'master', 'policy', 'company_evidence'])
                 and review.get('jd_hash') == current_inputs.get('jd_hash')
                 and review.get('jd_hash') and review.get('current_description'))
 
 
+def answer_check_due(app, state=None):
+    """A Ready role prepared before answers were required has no saved answer manifest."""
+    from application_answers import SCHEMA
+    inspection = ((state or {}).get('preparation') or {}).get('application_questions')
+    return bool(app.get('Lifecycle status') == 'Ready' and not protected_history(app, state)
+                and not (isinstance(inspection, dict) and inspection.get('schema') == SCHEMA))
+
+
 def preparation_eligible(app, state=None):
-    """Live Queued is authorization; Needs answer is its preparation retry state."""
-    return bool(app.get('Lifecycle status') in {'Queued', 'Needs answer'}
-                and not protected_history(app, state))
+    """Live Queued is authorization; Needs answer is its retry state; a Ready role
+    without a saved answer check gets that check."""
+    return bool((app.get('Lifecycle status') in {'Queued', 'Needs answer'}
+                 and not protected_history(app, state)) or answer_check_due(app, state))
 
 
 def canonical_job_url(value):

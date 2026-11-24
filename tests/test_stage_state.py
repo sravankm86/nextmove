@@ -6,7 +6,7 @@ from role_gate import review_frame_contract,scored_review
 
 class StateTests(unittest.TestCase):
     def setUp(self):
-        self.inputs={'company_evidence':'company-capture-v1','goals':'goals-v1','master':'master-v1','policy':review_frame_contract()[0],'eligibility_policy':'scope-v3','instructions':'new-storage-release','jd_hash':'jd-v1'}
+        self.inputs={'company_evidence':'company-capture-v1','goals':'goals-v1','master':'master-v1','policy':review_frame_contract()[0],'instructions':'new-storage-release','jd_hash':'jd-v1'}
         self.run={'id':'run-example','Input versions (JSON)':json.dumps({'stage_inputs':{'review':{**self.inputs,'instructions':'original-review-release'}}})}
         self.companies=[{'id':'company-example','Search status':'Allow','Application hold status':'Held'}]
         self.app={'Company':['company-example'],'id':'role-example','Job key':'employer:role-123','Lifecycle status':'Queued','Career fit':'High','Resume fit':'Medium','Review run':['run-example']}
@@ -77,7 +77,7 @@ class StateTests(unittest.TestCase):
         app,state=self.prepared(pdf,self.reuse(digest))
         app.update({'Career fit':'Unresolved','Resume fit':'Low','Review run':[]})
         state.pop('review');state['stage_runs'].pop('review');state.pop('run_checks')
-        inputs={**self.inputs,'goals':'changed','policy':'changed','company_evidence':'changed','eligibility_policy':'changed'}
+        inputs={**self.inputs,'goals':'changed','policy':'changed','company_evidence':'changed'}
         self.assertTrue(s.resume_verified(app,state,[],inputs,pdf,companies=[]))
         for change in [{'master':'changed'},{'jd_hash':'changed'}]:
             self.assertFalse(s.resume_verified(app,state,[],{**inputs,**change},pdf))
@@ -96,7 +96,7 @@ class StateTests(unittest.TestCase):
 
     def test_schema_only_release_preserves_policy_but_changed_inputs_block(self):
         self.assertTrue(s.review_ready(self.app,self.state,[self.run],self.inputs, companies=self.companies))
-        for key in ['goals','master','policy','eligibility_policy','company_evidence','jd_hash']:
+        for key in ['goals','master','policy','company_evidence','jd_hash']:
             self.assertFalse(s.review_ready(self.app,self.state,[self.run],{**self.inputs,key:'changed'}, companies=self.companies))
     def test_queue_needs_current_scores_and_evidence_without_extra_gate_columns(self):
         for key in ['evidence','assessment_complete','assessment_method','scoring']:
@@ -166,4 +166,25 @@ class StateTests(unittest.TestCase):
         self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/?ref=role-a'),s.canonical_job_url('https://jobs.example.test/?ref=role-b'))
         self.assertNotEqual(s.canonical_job_url('https://jobs.example.test/#/job/one'),s.canonical_job_url('https://jobs.example.test/#/job/two'))
 
-if __name__=='__main__':unittest.main()
+    def test_ready_without_answer_check_is_prepared_again(self):
+        ready={**self.app,'Lifecycle status':'Ready'}
+        self.assertTrue(s.preparation_eligible(ready,{}))
+        self.assertTrue(s.answer_check_due(ready,{'preparation':{}}))
+        checked={'preparation':{'application_questions':{'schema':'nextmove.application-questions.v1'}}}
+        self.assertFalse(s.preparation_eligible(ready,checked))
+        self.assertFalse(s.preparation_eligible({**ready,'Lifecycle status':'Apply manually'},{}))
+        self.assertTrue(s.preparation_eligible({**self.app,'Lifecycle status':'Queued'},checked))
+
+
+    def test_explicit_user_request_lets_an_agent_queue_without_review(self):
+        app={**self.app,'Lifecycle status':'Need review'}
+        with self.assertRaises(ValueError):
+            s.application_write({'Lifecycle status':'Queued'},existing_application=app,existing_state={})
+        request={'quote':'Please queue the Stripe payouts role','observed_at':'2026-11-24T10:00:00Z'}
+        self.assertEqual(s.application_write({'Lifecycle status':'Queued'},existing_application=app,existing_state={},human_request=request),{'Lifecycle status':'Queued'})
+        with self.assertRaises(ValueError):
+            s.application_write({'Lifecycle status':'Queued'},existing_application=app,existing_state={},human_request={'quote':' '})
+
+
+if __name__ == '__main__':
+    unittest.main()
