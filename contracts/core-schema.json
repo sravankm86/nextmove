@@ -127,6 +127,12 @@
                 "name": "Ready"
               },
               {
+                "name": "Needs answer"
+              },
+              {
+                "name": "Apply manually"
+              },
+              {
                 "name": "Not pursuing"
               },
               {

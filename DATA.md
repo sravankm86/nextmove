@@ -93,6 +93,8 @@ Examples (fictional):
 | Not pursuing | Not pursuing: the role requires five years of hands-on payments engineering, and your background shows product leadership but no engineering track record. |
 | Not pursuing | Role expired: the posting was no longer available when checked on 17 Nov. |
 | Ready | Ready: your platform base was reused because it leads with the large-scale launches this role asks for. Gaps: no direct experience in the retail industry. |
+| Needs answer | Needs answer: the resume is ready, but the form asks why you want to join and your drafted answer is waiting for your approval in Application questions. Approve it and the next Prepare run will mark this Ready. |
+| Apply manually | Apply manually: the resume is ready, but the application needs a Workday account sign-in that agents cannot do. Start this application yourself with the linked resume. |
 | Duplicate | Duplicate: this is the same posting (same requisition number) as the existing Senior Analyst row for this company, so that row is kept. |
 
 Company Agent notes follow the same rules, for example: `Proposed: the latest verified funding round meets your company-stage preference. Please choose Allow or Exclude.` `scripts/stage_state.py:agent_note_problems` flags notes that break the mechanical rules (too long, code-like text); writers fix those before saving.

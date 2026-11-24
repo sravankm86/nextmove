@@ -1,4 +1,6 @@
-"""Active lifecycle ends at a verified resume; later legacy outcomes are read-only."""
-STATUSES = ['Inventoried', 'Need review', 'Queued', 'Ready', 'Not pursuing', 'Duplicate']
-END_STATES = {'Ready', 'Not pursuing', 'Duplicate'}
-LEGACY_READ_ONLY = {'Needs answer', 'Applied', 'Interviewing', 'Rejected'}
+"""Active lifecycle ends at a Prepare handoff; later legacy outcomes are read-only."""
+STATUSES = ['Inventoried', 'Need review', 'Queued', 'Ready', 'Needs answer', 'Apply manually', 'Not pursuing', 'Duplicate']
+END_STATES = {'Ready', 'Apply manually', 'Not pursuing', 'Duplicate'}
+# Prepare takes Queued roles and re-checks Needs answer roles on every invocation.
+PREPARE_INPUTS = {'Queued', 'Needs answer'}
+LEGACY_READ_ONLY = {'Applied', 'Interviewing', 'Rejected'}

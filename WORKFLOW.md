@@ -8,7 +8,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Curate / Companies | Refresh company/funding evidence; on cadence propose matching companies new to the list as Proposed. Never sets Allow/Exclude |
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
-| Prepare | Current review-approved Queued roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready |
+| Prepare | Current review-approved Queued roles plus earlier Needs answer roles → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready, Needs answer or Apply manually |
 | Sanitize / Sanitize Nextmove | Explicit-only repository consistency and simplification under [Maintenance](docs/MAINTENANCE.md#sanitize-explicit-only); never a production stage |
 | Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
 | Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
@@ -73,7 +73,7 @@ If a tool or automatic approval review blocks an action, identify the exact acti
 
 A stage handoff reports completed work, counts, unresolved questions, affected identities, next action and whether ownership was released. Missing global access/Stop all blocks affected work. A company-specific issue need not stop all companies.
 
-## Six lifecycle states
+## Eight lifecycle states
 
 | State | Meaning |
 |---|---|
@@ -81,6 +81,8 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Need review | Review cannot confidently approve or reject it; Agent notes identifies the gap. |
 | Queued | Current evidence-backed Review approval; eligible for Prepare. |
 | Ready | Verified resume available; complete form inspection; every required answer Approved in Answer bank or Resolved in Application questions. Successful preparation endpoint. |
+| Needs answer | Prepare is waiting for the user: the resume is not yet verified, or a required answer is missing or not yet approved (an unticked Answer bank row or an Application questions row that is not Resolved). Every Prepare run rechecks these roles and moves them to Ready once everything is approved. |
+| Apply manually | The resume is verified, but no agent could open or fully read the official application (for example sign-in or account creation, a bot check, a blocked host, a broken Apply link or a required assessment). The user starts this application themselves. Prepare does not retry it unless asked. |
 | Not pursuing | Review declined the role or it is outside current targeting. |
 | Duplicate | Confirmed redundant unprotected row; canonical identity and prior values remain in History. |
 
@@ -88,12 +90,12 @@ Manual status changes are not acceptance evidence. Follow stages/review.md for t
 
 ## Existing installations
 
-Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: current scored Review approval already proves eligibility. Setup never deletes or remaps legacy fields automatically. Legacy Needs answer, Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
+Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: current scored Review approval already proves eligibility. Setup never deletes or remaps legacy fields automatically. Legacy Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Needs answer is an active Prepare state again; existing Needs answer rows are rechecked by the next Prepare run. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
 
 An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/resume evidence without fabricating completion or launching later work. Older Ready resumes do not establish answer readiness: inspect the form and verify current answers before reusing an unsubmitted Ready handoff, while preserving the resume. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
 
 ## First full run after an input change
 
-Refresh affected goal-derived criteria before Run checks. Read Settings.role_policy.revalidation_pending and the Run checkpoint; include affected unprotected Ready/Queued approvals in Review before reusing them. Preserve their PDFs and prior decisions. Re-review only affected declined roles, not every historical Not pursuing row. A settings refresh schedules revalidation; it does not manufacture a current approval or change lifecycle by itself.
+Refresh affected goal-derived criteria before Run checks. Read Settings.role_policy.revalidation_pending and the Run checkpoint; include affected unprotected Ready, Apply manually, Needs answer and Queued approvals in Review before reusing them. Preserve their PDFs and prior decisions. Re-review only affected declined roles, not every historical Not pursuing row. A settings refresh schedules revalidation; it does not manufacture a current approval or change lifecycle by itself.
 
 Curate reports Proposed companies for one human Allow/Exclude checkpoint. Existing Allow companies can continue independently. Newly discovered companies enter Scan only after the human's choices are saved and verified. Checkpoint if the user is absent; never auto-Allow. Missing earlier submission dates/PDFs block only the affected company's resume consistency check; retain exact questions in the Run and continue independent roles.

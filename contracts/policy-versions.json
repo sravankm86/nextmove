@@ -13,7 +13,7 @@
     "Manual notes is permanent; only verified Feedback is cleared. Company discovery is not restricted to recent funding, and the current user defines applicable company types/stage rules.",
     "Prepare inspects all accessible required application questions; nonempty Approved bank answers and Resolved role-question Final answers are required for Ready. Drafts and incomplete form coverage block Ready; no form filling or submission."
   ],
-  "lifecycle": "six-states-preparation-ready-v5",
+  "lifecycle": "eight-states-needs-answer-apply-manually-v6",
   "identity": "run-objective-identity-v2",
   "review_source": "stages/review.md",
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",

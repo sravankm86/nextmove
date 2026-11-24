@@ -113,7 +113,7 @@ class StateTests(unittest.TestCase):
         app={**self.app,'Lifecycle status':'Ready','Resume link':'file-example','Resume version':digest,'Resume verified at':'2026-01-01','Preparation run':['prep-example']}
         state=copy.deepcopy(self.state);state['stage_runs']['preparation']='prep-example';state['preparation']={'verified':True,'resume_hash':digest,'master':'master-v1','goals':'goals-v1','jd_hash':'jd-v1',**self.reuse(digest)}
         self.assertTrue(s.resume_verified(app,state,[self.run],self.inputs,data, companies=self.companies))
-        for status in ['Needs answer','Applied','Interviewing','Rejected','Not pursuing','Duplicate']:
+        for status in ['Applied','Interviewing','Rejected','Not pursuing','Duplicate']:
             self.assertFalse(s.resume_verified({**app,'Lifecycle status':status},state,[self.run],self.inputs,data,companies=self.companies))
         self.assertFalse(s.resume_verified({**app,'Submission attempt key':'legacy'},state,[self.run],self.inputs,data,companies=self.companies))
         old=copy.deepcopy(state);old['submission']={'attempt_key':'legacy'}
