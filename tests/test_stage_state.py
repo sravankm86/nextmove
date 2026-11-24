@@ -82,7 +82,7 @@ class StateTests(unittest.TestCase):
     def test_legacy_columns_and_multiple_context_links_are_rejected(self):
         with self.assertRaises(ValueError):s.application_write({'Evidence versions (JSON)':'old plan'})
         with self.assertRaises(ValueError):s.application_write({'Company':['one','two']})
-        self.assertEqual(len(s.CORE_FIELDS),28)
+        self.assertEqual(len(s.CORE_FIELDS),27)
     def test_separate_harness_recovers_without_legacy_columns(self):
         h=[{'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(s.payload([self.state]))}]
         self.assertTrue(s.review_ready(self.app,s.resolve(self.app,h),[self.run],self.inputs, companies=self.companies))

@@ -8,8 +8,7 @@ import json
 from datetime import date
 
 SCHEMA = 'nextmove.application-questions.v1'
-BANK_FIELDS = ('Answer', 'Approval', 'Handling', 'Source field', 'Guidance',
-               'Valid until', 'Company', 'Application')
+BANK_FIELDS = ('Question', 'Answer', 'Guidance', 'Source field', 'Approved')
 QUESTION_FIELDS = ('Question', 'Options', 'Field key', 'Question type',
                    'Final answer', 'Status', 'Application')
 
@@ -42,21 +41,8 @@ def question_key(company_id, application_id, field_key):
 def answer_ready(table, record, application, *, as_of):
     """Named, normalized live records, never select objects or cached statuses."""
     if table == 'Answer bank':
-        if record.get('Approval') != 'Approved' or not has_answer(record.get('Answer')):
-            return False
-        expiry = record.get('Valid until')
-        if expiry:
-            try:
-                if date.fromisoformat(str(expiry)[:10]) < date.fromisoformat(as_of):
-                    return False
-            except (ValueError, TypeError):
-                return False
-        for key, allowed in [('Company', application.get('Company') or []),
-                             ('Application', [application.get('id')])]:
-            scope = record.get(key) or []
-            if not isinstance(scope, list) or (scope and not set(scope).intersection(allowed)):
-                return False
-        return True
+        # Any company/role restriction lives in Guidance; the harness verifies it when mapping.
+        return record.get('Approved') is True and has_answer(record.get('Answer'))
     return bool(table == 'Application questions'
                 and record.get('Status') == 'Resolved'
                 and has_answer(record.get('Final answer'))

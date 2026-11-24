@@ -1,5 +1,11 @@
 # Changelog
 
+## Five-field Answer bank
+
+- Answer bank keeps Question (readable primary label), Answer, Guidance, Source field and an Approved checkbox. Answer ID, Topic, Handling, Approval, Valid until and the Company/Application scope links are retired; any restriction is written in Guidance.
+- Application questions drops the Answer rule link; Applications drops Application answers. Blueprint: 119 fields, schema 19.
+- `answer_fingerprint` now covers the five bank fields, so saved preparation manifests recompute on the next Prepare check.
+
 ## Required answers in Prepare
 
 - Expand Prepare to inspect application questions after resume verification; no external form filling or submission.

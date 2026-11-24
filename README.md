@@ -44,7 +44,7 @@ The private main Drive folder has two working children: **Role specific** for cu
 | Settings | Private references, versions, controls and verification | 6 |
 | History | Meaningful field changes, decisions, events, failures and uncertainty | 13 |
 | Review eval | Golden answer key from your graded notes, and each eval's prediction and match | 13 |
-| Answer bank | Reusable user-provided Form answers, guidance, scope and approval | 11 |
+| Answer bank | Reusable user-provided Form answers: question, answer, guidance and approval | 5 |
 | Application questions | Role-specific questions, grounded drafts and resolved final answers | 12 |
 
 The 128-column new-install target includes required reciprocal relationships. [DATA.md](DATA.md) explains storage and recovery; [core-schema.json](contracts/core-schema.json) is the machine-readable blueprint.
@@ -117,4 +117,4 @@ Use **Capture feedback** to consume the inbox, and **Review eval** (or **Eval Re
 
 Source files remain in Drive. Settings registers their identity, authority and current revision/hash; DATA.md "Registered sources and small artifact reads" defines freshness checks and exact-ID evidence selection. Use scripts/artifact_reader.py for stored job/company/coverage artifacts, and the dedicated Review eval workflow for label-free eval inputs. No extra preference/fact table is required.
 
-Answer bank stores reusable Form answers; only nonempty Answer with Approval = Approved counts. Application questions stores role-specific Narrative drafts/final answers; only nonempty Final answer with Status = Resolved counts. Missing items are Draft or Needs answer. You review and approve/resolve them; the agent does not approve its own drafts. Keep the exact submitted answer and Answered on date afterward for interview reference; preparation never claims a submission occurred.
+Answer bank stores reusable Form answers; only a nonempty Answer with Approved ticked counts. Application questions stores role-specific Narrative drafts/final answers; only nonempty Final answer with Status = Resolved counts. Missing items are unticked or Needs answer. You review and approve/resolve them; the agent does not approve its own drafts. Keep the exact submitted answer and Answered on date afterward for interview reference; preparation never claims a submission occurred.
