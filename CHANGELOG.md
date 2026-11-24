@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-retirement consistency
+
+- Keep the five-field Answer bank and checkbox approval; identify rules by native record ID rather than a globally unique Question label.
+- Resolve question company context through Application and treat old converted link text as historical display only.
+- Align source-change wording with an unapproved checkbox answer rather than the retired Draft status.
+
 Release history only; README.md and the current stage files define supported behavior. Older entries are not executable instructions.
 
 ## Five-field Answer bank

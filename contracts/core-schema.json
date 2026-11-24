@@ -1,5 +1,5 @@
 {
-  "version": 20,
+  "version": 21,
   "description": "Nine-table logical blueprint; reactivate answer tables without deleting existing data; preserve other legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -761,7 +761,7 @@
     },
     {
       "name": "Answer bank",
-      "business_key": "Question",
+      "business_key": "Native record ID; question meaning and Guidance scope checked before create",
       "description": "Reusable user-provided Form answers. Only a nonempty Answer with Approved ticked is ready; any company or role restriction is written in Guidance.",
       "fields": [
         {
