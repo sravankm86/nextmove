@@ -107,7 +107,7 @@ def check(root):
         fields |= {l['field'] for l in core['links'] if l['from_table']==table['name']}
         fields |= {l['inverse_field'] for l in core['links'] if l['target_table']==table['name'] and l.get('inverse_field')}
         counts[table['name']] = len(fields)
-    require(counts=={'Companies':12,'Applications':27,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13,'Answer bank':11,'Application questions':12}, 'Unexpected minimal table profile')
+    require(counts=={'Companies':11,'Applications':26,'Sources':13,'Runs':20,'Settings':6,'History':13,'Review eval':13,'Answer bank':5,'Application questions':11}, 'Unexpected minimal table profile')
     from company_policy import SEARCH_STATUSES
     companies = {f['name']: f for f in lookup['Companies']['fields']}
     require(not {'Origin', 'Company fit', 'Latest funding', 'Funding date'} & companies.keys(),
@@ -165,7 +165,7 @@ def check(root):
     from stage_state import CORE_FIELDS
     require('Feedback' in companies and {'Manual notes','Feedback'}.issubset(app_fields), 'Separate lasting notes and Feedback are required')
     linked = {l['field'] for l in core['links'] if l['from_table'] == 'Applications'} | {l['inverse_field'] for l in core['links'] if l['target_table'] == 'Applications' and l.get('inverse_field')}
-    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 27, 'Expected the 27-field Application profile')
+    require(app_fields | linked == set(CORE_FIELDS) and len(CORE_FIELDS) == 26, 'Expected the 26-field Application profile')
     primary = lookup['Applications']['fields'][0]
     require(primary['name'] == 'Application ID' and primary['type'] == 'formula' and primary.get('options', {}).get('formula') == 'RECORD_ID()', 'Application ID must expose native record identity')
     require((root/'DATA.md').is_file() and (root/'contracts/policy-versions.json').is_file(), 'Missing durable stage-state/version contract')

@@ -2,6 +2,12 @@
 
 Release history only; README.md and the current stage files define supported behavior. Older entries are not executable instructions.
 
+## Five-field Answer bank
+
+- Answer bank keeps Question (readable primary label), Answer, Guidance, Source field and an Approved checkbox. Answer ID, Topic, Handling, Approval, Valid until and the Company/Application scope links are retired; any restriction is written in Guidance.
+- Application questions drops the Answer rule link; Applications drops Application answers. Schema 20.
+- `answer_fingerprint` now covers the five bank fields, so saved preparation manifests recompute on the next Prepare check.
+
 ## Explicit-only sanitization
 
 - Add Sanitize under the existing maintenance procedure; it never runs with the pipeline, setup or schedules.

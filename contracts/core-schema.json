@@ -1,5 +1,5 @@
 {
-  "version": 19,
+  "version": 20,
   "description": "Nine-table logical blueprint; reactivate answer tables without deleting existing data; preserve other legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -761,36 +761,19 @@
     },
     {
       "name": "Answer bank",
-      "business_key": "Answer ID",
-      "description": "Reusable user-provided Form answers. Only nonempty Approved answers in applicable scope are ready; drafts need human approval.",
+      "business_key": "Question",
+      "description": "Reusable user-provided Form answers. Only a nonempty Answer with Approved ticked is ready; any company or role restriction is written in Guidance.",
       "fields": [
         {
-          "name": "Answer ID",
+          "name": "Question",
           "type": "singleLineText"
-        },
-        {
-          "name": "Topic",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Handling",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Exact"
-              },
-              {
-                "name": "Adapt"
-              },
-              {
-                "name": "From source"
-              }
-            ]
-          }
         },
         {
           "name": "Answer",
+          "type": "multilineText"
+        },
+        {
+          "name": "Guidance",
           "type": "multilineText"
         },
         {
@@ -798,34 +781,8 @@
           "type": "singleLineText"
         },
         {
-          "name": "Guidance",
-          "type": "multilineText"
-        },
-        {
-          "name": "Approval",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Draft"
-              },
-              {
-                "name": "Approved"
-              },
-              {
-                "name": "Retired"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Valid until",
-          "type": "date",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            }
-          }
+          "name": "Approved",
+          "type": "checkbox"
         }
       ]
     },
@@ -967,31 +924,10 @@
       "inverse_field": "Preparation applications"
     },
     {
-      "from_table": "Answer bank",
-      "field": "Company",
-      "target_table": "Companies",
-      "cardinality": "0..1",
-      "inverse_field": "Answer bank"
-    },
-    {
-      "from_table": "Answer bank",
-      "field": "Application",
-      "target_table": "Applications",
-      "cardinality": "many",
-      "inverse_field": "Application answers"
-    },
-    {
       "from_table": "Application questions",
       "field": "Application",
       "target_table": "Applications",
       "cardinality": "1",
-      "inverse_field": "Application questions"
-    },
-    {
-      "from_table": "Application questions",
-      "field": "Answer rule",
-      "target_table": "Answer bank",
-      "cardinality": "0..1",
       "inverse_field": "Application questions"
     }
   ],
@@ -1021,7 +957,6 @@
     "Scan run",
     "Review run",
     "Preparation run",
-    "Application answers",
     "Application questions"
   ]
 }

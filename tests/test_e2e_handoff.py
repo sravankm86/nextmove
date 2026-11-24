@@ -61,7 +61,7 @@ class EndToEndHandoffTests(unittest.TestCase):
                     'company_history': {'status': 'complete', 'matches': 0, 'evidence': 'Verified empty relevant history'}})
         app.update({'Preparation run': [ids['preparation']], 'Resume link': 'https://files.example.test/resume.pdf',
                     'Resume version': digest, 'Resume verified at': '2026-01-01T12:00:00Z'})
-        bank = [{'id': 'answer-one', 'Answer': 'Seattle', 'Approval': 'Approved'}]
+        bank = [{'id': 'answer-one', 'Question': 'Current location', 'Answer': 'Seattle', 'Approved': True}]
         questions = [{'id': 'essay-one', 'Question': 'Why this role?', 'Final answer': 'Grounded final response.',
                       'Status': 'Resolved', 'Application': [app['id']]}]
         manifest = {'schema': SCHEMA, 'application_id': app['id'], 'job_key': app['Job key'],
@@ -101,7 +101,7 @@ class EndToEndHandoffTests(unittest.TestCase):
     def test_saved_resume_survives_unanswered_form_but_cannot_advance(self):
         app, state, runs, inputs, pdf, companies, bank, questions, manifest = self.build(True)
         state['preparation']['application_questions'] = manifest
-        bank[0]['Approval'] = 'Draft'
+        bank[0]['Approved'] = False
         self.assertFalse(resume_ready(app, state, runs, inputs, pdf, companies=companies,
                                       answer_bank=bank, application_questions=questions))
         self.assertTrue(resume_verified(app, state, runs, inputs, pdf, companies=companies))

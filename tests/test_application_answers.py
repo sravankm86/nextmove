@@ -13,7 +13,7 @@ class AnswerReadinessTests(unittest.TestCase):
     def setUp(self):
         self.app = {'id': 'role-one', 'Company': ['company-one'], 'Job key': 'employer:one',
                     'Job description link': 'https://jobs.example.test/one'}
-        self.bank = [{'id': 'answer-one', 'Approval': 'Approved', 'Answer': 'Seattle, WA'}]
+        self.bank = [{'id': 'answer-one', 'Question': 'Current location', 'Approved': True, 'Answer': 'Seattle, WA'}]
         self.narratives = [{'id': 'essay-one', 'Status': 'Resolved', 'Final answer': 'My grounded motivation.',
                             'Application': ['role-one']}]
         self.manifest = {'schema': SCHEMA, 'application_id': 'role-one', 'job_key': 'employer:one',
@@ -38,14 +38,14 @@ class AnswerReadinessTests(unittest.TestCase):
 
     def test_requires_approved_form_and_resolved_final_narrative(self):
         self.assertTrue(self.ready())
-        for target, key, value in [(self.bank[0], 'Approval', 'Draft'),
+        for target, key, value in [(self.bank[0], 'Approved', False),
                                    (self.narratives[0], 'Status', 'Needs answer'),
                                    (self.bank[0], 'Answer', ''), (self.narratives[0], 'Final answer', '')]:
             old = target[key]; target[key] = value
             self.assertFalse(self.ready()); target[key] = old
 
     def test_blank_from_source_rule_and_draft_essay_do_not_count(self):
-        self.bank[0].update(Answer='', Handling='From source', **{'Source field': 'goals.minimum'})
+        self.bank[0].update(Answer='', **{'Source field': 'goals.minimum'})
         self.assertFalse(self.ready())
         self.narratives[0].update(Status='Needs answer', **{'Draft answer': 'Generated draft'})
         self.assertFalse(self.ready())
@@ -55,11 +55,9 @@ class AnswerReadinessTests(unittest.TestCase):
         self.bank[0]['Answer'] = 'Seattle, WA'; self.assertTrue(self.ready())
         self.narratives[0]['Final answer'] = 'Changed text'; self.assertFalse(self.ready())
 
-    def test_expiry_and_wrong_company_or_application_scope_block(self):
-        for change in [{'Valid until': '2025-12-31'}, {'Company': ['other-company']}, {'Application': ['other-role']}]:
-            old = copy.deepcopy(self.bank[0]); self.bank[0].update(change)
-            self.manifest['questions'][0]['answer']['fingerprint'] = answer_fingerprint('Answer bank', self.bank[0])
-            self.assertFalse(self.ready()); self.bank[0] = old
+    def test_guidance_edit_and_wrong_role_question_block(self):
+        self.bank[0]['Guidance'] = 'Only for Snowflake'; self.assertFalse(self.ready())
+        self.bank[0].pop('Guidance'); self.assertTrue(self.ready())
         self.narratives[0]['Application'] = ['other-role']; self.assertFalse(self.ready())
 
     def test_blocked_or_missing_inspection_never_means_zero_questions(self):
@@ -113,7 +111,7 @@ class AnswerReadinessTests(unittest.TestCase):
         kwargs = {'companies': companies, 'answer_bank': self.bank, 'application_questions': self.narratives}
         self.assertTrue(stage_state.resume_ready(app, state, [fixture.run], inputs, pdf, **kwargs))
         self.assertFalse(stage_state.resume_ready({**app, 'Resume link': ''}, state, [fixture.run], inputs, pdf, **kwargs))
-        self.bank[0]['Approval'] = 'Draft'
+        self.bank[0]['Approved'] = False
         self.assertFalse(stage_state.resume_ready(app, state, [fixture.run], inputs, pdf, **kwargs))
 
 

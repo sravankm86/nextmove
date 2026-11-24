@@ -11,7 +11,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application answers','Application questions']
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
 
 
 def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None):
