@@ -45,7 +45,7 @@ class AnswerReadinessTests(unittest.TestCase):
             self.assertFalse(self.ready()); target[key] = old
 
     def test_blank_from_source_rule_and_draft_essay_do_not_count(self):
-        self.bank[0].update(Answer='', **{'Source field': 'goals.minimum'})
+        self.bank[0].update(Answer='', **{'Agent notes': 'Use goals minimum salary'})
         self.assertFalse(self.ready())
         self.narratives[0].update(Status='Needs answer', **{'Draft answer': 'Generated draft'})
         self.assertFalse(self.ready())
@@ -95,8 +95,9 @@ class AnswerReadinessTests(unittest.TestCase):
         self.assertFalse(self.ready())
 
     def test_guidance_edit_and_wrong_role_question_block(self):
-        self.bank[0]['Guidance'] = 'Only for Snowflake'; self.assertFalse(self.ready())
-        self.bank[0].pop('Guidance'); self.assertTrue(self.ready())
+        self.bank[0]['Additional guidance'] = 'Only for Snowflake'; self.assertFalse(self.ready())
+        self.bank[0].pop('Additional guidance'); self.assertTrue(self.ready())
+        self.bank[0]['Agent notes'] = 'Remark added later'; self.assertTrue(self.ready())
         self.narratives[0]['Application'] = ['other-role']; self.assertFalse(self.ready())
 
     def test_blocked_or_missing_inspection_never_means_zero_questions(self):

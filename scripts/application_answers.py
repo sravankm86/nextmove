@@ -10,7 +10,8 @@ import json
 from datetime import date
 
 SCHEMA = 'nextmove.application-questions.v2'
-BANK_FIELDS = ('Question', 'Answer', 'Guidance', 'Source field', 'Approved')
+# Agent notes is free-form remarks and is excluded: editing it never invalidates an approval.
+BANK_FIELDS = ('Question', 'Answer', 'Additional guidance', 'Approved')
 QUESTION_FIELDS = ('Question', 'Options', 'Field key', 'Question type',
                    'Final answer', 'Status', 'Application')
 
@@ -43,7 +44,7 @@ def question_key(company_id, application_id, field_key):
 def answer_ready(table, record, application, *, as_of):
     """Named, normalized live records, never select objects or cached statuses."""
     if table == 'Answer bank':
-        # Any company/role restriction lives in Guidance; the harness verifies it when mapping.
+        # Variations and any company/role restriction live in Additional guidance; the harness verifies it when mapping.
         return record.get('Approved') is True and has_answer(record.get('Answer'))
     return bool(table == 'Application questions'
                 and record.get('Status') == 'Resolved'
