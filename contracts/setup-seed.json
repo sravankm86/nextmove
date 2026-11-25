@@ -187,10 +187,11 @@
       "value": {
         "enabled": false,
         "max_per_run": 10,
-        "max_per_company_per_day": 1
+        "max_per_company_per_day": 1,
+        "resume_upload_name": null
       },
       "verification": "Needs verification",
-      "note": "Submit stage switch and caps (stages/submit.md). Disabled unless the user sets enabled to true; Submit still needs the explicit command."
+      "note": "Submit stage switch and caps (stages/submit.md). Disabled unless the user sets enabled to true; Submit still needs the explicit command. resume_upload_name is the file name employers see for the uploaded resume (for example First_Last); required before Submit uploads."
     },
     {
       "key": "preparation_notes",
