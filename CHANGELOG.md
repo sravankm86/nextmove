@@ -1,6 +1,11 @@
 # Changelog
 
 
+
+## Answer bank fields
+
+- Answer bank is Question, Answer, Additional guidance (variations it covers and scope), Agent notes (agent remarks, outside the approval fingerprint) and Approved. Source field is retired.
+
 ## Submit stage
 
 - New explicit-only **Submit applications** command (stages/submit.md), outside Run and disabled until Settings `submission_policy.enabled` is true; caps per run and per company per day.

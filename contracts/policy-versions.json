@@ -1,5 +1,5 @@
 {
-  "schema_version": 22,
+  "schema_version": 23,
   "scan": "role-family-from-settings-v4",
   "rules": [
     "Career Goals supplies personal criteria and exceptions; the master supplies candidate facts. Public Review defines only extraction, ratings and score routing.",
