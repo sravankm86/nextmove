@@ -73,7 +73,7 @@ class EndToEndHandoffTests(unittest.TestCase):
                     'evidence': 'Verified exact full form capture', 'blockers': [], 'questions': []}
         for key, table, row, text in [('location', 'Answer bank', bank[0], 'Seattle'),
                                      ('motivation', 'Application questions', questions[0], 'Grounded final response.')]:
-            manifest['questions'].append({'field_key': key, 'question': key+'?', 'options': [], 'required': True,
+            manifest['questions'].append({'field_key': key, 'question': key+'?', 'options': [], 'required': True, 'sensitive': False,
                 'type': 'Form' if table == 'Answer bank' else 'Narrative',
                 'answer': {'table': table, 'record_id': row['id'], 'fingerprint': answer_fingerprint(table, row),
                            'mapped_answer': text, 'mapping_verified': True, 'match_evidence': 'Same intent and valid options'}})

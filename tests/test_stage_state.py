@@ -185,7 +185,7 @@ class StateTests(unittest.TestCase):
         ready={**self.app,'Lifecycle status':'Ready'}
         self.assertTrue(s.preparation_eligible(ready,{}))
         self.assertTrue(s.answer_check_due(ready,{'preparation':{}}))
-        checked={'preparation':{'application_questions':{'schema':'nextmove.application-questions.v1'}}}
+        checked={'preparation':{'application_questions':{'schema':'nextmove.application-questions.v2'}}}
         self.assertFalse(s.preparation_eligible(ready,checked))
         self.assertFalse(s.preparation_eligible({**ready,'Lifecycle status':'Apply manually'},{}))
         self.assertTrue(s.preparation_eligible({**self.app,'Lifecycle status':'Queued'},checked))

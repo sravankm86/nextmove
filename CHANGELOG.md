@@ -1,5 +1,14 @@
 # Changelog
 
+
+## Submit stage
+
+- New explicit-only **Submit applications** command (stages/submit.md), outside Run and disabled until Settings `submission_policy.enabled` is true; caps per run and per company per day.
+- Submits only Ready roles whose live Prepare checks still pass: approved answers and files only, duplicate check, a saved lock before filling, one Submit click and verified confirmation proof before **Applied** (now an active status, read-only once written).
+- Every failure ends at **Apply manually** with the reason; when Submit may have been clicked, the note warns to check before applying again and no automatic retry happens.
+- Sensitive questions (demographics/EEO, disability, veteran, criminal history, attestations, consents) need approved answers even when optional; the answer-check schema is v2, so Ready roles are checked again by Prepare before Submit.
+- Accounts: only the user's signed-in browser or harness credential store; no account creation, CAPTCHA bypass or credentials in chat or storage.
+
 ## Current resumes and reusable approved answers
 
 - Missing prior submission files or dates no longer block selecting or preparing a current resume; submitted files remain immutable history when the master changes.

@@ -1,5 +1,5 @@
 {
-  "version": 21,
+  "version": 22,
   "description": "Nine-table logical blueprint; reactivate answer tables without deleting existing data; preserve other legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
@@ -131,6 +131,9 @@
               },
               {
                 "name": "Apply manually"
+              },
+              {
+                "name": "Applied"
               },
               {
                 "name": "Not pursuing"
@@ -403,6 +406,9 @@
               },
               {
                 "name": "Prepare"
+              },
+              {
+                "name": "Submit"
               },
               {
                 "name": "Migration"
