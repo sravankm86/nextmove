@@ -6,6 +6,7 @@
 ## Grounded answers
 
 - Prepare answers factual Form questions from the current master, role resume or Career Goals (`answer.grounded` with a verbatim quote, source version and derivation) without Answer bank rows; the bank holds only gaps.
+- When an approved bank answer and a grounded source disagree, the approved answer wins and the conflict is reported.
 - Submit uploads the verified resume under Settings `submission_policy.resume_upload_name` (downloaded, renamed, hash-checked) instead of the stored file name.
 - Judgment, sensitive and Narrative questions still need approved/resolved answers. New bank rows carry the asking company, prompt, format, options and limits in Agent notes; Additional guidance holds no status text.
 
