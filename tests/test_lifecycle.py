@@ -3,7 +3,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from lifecycle import STATUSES, END_STATES, LEGACY_READ_ONLY, PREPARE_INPUTS, PROTECTED_OUTCOMES, SUBMIT_INPUTS
-from stage_state import application_write, run_progress, protected_history, merge_state
+from stage_state import application_write, protected_history, merge_state
 
 class LifecycleTests(unittest.TestCase):
     def test_nine_active_states_and_stage_exits(self):
@@ -41,15 +41,10 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(application_write({'Application questions':['question-one']}), {'Application questions':['question-one']})
 
     def test_active_state_merge_preserves_opaque_legacy_history(self):
-        old={'record_id':'role','stage_runs':{'submission':'old-run'},'submission':{'attempt_key':'legacy'}}
-        merged=merge_state(old,record_id='role',job_key='employer:role',stage='scan',run_id='new',values={'observed':True})
+        old={'schema':'nextmove.evidence.v1','record_id':'role','submission':{'attempt_key':'legacy'}}
+        merged=merge_state(old,record_id='role',job_key='employer:role',stage='scan',values={'observed':True})
         self.assertEqual(merged['submission'],old['submission'])
-        with self.assertRaises(ValueError):merge_state(old,record_id='role',job_key='employer:role',stage='submission',run_id='new',values={})
-
-    def test_run_progress_reads_checkpoint_only(self):
-        run={'Input versions (JSON)':'immutable input pins','Checkpoint (JSON)':'{"cursor":42}'}
-        self.assertEqual(run_progress(run),{'cursor':42})
-        self.assertEqual(run_progress({'Checkpoint (JSON)':'not json'}),{'raw_checkpoint':'not json'})
-        self.assertEqual(run_progress({}),{})
+        with self.assertRaises(ValueError):merge_state(old,record_id='role',job_key='employer:role',stage='submission',values={})
+        with self.assertRaises(ValueError):merge_state(old,record_id='other',job_key='employer:role',stage='scan',values={})
 
 if __name__=='__main__':unittest.main()

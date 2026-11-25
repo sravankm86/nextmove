@@ -6,34 +6,34 @@ Follow WORKFLOW.md and DATA.md. Scan enumerates every official board of every in
 
 Scan only companies where `scripts/company_policy.py:scan_enabled` is true (Search status Allow; also honor any legacy permanent block). Proposed and Exclude companies are skipped and reported as such; funding stage and Curate’s advisory assessment are not inventory filters; legacy temporary holds/policy fields are not required. A standalone Scan uses current Companies and saved Curate output; it does not run Curate research or discovery.
 
-Snapshot in-scope company and source IDs in the Run scope, then reread company targeting before each inventory write and pass current Companies records to `application_write`. A company that leaves scope keeps its existing rows.
+Note the in-scope company IDs in the start-of-command log entry, then reread company targeting before each inventory write and pass current Companies records to `application_write`. A company that leaves scope keeps its existing rows.
 
-Derive the role family, designation examples, seniority/experience/scope and explicit function or level exclusions from the current Career Goals revision under CAREER-GOALS.md. Save the extracted criteria, source revision and readiness in Settings and the Run; the title patterns live in Settings `role_family` (format: templates/role-family.example.json) and Scan stops until it is set; reuse a verified extraction only while its revision matches. Missing title synonyms can be derived from the function; missing or conflicting essential role intent needs a question, not an invented exclusion.
+Derive the role family, designation examples, seniority/experience/scope and explicit function or level exclusions from the current Career Goals revision under CAREER-GOALS.md. Save the extracted criteria, source revision and readiness in Settings; the title patterns live in Settings `role_family` (format: templates/role-family.example.json) and Scan stops until it is set; reuse a verified extraction only while its revision matches. Missing title synonyms can be derived from the function; missing or conflicting essential role intent needs a question, not an invented exclusion.
 
 ## Complete source coverage
 
-Validate Curate's draft Sources once the user allows a company, and resolve missing boards, regions or reader configuration. An Allow company without usable Sources is a coverage gap, not zero jobs.
+Validate a company's Careers URLs once the user allows it, and resolve missing boards or regions. An Allow company without usable Careers URLs is a coverage gap, not zero jobs. After each company, update Last scanned and Scan notes (complete, partial with what was missed, or the error).
 
 Use scripts/catalog_reader.py for verified Greenhouse, Ashby and Lever boards; retain raw feed artifacts transiently and expose only plausible candidates to the model. Board slugs must come from official links/configuration. Other providers need a validated reader; this helper does not claim support for them.
 
-Enumerate every catalog page or cursor to its verified end with repeatable readers and code. Validate counts, unique identities, repeated cursors, malformed or empty pages and caps. Zero jobs needs verified empty coverage; search snippets or page-one counts never prove completeness. Reuse unchanged resources only with equivalent evidence and durable checkpoints. Preserve meaningful URL parameters; title equality is not deduplication.
+Enumerate every catalog page or cursor to its verified end with repeatable readers and code. Validate counts, unique identities, repeated cursors, malformed or empty pages and caps. Zero jobs needs verified empty coverage; search snippets or page-one counts never prove completeness. Reuse unchanged resources only with equivalent saved evidence. Preserve meaningful URL parameters; title equality is not deduplication.
 
 Source status: Complete when every planned source is verified, Partial when usable observations have gaps, Failed when no source is usable.
 
 ## Basic candidate screen
 
-Run checks (WORKFLOW.md) own duplicate discovery: check the identity index before inserting and hand new identity evidence back to Run.
+Run checks (WORKFLOW.md) own duplicate discovery: check the identity index before inserting and log new identity evidence for the Run checks.
 
 Use broad signals from Settings `role_family`: direct title patterns (including level variants and localized equivalents), broader patterns that need a context check, clearly different functions and clearly junior titles. Abbreviations and mixed functions get a basic contextual check of the title, team, summary or description. `scripts/role_gate.py` provides `title_screen` and `inventory_candidate`, both driven by that definition; a title alone never admits a role. Review then scores the full description under stages/review.md.
 
 - Exclude clearly unrelated functions and clearly junior roles, with recorded evidence.
 - Keep direct role-family matches whose domain names another field (for example finance, design or security), unlevelled or flat titles, and roles with uncertain level: they enter Inventoried for Review.
 - Do not require a seniority word, infer company grade from a title, treat a low minimum-years figure as proof of insufficient scope, or turn career preferences into scan exclusions.
-- Missing identity stays a Run pending check (URL, reason, next action). Insufficient evidence of plausibility stays pending, not rejected. A missing full JD does not block inventory but blocks Review approval.
+- Missing identity is logged as an open question (URL, reason, next action). Insufficient evidence of plausibility stays pending, not rejected. A missing full JD does not block inventory but blocks Review approval.
 
 ## Inventory and handoff
 
-Create or update candidates as Inventoried with stable identity, official posting URL, Scan run and the source snapshot under DATA.md. Save Job evidence: an exact capture with the full description, posting aliases, salary basis, currency, location and level conditions, work restrictions and the true posting date. Display columns follow DATA.md compact job facts; never estimate values or borrow another posting's band.
+Create or update candidates as Inventoried with stable identity, official posting URL and the `scan` evidence under DATA.md. Save Job evidence: an exact capture with the full description, posting aliases, salary basis, currency, location and level conditions, work restrictions and the true posting date. Display columns follow DATA.md compact job facts; never estimate values or borrow another posting's band.
 
 Reobserving an active role updates only source metadata; skip protected historical rows under WORKFLOW.md and preserve human outcomes, review evidence and later states; consume Feedback only through DATA.md’s verified feedback-inbox procedure. A changed content fingerprint flags targeted re-review without reopening submitted or terminal roles; an unchanged declined role is not requeued. Scan never closes inventory because a posting disappeared.
 
@@ -53,4 +53,4 @@ Eligible-role recall comes first; a smaller inventory is not success. Review rec
 
 For recurring role or scope mistakes, propose the smallest explainable change, preferring better positive aliases and disambiguation over broad negative keywords. Before activating it, replay it against reviewed eligible positives (including eligible Not pursuing roles), known false positives, ambiguous, flat and localized titles, and a sample of source rejects, labelled independently of the rule. Every known eligible regression must be fixed or accepted by the user; without enough evidence keep the current screen and save the proposal. Moving Review-owned reasons (specialization, pay, funding, geography, qualifications) into Scan changes the stage boundary and needs the user's decision.
 
-A validated change needs an authorized Git or Settings update with a version identifier and a History event linking the evaluation. After activation, recheck affected catalog slices, sample rejects, and widen or revert on any eligible false negative.
+A validated change needs an authorized Git or Settings update with a version identifier and an Audit log entry linking the evaluation. After activation, recheck affected catalog slices, sample rejects, and widen or revert on any eligible false negative.

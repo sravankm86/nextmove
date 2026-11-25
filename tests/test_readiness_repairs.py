@@ -2,21 +2,21 @@ import copy,json,sys,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from stage_state import resolve,payload,application_write,company_history_ready
+from stage_state import legacy_evidence,application_write,company_history_ready
 from review_eval import feedback_id,feedback_clear
 
 class RecoveryAndFeedbackTests(unittest.TestCase):
     def test_legacy_field_change_map_does_not_crash_or_replace_acceptance(self):
         state={'record_id':'role-one','stage_runs':{'review':'run-one'},'review':{'decision':'approve'}}
-        good={'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps(payload([state]))}
+        good={'Recorded at':'2026-01-01','Field changes (JSON)':json.dumps({'schema':'nextmove.stage-state.v2','records':[state]})}
         bad={'Recorded at':'2026-01-02','Field changes (JSON)':json.dumps({'schema':'nextmove.stage-state.v1','records':{'role-one':[{'field':'resume','after':'pdf'}]}})}
         original=copy.deepcopy([good,bad])
-        self.assertEqual(resolve({'id':'role-one'},[good,bad]),state)
-        self.assertIsNone(resolve({'id':'role-one'},[bad]))
+        self.assertEqual(legacy_evidence({'id':'role-one'},[good,bad])['review']['decision'],'approve')
+        self.assertIsNone(legacy_evidence({'id':'role-one'},[bad]))
         self.assertEqual([good,bad],original)
         for records in [None,'broken',[None,'role-one',{},3]]:
             event={'Field changes (JSON)':{'schema':'nextmove.stage-state.v2','records':records}}
-            self.assertEqual(resolve({'id':'role-one'},[good,event]),state)
+            self.assertEqual(legacy_evidence({'id':'role-one'},[good,event])['review']['decision'],'approve')
 
     def test_same_company_history_cannot_be_hidden_by_not_applicable(self):
         p={'company_consistency':'not_applicable'}

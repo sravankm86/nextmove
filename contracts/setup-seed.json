@@ -216,6 +216,11 @@
     {
       "key": "Setup readiness",
       "value": "Needs verification"
+    },
+    {
+      "key": "Active writer",
+      "value": null,
+      "note": "Set to {agent, command, started_at} while an agent writes; cleared when it finishes. Another agent waits or asks the user; never takes over silently."
     }
   ],
   "preference_contract": {

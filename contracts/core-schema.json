@@ -1,11 +1,11 @@
 {
-  "version": 23,
-  "description": "Nine-table logical blueprint; reactivate answer tables without deleting existing data; preserve other legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
+  "version": 24,
+  "description": "Seven-table logical blueprint; reactivate answer tables without deleting existing data; preserve other legacy fields/tables as read-only history, not raw connector request payloads. Map and preserve existing fields by ID; computed metadata never receives input values. DATA.md defines compact displays, manual feedback and view visibility.",
   "tables": [
     {
       "name": "Companies",
       "business_key": "Company key",
-      "description": "Human targeting, agent-discovered Proposed companies, funding and company evidence. No automatic Allow.",
+      "description": "Human targeting, agent-discovered Proposed companies, funding and company evidence, plus the official careers boards Scan reads (one URL per line, with region when relevant) and the latest scan result. No automatic Allow.",
       "fields": [
         {
           "name": "Company",
@@ -82,13 +82,34 @@
         {
           "name": "Company evidence",
           "type": "url"
+        },
+        {
+          "name": "Careers URLs",
+          "type": "multilineText"
+        },
+        {
+          "name": "Last scanned",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Scan notes",
+          "type": "multilineText"
         }
       ]
     },
     {
       "name": "Applications",
       "business_key": "Canonical Job key; native record ID for preserved unmatched history",
-      "description": "Current physical fields including relationships. Current job facts, six-state lifecycle, human/agent notes and resume readiness references live here; bounded stage snapshots in History join fixed shared inputs in Runs under DATA.md.",
+      "description": "Current job facts, lifecycle, human/agent notes, resume references and the role's current stage evidence (Evidence (JSON), DATA.md). The Audit log records how it got here.",
       "fields": [
         {
           "name": "Application ID",
@@ -290,239 +311,9 @@
             },
             "timeZone": "utc"
           }
-        }
-      ]
-    },
-    {
-      "name": "Sources",
-      "business_key": "Source key",
-      "description": "One official board/region. Enumerate all pages transiently; preserve coverage and minimal source/identity checks; plausible role/scope ambiguities are inventoried for Review.",
-      "fields": [
-        {
-          "name": "Source key",
-          "type": "singleLineText"
         },
         {
-          "name": "Official careers URL",
-          "type": "url"
-        },
-        {
-          "name": "Catalog URL",
-          "type": "url"
-        },
-        {
-          "name": "Region",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Reader",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Reader version",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Latest coverage",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Complete"
-              },
-              {
-                "name": "Partial"
-              },
-              {
-                "name": "Failed"
-              },
-              {
-                "name": "Unverified"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Checkpoint (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Last error",
-          "type": "multilineText"
-        },
-        {
-          "name": "Last scanned at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Archived at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Runs",
-      "business_key": "Run key",
-      "description": "One row per full run by default; manual stage invocations use the identical checkpoint/handoff shape. No per-job work-item or general attempt tables.",
-      "fields": [
-        {
-          "name": "Run key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Run type",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Full run"
-              },
-              {
-                "name": "Curate"
-              },
-              {
-                "name": "Scan"
-              },
-              {
-                "name": "Review"
-              },
-              {
-                "name": "Prepare"
-              },
-              {
-                "name": "Submit"
-              },
-              {
-                "name": "Migration"
-              },
-              {
-                "name": "Experiment"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Status",
-          "type": "singleSelect",
-          "options": {
-            "choices": [
-              {
-                "name": "Pending"
-              },
-              {
-                "name": "Running"
-              },
-              {
-                "name": "Complete"
-              },
-              {
-                "name": "Partial"
-              },
-              {
-                "name": "Blocked"
-              },
-              {
-                "name": "Failed"
-              },
-              {
-                "name": "Interrupted"
-              },
-              {
-                "name": "Cancelled"
-              },
-              {
-                "name": "No work"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Owner",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Instruction revision",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Input versions (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Scope (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Checkpoint (JSON)",
-          "type": "multilineText"
-        },
-        {
-          "name": "Expected items",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "Completed items",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "Blocked items",
-          "type": "number",
-          "options": {
-            "precision": 0
-          }
-        },
-        {
-          "name": "Started at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Finished at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
-        },
-        {
-          "name": "Agent notes",
+          "name": "Evidence (JSON)",
           "type": "multilineText"
         }
       ]
@@ -578,20 +369,12 @@
       ]
     },
     {
-      "name": "History",
+      "name": "Audit log",
       "business_key": "Event key",
-      "description": "Meaningful mutations and business events; failed/uncertain operations retain evidence. No routine per-read/per-row access logging. Not a universal immutable audit system.",
+      "description": "Append-only record of every agent action and decision: when, which agent, what changed and why, with before/after values and evidence links. The full timeline can be rebuilt from it; stages never need it to decide.",
       "fields": [
         {
           "name": "Event key",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Operation ID",
-          "type": "singleLineText"
-        },
-        {
-          "name": "Event type",
           "type": "singleLineText"
         },
         {
@@ -608,20 +391,11 @@
           }
         },
         {
-          "name": "Occurred at",
-          "type": "dateTime",
-          "options": {
-            "dateFormat": {
-              "name": "iso"
-            },
-            "timeFormat": {
-              "name": "24hour"
-            },
-            "timeZone": "utc"
-          }
+          "name": "Agent",
+          "type": "singleLineText"
         },
         {
-          "name": "Actor / channel",
+          "name": "Action",
           "type": "singleLineText"
         },
         {
@@ -633,23 +407,23 @@
           "type": "singleLineText"
         },
         {
-          "name": "Field changes (JSON)",
+          "name": "Summary",
+          "type": "multilineText"
+        },
+        {
+          "name": "Details (JSON)",
           "type": "multilineText"
         },
         {
           "name": "Evidence URL",
           "type": "url"
-        },
-        {
-          "name": "Notes",
-          "type": "multilineText"
         }
       ]
     },
     {
       "name": "Review eval",
       "business_key": "Application record",
-      "description": "Golden answer key for Review built from the user's graded Feedback: frozen verdict and reason, holdout split, the latest eval prediction and its match. Self-contained (no links) so Applications and Runs gain no columns. DATA.md \"Review eval\".",
+      "description": "Golden answer key for Review built from the user's graded Feedback: frozen verdict and reason, holdout split, the latest eval prediction and its match. Self-contained (no links) so Applications gains no columns. DATA.md \"Review eval\".",
       "fields": [
         {
           "name": "Example",
@@ -880,60 +654,11 @@
       "inverse_field": "Applications"
     },
     {
-      "from_table": "Companies",
-      "field": "Curate run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "Curate companies"
-    },
-    {
-      "from_table": "Sources",
-      "field": "Company",
-      "target_table": "Companies",
-      "cardinality": "1",
-      "inverse_field": "Sources"
-    },
-    {
-      "from_table": "Sources",
-      "field": "Last run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "Sources"
-    },
-    {
-      "from_table": "History",
+      "from_table": "Audit log",
       "field": "Application",
       "target_table": "Applications",
       "cardinality": "many",
-      "inverse_field": "History"
-    },
-    {
-      "from_table": "History",
-      "field": "Run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "History"
-    },
-    {
-      "from_table": "Applications",
-      "field": "Scan run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "Scan applications"
-    },
-    {
-      "from_table": "Applications",
-      "field": "Review run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "Review applications"
-    },
-    {
-      "from_table": "Applications",
-      "field": "Preparation run",
-      "target_table": "Runs",
-      "cardinality": "0..1",
-      "inverse_field": "Preparation applications"
+      "inverse_field": "Audit log"
     },
     {
       "from_table": "Application questions",
@@ -965,10 +690,8 @@
     "Resume link",
     "Resume version",
     "Resume verified at",
-    "History",
-    "Scan run",
-    "Review run",
-    "Preparation run",
+    "Evidence (JSON)",
+    "Audit log",
     "Application questions"
   ]
 }
