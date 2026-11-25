@@ -1,5 +1,5 @@
 {
-  "version": 15,
+  "version": 16,
   "tables": [
     "Companies",
     "Applications",
@@ -33,7 +33,7 @@
       "stage": "Full run",
       "mode": "prepare",
       "instructions": "WORKFLOW.md",
-      "scope": "Curate \u2192 Scan \u2192 Review \u2192 Prepare; Ready requires a verified resume and approved/resolved required answers. Continue independent work and checkpoint blockers.",
+      "scope": "Curate → Scan → Review → Prepare; Ready requires a verified resume and approved/resolved required answers. Continue independent work and checkpoint blockers.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -107,7 +107,7 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Queued roles, including human choices, plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. No repeat fit gates, form filling or submission.",
+      "scope": "Queued roles, including human choices, plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. No repeat fit gates, form filling or submission; sensitive questions need approved answers even when optional.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
@@ -117,6 +117,27 @@
         "resume_guidelines",
         "base_resumes",
         "answer_bank"
+      ]
+    },
+    {
+      "command": "Submit",
+      "aliases": [
+        "submit applications",
+        "submit"
+      ],
+      "stage": "Submit",
+      "mode": "submit",
+      "instructions": "stages/submit.md",
+      "scope": "Explicit-only. Ready roles whose live Prepare checks still pass: fill only approved answers, upload the verified resume and approved files, click Submit once and save proof → Applied; any failure → Apply manually with the reason and a warning if it may have been submitted. Requires Settings submission_policy.enabled; respects caps and Stop all; dry run stops before Submit.",
+      "explicit_only": true,
+      "included_in_run": false,
+      "required_resources": [
+        "instructions_repository",
+        "structured_store",
+        "content_output",
+        "resume_output",
+        "answer_bank",
+        "submission_policy"
       ]
     },
     {
@@ -183,6 +204,10 @@
   "prepare_outcomes": [
     "Ready",
     "Needs answer",
+    "Apply manually"
+  ],
+  "submit_outcomes": [
+    "Applied",
     "Apply manually"
   ]
 }

@@ -26,7 +26,7 @@ class AnswerReadinessTests(unittest.TestCase):
 
     def add_question(self, key, table, row, required=True):
         self.manifest['questions'].append({'field_key': key, 'question': key + '?',
-            'type': 'Form' if table == 'Answer bank' else 'Narrative', 'required': required, 'options': [],
+            'type': 'Form' if table == 'Answer bank' else 'Narrative', 'required': required, 'sensitive': False, 'options': [],
             'answer': {'table': table, 'record_id': row['id'], 'fingerprint': answer_fingerprint(table, row),
                        'mapped_answer': row.get('Answer') or row.get('Final answer'),
                        'mapping_verified': True, 'match_evidence': 'Same meaning, scope and valid options'}})
@@ -110,15 +110,29 @@ class AnswerReadinessTests(unittest.TestCase):
         self.manifest['questions'] = []; self.manifest['form_hash'] = form_fingerprint([])
         self.assertTrue(self.ready())
         self.manifest['questions'].append({'field_key': 'conditional', 'question': 'Follow up?',
-                                           'type': 'Form', 'required': True, 'options': []})
+                                           'type': 'Form', 'required': True, 'sensitive': False, 'options': []})
         self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
         self.assertFalse(self.ready())
 
     def test_optional_unanswered_question_does_not_block(self):
         self.manifest['questions'].append({'field_key': 'optional', 'question': 'Optional?',
-                                           'type': 'Form', 'required': False, 'options': []})
+                                           'type': 'Form', 'required': False, 'sensitive': False, 'options': []})
         self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
         self.assertTrue(self.ready())
+
+    def test_optional_sensitive_question_needs_an_approved_answer(self):
+        self.manifest['questions'].append({'field_key': 'veteran', 'question': 'Veteran status?',
+                                           'type': 'Form', 'required': False, 'sensitive': True, 'options': []})
+        self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+        self.assertFalse(self.ready())
+        self.manifest['questions'].pop()
+        self.add_question('veteran', 'Answer bank', self.bank[0], required=False)
+        self.manifest['questions'][-1]['sensitive'] = True
+        self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+        self.assertTrue(self.ready())
+        del self.manifest['questions'][-1]['sensitive']
+        self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+        self.assertFalse(self.ready())
 
     def test_question_option_changes_and_duplicate_field_keys_block(self):
         self.manifest['questions'][0]['options'] = ['New option']; self.assertFalse(self.ready())

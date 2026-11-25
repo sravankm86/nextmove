@@ -1,6 +1,6 @@
 # Nextmove
 
-Nextmove is an instruction-led workflow for tool-capable AI harnesses such as Codex and Claude Code. It discovers relevant companies, finds roles, reviews their fit and prepares a truthful resume plus the required application answers. It ends at **Ready**; you fill and submit the application and handle recruiting afterward.
+Nextmove is an instruction-led workflow for tool-capable AI harnesses such as Codex and Claude Code. It discovers relevant companies, finds roles, reviews their fit and prepares a truthful resume plus the required application answers. Run ends at **Ready**. You submit the application yourself, or explicitly run **Submit applications** to have an agent submit Ready roles with proof (off by default). Recruiting afterward is yours.
 
 One agent can run the sequence, or you can start individual stages in different harnesses. Both use the same saved state and acceptance checks. This repository is not a hosted app, scheduler or launcher for other harnesses.
 
@@ -11,7 +11,8 @@ One agent can run the sequence, or you can start individual stages in different 
 | [Curate](stages/curate.md) | Research company/funding facts and propose companies new to your list. You choose Allow or Exclude; agents never auto-Allow. |
 | [Scan](stages/scan.md) | Enumerate every configured official board and region for allowed companies. Broad role keywords and basic semantic checks produce Inventoried roles, protecting recall. |
 | [Review](stages/review.md) | Compare the exact job description with Career Goals and the master resume. Current scores route to Queued, Need review or Not pursuing. |
-| [Prepare](stages/prepare.md) | Reuse a suitable approved base or tailor from it, verify the PDF, inspect application questions and capture missing answers for your approval. |
+| [Prepare](stages/prepare.md), [Submit](stages/submit.md) | Reuse a suitable approved base or tailor from it, verify the PDF, inspect application questions and capture missing answers for your approval. |
+| [Submit](stages/submit.md) | Explicit-only and off by default. Submits Ready roles on the official portal with approved answers and files, saves proof → Applied; any problem → Apply manually with the reason. |
 
 **Queued authorizes preparation**, including when you set it manually after disagreeing with Review. Agents apply fit gates before queueing; Prepare does not repeat them. [Queue decisions](WORKFLOW.md#queue-decisions) explains the handoff and explicit reassessment.
 
@@ -79,7 +80,7 @@ Agents load the requested stage and relevant reference sections, not the whole r
 
 Expect thorough configured coverage, explained decisions, grounded resumes, approval-aware answers and recoverable progress. Do not expect guaranteed interviews or pay, universal careers-site access, unattended authentication, automatic cross-provider orchestration, identical model judgments or unlimited free storage. A hidden form step, missing earlier resume or unanswered question can require your help.
 
-External form filling, submission, mailbox monitoring, application-limit/cooldown management and later recruiting work are outside scope. Existing historical fields/files are preserved; the active schema does not authorize automatic deletion. [Maintenance](docs/MAINTENANCE.md#retiring-live-columns-or-choices) governs any live retirement.
+Submission happens only through the explicit, disabled-by-default Submit stage. Mailbox monitoring, application-limit/cooldown management and later recruiting work are outside scope. Existing historical fields/files are preserved; the active schema does not authorize automatic deletion. [Maintenance](docs/MAINTENANCE.md#retiring-live-columns-or-choices) governs any live retirement.
 
 ## Contributing and license
 

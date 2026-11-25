@@ -32,8 +32,8 @@ def check(root):
     for name in ["README.md", "LICENSE", "AGENTS.md", "WORKFLOW.md", "SETUP.md", "DATA.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "CAREER-GOALS.md", "RESUME-FILES.md", "docs/MAINTENANCE.md", "templates/career-goals.md"]:
         require((root / name).is_file(), "Missing required public file: " + name)
 
-    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['curate','scan','review','prepare']]
-    require(len(runtime)==10 and all((root/p).is_file() for p in runtime), 'Expected ten canonical operational instruction files')
+    runtime = ['AGENTS.md','WORKFLOW.md','SETUP.md','DATA.md','CAREER-GOALS.md','RESUME-FILES.md'] + ['stages/'+x+'.md' for x in ['curate','scan','review','prepare','submit']]
+    require(len(runtime)==11 and all((root/p).is_file() for p in runtime), 'Expected eleven canonical operational instruction files')
 
     decoded = {}
     for p in files(root):
@@ -100,7 +100,7 @@ def check(root):
         require(link["from_table"] in lookup and link["target_table"] in lookup, "Unknown linked table")
     from lifecycle import STATUSES
     lifecycle = next(f for f in lookup['Applications']['fields'] if f['name']=='Lifecycle status')
-    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==8, 'Expected eight lifecycle states ending at a Prepare handoff')
+    require([c['name'] for c in lifecycle['options']['choices']] == STATUSES and len(STATUSES)==9 and STATUSES[-3]=='Applied', 'Expected nine lifecycle states including Submit\'s Applied')
     counts = {}
     for table in tables:
         fields = {f['name'] for f in table['fields']}
@@ -137,7 +137,12 @@ def check(root):
     require(not {'Apply', 'Track'} & {c['command'] for c in command['commands']}, 'Removed commands cannot dispatch')
     removed = ['stages/apply.md','stages/track.md','scripts/submission_policy.py']
     require(all(not (root/p).exists() for p in removed), 'Retired tasks must stay absent')
-    require(not {'submission_policy','mailbox','narrative_context'} & set(resources), 'Retired resources cannot be setup dependencies')
+    require(not {'mailbox','narrative_context'} & set(resources), 'Retired resources cannot be setup dependencies')
+    submit = next((c for c in command['commands'] if c['command'] == 'Submit'), {})
+    require(submit.get('explicit_only') is True and submit.get('included_in_run') is False and 'Submit' not in command['pipeline']
+            and submit.get('instructions') == 'stages/submit.md', 'Submit must be explicit-only and outside Run')
+    sub_policy = next((x['value'] for x in seed['policies'] if x['key'] == 'submission_policy'), {})
+    require(sub_policy.get('enabled') is False, 'Submission must ship disabled')
     eval_cmd = next((c for c in command["commands"] if c["command"] == "Review eval"), {})
     capture_cmd = next((c for c in command["commands"] if c["command"] == "Capture feedback"), {})
     require(eval_cmd.get("instructions") == "DATA.md" and capture_cmd.get("instructions") == "DATA.md", "Feedback and eval need shared instructions")

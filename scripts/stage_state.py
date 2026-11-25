@@ -1,6 +1,6 @@
 """Versioned stage metadata in History, joined to fixed inputs in Runs.
 
-Pure readers/guards: no credentials, network access, orchestration or submissions.
+Pure readers/guards: no credentials, network access, orchestration or browser actions.
 Fetch linked History/Run records through the harness and map field IDs first.
 """
 import hashlib
@@ -11,6 +11,8 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 SCHEMA = 'nextmove.stage-state.v2'
 READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
 RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
+# Submit links its Run through History, so it has no Applications run field.
+STAGES = set(RUN_LINKS) | {'submit'}
 CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
 
 
@@ -49,6 +51,12 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
                         and human_request['quote'].strip() and human_request.get('observed_at'))
         if not human_choice and not review_ready(candidate, existing_state, runs or [], current_inputs or {}, companies=companies):
             raise ValueError('Agent queue admission requires a current qualifying Review or an explicit user request')
+    if values.get('Lifecycle status') == 'Applied':
+        from submission import submission_result
+        latest = ((existing_state or {}).get('submit') or {}).get('attempts') or [None]
+        if ((existing_application or {}).get('Lifecycle status') != 'Ready'
+                or submission_result(latest[-1])['status'] != 'Applied'):
+            raise ValueError('Applied requires a Ready role and a saved Submit attempt with verified proof')
     return values
 
 
@@ -268,14 +276,14 @@ def company_history_ready(preparation):
 
 def protected_history(app, state=None):
     """Legacy outcomes/attempts are retained evidence, never new workflow work."""
-    from lifecycle import LEGACY_READ_ONLY
-    return bool(app.get('Lifecycle status') in LEGACY_READ_ONLY
+    from lifecycle import PROTECTED_OUTCOMES
+    return bool(app.get('Lifecycle status') in PROTECTED_OUTCOMES
                 or app.get('Submission attempt key')
                 or (state or {}).get('submission', {}).get('attempt_key'))
 
 
 def merge_state(previous, *, record_id, job_key, stage, run_id, values):
-    if stage not in RUN_LINKS:
+    if stage not in STAGES:
         raise ValueError('Unknown stage')
     previous = previous or {'record_id': record_id, 'job_key': job_key, 'stage_runs': {}}
     if previous['record_id'] != record_id:

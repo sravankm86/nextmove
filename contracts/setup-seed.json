@@ -183,6 +183,16 @@
       "verification": "Verified"
     },
     {
+      "key": "submission_policy",
+      "value": {
+        "enabled": false,
+        "max_per_run": 10,
+        "max_per_company_per_day": 1
+      },
+      "verification": "Needs verification",
+      "note": "Submit stage switch and caps (stages/submit.md). Disabled unless the user sets enabled to true; Submit still needs the explicit command."
+    },
+    {
       "key": "preparation_notes",
       "value": {
         "shortlist_estimate": false

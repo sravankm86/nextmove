@@ -1,13 +1,15 @@
 """Pure checks for a complete form inspection and current approved/resolved answers.
 
 The harness discovers questions and maps meaning/options; this reader never browses,
-drafts, approves, resolves, fills, uploads or submits anything.
+drafts, approves, resolves, fills, uploads or submits anything. Sensitive questions
+(demographics/EEO, disability, veteran status, criminal history, legal attestations and
+consents) need approved answers even when optional, because Submit may only send approved values.
 """
 import hashlib
 import json
 from datetime import date
 
-SCHEMA = 'nextmove.application-questions.v1'
+SCHEMA = 'nextmove.application-questions.v2'
 BANK_FIELDS = ('Question', 'Answer', 'Guidance', 'Source field', 'Approved')
 QUESTION_FIELDS = ('Question', 'Options', 'Field key', 'Question type',
                    'Final answer', 'Status', 'Application')
@@ -79,9 +81,9 @@ def application_answers_ready(application, inspection, answer_bank, application_
     tables = {'Answer bank': answer_bank, 'Application questions': application_questions}
     for q in questions:
         if (not has_answer(q.get('question')) or q.get('type') not in {'Form', 'Narrative'}
-                or type(q.get('required')) is not bool):
+                or type(q.get('required')) is not bool or type(q.get('sensitive')) is not bool):
             return False
-        if not q['required']:
+        if not q['required'] and not q['sensitive']:
             continue
         ref = q.get('answer') or {}
         if not isinstance(ref, dict):

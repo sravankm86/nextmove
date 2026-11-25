@@ -9,6 +9,7 @@ Read AGENTS.md and the requested stage. Load reference docs only when needed, an
 | Scan | Derive broad role criteria from current goals; complete source coverage and basic semantics → Inventoried; no career-fit assessment |
 | Review / Assess / Shortlist | Inventoried/Need review → JD extraction, career fit and resume fit scores → Queued, Need review or Not pursuing |
 | Prepare | Queued roles, including human choices, plus earlier Needs answer roles and Ready roles that have never had an answer check → reuse a fully covering approved base or tailor from the closest base under the resume guidelines → verified resume and approved/resolved required answers → Ready, Needs answer or Apply manually |
+| Submit applications | Explicit-only; never part of Run. Ready roles whose live Prepare checks still pass → fill approved answers, upload the verified resume and approved files, submit once, save proof → Applied, or Apply manually with the reason under [stages/submit.md](stages/submit.md) |
 | Sanitize / Sanitize Nextmove | Explicit-only repository consistency and simplification under [Maintenance](docs/MAINTENANCE.md#sanitize-explicit-only); never a production stage |
 | Review eval / Eval Review | Capture feedback, prepare frozen label-free inputs, run a fresh blind Review and score it under DATA.md; no production decisions change |
 | Capture feedback | Move feedback into verified eval cases and clear only the captured unchanged notes; no role decisions |
@@ -59,7 +60,7 @@ Reread affected state, reconcile human edits, write permitted deltas and verify 
 
 Applications retains current evidence/PDF references, current PDF version/verification and stage Run links. DATA.md stores exact stage metadata in History and fixed shared inputs in Runs. Content lives in registered Drive locations. Check current fit inputs before agent queue admission; check current master, guidelines, JD, PDF and answers when preparing or reusing a Ready handoff.
 
-Review owns agent queue admission (stages/review.md); humans may queue directly. Prepare produces the verified resume, inspects the official application questions and prepares approved/resolved answers under stages/prepare.md. It saves the evidence and stops at Ready; it does not fill forms, submit or monitor mail.
+Review owns agent queue admission (stages/review.md); humans may queue directly. Prepare produces the verified resume, inspects the official application questions and prepares approved/resolved answers under stages/prepare.md. It saves the evidence and stops at Ready; it does not fill forms, submit or monitor mail. Only the explicit Submit command submits, under stages/submit.md.
 
 ## Stage boundaries and exit
 
@@ -81,7 +82,7 @@ If a tool or automatic approval review blocks an action, identify the exact acti
 
 A stage handoff reports completed work, counts, unresolved questions, affected identities, next action and whether ownership was released. Missing global access/Stop all blocks affected work. A company-specific issue need not stop all companies.
 
-## Eight lifecycle states
+## Nine lifecycle states
 
 | State | Meaning |
 |---|---|
@@ -90,7 +91,8 @@ A stage handoff reports completed work, counts, unresolved questions, affected i
 | Queued | Authorized for Prepare by Review or a human's direct choice. |
 | Ready | Verified resume available; complete form inspection; every required answer Approved in Answer bank or Resolved in Application questions. Successful preparation endpoint. |
 | Needs answer | Prepare could not finish: the resume is not yet verified, or a required answer or attachment is missing or not yet approved (an unticked Answer bank row or an Application questions row that is not Resolved). Agent notes says whether the next step is the user's (provide or approve something) or the agent's own retry (for example a failed render). Every Prepare run rechecks these roles and moves them to Ready once everything passes. |
-| Apply manually | The resume is verified, but no agent could open or fully read the official application (for example sign-in or account creation, a bot check, a blocked host, a broken Apply link or a required assessment). The user starts this application themselves. Prepare does not retry it unless asked. |
+| Apply manually | The resume is verified, but no agent could open or fully read the official application (for example sign-in or account creation, a bot check, a blocked host, a broken Apply link or a required assessment). The user starts this application themselves. Submit also ends here on any failure, with the reason and, if Submit may have been clicked, a warning to check before applying again. Neither stage retries it unless asked. |
+| Applied | Submit clicked Submit once and saved verified confirmation proof under stages/submit.md. Read-only afterwards; later tracking is separate. |
 | Not pursuing | Review declined the role or it is outside current targeting. |
 | Duplicate | Confirmed redundant unprotected row; canonical identity and prior values remain in History. |
 
@@ -98,7 +100,7 @@ Manual Queued authorizes Prepare; manual Ready does not prove that the resume an
 
 ## Existing installations
 
-Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: Queued is the preparation handoff. Setup never deletes or remaps legacy fields automatically. Legacy Applied, Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers. Needs answer is an active Prepare state again; existing Needs answer rows are rechecked by the next Prepare run. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
+Read nine active tables. Answer bank and Application questions are active for Prepare; reuse their current field IDs and preserve all existing answers/statuses. Preserve other extra columns, options, old controls and artifacts as inactive history. The retired Role eligibility flag is preserved but is no longer read or written: Queued is the preparation handoff. Setup never deletes or remaps legacy fields automatically. Applied rows (legacy or from Submit), Interviewing and Rejected rows, and any row with a legacy submission attempt, are read-only for stage writers; Submit writes Applied only with verified proof. Needs answer is an active Prepare state again; existing Needs answer rows are rechecked by the next Prepare run. Check both the retained row and resolved History metadata with scripts/stage_state.py:protected_history; a manual reset of the label does not erase an attempt. The feedback coordinator may still consume Feedback by the verified DATA.md procedure without changing the outcome.
 
 An old Run whose plan contains removed stages is not a compatible run to resume. Preserve it, release its owner only after verifying no writer remains, and start a new four-stage Run referencing the old checkpoints. Reuse valid Scan/Review/resume evidence without fabricating completion or launching later work. Older Ready resumes do not establish answer readiness: Prepare selects Ready roles without a saved answer check (`scripts/stage_state.py:answer_check_due`), inspects the form and verifies current answers, keeping Ready only if everything passes and preserving the resume. Do not delete live columns or existing external automations as part of routine startup; report any out-of-repo automation that needs the user's attention.
 
