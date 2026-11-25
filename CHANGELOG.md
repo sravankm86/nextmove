@@ -3,6 +3,14 @@
 
 
 
+
+## Seven-table model
+
+- Runs and Sources are retired; History becomes the append-only **Audit log** (Recorded at, Agent, Action, record, Summary, Details (JSON), Evidence URL) from which the timeline can be rebuilt.
+- Each role's current stage evidence moves to Applications **Evidence (JSON)** (`evidence`, `evidence_json`, `merge_state`, `stage_inputs`); decisions carry their own input versions, so stages never replay logs or join Runs.
+- Companies gains **Careers URLs**, **Last scanned** and **Scan notes**; Settings gains the **Active writer** control for one-writer-at-a-time.
+- `legacy_evidence` migrates existing History snapshots and Run input pins once; old tables stay read-only until retired.
+
 ## Grounded answers
 
 - Prepare answers factual Form questions from the current master, role resume or Career Goals (`answer.grounded` with a verbatim quote, source version and derivation) without Answer bank rows; the bank holds only gaps.

@@ -35,11 +35,11 @@ flowchart LR
 
 - **GitHub** holds portable procedures, contracts, helpers and tests. Personal preferences and credentials do not belong here.
 - **Google Drive** holds Career Goals, the factual master resume, resume guidelines, approved bases, role resumes, captures and reports. Setup creates or reuses **Role specific** and **Audit trail** under your private main folder.
-- **Airtable** holds nine tables: Companies, Applications, Sources, Runs, Settings, History, Review eval, Answer bank and Application questions. [DATA.md](DATA.md) defines their purposes and recovery; [core-schema.json](contracts/core-schema.json) defines the active fields and relationships.
+- **Airtable** holds seven tables: Companies, Applications, Settings, Audit log, Review eval, Answer bank and Application questions. [DATA.md](DATA.md) defines their purposes and recovery; [core-schema.json](contracts/core-schema.json) defines the active fields and relationships.
 
 Answer bank holds reusable Form answers: a readable question label, the answer, any guidance and an Approved checkbox. Application questions holds role-specific Narrative drafts and final answers, including exact submitted answers you may later record for interview reference. Agents draft and match; you approve or resolve. Preparation never claims a submission occurred.
 
-Each harness uses its own authenticated connections. Airtable/Drive checkpoints, source identities and verified artifacts let the next harness recover without this chat or the previous computer's files. Only one agent writes at a time. Historical outcomes and uncertain prior submissions remain protected.
+Each harness uses its own authenticated connections. Each role's saved evidence, the Audit log and verified artifacts let the next harness recover without this chat or the previous computer's files. Only one agent writes at a time. Historical outcomes and uncertain prior submissions remain protected.
 
 ## What you provide
 

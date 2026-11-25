@@ -1,24 +1,22 @@
-"""Versioned stage metadata in History, joined to fixed inputs in Runs.
+"""Each role's current stage evidence lives in its Applications row (Evidence (JSON)).
 
-Pure readers/guards: no credentials, network access, orchestration or browser actions.
-Fetch linked History/Run records through the harness and map field IDs first.
+The Audit log is an append-only record of agent actions; stages never replay it to
+decide anything. Pure readers/guards: no credentials, network access or browser actions.
 """
 import hashlib
 import re
 import json
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-SCHEMA = 'nextmove.stage-state.v2'
-READ_SCHEMAS = {'nextmove.stage-state.v1', SCHEMA}
-RUN_LINKS = {'scan': 'Scan run', 'review': 'Review run', 'preparation': 'Preparation run'}
-# Submit links its Run through History, so it has no Applications run field.
-STAGES = set(RUN_LINKS) | {'submit'}
-CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','History','Scan run','Review run','Preparation run','Application questions']
+SCHEMA = 'nextmove.evidence.v1'
+LEGACY_SCHEMAS = {'nextmove.stage-state.v1', 'nextmove.stage-state.v2'}
+STAGES = {'scan', 'review', 'preparation', 'submit'}
+CORE_FIELDS = ['Application ID','Company','Role','Job key','Job description link','Lifecycle status','Manual notes','Feedback','Agent notes','Starting salary','Max salary','Additional compensation','Location','Work arrangement','Job posted date','Career fit','Resume fit','Job evidence','Resume link','Resume version','Resume verified at','Evidence (JSON)','Audit log','Application questions']
 
 
-def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None, runs=None, current_inputs=None, human_request=None):
+def application_write(values, *, creating=False, existing_keys=None, allowed_companies=None, companies=None, existing_application=None, existing_state=None, current_inputs=None, human_request=None):
     """Validate active fields and preserve historical outcomes before any stage update."""
-    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'History', 'Manual notes'})
+    bad = set(values) - (set(CORE_FIELDS) - {'Application ID', 'Audit log', 'Manual notes'})
     if bad:
         raise ValueError('Unsupported Application fields: '+', '.join(sorted(bad)))
     if protected_history(existing_application or {}, existing_state) and set(values) - {'Feedback'}:
@@ -26,9 +24,11 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
     from lifecycle import STATUSES
     if 'Lifecycle status' in values and values['Lifecycle status'] not in STATUSES:
         raise ValueError('Unsupported lifecycle status')
-    for label in ['Company', 'Scan run', 'Review run', 'Preparation run']:
-        if label in values and len(values[label] or []) > 1:
-            raise ValueError('Expected at most one linked record: '+label)
+    if 'Company' in values and len(values['Company'] or []) > 1:
+        raise ValueError('Expected at most one linked record: Company')
+    if 'Evidence (JSON)' in values:
+        if evidence({**(existing_application or {}), 'Evidence (JSON)': values['Evidence (JSON)']}) is None:
+            raise ValueError('Evidence (JSON) must be a complete evidence object for this application')
     if creating:
         key = values.get('Job key')
         company = values.get('Company') or []
@@ -49,7 +49,7 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
         # A user's explicit instruction to queue this role is their choice, recorded verbatim.
         human_choice = (isinstance(human_request, dict) and isinstance(human_request.get('quote'), str)
                         and human_request['quote'].strip() and human_request.get('observed_at'))
-        if not human_choice and not review_ready(candidate, existing_state, runs or [], current_inputs or {}, companies=companies):
+        if not human_choice and not review_ready(candidate, existing_state, current_inputs or {}, companies=companies):
             raise ValueError('Agent queue admission requires a current qualifying Review or an explicit user request')
     if values.get('Lifecycle status') == 'Applied':
         from submission import submission_result
@@ -60,15 +60,34 @@ def application_write(values, *, creating=False, existing_keys=None, allowed_com
     return values
 
 
-def payload(records):
-    ids = [r['record_id'] for r in records]
-    if len(ids) != len(set(ids)):
-        raise ValueError('Duplicate application identity in stage-state batch')
-    return {'schema': SCHEMA, 'records': records}
+def evidence(application):
+    """The role's current evidence object from its Evidence (JSON) field, or None."""
+    raw = application.get('Evidence (JSON)')
+    try:
+        data = json.loads(raw) if isinstance(raw, str) else raw
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(data, dict) or data.get('schema') != SCHEMA or not data.get('record_id'):
+        return None
+    if application.get('id') and data['record_id'] != application['id']:
+        return None
+    return data
 
 
-def resolve(application, histories):
-    """Return the newest complete metadata snapshot, never infer approval from status."""
+def evidence_json(state):
+    """Serialize an evidence object for the Evidence (JSON) field."""
+    if not isinstance(state, dict) or state.get('schema') != SCHEMA or not state.get('record_id'):
+        raise ValueError('Complete evidence object required')
+    return json.dumps(state, sort_keys=True, ensure_ascii=False, separators=(',', ':'))
+
+
+def legacy_evidence(application, histories, runs=()):
+    """One-time migration from the retired History snapshots and Runs input pins.
+
+    Picks the newest complete snapshot for the application, folds each stage's Run
+    input versions into that stage as `inputs`, and drops Run links. Older field-change
+    maps are ignored, never reinterpreted as acceptance evidence.
+    """
     matches = []
     for event in histories:
         raw = event.get('Field changes (JSON)', {})
@@ -76,35 +95,37 @@ def resolve(application, histories):
             data = json.loads(raw) if isinstance(raw, str) else raw
         except (ValueError, TypeError):
             continue
-        if not isinstance(data, dict) or data.get('schema') not in READ_SCHEMAS:
+        if not isinstance(data, dict) or data.get('schema') not in LEGACY_SCHEMAS or not isinstance(data.get('records'), list):
             continue
-        records = data.get('records')
-        # Legacy audit maps contain lists of field changes, not complete stage states.
-        # Preserve those events; do not reinterpret them as acceptance evidence.
-        if not isinstance(records, list):
-            continue
-        for state in records:
+        for state in data['records']:
             if (isinstance(state, dict) and isinstance(state.get('stage_runs'), dict)
                     and state.get('record_id') == application['id']):
                 matches.append((event.get('Recorded at', ''), event.get('Event key', ''), state))
     if not matches:
         return None
-    return max(matches, key=lambda x: (x[0], x[1]))[2]
+    old = json.loads(json.dumps(max(matches, key=lambda x: (x[0], x[1]))[2]))
+    stage_runs = old.pop('stage_runs', {})
+    for stage, rid in stage_runs.items():
+        run = next((r for r in runs if r.get('id') == rid), None)
+        raw = (run or {}).get('Input versions (JSON)', {})
+        try:
+            pins = json.loads(raw) if isinstance(raw, str) else raw
+        except (ValueError, TypeError):
+            pins = {}
+        common = (pins or {}).get('stage_inputs', {}).get(stage, {})
+        if isinstance(old.get(stage), dict):
+            old[stage]['inputs'] = {**common, **old[stage].pop('version_overrides', {})}
+    old['schema'] = SCHEMA
+    return old
 
 
-def stage_versions(state, stage, runs):
-    rid = state.get('stage_runs', {}).get(stage)
-    run = next((r for r in runs if r['id'] == rid), None)
-    raw = (run or {}).get('Input versions (JSON)', {})
-    try:
-        data = json.loads(raw) if isinstance(raw, str) else raw
-    except (ValueError, TypeError):
-        data = {}
-    common = (data or {}).get('stage_inputs', {}).get(stage, {})
-    return {**common, **state.get(stage, {}).get('version_overrides', {})}
+def stage_inputs(state, stage):
+    """Input versions a stage decision used, saved with that stage's evidence."""
+    values = (state or {}).get(stage) or {}
+    return {**(values.get('inputs') or {}), **(values.get('version_overrides') or {})}
 
 
-def review_ready(app, state, runs, current_inputs, *, companies=None):
+def review_ready(app, state, current_inputs, *, companies=None):
     """Validate an agent's proposed queue admission, never an existing Prepare handoff."""
     from company_policy import company_for_application
     if not company_for_application(app, companies):
@@ -129,11 +150,9 @@ def review_ready(app, state, runs, current_inputs, *, companies=None):
     if not review.get('evidence') or not review.get('assessment_complete'):
         return False
     check = state.get('run_checks', {}).get('duplicate', {})
-    rid = state.get('stage_runs', {}).get('review')
-    if (check.get('status') not in {'unique', 'canonical'} or not check.get('evidence')
-            or check.get('checked_in_run') != rid or app.get('Review run') != [rid]):
+    if check.get('status') not in {'unique', 'canonical'} or not check.get('evidence') or not check.get('checked_at'):
         return False
-    versions = stage_versions(state, 'review', runs)
+    versions = stage_inputs(state, 'review')
     return bool(all(versions.get(k) and versions[k] == current_inputs.get(k)
                     for k in ['goals', 'master', 'policy', 'company_evidence'])
                 and review.get('jd_hash') == current_inputs.get('jd_hash')
@@ -169,7 +188,7 @@ def canonical_job_url(value):
                        parts.path.rstrip('/'), urlencode(sorted(query)), parts.fragment))
 
 
-def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
+def resume_verified(app, state, current_inputs, pdf_bytes=None, *, provider_version=None, companies=None):
     if app.get('Lifecycle status') not in {'Queued', 'Needs answer', 'Ready', 'Apply manually'}:
         return False
     candidate = {**app, 'Lifecycle status': 'Queued'}
@@ -180,20 +199,18 @@ def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provide
             or state.get('job_key') != app['Job key']):
         return False
     p = state.get('preparation', {})
-    rid = state.get('stage_runs', {}).get('preparation')
     digest = hashlib.sha256(pdf_bytes).hexdigest() if pdf_bytes is not None else provider_version
-    return bool(rid and app.get('Preparation run') == [rid]
-                and app.get('Resume verified at') and app.get('Resume link')
+    return bool(app.get('Resume verified at') and app.get('Resume link')
                 and digest and p.get('verified') and (p.get('resume_version') or p.get('resume_hash')) == digest == app.get('Resume version')
                 and p.get('master') == current_inputs.get('master')
                 and p.get('jd_hash') == current_inputs.get('jd_hash')
                 and preparation_complete(p, current_inputs, digest))
 
 
-def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None,
+def resume_ready(app, state, current_inputs, pdf_bytes=None, *, provider_version=None,
                  companies=None, answer_bank=None, application_questions=None, grounding_sources=None):
     """Ready needs both the verified resume and current required-answer evidence."""
-    if not resume_verified(app, state, runs, current_inputs, pdf_bytes,
+    if not resume_verified(app, state, current_inputs, pdf_bytes,
                            provider_version=provider_version, companies=companies):
         return False
     from application_answers import application_answers_ready
@@ -209,11 +226,11 @@ ACCESS_BLOCKERS = ('sign_in_required', 'account_creation', 'bot_check', 'host_bl
                    'apply_link_unavailable', 'assessment_required', 'technical_error')
 
 
-def preparation_outcome(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None,
+def preparation_outcome(app, state, current_inputs, pdf_bytes=None, *, provider_version=None,
                         companies=None, answer_bank=None, application_questions=None, grounding_sources=None):
     """Prepare's three exits: Ready, Needs answer (resume or an answer missing/unapproved)
     or Apply manually (verified resume, but the application itself could not be accessed)."""
-    if not resume_verified(app, state, runs, current_inputs, pdf_bytes,
+    if not resume_verified(app, state, current_inputs, pdf_bytes,
                            provider_version=provider_version, companies=companies):
         return 'Needs answer'
     inspection = (state or {}).get('preparation', {}).get('application_questions') or {}
@@ -222,7 +239,7 @@ def preparation_outcome(app, state, runs, current_inputs, pdf_bytes=None, *, pro
             and all(isinstance(b, dict) and b.get('kind') in ACCESS_BLOCKERS and b.get('detail') for b in blockers)
             and inspection.get('evidence')):
         return 'Apply manually'
-    if resume_ready(app, state, runs, current_inputs, pdf_bytes, provider_version=provider_version,
+    if resume_ready(app, state, current_inputs, pdf_bytes, provider_version=provider_version,
                     companies=companies, answer_bank=answer_bank, application_questions=application_questions,
                     grounding_sources=grounding_sources):
         return 'Ready'
@@ -284,41 +301,17 @@ def protected_history(app, state=None):
                 or (state or {}).get('submission', {}).get('attempt_key'))
 
 
-def merge_state(previous, *, record_id, job_key, stage, run_id, values):
+def merge_state(previous, *, record_id, job_key, stage, values):
+    """Replace one stage's evidence, keeping the others; returns a new evidence object."""
     if stage not in STAGES:
         raise ValueError('Unknown stage')
-    previous = previous or {'record_id': record_id, 'job_key': job_key, 'stage_runs': {}}
-    if previous['record_id'] != record_id:
+    previous = previous or {'schema': SCHEMA, 'record_id': record_id, 'job_key': job_key}
+    if previous.get('record_id') != record_id:
         raise ValueError('Application identity mismatch')
     result = json.loads(json.dumps(previous))
-    result['stage_runs'][stage] = run_id
+    result['schema'] = SCHEMA
     result[stage] = values
     return result
-
-
-def merge_company_state(previous, *, company_id, company_key, run_id, values):
-    """Curate history uses company identity, never an Application or Job key."""
-    previous = previous or {'record_id': company_id, 'entity': 'company',
-                            'company_key': company_key, 'stage_runs': {}}
-    if previous.get('record_id') != company_id or previous.get('entity') != 'company':
-        raise ValueError('Company identity mismatch')
-    result = json.loads(json.dumps(previous))
-    result['stage_runs']['curate'] = run_id
-    result['curate'] = values
-    return result
-
-
-def run_progress(run):
-    """Parse a Run's Checkpoint (JSON); non-JSON text is kept under raw_checkpoint."""
-    raw = run.get('Checkpoint (JSON)')
-    if raw in (None, ''):
-        return {}
-    if isinstance(raw, str):
-        try:
-            raw = json.loads(raw)
-        except (ValueError, TypeError):
-            return {'raw_checkpoint': raw}
-    return dict(raw) if isinstance(raw, dict) else {'raw_checkpoint': raw}
 
 
 def run_duplicate_match(left, right):

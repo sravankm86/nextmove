@@ -89,17 +89,16 @@ class ReviewFrameTests(unittest.TestCase):
     def test_new_acceptance_requires_current_scoring_and_run_identity(self):
         policy,contract=review_frame_contract();c=max(contract['career'],key=contract['career'].get);r=max(contract['resume'],key=contract['resume'].get)
         inputs={'company_evidence':'company-capture','goals':'g','master':'m','policy':policy,'jd_hash':'jd'}
-        run={'id':'run','Input versions (JSON)':{'stage_inputs':{'review':inputs}}}
         companies=[{'id':'company','Search status':'Allow'}]
-        app={'Company':['company'],'id':'job','Lifecycle status':'Queued','Career fit':c,'Resume fit':r,'Review run':['run']}
-        state={'record_id':'job','stage_runs':{'review':'run'},'run_checks':{'duplicate':{'status':'unique','checked_in_run':'run','evidence':'Verified posting identity'}},'review':{'assessment_method':contract['assessment_method'],'scoring':scored_review(c,r),'decision':'approve','assessment_complete':True,'jd_hash':'jd','current_description':True,'evidence':'Verified indexed assessment'}}
-        self.assertTrue(review_ready(app,state,[run],inputs, companies=companies))
+        app={'Company':['company'],'id':'job','Lifecycle status':'Queued','Career fit':c,'Resume fit':r}
+        state={'record_id':'job','run_checks':{'duplicate':{'status':'unique','checked_at':'2026-01-01','evidence':'Verified posting identity'}},'review':{'assessment_method':contract['assessment_method'],'scoring':scored_review(c,r),'decision':'approve','assessment_complete':True,'jd_hash':'jd','current_description':True,'evidence':'Verified indexed assessment','inputs':inputs}}
+        self.assertTrue(review_ready(app,state,inputs, companies=companies))
         for key in ['scoring','evidence','assessment_method']:
             changed=copy.deepcopy(state);changed['review'].pop(key)
-            self.assertFalse(review_ready(app,changed,[run],inputs, companies=companies))
+            self.assertFalse(review_ready(app,changed,inputs, companies=companies))
         changed=copy.deepcopy(state);changed['run_checks']['duplicate']['status']='unresolved'
-        self.assertFalse(review_ready(app,changed,[run],inputs, companies=companies))
-        self.assertFalse(review_ready(app,state,[run],{**inputs,'policy':'changed'}, companies=companies))
+        self.assertFalse(review_ready(app,changed,inputs, companies=companies))
+        self.assertFalse(review_ready(app,state,{**inputs,'policy':'changed'}, companies=companies))
 
 
 if __name__=='__main__':unittest.main()

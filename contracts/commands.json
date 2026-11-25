@@ -1,12 +1,10 @@
 {
-  "version": 16,
+  "version": 17,
   "tables": [
     "Companies",
     "Applications",
-    "Sources",
-    "Runs",
     "Settings",
-    "History",
+    "Audit log",
     "Review eval",
     "Answer bank",
     "Application questions"
@@ -70,7 +68,7 @@
       "stage": "Scan",
       "mode": "prepare",
       "instructions": "stages/scan.md",
-      "scope": "Every current human-Allow source, respecting legacy permanent blocks; broad role criteria/basic semantics to Inventoried. Funding/career fit belongs to Review.",
+      "scope": "Every Careers URL of current human-Allow companies, respecting legacy permanent blocks; broad role criteria/basic semantics to Inventoried. Funding/career fit belongs to Review.",
       "required_resources": [
         "instructions_repository",
         "structured_store",

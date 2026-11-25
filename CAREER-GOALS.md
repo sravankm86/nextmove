@@ -18,6 +18,6 @@ Apply domain openness, product-layer preferences, specialist-work limits, senior
 
 Assess career fit from the desired overall product space and stated preferences. Assess what the candidate brings, central experience requirements and transferable accomplishments only under resume fit in stages/review.md. Do not infer a career exclusion from missing prior experience. Preserve explicit work-type and company preferences when removing experience criteria.
 
-Save the extracted values/readiness and source revision in Settings and Runs. Procedures, scores, thresholds and lifecycle transitions live in Git. Goals cannot authorize submissions, supply missing qualifications or install automations. Keep private references and background out of the public repository.
+Save the extracted values/readiness and source revision in Settings. Procedures, scores, thresholds and lifecycle transitions live in Git. Goals cannot authorize submissions, supply missing qualifications or install automations. Keep private references and background out of the public repository.
 
 Company type matters when applying preferences: an investor can be an employer and a portfolio-discovery source simultaneously. Startup funding stages and fund raises are different facts. Apply the user's stated stage requirement and exceptions to the correct entity/type, and keep portfolio-company employment separate from investor employment.
