@@ -10,7 +10,7 @@
     "Curate maintains company targeting proposals and funding evidence; only humans set Allow/Exclude.",
     "Run stops after Prepare: Ready (verified resume and approved/resolved required answers), Needs answer or Apply manually. Only the explicit Submit command submits, under stages/submit.md: Applied needs verified proof; every failure is Apply manually. Preserve Applied, legacy outcomes, uncertain attempts and historical data; never reopen them automatically.",
     "Manual notes is permanent; only verified Feedback is cleared. Company discovery is not restricted to recent funding, and the current user defines applicable company types/stage rules.",
-    "Prepare inspects all accessible required application questions; nonempty Approved bank answers and Resolved role-question Final answers are required for Ready. Sensitive questions need approved answers even when optional. Drafts and incomplete form coverage block Ready; Prepare never fills or submits forms."
+    "Prepare inspects all accessible required application questions; each required answer must be grounded in a current master/role-resume/Career Goals passage or be a nonempty Approved bank answer or Resolved role-question Final answer; the bank holds only gaps. Sensitive questions need approved answers even when optional. Drafts and incomplete form coverage block Ready; Prepare never fills or submits forms."
   ],
   "lifecycle": "eight-states-authoritative-queue-v7",
   "identity": "run-objective-identity-v2",

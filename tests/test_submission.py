@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from stage_state import application_write
 from submission import (ATTEMPT_SCHEMA, manifest, policy, prior_attempt_uncertain, proof_verified,
-                        same_site, submission_eligible, submission_result)
+                        same_site, submission_eligible, submission_result, upload_filename)
 
 FORM = 'https://jobs.example.test/acme/123/apply'
 
@@ -27,6 +27,13 @@ class PolicyTests(unittest.TestCase):
         self.assertTrue(policy({'enabled': True})['enabled'])
         self.assertEqual(policy({'max_per_run': -1})['max_per_run'], 10)
         self.assertEqual(policy({'max_per_company_per_day': 0})['max_per_company_per_day'], 0)
+
+    def test_resume_upload_name_comes_from_settings(self):
+        self.assertEqual(upload_filename({'resume_upload_name': 'Example_Person'}), 'Example_Person.pdf')
+        self.assertEqual(upload_filename({'resume_upload_name': 'Example_Person.pdf'}), 'Example_Person.pdf')
+        for bad in [None, {}, {'resume_upload_name': '../etc/passwd'}, {'resume_upload_name': 'a b'}, {'resume_upload_name': ''}]:
+            with self.assertRaises(ValueError):
+                upload_filename(bad)
 
 
 class EligibilityTests(unittest.TestCase):

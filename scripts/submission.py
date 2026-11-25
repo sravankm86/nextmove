@@ -6,6 +6,7 @@ browse, sign in, fill, upload or click anything themselves.
 """
 import hashlib
 import json
+import re
 from urllib.parse import urlsplit
 
 ATTEMPT_SCHEMA = 'nextmove.submit-attempt.v1'
@@ -33,7 +34,17 @@ def policy(settings_value):
     for key in ('max_per_run', 'max_per_company_per_day'):
         if type(value.get(key)) is int and value[key] >= 0:
             result[key] = value[key]
+    name = value.get('resume_upload_name')
+    result['resume_upload_name'] = name if isinstance(name, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,99}', name) and '..' not in name else None
     return result
+
+
+def upload_filename(policy_value, extension='pdf'):
+    """The file name employers see: Settings submission_policy.resume_upload_name plus the extension."""
+    name = policy(policy_value)['resume_upload_name']
+    if not name:
+        raise ValueError('Settings submission_policy.resume_upload_name is required before Submit uploads a resume')
+    return name if name.lower().endswith('.' + extension) else name + '.' + extension
 
 
 def same_site(url, reference):

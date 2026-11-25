@@ -135,6 +135,34 @@ class AnswerReadinessTests(unittest.TestCase):
         self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
         self.assertFalse(self.ready())
 
+    def test_grounded_answer_needs_a_current_verbatim_source(self):
+        sources = {'master_resume': {'version': 'master-v8', 'text': 'Education\nB.Tech, Example Institute of Technology, 2008'}}
+        q = {'field_key': 'university', 'question': 'University attended?', 'type': 'Form', 'required': True,
+             'sensitive': False, 'options': [],
+             'answer': {'grounded': [{'source': 'master_resume', 'version': 'master-v8',
+                                      'quote': 'B.Tech, Example Institute of Technology', 'derivation': 'University name copied'}],
+                        'mapped_answer': 'Example Institute of Technology', 'mapping_verified': True,
+                        'match_evidence': 'Same meaning'}}
+        self.manifest['questions'].append(q)
+        self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+        ready = lambda src=sources: application_answers_ready(self.app, self.manifest, self.bank, self.narratives,
+            as_of='2026-01-01', current_form_hash=self.manifest['form_hash'], grounding_sources=src)
+        self.assertTrue(ready())
+        self.assertFalse(ready(None))
+        self.assertFalse(ready({'master_resume': {**sources['master_resume'], 'version': 'master-v9'}}))
+        self.assertFalse(ready({'master_resume': {**sources['master_resume'], 'text': 'Education removed'}}))
+        g = q['answer']['grounded'][0]
+        for key, value in [('source', 'linkedin'), ('derivation', ''), ('quote', 'Stanford University')]:
+            old = g[key]; g[key] = value; self.assertFalse(ready()); g[key] = old
+        self.assertTrue(ready())
+        q['answer']['table'] = 'Answer bank'; self.assertFalse(ready()); del q['answer']['table']
+        for key, value in [('sensitive', True), ('type', 'Narrative')]:
+            old = q[key]; q[key] = value
+            self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+            self.assertFalse(ready()); q[key] = old
+        self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+        self.assertTrue(ready())
+
     def test_question_option_changes_and_duplicate_field_keys_block(self):
         self.manifest['questions'][0]['options'] = ['New option']; self.assertFalse(self.ready())
         self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])

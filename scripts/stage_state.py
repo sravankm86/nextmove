@@ -191,7 +191,7 @@ def resume_verified(app, state, runs, current_inputs, pdf_bytes=None, *, provide
 
 
 def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None,
-                 companies=None, answer_bank=None, application_questions=None):
+                 companies=None, answer_bank=None, application_questions=None, grounding_sources=None):
     """Ready needs both the verified resume and current required-answer evidence."""
     if not resume_verified(app, state, runs, current_inputs, pdf_bytes,
                            provider_version=provider_version, companies=companies):
@@ -200,7 +200,8 @@ def resume_ready(app, state, runs, current_inputs, pdf_bytes=None, *, provider_v
     return application_answers_ready(app, state.get('preparation', {}).get('application_questions'),
                                      answer_bank, application_questions,
                                      as_of=current_inputs.get('answer_check_date'),
-                                     current_form_hash=current_inputs.get('form_hash'))
+                                     current_form_hash=current_inputs.get('form_hash'),
+                                     grounding_sources=grounding_sources)
 
 
 # Access blockers mean no agent could open or fully read the official application.
@@ -209,7 +210,7 @@ ACCESS_BLOCKERS = ('sign_in_required', 'account_creation', 'bot_check', 'host_bl
 
 
 def preparation_outcome(app, state, runs, current_inputs, pdf_bytes=None, *, provider_version=None,
-                        companies=None, answer_bank=None, application_questions=None):
+                        companies=None, answer_bank=None, application_questions=None, grounding_sources=None):
     """Prepare's three exits: Ready, Needs answer (resume or an answer missing/unapproved)
     or Apply manually (verified resume, but the application itself could not be accessed)."""
     if not resume_verified(app, state, runs, current_inputs, pdf_bytes,
@@ -222,7 +223,8 @@ def preparation_outcome(app, state, runs, current_inputs, pdf_bytes=None, *, pro
             and inspection.get('evidence')):
         return 'Apply manually'
     if resume_ready(app, state, runs, current_inputs, pdf_bytes, provider_version=provider_version,
-                    companies=companies, answer_bank=answer_bank, application_questions=application_questions):
+                    companies=companies, answer_bank=answer_bank, application_questions=application_questions,
+                    grounding_sources=grounding_sources):
         return 'Ready'
     return 'Needs answer'
 
