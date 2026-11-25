@@ -1,6 +1,6 @@
 {
   "schema": "nextmove.resume-guidelines",
-  "version": 1,
+  "version": 2,
   "description": "Standard frame for the user's private resume guidelines. Sections and field IDs are stable so a document today and a configurable UX later share one structure. Values live only in the private guidelines; Git holds the frame.",
   "field_types": {
     "select": "one option",
@@ -313,7 +313,7 @@
     {
       "id": "company_consistency",
       "title": "Same-company consistency",
-      "purpose": "Keeps resumes sent to one company consistent.",
+      "purpose": "Preserves submitted versions and records selection preferences; unavailable history does not block a current resume.",
       "fields": [
         {
           "id": "window_days",
@@ -328,7 +328,8 @@
           "help": "Rule for further roles at the same company inside the window.",
           "options": [
             "Reuse the exact submitted version",
-            "Allow another version if consistent with earlier submissions"
+            "Allow another version if consistent with earlier submissions",
+            "Prefer the submitted version when available; otherwise select a current base or tailor"
           ]
         },
         {
@@ -338,7 +339,8 @@
           "help": "Rule once the window has passed.",
           "options": [
             "Allow another version after comparing with every earlier submission and removing inconsistencies",
-            "Always reuse the first submitted version"
+            "Always reuse the first submitted version",
+            "Select a current base or tailor without reconciling earlier submissions"
           ]
         },
         {

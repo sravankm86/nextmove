@@ -86,14 +86,30 @@ def application_answers_ready(application, inspection, answer_bank, application_
         ref = q.get('answer') or {}
         if not isinstance(ref, dict):
             return False
-        table = ref.get('table')
-        if table not in tables or not ref.get('record_id'):
+        if (not has_answer(ref.get('mapped_answer')) or ref.get('mapping_verified') is not True
+                or not has_answer(ref.get('match_evidence'))):
             return False
-        rows = [r for r in tables[table] if r.get('id') == ref['record_id']]
-        if len(rows) != 1 or not answer_ready(table, rows[0], application, as_of=as_of):
-            return False
-        if (ref.get('fingerprint') != answer_fingerprint(table, rows[0])
-                or not has_answer(ref.get('mapped_answer')) or ref.get('mapping_verified') is not True
-                or not ref.get('match_evidence')):
-            return False
+        sources = ref.get('sources')
+        if sources is not None:
+            # Form wording may be assembled from multiple approved facts without
+            # inventing another bank row. Every contributing approval stays live.
+            if (q['type'] != 'Form' or not isinstance(sources, list) or not sources
+                    or not has_answer(ref.get('composition'))
+                    or any(k in ref for k in ('table', 'record_id', 'fingerprint'))):
+                return False
+        else:
+            sources = [ref]
+        seen = set()
+        for source in sources:
+            if not isinstance(source, dict):
+                return False
+            table, rid = source.get('table'), source.get('record_id')
+            if table not in tables or not rid or (table, rid) in seen:
+                return False
+            seen.add((table, rid))
+            rows = [r for r in tables[table] if r.get('id') == rid]
+            if len(rows) != 1 or not answer_ready(table, rows[0], application, as_of=as_of):
+                return False
+            if source.get('fingerprint') != answer_fingerprint(table, rows[0]):
+                return False
     return True

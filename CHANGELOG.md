@@ -1,5 +1,11 @@
 # Changelog
 
+## Current resumes and reusable approved answers
+
+- Missing prior submission files or dates no longer block selecting or preparing a current resume; submitted files remain immutable history when the master changes.
+- Form responses may combine existing approved answers without adding a bank row; manifests retain and validate each contributing source.
+- Explicit approval of an existing narrative draft permits copying it unchanged into an empty Final answer, with the approval preserved in History.
+
 
 ## Consistency fixes
 

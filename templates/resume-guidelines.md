@@ -1,6 +1,6 @@
 # Resume guidelines
 
-Standard frame `nextmove.resume-guidelines` v1. Fill the Value column; keep section and field IDs unchanged. Options lists the allowed choices for select fields. Instructions holds natural-language guidance for the section; structured values take precedence. Facts always come from the registered master; this document decides selection, order, wording and layout.
+Standard frame `nextmove.resume-guidelines` v2. Fill the Value column; keep section and field IDs unchanged. Options lists the allowed choices for select fields. Instructions holds natural-language guidance for the section; structured values take precedence. Facts always come from the registered master; this document decides selection, order, wording and layout.
 
 ## 1. Document `document`
 
@@ -95,13 +95,13 @@ Which base each company starts from.
 
 ## 7. Same-company consistency `company_consistency`
 
-Keeps resumes sent to one company consistent.
+Preserves submitted versions and records selection preferences; unavailable history does not block a current resume.
 
 | Field | ID | Type | Options | Value |
 |---|---|---|---|---|
 | Window (days) | `window_days` | number |  |  |
-| Within the window | `within_window` | select | Reuse the exact submitted version / Allow another version if consistent with earlier submissions |  |
-| After the window | `after_window` | select | Allow another version after comparing with every earlier submission and removing inconsistencies / Always reuse the first submitted version |  |
+| Within the window | `within_window` | select | Reuse the exact submitted version / Allow another version if consistent with earlier submissions / Prefer the submitted version when available; otherwise select a current base or tailor |  |
+| After the window | `after_window` | select | Allow another version after comparing with every earlier submission and removing inconsistencies / Always reuse the first submitted version / Select a current base or tailor without reconciling earlier submissions |  |
 | Submitted files editable | `submitted_files_editable` | boolean |  |  |
 
 **Instructions:** _(natural language, optional)_

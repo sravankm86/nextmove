@@ -63,7 +63,7 @@ class CurateHandoffTests(unittest.TestCase):
 
     def test_review_uses_current_targeting_and_decisive_company_evidence(self):
         policy, contract = review_frame_contract()
-        inputs = {'goals': 'g', 'master': 'm', 'policy': policy, 
+        inputs = {'goals': 'g', 'master': 'm', 'policy': policy,
                   'company_evidence': 'funding-capture-v1', 'jd_hash': 'jd'}
         run = {'id': 'review-run', 'Input versions (JSON)': {'stage_inputs': {'review': inputs}}}
         app = {'id': 'role', 'Company': [self.company['id']], 'Lifecycle status': 'Queued', 'Career fit': 'High', 'Resume fit': 'Medium',

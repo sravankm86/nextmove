@@ -55,6 +55,45 @@ class AnswerReadinessTests(unittest.TestCase):
         self.bank[0]['Answer'] = 'Seattle, WA'; self.assertTrue(self.ready())
         self.narratives[0]['Final answer'] = 'Changed text'; self.assertFalse(self.ready())
 
+    def salary_composition(self):
+        self.bank.extend([
+            {'id': 'minimum', 'Question': 'Minimum base', 'Answer': '260000', 'Approved': True},
+            {'id': 'ideal', 'Question': 'Ideal base', 'Answer': '325000', 'Approved': True}])
+        self.manifest['questions'][0]['answer'] = {
+            'sources': [{'table': 'Answer bank', 'record_id': r['id'],
+                         'fingerprint': answer_fingerprint('Answer bank', r)} for r in self.bank[1:]],
+            'composition': 'Format approved minimum and ideal as one USD annual base range.',
+            'mapped_answer': 'USD 260,000–325,000 annual base salary',
+            'mapping_verified': True, 'match_evidence': 'Same currency, annual period and base component.'}
+
+    def test_free_form_range_uses_existing_approved_facts_without_new_row(self):
+        self.salary_composition()
+        self.assertTrue(self.ready())
+        self.assertEqual(len(self.bank), 3)
+        self.bank[-1]['Answer'] = '350000'
+        self.assertFalse(self.ready())
+
+    def test_each_composed_source_must_remain_approved_nonempty_and_present(self):
+        self.salary_composition()
+        for value in [False, None]:
+            self.bank[-1]['Approved'] = value
+            self.assertFalse(self.ready())
+        self.bank[-1]['Approved'] = True
+        self.bank[-1]['Answer'] = ''
+        self.assertFalse(self.ready())
+        self.bank.pop()
+        self.assertFalse(self.ready())
+
+    def test_composition_needs_evidence_and_cannot_approve_a_new_essay(self):
+        self.salary_composition()
+        ref = self.manifest['questions'][0]['answer']
+        ref['composition'] = ''
+        self.assertFalse(self.ready())
+        ref['composition'] = 'Format a range.'
+        self.manifest['questions'][0]['type'] = 'Narrative'
+        self.manifest['form_hash'] = form_fingerprint(self.manifest['questions'])
+        self.assertFalse(self.ready())
+
     def test_guidance_edit_and_wrong_role_question_block(self):
         self.bank[0]['Guidance'] = 'Only for Snowflake'; self.assertFalse(self.ready())
         self.bank[0].pop('Guidance'); self.assertTrue(self.ready())

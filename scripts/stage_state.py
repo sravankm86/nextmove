@@ -246,8 +246,16 @@ def preparation_complete(p, current_inputs, digest):
 
 
 def company_history_ready(preparation):
-    """A label alone cannot prove same-company consistency or an empty history."""
+    """Record an authorized current-resume path without inventing empty history.
+
+    Older complete-history evidence remains readable. An explicit current-resume
+    choice under the registered guidelines does not require old submission files.
+    """
     history = preparation.get('company_history') or {}
+    if history.get('status') == 'not_required':
+        return bool(preparation.get('company_consistency') == 'not_required'
+                    and history.get('evidence') and history.get('reason')
+                    and history.get('policy') == 'current_resume_only')
     matches = history.get('matches')
     if (history.get('status') != 'complete' or not history.get('evidence')
             or type(matches) is not int or matches < 0 or history.get('missing_details')):

@@ -18,7 +18,7 @@
   "review_identity": "SHA-256 of the exact Review file, computed automatically by scripts/role_gate.py",
   "company_curation": "new-to-list-dual-source-v4",
   "company_policy_source": "stages/curate.md and scripts/company_policy.py",
-  "preparation": "queued-resume-and-required-answers-v4",
+  "preparation": "current-resume-and-composed-answers-v5",
   "feedback_evaluation": "separate-feedback-inbox-v2",
   "endpoint": "Ready",
   "prepare_outcomes": ["Ready", "Needs answer", "Apply manually"]

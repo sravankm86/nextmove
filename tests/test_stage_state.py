@@ -43,6 +43,21 @@ class StateTests(unittest.TestCase):
             bad=copy.deepcopy(state);bad['preparation'].update(change)
             self.assertFalse(s.resume_verified(app,bad,[self.run],inputs,pdf,companies=self.companies))
 
+    def test_current_resume_can_proceed_without_old_submitted_files(self):
+        pdf=b'current verified base'; digest=hashlib.sha256(pdf).hexdigest()
+        p=self.reuse(digest)
+        p.update(company_consistency='not_required', company_history={
+            'status':'not_required','policy':'current_resume_only',
+            'reason':'Prior submitted files unavailable; use the current approved base.',
+            'evidence':'Current registered guidelines authorize this path.',
+            'missing_details':['Earlier PDF and date are unavailable.']})
+        app,state=self.prepared(pdf,p)
+        self.assertTrue(s.resume_verified(app,state,[self.run],self.inputs,pdf))
+        # The new PDF is still checked against the current master, never waived.
+        self.assertFalse(s.resume_verified(app,state,[self.run],{**self.inputs,'master':'new-master'},pdf))
+        state['preparation']['company_history'].pop('evidence')
+        self.assertFalse(s.resume_verified(app,state,[self.run],self.inputs,pdf))
+
     def test_manual_queue_authorizes_prepare_without_forging_review_approval(self):
         self.assertTrue(s.preparation_eligible(self.app))
         self.assertFalse(s.review_ready(self.app,None,[self.run],self.inputs, companies=self.companies))
