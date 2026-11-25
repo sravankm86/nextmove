@@ -7,7 +7,39 @@ consents) need approved answers even when optional, because Submit may only send
 """
 import hashlib
 import json
+import re
 from datetime import date
+
+# Documents a Form answer may be grounded in without an Answer bank row.
+GROUNDING_SOURCES = ('master_resume', 'role_resume', 'career_goals')
+
+
+def _normalized(text):
+    return re.sub(r'\s+', ' ', text or '').strip().casefold()
+
+
+def grounded_ready(question, grounded, grounding_sources):
+    """A factual Form answer stated in, or mechanically derived from, a current source passage.
+
+    Each item names the source, its exact current version, a verbatim quote and how the
+    answer follows (formatting, arithmetic or choosing the matching option). Sensitive and
+    Narrative questions never qualify; they need an approved or resolved answer.
+    """
+    if question.get('type') != 'Form' or question.get('sensitive') is not False:
+        return False
+    items = grounded if isinstance(grounded, list) else [grounded]
+    if not items or not isinstance(grounding_sources, dict):
+        return False
+    for item in items:
+        if not isinstance(item, dict) or item.get('source') not in GROUNDING_SOURCES:
+            return False
+        current = grounding_sources.get(item['source'])
+        quote = item.get('quote')
+        if (not isinstance(current, dict) or not current.get('version') or item.get('version') != current['version']
+                or not has_answer(quote) or not has_answer(item.get('derivation'))
+                or _normalized(quote) not in _normalized(current.get('text'))):
+            return False
+    return True
 
 SCHEMA = 'nextmove.application-questions.v2'
 # Agent notes is free-form remarks and is excluded: editing it never invalidates an approval.
@@ -52,7 +84,7 @@ def answer_ready(table, record, application, *, as_of):
                 and record.get('Application') == [application.get('id')])
 
 
-def application_answers_ready(application, inspection, answer_bank, application_questions, *, as_of, current_form_hash=None):
+def application_answers_ready(application, inspection, answer_bank, application_questions, *, as_of, current_form_hash=None, grounding_sources=None):
     """Fail closed on unknown form coverage, missing rows or changed approvals."""
     if not isinstance(inspection, dict) or answer_bank is None or application_questions is None:
         return False
@@ -92,6 +124,12 @@ def application_answers_ready(application, inspection, answer_bank, application_
         if (not has_answer(ref.get('mapped_answer')) or ref.get('mapping_verified') is not True
                 or not has_answer(ref.get('match_evidence'))):
             return False
+        if 'grounded' in ref:
+            if any(k in ref for k in ('sources', 'table', 'record_id', 'fingerprint')):
+                return False
+            if not grounded_ready(q, ref['grounded'], grounding_sources):
+                return False
+            continue
         sources = ref.get('sources')
         if sources is not None:
             # Form wording may be assembled from multiple approved facts without

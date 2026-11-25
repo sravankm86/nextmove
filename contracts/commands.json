@@ -107,7 +107,7 @@
       "stage": "Prepare",
       "mode": "prepare",
       "instructions": "stages/prepare.md",
-      "scope": "Queued roles, including human choices, plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, capture missing Form answers as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. No repeat fit gates, form filling or submission; sensitive questions need approved answers even when optional.",
+      "scope": "Queued roles, including human choices, plus earlier Needs answer roles: verify a reused or tailored resume, inspect the official application questions, answer Form questions grounded in the master, role resume or Career Goals first, capture only remaining gaps as unapproved Answer bank rows and Narrative questions as Needs answer, then set Ready, Needs answer or Apply manually. No repeat fit gates, form filling or submission; sensitive questions need approved answers even when optional.",
       "required_resources": [
         "instructions_repository",
         "structured_store",
